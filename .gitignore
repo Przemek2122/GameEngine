@@ -325,3 +325,7 @@ ASALocalRun/
 
 # Log files
 *.log
+
+#Ignore VS & VS output
+x64/
+x32/
