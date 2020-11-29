@@ -24,7 +24,7 @@ void RunEngine(int argc, char* argv[])
 	// Main loop
 	{
 		// FPS limit
-		const uint32_t FPS = 2;
+		const uint32_t FPS = 60;
 		const uint32_t FrameDelay = 1000 / FPS;
 
 		uint32_t FrameStart;
@@ -53,8 +53,6 @@ void RunEngine(int argc, char* argv[])
 					SDL_Delay(FrameDelay - FrameTime);
 				}
 			}
-
-			std::cout << "Frame" << std::endl;
 		}
 	}
 

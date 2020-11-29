@@ -8,11 +8,14 @@ public:
 	FEngine();
 	~FEngine();
 
-	/** First called function. */
+	/** First init ever called. */
 	virtual void PreInit();
 
-	/** Second called function. */
+	/** Init (Inits SDL, Engine stuff). */
 	virtual void Init(int argc, char* argv[]);
+
+	/** Third init function. */
+	virtual void PostInit();
 
 	/** Is inside of loop. Runs until Exit() is called. */
 	virtual void MainLoop();

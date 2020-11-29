@@ -35,6 +35,10 @@ void FEngine::Init(int argc, char* argv[])
 	}
 }
 
+void FEngine::PostInit()
+{
+}
+
 void FEngine::MainLoop()
 {
 }
