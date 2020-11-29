@@ -6,8 +6,12 @@
 
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+
+
 // Add headers that you want to pre-compile here
-#include "Framework.h"
 #include <iostream>
+#include "ThirdParty/SDL/SDL.h"
+#undef main // Required as SDL defines it's own main.
 
 
