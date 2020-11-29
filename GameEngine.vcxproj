@@ -133,7 +133,12 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <AdditionalIncludeDirectories>E:\Projects\2DGameEngine\Source\Public;E:\Projects\2DGameEngine\Source\Private;E:\Projects\2DGameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAsManaged>false</CompileAsManaged>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,7 +157,13 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <AdditionalIncludeDirectories>E:\Projects\2DGameEngine\Source\Public;E:\Projects\2DGameEngine\Source\Private;E:\Projects\2DGameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAsManaged>false</CompileAsManaged>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -171,7 +182,12 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <AdditionalIncludeDirectories>E:\Projects\2DGameEngine\Source\Public;E:\Projects\2DGameEngine\Source\Private;E:\Projects\2DGameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAsManaged>false</CompileAsManaged>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -190,7 +206,13 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <AdditionalIncludeDirectories>E:\Projects\2DGameEngine\Source\Public;E:\Projects\2DGameEngine\Source\Private;E:\Projects\2DGameEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(ProjectDir)Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAsManaged>false</CompileAsManaged>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
