@@ -13,5 +13,8 @@
 #include <iostream>
 #include "ThirdParty/SDL/SDL.h"
 #undef main // Required as SDL defines it's own main.
+#include "Misc/Util.h"
+#include <string>
+
 
 

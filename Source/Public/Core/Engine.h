@@ -38,6 +38,11 @@ public:
 protected:
 	bool bFrameRateLimit;
 
+	//static SDL_Window* Window;
+	//static SDL_Renderer* Renderer;
+	//static SDL_Event Event;
+	//static AssetsManager* Assets;
+
 private:
 	bool bContinueMainLoop;
 };

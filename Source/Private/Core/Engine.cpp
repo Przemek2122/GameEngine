@@ -1,5 +1,6 @@
 #include <Engine.PCH.h>
 #include "Engine.h"
+#include "Misc/Util.h"
 
 FEngine::FEngine()
 	: bContinueMainLoop(true)
@@ -17,6 +18,10 @@ void FEngine::PreInit()
 
 void FEngine::Init(int argc, char* argv[])
 {
+	// Enable log thread
+	FUtil::LogInit();
+
+	// Read command line flags.
 	while ((++argv)[0])
 	{
 		if (argv[0][0] == '-')
@@ -28,11 +33,14 @@ void FEngine::Init(int argc, char* argv[])
 				break;
 
 			default:
-				//Util::Info("Unknown option: " + (std::string)argv[0]);
+				FUtil::Info("Unknown option: " + (std::string)argv[0]);
 				break;
 			}
 		}
 	}
+
+
+
 }
 
 void FEngine::PostInit()

@@ -22,6 +22,18 @@
     <Filter Include="Source\ThirdParty\SDL">
       <UniqueIdentifier>{06b94060-ef81-4f63-a1a4-f500f7f4b339}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\Misc">
+      <UniqueIdentifier>{0ebb7a84-9482-4367-b40d-204199c30399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Misc">
+      <UniqueIdentifier>{6de5aea9-5bbe-4aad-820d-dfdf4f439cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Containers">
+      <UniqueIdentifier>{fc9dca8c-aa04-48e8-ac76-dfddce66ad74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Containers">
+      <UniqueIdentifier>{c02aa1ce-c539-46cc-ad3c-36072f1d3d17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine.PCH.h">
@@ -297,6 +309,21 @@
     <ClInclude Include="Source\GameEngine.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Misc\Util.h">
+      <Filter>Source\Public\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Containers\ContainerBase.h">
+      <Filter>Source\Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Containers\Queue.h">
+      <Filter>Source\Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Containers\Array.h">
+      <Filter>Source\Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Containers\QueueSafe.h">
+      <Filter>Source\Public\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GameEngine.cpp">
@@ -310,6 +337,21 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Object.cpp">
       <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SimpleShooter\2DGameE\Source\Util.cpp">
+      <Filter>Source\Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
+      <Filter>Source\Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\Queue.cpp">
+      <Filter>Source\Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\Array.cpp">
+      <Filter>Source\Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
+      <Filter>Source\Private\Containers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

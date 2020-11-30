@@ -12,7 +12,7 @@ void RunEngine(int argc, char* argv[])
 {
 	// Init
 	{
-		std::cout << "Game engine start" << std::endl;
+		std::cout << "Game engine start." << std::endl;
 
 		Engine = new FEngineClass();
 
@@ -63,5 +63,7 @@ void RunEngine(int argc, char* argv[])
 		Engine->Clean();
 
 		delete Engine;
+
+		std::cout << "Game engine end." << std::endl;
 	}
 }
