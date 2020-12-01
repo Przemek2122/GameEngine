@@ -11,6 +11,7 @@
 
 // Add headers that you want to pre-compile here
 #include <iostream>
+#include <stdio.h>
 #include "ThirdParty/SDL/SDL.h"
 #undef main // Required as SDL defines it's own main.
 #include "Misc/Util.h"

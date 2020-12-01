@@ -7,7 +7,7 @@
 #include "QueueSafe.h"
 
 
-enum ELogMessageType
+enum class ELogMessageType
 {
 	Message_Info,
 	Message_Debug,
@@ -59,21 +59,21 @@ namespace FUtil
 
 	/* Logs (Info): with white(default) color.
 	 * Logs to file when isLoggingEnabled is true. */
-	void Info(std::string Message); // __fastcall - @todo try it
+	void I(std::string Message); // __fastcall - @todo try it
 
 	/* Logs (Debug): with log color.
 	 * LOGS ONLY WHEN IN _DEBUG mode.
 	 * This is empty function in release.
 	 * Logs to file when isLoggingEnabled is true. */
-	void Debug(std::string Message);
+	void D(std::string Message);
 
 	/* Logs (Warnning): with yellow color. 
 	 * Logs to file when isLoggingEnabled is true. */
-	void Warning(std::string Message);
+	void W(std::string Message);
 
 	/* Logs (Error): with red color.
 	 * Logs to file when isLoggingEnabled is true. */
-	void Error(std::string Message);
+	void E(std::string Message);
 
 
 	/* Print text to console with specified color.

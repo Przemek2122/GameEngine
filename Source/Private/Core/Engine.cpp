@@ -1,3 +1,5 @@
+//
+
 #include <Engine.PCH.h>
 #include "Engine.h"
 #include "Misc/Util.h"
@@ -6,6 +8,8 @@ FEngine::FEngine()
 	: bContinueMainLoop(true)
 	, bFrameRateLimit(true)
 {
+	Window = nullptr;
+	Renderer = nullptr;
 }
 
 FEngine::~FEngine()
@@ -21,6 +25,8 @@ void FEngine::Init(int argc, char* argv[])
 	// Enable log thread
 	FUtil::LogInit();
 
+	FUtil::I("Engine init Start");
+
 	// Read command line flags.
 	while ((++argv)[0])
 	{
@@ -33,7 +39,7 @@ void FEngine::Init(int argc, char* argv[])
 				break;
 
 			default:
-				FUtil::Info("Unknown option: " + (std::string)argv[0]);
+				FUtil::I("Unknown option: " + (std::string)argv[0]);
 				break;
 			}
 		}
@@ -41,6 +47,7 @@ void FEngine::Init(int argc, char* argv[])
 
 
 
+	FUtil::I("Engine init End");
 }
 
 void FEngine::PostInit()

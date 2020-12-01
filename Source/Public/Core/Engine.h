@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <Engine.PCH.h>
+
 class FEngine
 {
 public:
@@ -38,9 +40,9 @@ public:
 protected:
 	bool bFrameRateLimit;
 
-	//static SDL_Window* Window;
-	//static SDL_Renderer* Renderer;
-	//static SDL_Event Event;
+	static SDL_Window* Window;
+	static SDL_Renderer* Renderer;
+	static SDL_Event Event;
 	//static AssetsManager* Assets;
 
 private:
