@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Engine.PCH.h>
 #include <string>
 #include <queue>
 #include <mutex>
@@ -59,21 +58,21 @@ namespace FUtil
 
 	/* Logs (Info): with white(default) color.
 	 * Logs to file when isLoggingEnabled is true. */
-	void I(std::string Message); // __fastcall - @todo try it
+	void Info(std::string Message); // __fastcall - @todo try it
 
 	/* Logs (Debug): with log color.
 	 * LOGS ONLY WHEN IN _DEBUG mode.
 	 * This is empty function in release.
 	 * Logs to file when isLoggingEnabled is true. */
-	void D(std::string Message);
+	void Debug(std::string Message);
 
 	/* Logs (Warnning): with yellow color. 
 	 * Logs to file when isLoggingEnabled is true. */
-	void W(std::string Message);
+	void Warn(std::string Message);
 
 	/* Logs (Error): with red color.
 	 * Logs to file when isLoggingEnabled is true. */
-	void E(std::string Message);
+	void Error(std::string Message);
 
 
 	/* Print text to console with specified color.

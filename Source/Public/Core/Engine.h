@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <Engine.PCH.h>
+#include "ThirdParty/SDL/SDL.h"
 
 class FEngine
 {
@@ -48,4 +48,3 @@ protected:
 private:
 	bool bContinueMainLoop;
 };
-

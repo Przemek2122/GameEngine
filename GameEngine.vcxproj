@@ -28,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine.PCH.h" />
-    <ClInclude Include="Source\GameEngine.h" />
+    <ClInclude Include="Source\EngineMain.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
     <ClInclude Include="Source\Public\Containers\Queue.h" />
@@ -127,7 +127,7 @@
   <ItemGroup>
     <ClCompile Include="..\SimpleShooter\2DGameE\Source\Util.cpp" />
     <ClCompile Include="Source\Engine.PCH.cpp" />
-    <ClCompile Include="Source\GameEngine.cpp" />
+    <ClCompile Include="Source\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Containers\Array.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
     <ClCompile Include="Source\Private\Containers\Queue.cpp" />
@@ -219,7 +219,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(Platform)\$;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -280,7 +280,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Engine.PCH.h</PrecompiledHeaderFile>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
@@ -379,7 +379,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Engine.PCH.h</PrecompiledHeaderFile>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>

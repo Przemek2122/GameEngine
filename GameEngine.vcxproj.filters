@@ -306,9 +306,6 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_ttf.h">
       <Filter>Source\ThirdParty\SDL</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameEngine.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Misc\Util.h">
       <Filter>Source\Public\Misc</Filter>
     </ClInclude>
@@ -324,11 +321,11 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h">
       <Filter>Source\Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EngineMain.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\GameEngine.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine.PCH.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -352,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
       <Filter>Source\Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EngineMain.cpp">
+      <Filter>Source\Private\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

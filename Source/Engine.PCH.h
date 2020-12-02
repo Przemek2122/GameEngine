@@ -10,12 +10,19 @@
 
 
 // Add headers that you want to pre-compile here
+
+// C/C++ includes
 #include <iostream>
 #include <stdio.h>
+#include <string>
+
+// ThirdParty includes
 #include "ThirdParty/SDL/SDL.h"
 #undef main // Required as SDL defines it's own main.
+
+// Game engine includes
 #include "Misc/Util.h"
-#include <string>
+#include "Core/Engine.h"
 
 
 
