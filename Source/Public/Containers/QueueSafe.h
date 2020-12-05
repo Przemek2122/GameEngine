@@ -8,31 +8,33 @@
  * Class for safe queue.
  * Thread safe
  */
-template<typename Type>
-class CQueueSafe : public CQueue<Type>
+template<typename TType>
+class CQueueSafe : public CQueue<TType>
 {
 public:
 	/* Add element at end. */
-	void SafePush(const Type& value)
+	inline void PushSafe(const TType& Value)
 	{
 		while (!Mutex.try_lock())
 		{
 			SDL_Delay(1);
 		}
 
-		CQueue<Type>::Queue.push(value);
+		CQueue<TType>::Push(Value);
+
 		Mutex.unlock();
 	}
 
 	/* Delete first element. */
-	void SafePop()
+	inline void PopSafe()
 	{
 		while (!Mutex.try_lock())
 		{
 			SDL_Delay(1);
 		}
 
-		CQueue<Type>::Queue.pop();
+		CQueue<TType>::Pop();
+
 		Mutex.unlock();
 	}
 

@@ -19,6 +19,10 @@ void RunEngine(int argc, char* argv[])
 		Engine->PreInit();
 
 		Engine->Init(argc, argv);
+
+		Engine->GameInit();
+
+		Engine->PostInit();
 	}
 
 	// Main loop

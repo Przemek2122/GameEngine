@@ -8,13 +8,15 @@ class FEngine
 {
 public:
 	FEngine();
-	~FEngine();
+	virtual ~FEngine();
 
 	/** First init ever called. */
 	virtual void PreInit();
 
 	/** Init (Inits SDL, Engine stuff). */
-	virtual void Init(int argc, char* argv[]);
+	void Init(int argc, char* argv[]);
+
+	virtual void GameInit();
 
 	/** Third init function. */
 	virtual void PostInit();
@@ -37,11 +39,13 @@ public:
 	/** Clean up memory. */
 	virtual void Clean();
 
+	/** @Returns true if Init() has finished */
+	bool IsEngineInitialized() const;
+
 protected:
 	bool bFrameRateLimit;
+	bool bIsEngineInitialized;
 
-	static SDL_Window* Window;
-	static SDL_Renderer* Renderer;
 	static SDL_Event Event;
 	//static AssetsManager* Assets;
 

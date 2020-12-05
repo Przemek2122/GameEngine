@@ -34,6 +34,18 @@
     <Filter Include="Source\Private\Containers">
       <UniqueIdentifier>{c02aa1ce-c539-46cc-ad3c-36072f1d3d17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Renderer">
+      <UniqueIdentifier>{959ce2cf-b0ce-4853-a114-4ecc37c25dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Renderer">
+      <UniqueIdentifier>{05f01ffc-e1ba-41ba-a76a-a2c39b08626f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Types">
+      <UniqueIdentifier>{2a8cf5d8-b96f-42dc-a2c9-79bf4518a475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Types">
+      <UniqueIdentifier>{f34eef71-39cc-4840-9c55-d2c988852ae5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine.PCH.h">
@@ -321,8 +333,23 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h">
       <Filter>Source\Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EngineMain.h">
+    <ClInclude Include="Source\Public\Render\Window.h">
+      <Filter>Source\Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Render\Renderer.h">
+      <Filter>Source\Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\EngineMain.h">
       <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Containers\Map.h">
+      <Filter>Source\Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Render\WindowAdvanced.h">
+      <Filter>Source\Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\Vector2D.h">
+      <Filter>Source\Public\Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -350,8 +377,23 @@
     <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EngineMain.cpp">
+    <ClCompile Include="Source\Private\Render\Window.cpp">
+      <Filter>Source\Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Render\Renderer.cpp">
+      <Filter>Source\Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\EngineMain.cpp">
       <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\Map.cpp">
+      <Filter>Source\Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Render\WindowAdvanced.cpp">
+      <Filter>Source\Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\Vector2D.cpp">
+      <Filter>Source\Private\Types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

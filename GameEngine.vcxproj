@@ -28,14 +28,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine.PCH.h" />
-    <ClInclude Include="Source\EngineMain.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
+    <ClInclude Include="Source\Public\Containers\Map.h" />
     <ClInclude Include="Source\Public\Containers\Queue.h" />
     <ClInclude Include="Source\Public\Containers\QueueSafe.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
+    <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
+    <ClInclude Include="Source\Public\Render\Renderer.h" />
+    <ClInclude Include="Source\Public\Render\Window.h" />
+    <ClInclude Include="Source\Public\Render\WindowAdvanced.h" />
+    <ClInclude Include="Source\Public\Types\Vector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\close_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL.h" />
@@ -127,13 +132,18 @@
   <ItemGroup>
     <ClCompile Include="..\SimpleShooter\2DGameE\Source\Util.cpp" />
     <ClCompile Include="Source\Engine.PCH.cpp" />
-    <ClCompile Include="Source\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Containers\Array.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
+    <ClCompile Include="Source\Private\Containers\Map.cpp" />
     <ClCompile Include="Source\Private\Containers\Queue.cpp" />
     <ClCompile Include="Source\Private\Containers\QueueSafe.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
+    <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
+    <ClCompile Include="Source\Private\Render\Renderer.cpp" />
+    <ClCompile Include="Source\Private\Render\Window.cpp" />
+    <ClCompile Include="Source\Private\Render\WindowAdvanced.cpp" />
+    <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -211,36 +221,36 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(Platform)\$;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -253,7 +263,7 @@
       <PrecompiledHeaderFile>Engine.PCH.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <IntrinsicFunctions>false</IntrinsicFunctions>
@@ -269,6 +279,10 @@
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -284,7 +298,7 @@
       <SupportJustMyCode>true</SupportJustMyCode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
@@ -301,6 +315,10 @@
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -315,7 +333,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -335,6 +353,10 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
@@ -349,7 +371,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
     </ClCompile>
@@ -368,6 +390,10 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -383,7 +409,7 @@
       <SupportJustMyCode>true</SupportJustMyCode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
@@ -401,6 +427,10 @@
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
@@ -416,7 +446,7 @@
       <SupportJustMyCode>true</SupportJustMyCode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
@@ -434,6 +464,10 @@
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,14 +15,22 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <cfloat>
+#include <climits>
+#include <array>
+#include <vector>
 
 // ThirdParty includes
 #include "ThirdParty/SDL/SDL.h"
+#include "ThirdParty/SDL/SDL_ttf.h"
+#include "ThirdParty/SDL/SDL_mixer.h"
 #undef main // Required as SDL defines it's own main.
 
-// Game engine includes
+// Engine includes
 #include "Misc/Util.h"
+#include "Core/Object.h"
 #include "Core/Engine.h"
+#include "Core/EngineMain.h"
 
 
 

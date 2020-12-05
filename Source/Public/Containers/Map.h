@@ -4,24 +4,27 @@
 
 #include "ContainerBase.h"
 
-/**
- * Dynamic array template for any type.
+/*
+ * Class for safe queue.
+ * Not thread safe
  */
 template<typename TType>
-class CArray : public CContainerBase<TType>
+class CQueue : public CContainerBase<TType>
 {
+public:
 	/** Begin CContainerBase interface */
-	inline int Size() const override
+	inline size_t Size() const override
 	{
-		return Vector.size();
+		return Queue.size();
 	};
 	inline bool IsEmpty() const override
 	{
-		return Vector.empty();
+		return Queue.empty();
 	}
 	/** End CContainerBase interface */
 
 
 
-	std::vector Vector;
+	// C++ Map
+	std::map;
 };
