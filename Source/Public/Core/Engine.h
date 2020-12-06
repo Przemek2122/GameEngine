@@ -3,6 +3,9 @@
 #pragma once
 
 #include "ThirdParty/SDL/SDL.h"
+#include "Array.h"
+
+class FWindow;
 
 class FEngine
 {
@@ -51,4 +54,24 @@ protected:
 
 private:
 	bool bContinueMainLoop;
+
+public:
+	template<class TWindow>
+	FWindow* CreateWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0)
+	{
+		TWindow* NewWindow = new TWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags);
+
+		WindowsManaged.Push(NewWindow);
+	}
+
+	bool DestroyWindow(FWindow* Window)
+	{
+		//WindowsManaged.Remove(0);
+
+	}
+
+protected:
+	/** Array of windows managed by this engine. */
+	CArray<FWindow*> WindowsManaged;
+
 };

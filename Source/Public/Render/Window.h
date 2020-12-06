@@ -6,8 +6,7 @@ struct SDL_Window;
 class FRenderer;
 
 /**
- * Window class. Has SDL_Window and .
- * 
+ * Window class. Has SDL_Window and FRender.
  */
 class FWindow
 {
@@ -31,7 +30,7 @@ protected:
 	Uint32 WindowFlags;
 public:
 	/**
-	 * Renders this window using renderer.
+	 * Render this window using renderer.
 	 */
 	virtual void Render();
 

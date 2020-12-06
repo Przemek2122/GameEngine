@@ -58,5 +58,3 @@ void FWindow::Resize(const int NewWidth, const int NewHeight)
 	WindowWidth = NewWidth;
 	WindowHeight = NewWidth;
 }
-
-

@@ -7,7 +7,6 @@
 #include <mutex>
 #include "QueueSafe.h"
 
-
 enum class ELogMessageType
 {
 	Message_Info,

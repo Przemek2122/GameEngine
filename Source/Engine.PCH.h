@@ -15,6 +15,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <fstream>
+#include <filesystem>
 #include <cfloat>
 #include <climits>
 #include <array>
@@ -28,6 +30,13 @@
 
 // Engine includes
 #include "Misc/Util.h"
+
+#include "Public/Containers/ContainerBase.h"
+#include "Public/Containers/Array.h"
+#include "Public/Containers/Queue.h"
+#include "Public/Containers/QueueSafe.h"
+#include "Public/Containers/Map.h"
+
 #include "Core/Object.h"
 #include "Core/Engine.h"
 #include "Core/EngineMain.h"
