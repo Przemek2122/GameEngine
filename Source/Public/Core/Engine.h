@@ -2,10 +2,7 @@
 
 #pragma once
 
-#include "ThirdParty/SDL/SDL.h"
-#include "Array.h"
-
-class FWindow;
+#include "CoreMinimal.h"
 
 class FEngine
 {
@@ -66,8 +63,7 @@ public:
 
 	bool DestroyWindow(FWindow* Window)
 	{
-		//WindowsManaged.Remove(0);
-
+		WindowsManaged.Remove(Window);
 	}
 
 protected:

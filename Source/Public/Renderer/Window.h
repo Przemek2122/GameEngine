@@ -2,8 +2,7 @@
 
 #pragma once
 
-struct SDL_Window;
-class FRenderer;
+#include "CoreMinimal.h"
 
 /**
  * Window class. Has SDL_Window and FRender.

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Queue.h"
+#include "ThirdParty/SDL/SDL.h"
 
 /*
  * Class for safe queue.

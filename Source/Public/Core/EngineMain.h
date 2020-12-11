@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <Engine.PCH.h>
+#include "CoreEngine.h"
 #include "Engine.h"
 
 static FEngine* Engine = nullptr;
@@ -12,7 +12,7 @@ void RunEngine(int argc, char* argv[])
 {
 	// Init
 	{
-		std::cout << "Game engine start." << std::endl;
+		std::cout << "Game engine initializing ..." << std::endl;
 
 		Engine = new FEngineClass();
 

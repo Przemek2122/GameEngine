@@ -6,21 +6,20 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-
-
-// Add headers that you want to pre-compile here
-
-// C/C++ includes
+// Add headers that you want to pre-compile here// C/C++ includes
 #include <iostream>
-#include <stdio.h>
 #include <string>
+#include <time.h>
 #include <fstream>
-#include <filesystem>
 #include <cfloat>
 #include <climits>
+#include <chrono>
+#include <filesystem>
+#include <mutex>
+
 #include <array>
 #include <vector>
+#include <queue>
 
 // ThirdParty includes
 #include "ThirdParty/SDL/SDL.h"
@@ -28,18 +27,17 @@
 #include "ThirdParty/SDL/SDL_mixer.h"
 #undef main // Required as SDL defines it's own main.
 
-// Engine includes
+// Engine
 #include "Misc/Util.h"
 
 #include "Public/Containers/ContainerBase.h"
 #include "Public/Containers/Array.h"
+#include "Public/Containers/Map.h"
 #include "Public/Containers/Queue.h"
 #include "Public/Containers/QueueSafe.h"
-#include "Public/Containers/Map.h"
 
 #include "Core/Object.h"
 #include "Core/Engine.h"
 #include "Core/EngineMain.h"
-
-
-
+#include "Renderer/Window.h"
+#include "Renderer/Renderer.h"

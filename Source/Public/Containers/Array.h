@@ -32,9 +32,36 @@ public:
 		Vector.push_back(Value);
 	}
 
-	inline bool RemoveAt(const size_t Value)
+	inline bool RemoveAt(const size_t Index)
 	{
-		Vector.erase(Value);
+		Vector.erase(Vector.begin() + Index);
+	}
+	/** Remove first match. */
+	inline bool Remove(TType& Value)
+	{
+		return Vector.erase(std::remove(Vector.begin(), Vector.end(), Value), Vector.end()) != Vector.end();
+	}
+	/** Remove all matches. */
+	inline bool RemoveAll(TType& Value)
+	{
+		std::vector<int>::iterator Iter = Vector.begin();
+
+		size_t RemovedElements = 0;
+
+		while (Iter != Vector.end())
+		{
+			if (*Iter == Value)
+			{
+				Iter = Vector.erase(Iter);
+				RemovedElements++;
+			}
+			else 
+			{
+				Iter++;
+			}
+		}
+
+		return RemovedElements > 0;
 	}
 
 	inline TType& operator[](size_t Index)

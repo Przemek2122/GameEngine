@@ -2,9 +2,7 @@
 
 #pragma once
 
-struct SDL_Renderer;
-struct SDL_Window;
-class FWindow;
+#include "CoreMinimal.h"
 
 /**
  * Base Renderer class.
@@ -20,19 +18,19 @@ protected:
 	virtual ~FRenderer();
 
 protected:
-	SDL_Renderer* Renderer;
 	SDL_Window* Window;
 
 public:
 	/** Before render - Clear scene */
-	void PreRender();
+	virtual void PreRender();
 
-	/** Actual render */
-	void Render();
+	/** Actual render - No need to call parent */
+	virtual void Render();
 	
 	/** After render */
-	void PostRender();
+	virtual void PostRender();
 
 protected:
+	SDL_Renderer* Renderer;
 
 };

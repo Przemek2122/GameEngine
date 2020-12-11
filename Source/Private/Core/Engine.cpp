@@ -1,7 +1,8 @@
 //
 
 #include "Engine.h"
-#include <Engine.PCH.h>
+#include "CoreEngine.h"
+#include "Renderer/Window.h"
 
 FEngine::FEngine()
 	: bContinueMainLoop(true)

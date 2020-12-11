@@ -48,9 +48,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Engine.PCH.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Core\Object.h">
       <Filter>Source\Public\Core</Filter>
     </ClInclude>
@@ -318,9 +315,6 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_ttf.h">
       <Filter>Source\ThirdParty\SDL</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Misc\Util.h">
-      <Filter>Source\Public\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Containers\ContainerBase.h">
       <Filter>Source\Public\Containers</Filter>
     </ClInclude>
@@ -333,37 +327,46 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h">
       <Filter>Source\Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Render\Window.h">
-      <Filter>Source\Public\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Render\Renderer.h">
-      <Filter>Source\Public\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Core\EngineMain.h">
       <Filter>Source\Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Containers\Map.h">
       <Filter>Source\Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Render\WindowAdvanced.h">
-      <Filter>Source\Public\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Types\Vector2D.h">
       <Filter>Source\Public\Types</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Misc\Filesystem.h">
+      <Filter>Source\Public\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Misc\Util.h">
+      <Filter>Source\Public\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreEngine.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreMinimal.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Renderer.h">
+      <Filter>Source\Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Window.h">
+      <Filter>Source\Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h">
+      <Filter>Source\Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\EngineRender.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Engine.PCH.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Object.cpp">
       <Filter>Source\Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SimpleShooter\2DGameE\Source\Util.cpp">
-      <Filter>Source\Private\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
       <Filter>Source\Private\Containers</Filter>
@@ -377,23 +380,38 @@
     <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Render\Window.cpp">
-      <Filter>Source\Private\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Render\Renderer.cpp">
-      <Filter>Source\Private\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Private\Core\EngineMain.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Containers\Map.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Render\WindowAdvanced.cpp">
-      <Filter>Source\Private\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Private\Types\Vector2D.cpp">
       <Filter>Source\Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Misc\FileSystem.cpp">
+      <Filter>Source\Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Misc\Util.cpp">
+      <Filter>Source\Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\CoreMinimal.cpp">
+      <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\CoreEngine.cpp">
+      <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Window.cpp">
+      <Filter>Source\Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp">
+      <Filter>Source\Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
+      <Filter>Source\Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\EngineRender.cpp">
+      <Filter>Source\Private\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

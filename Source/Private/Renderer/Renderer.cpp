@@ -1,7 +1,7 @@
 //
 
-#include <Engine.PCH.h>
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
+#include "CoreEngine.h"
 
 FRenderer::FRenderer(SDL_Window* InWindow)
 	: Window(InWindow)
@@ -11,7 +11,7 @@ FRenderer::FRenderer(SDL_Window* InWindow)
 	if (Renderer)
 	{
 		FUtil::Info("Renderer created!");
-		SDL_SetRenderDrawColor(Renderer, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(Renderer, 34, 91, 211, 255);
 	}
 	else
 	{
