@@ -46,6 +46,9 @@
     <Filter Include="Source\Private\Types">
       <UniqueIdentifier>{f34eef71-39cc-4840-9c55-d2c988852ae5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\Core\Includes">
+      <UniqueIdentifier>{263bba92-4dad-4a97-9797-318404a25e00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\Core\Object.h">
@@ -360,6 +363,27 @@
     <ClInclude Include="Source\Public\Core\EngineRender.h">
       <Filter>Source\Public\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\FullCppIncludes.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\FullEngineBase.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\Statics.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\EngineMacros.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\ForwardEngineBase.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\ForwardThirdParty.h">
+      <Filter>Source\Public\Core\Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
@@ -413,5 +437,8 @@
     <ClCompile Include="Source\Private\Core\EngineRender.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

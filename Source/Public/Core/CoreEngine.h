@@ -1,4 +1,9 @@
-// pch.h: This is a precompiled header file.
+// Created by Przemys³aw Wiewióra 2020
+
+// This should be included once in each .cpp file at the top before other includes.
+// In case of subproject including this files it should be under ProjectPCH.h but still above everything else than that.
+
+// CoreEngine.h: This is a precompiled header file.
 // Files listed below are compiled only once, improving build performance for future builds.
 // This also affects IntelliSense performance, including code completion and many code browsing features.
 // However, files listed here are ALL re-compiled if any one of them is updated between builds.
@@ -6,38 +11,8 @@
 
 #pragma once
 
-// Add headers that you want to pre-compile here// C/C++ includes
-#include <iostream>
-#include <string>
-#include <time.h>
-#include <fstream>
-#include <cfloat>
-#include <climits>
-#include <chrono>
-#include <filesystem>
-#include <mutex>
+// Add headers that you want to pre-compile here 
 
-#include <array>
-#include <vector>
-#include <queue>
-
-// ThirdParty includes
-#include "ThirdParty/SDL/SDL.h"
-#include "ThirdParty/SDL/SDL_ttf.h"
-#include "ThirdParty/SDL/SDL_mixer.h"
-#undef main // Required as SDL defines it's own main.
-
-// Engine
-#include "Misc/Util.h"
-
-#include "Public/Containers/ContainerBase.h"
-#include "Public/Containers/Array.h"
-#include "Public/Containers/Map.h"
-#include "Public/Containers/Queue.h"
-#include "Public/Containers/QueueSafe.h"
-
-#include "Core/Object.h"
-#include "Core/Engine.h"
-#include "Core/EngineMain.h"
-#include "Renderer/Window.h"
-#include "Renderer/Renderer.h"
+#include "Includes/FullCppIncludes.h"
+#include "Includes/FullThirdParty.h"
+#include "Includes/FullEngineBase.h"

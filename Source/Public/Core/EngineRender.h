@@ -7,5 +7,10 @@
 /** Call for managing rendering (windows). */
 class FEnginerRender
 {
+protected:
+
+
+public:
+
 
 };

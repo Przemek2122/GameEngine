@@ -37,6 +37,13 @@
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
+    <ClInclude Include="Source\Public\Core\Includes\EngineMacros.h" />
+    <ClInclude Include="Source\Public\Core\Includes\ForwardEngineBase.h" />
+    <ClInclude Include="Source\Public\Core\Includes\ForwardThirdParty.h" />
+    <ClInclude Include="Source\Public\Core\Includes\FullCppIncludes.h" />
+    <ClInclude Include="Source\Public\Core\Includes\FullEngineBase.h" />
+    <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h" />
+    <ClInclude Include="Source\Public\Core\Includes\Statics.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
@@ -164,6 +171,9 @@
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -244,7 +254,7 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <PublicIncludeDirectories>$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -252,31 +262,31 @@
     <LibraryPath>$(Platform)\$;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <PublicIncludeDirectories>$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <PublicIncludeDirectories>$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <PublicIncludeDirectories>$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <PublicIncludeDirectories>$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <PublicIncludeDirectories>$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

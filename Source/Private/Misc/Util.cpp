@@ -22,13 +22,10 @@ namespace FUtil
 
 	void LogInit(bool EnableLogging)
 	{
-		// @TODO - Create directory error if doesn't exist (Windows only)
-		// @TODO - Crossplatform
-
 		if (EnableLogging)
 		{
 			// @TODO uncomment
-			//FFilesystem::CreateDirrectory(LogDir);
+			FFilesystem::CreateDirrectory(LogDir);
 
 			isLoggingEnabled = true;
 
@@ -168,7 +165,12 @@ namespace FUtil
 	{
 		Message = GetCurrTime() + " (Info): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Info , Message });
+		MessagesQueue.PushSafe({ ELogMessageType::Message_Info, Message });
+	}
+
+	void Info(std::ostream& Message)
+	{
+		Info(dynamic_cast<std::ostringstream&>(Message).str());
 	}
 
 	void Debug(std::string Message)
@@ -176,22 +178,37 @@ namespace FUtil
 #ifdef _DEBUG // if debug
 		Message = GetCurrTime() + " (Debug): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Debug , Message });
+		MessagesQueue.PushSafe({ ELogMessageType::Message_Debug, Message });
 #endif
+	}
+
+	void Debug(std::ostream& Message)
+	{
+		Debug(dynamic_cast<std::ostringstream&>(Message).str());
 	}
 
 	void Warn(std::string Message)
 	{
 		Message = GetCurrTime() + " (Warn): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Warning , Message });
+		MessagesQueue.PushSafe({ ELogMessageType::Message_Warning, Message });
+	}
+
+	void Warn(std::ostream& Message)
+	{
+		Warn(dynamic_cast<std::ostringstream&>(Message).str());
 	}
 
 	void Error(std::string Message)
 	{
 		Message = GetCurrTime() + " (Error): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Error , Message });
+		MessagesQueue.PushSafe({ ELogMessageType::Message_Error, Message });
+	}
+
+	void Error(std::ostream& Message)
+	{
+		Error(dynamic_cast<std::ostringstream&>(Message).str());
 	}
 
 	void PrintToConsole(std::string& Message, const int Color)

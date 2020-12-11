@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include <string>
+#include <sstream>
 #include "QueueSafe.h"
 
 enum class ELogMessageType
@@ -56,23 +57,42 @@ namespace FUtil
 	inline std::string GetCurrTime();
 
 
-	/* Logs (Info): with white(default) color.
-	 * Logs to file when isLoggingEnabled is true. */
-	INLINE_DEBUGABLE void Info(std::string Message); 
+	/** Logs (Info): with white(default) color. */
+	INLINE_DEBUGABLE void Info(std::string Message);
+	/** Logs (Info): with white(default) color. Print any value (std::ostream). */
+	INLINE_DEBUGABLE void Info(std::ostream& Message);
 
-	/* Logs (Debug): with log color.
-	 * LOGS ONLY WHEN IN _DEBUG mode.
-	 * This is empty function in release.
-	 * Logs to file when isLoggingEnabled is true. */
+/** Logs (Info): with white(default) color. */
+#define LOG_INFO(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+
+	/** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. */
 	INLINE_DEBUGABLE void Debug(std::string Message);
+	/** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. Print any value (std::ostream). */
+	INLINE_DEBUGABLE void Debug(std::ostream& Message);
 
-	/* Logs (Warnning): with yellow color. 
-	 * Logs to file when isLoggingEnabled is true. */
+#if _DEBUG
+/** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. */
+#define LOG_DEBUG(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+#else
+#define LOG_DEBUG(Message)
+#endif
+
+	/** Logs (Warnning): with yellow color. Has overloads. */
 	INLINE_DEBUGABLE void Warn(std::string Message);
+	/** Logs (Warnning): with yellow color. Print any value (std::ostream). */
+	INLINE_DEBUGABLE void Warn(std::ostream& Message);
 
-	/* Logs (Error): with red color.
-	 * Logs to file when isLoggingEnabled is true. */
+/** Logs (Warnning): with yellow color. Has overloads. */
+#define LOG_WARN(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+
+	
+	/** Logs (Error): with red color */
 	INLINE_DEBUGABLE void Error(std::string Message);
+	/** Logs (Error): with red color. Print any value (std::ostream). */
+	INLINE_DEBUGABLE void Error(std::ostream& Message);
+
+/** Logs (Error): with red color */
+#define LOG_ERROR(Message) FUtil::Debug(std::ostringstream().flush() << Message)
 
 
 	/* Print text to console with specified color.

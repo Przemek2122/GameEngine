@@ -1,40 +1,12 @@
-// include for headers
+// Created by Przemys³aw Wiewióra 2020
+
+// This should be included once in each .h file at the top before other includes.
 
 #pragma once
 
-// Stuff forward declared here must be included in CoreEngine.h
+// Stuff forward declared here must be included fully in CoreEngine.h
 
-// Third Party forward declarations
-struct SDL_Renderer;
-struct SDL_Window; 
-union SDL_Event;
-struct SDL_Thread;
-
-// Engine base classes forward declarations
-class FEngineMain;
-class FEngine;
-class FFilesystem;
-class FRenderer;
-class FWindow;
-
-template<typename TType>
-class CContainerBase;
-template<typename TType>
-class CArray;
-template<typename TKey, typename TValue>
-class CMap;
-template<typename TType>
-class CQueue;
-template<typename TType>
-class CQueueSafe;
-
-
-// Public macros
-
-#ifdef _DEBUG
-// It is an inline function but only in release.
-#define INLINE_DEBUGABLE
-#elif
-#define INLINE_DEBUGABLE inline
-#endif
+#include "Includes/ForwardThirdParty.h"
+#include "Includes/ForwardEngineBase.h"
+#include "Includes/EngineMacros.h"
 
