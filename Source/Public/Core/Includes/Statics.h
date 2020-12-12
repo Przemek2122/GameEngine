@@ -1,5 +1,15 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #pragma once
-static class FEngine* Engine;
+
+#include "Engine.h"
+#include "EngineMain.h"
+
+static FEngine* Engine;
+
+template<class FEngineClass = FEngine>
+FEngineClass* GetEngine()
+{
+	return Engine;
+}
 

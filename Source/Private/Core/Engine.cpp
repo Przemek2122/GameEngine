@@ -4,10 +4,19 @@
 
 FEngine::FEngine()
 	: bContinueMainLoop(true)
-	, bIsEngineInitialized(true)
-	, bFrameRateLimit(true)
+	, bIsEngineInitialized(false)
+	, bFrameRateLimited(true)
+
+	, FPS(0)
+	, FrameDelay(0)
+	, FrameStart(0)
+	, FrameTime(0)
+	, CounterLastFrame(0)
+	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 {
 	FUtil::LogInit();
+
+	SetFrameRate(60);
 }
 
 FEngine::~FEngine()
@@ -19,7 +28,7 @@ void FEngine::PreInit()
 {
 }
 
-void FEngine::Init(int argc, char* argv[])
+void FEngine::EngineInit(int argc, char* argv[])
 {
 	FUtil::Info("Engine init Start");
 
@@ -74,15 +83,21 @@ void FEngine::Init(int argc, char* argv[])
 	bIsEngineInitialized = true;
 }
 
-void FEngine::GameInit()
+void FEngine::Init()
 {
+	
 }
 
 void FEngine::PostInit()
 {
 }
 
-void FEngine::MainLoop()
+void FEngine::EngineTick()
+{
+	Tick();
+}
+
+void FEngine::Tick()
 {
 }
 
@@ -91,9 +106,9 @@ bool FEngine::CanContinueMainLoop() const
 	return bContinueMainLoop;
 }
 
-bool FEngine::IsFrameRateLimit() const
+bool FEngine::IsFrameRateLimited() const
 {
-	return bFrameRateLimit;
+	return bFrameRateLimited;
 }
 
 void FEngine::Stop()
@@ -112,4 +127,34 @@ void FEngine::Clean()
 bool FEngine::IsEngineInitialized() const
 {
 	return bIsEngineInitialized;
+}
+
+void FEngine::UpdateFrameTimeStart()
+{
+	CounterLastFrame = CounterCurrentFrame;
+
+	CounterCurrentFrame = SDL_GetPerformanceCounter();
+
+	FrameStart = SDL_GetTicks();
+}
+
+void FEngine::UpdateFrameTimeEnd()
+{
+	FrameTime = SDL_GetTicks() - FrameStart;
+}
+
+uint32_t FEngine::GetFrameTime() const
+{
+	return FrameTime;
+}
+
+uint32_t FEngine::GetFrameDelay() const
+{
+	return FrameDelay;
+}
+
+void FEngine::SetFrameRate(uint32_t NewFrameRate)
+{
+	FPS = NewFrameRate;
+	FrameDelay = 1000 / FPS;
 }

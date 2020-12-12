@@ -13,22 +13,24 @@ public:
 	/** First init ever called. */
 	virtual void PreInit();
 
-	/** Init (Inits SDL, Engine stuff). */
-	void Init(int argc, char* argv[]);
+	void EngineInit(int argc, char* argv[]);
 
-	virtual void GameInit();
+	/** Init (Inits SDL, Engine stuff). */
+	virtual void Init();
 
 	/** Third init function. */
 	virtual void PostInit();
 
 	/** Is inside of loop. Runs until Exit() is called. */
-	virtual void MainLoop();
+	void EngineTick();
+
+	virtual void Tick();
 
 	/** MainLoop() runs untill this return false. */
-	bool CanContinueMainLoop() const;
+	virtual bool CanContinueMainLoop() const;
 
 	/** True if framerate limit is enabled. */
-	bool IsFrameRateLimit() const;
+	virtual bool IsFrameRateLimited() const;
 
 	/** Call to stop main loop. (Exit engine) */
 	virtual void Stop();
@@ -42,15 +44,39 @@ public:
 	/** @Returns true if Init() has finished */
 	bool IsEngineInitialized() const;
 
-protected:
-	bool bFrameRateLimit;
-	bool bIsEngineInitialized;
-
-	static SDL_Event Event;
-	//static AssetsManager* Assets;
-
 private:
 	bool bContinueMainLoop;
+
+protected:
+	bool bFrameRateLimited;
+	bool bIsEngineInitialized;
+
+public:
+	virtual void UpdateFrameTimeStart();
+	virtual void UpdateFrameTimeEnd();
+
+	uint32_t GetFrameTime() const;
+	uint32_t GetFrameDelay() const;
+
+	// Use to set engine frame rate - ticks per second
+	virtual void SetFrameRate(uint32_t NewFrameRate);
+
+	
+
+protected:
+	// Framerate per second / ticks per second
+	uint32_t FPS;
+	// Cached per frame delay for example 60 FPS will be 60 / 1000 = 16
+	uint32_t FrameDelay;
+
+	// Time ms of frame start
+	uint32_t FrameStart;
+	// Time ms of frame end
+	uint32_t FrameTime;
+
+	// Deltatime
+	uint64_t CounterLastFrame;
+	uint64_t CounterCurrentFrame = SDL_GetPerformanceCounter();
 
 public:
 	template<class TWindow>
@@ -69,5 +95,11 @@ public:
 protected:
 	/** Array of windows managed by this engine. */
 	CArray<FWindow*> WindowsManaged;
+
+
+
+	static SDL_Event Event;
+	//static AssetsManager* Assets;
+
 
 };

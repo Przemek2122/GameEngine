@@ -38,12 +38,12 @@ namespace FUtil
 	/* Starts delay.
 	 * @param startMs should be long long int &.
 	 * This functions sets time in ms. */
-	void StartDelay(time_t& startMs);
+	void StartDelay(time_t& StartMs);
 
 	/* Checks and returns true if it's delayed enough.
 	 * @param startMs is long long int& set in startDelay().
 	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.*/
-	bool IsDelayed(time_t& startMs, time_t& delayMs);
+	bool IsDelayed(time_t& StartMs, time_t& DelayMs);
 
 
 	/* Returns safe rawtime 
@@ -63,7 +63,7 @@ namespace FUtil
 	INLINE_DEBUGABLE void Info(std::ostream& Message);
 
 /** Logs (Info): with white(default) color. */
-#define LOG_INFO(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+#define LOG_INFO(Message) FUtil::Info(std::ostringstream().flush() << Message)
 
 	/** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. */
 	INLINE_DEBUGABLE void Debug(std::string Message);
@@ -83,7 +83,7 @@ namespace FUtil
 	INLINE_DEBUGABLE void Warn(std::ostream& Message);
 
 /** Logs (Warnning): with yellow color. Has overloads. */
-#define LOG_WARN(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+#define LOG_WARN(Message) FUtil::Warn(std::ostringstream().flush() << Message)
 
 	
 	/** Logs (Error): with red color */
@@ -92,7 +92,7 @@ namespace FUtil
 	INLINE_DEBUGABLE void Error(std::ostream& Message);
 
 /** Logs (Error): with red color */
-#define LOG_ERROR(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+#define LOG_ERROR(Message) FUtil::Error(std::ostringstream().flush() << Message)
 
 
 	/* Print text to console with specified color.

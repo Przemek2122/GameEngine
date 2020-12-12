@@ -11,7 +11,6 @@
 namespace FUtil
 {
 	bool isLoggingEnabled = false;
-	int loggingLevel = 1;
 	std::string LogDir = "log";
 	std::string LogPrefix = "log_";
 	std::string LogFilePath = LogDir + "/" + LogPrefix + GetCurrentTimeNoSpecial();
@@ -55,6 +54,7 @@ namespace FUtil
 				{
 				case ELogMessageType::Message_Info:
 					PrintToConsole(Message.Text, 7);
+
 					break;
 
 				case ELogMessageType::Message_Debug:
@@ -65,15 +65,18 @@ namespace FUtil
 
 				case ELogMessageType::Message_Warning:
 					PrintToConsole(Message.Text, 6);
+
 					break;
 
 				case ELogMessageType::Message_Error:
 					PrintToConsole(Message.Text, 4);
+
 					break;
 
 				default:
 					// Should be impossible (infinite loop may happen)
-					// @TODO Create type assert
+					ENSURE("Debug break");
+
 					break;
 				}
 
@@ -102,14 +105,14 @@ namespace FUtil
 	}
 
 	/* Starts delay you need variable long long int and pass it as reference */
-	void StartDelay(time_t& startMs)
+	void StartDelay(time_t& StartMs)
 	{
-		startMs = GetMiliseconds();
+		StartMs = GetMiliseconds();
 	}
 
-	bool IsDelayed(time_t& startMs, time_t& delayMs)
+	bool IsDelayed(time_t& StartMs, time_t& DelayMs)
 	{
-		long long signed int Difference = startMs + delayMs;
+		long long signed int Difference = StartMs + DelayMs;
 
 		if (static_cast<long long signed int>(GetMiliseconds()) >= Difference)
 		{

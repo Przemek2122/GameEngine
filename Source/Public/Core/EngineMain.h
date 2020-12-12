@@ -4,8 +4,7 @@
 
 #include "CoreEngine.h"
 #include "Engine.h"
-
-static FEngine* Engine = nullptr;
+#include "Includes/Statics.h"
 
 template<class FEngineClass = FEngine>
 void RunEngine(int argc, char* argv[])
@@ -18,43 +17,31 @@ void RunEngine(int argc, char* argv[])
 
 		Engine->PreInit();
 
-		Engine->Init(argc, argv);
+		Engine->EngineInit(argc, argv);
 
-		Engine->GameInit();
+		Engine->Init();
 
 		Engine->PostInit();
 	}
 
 	// Main loop
 	{
-		// FPS limit
-		const uint32_t FPS = 60;
-		const uint32_t FrameDelay = 1000 / FPS;
-
-		uint32_t FrameStart;
-		uint32_t FrameTime;
-
-		// Deltatime
-		uint64_t CounterLastFrame = 0;
-		uint64_t CounterCurrentFrame = SDL_GetPerformanceCounter();
-
 		while (Engine->CanContinueMainLoop())
 		{
-			// Deltatime
-			CounterLastFrame = CounterCurrentFrame;
-			CounterCurrentFrame = SDL_GetPerformanceCounter();
+			Engine->UpdateFrameTimeStart();
 
-			FrameStart = SDL_GetTicks();
+			Engine->EngineTick();
 
-			Engine->MainLoop();
+			Engine->UpdateFrameTimeEnd();
 
-			if (Engine->IsFrameRateLimit())
+			if (Engine->IsFrameRateLimited())
 			{
-				FrameTime = SDL_GetTicks() - FrameStart;
+				const uint32_t EngineFrameTime = Engine->GetFrameTime();
+				const uint32_t EngineFrameDelay = Engine->GetFrameDelay();
 
-				if (FrameDelay > FrameTime)
+				if (EngineFrameDelay > EngineFrameTime)
 				{
-					SDL_Delay(FrameDelay - FrameTime);
+					SDL_Delay(EngineFrameDelay - EngineFrameTime);
 				}
 			}
 		}
