@@ -24,7 +24,13 @@ public:
 	/** Is inside of loop. Runs until Exit() is called. */
 	void EngineTick();
 
+	/** To be subproject overriden. Called each frame */
 	virtual void Tick();
+
+	void EnginePostSecondTick();
+
+	/** To be subproject overriden. Called every second */
+	virtual void PostSecondTick();
 
 	/** MainLoop() runs untill this return false. */
 	virtual bool CanContinueMainLoop() const;
@@ -38,7 +44,7 @@ public:
 	/** Called when main loops stop but before destructor. */
 	virtual void PreExit();
 
-	/** Clean up memory. */
+	/** Clean up memory. (Remember to call parent! Otherwise you will leak memory.) */
 	virtual void Clean();
 
 	/** @Returns true if Init() has finished */
@@ -61,7 +67,7 @@ public:
 	// Use to set engine frame rate - ticks per second
 	virtual void SetFrameRate(uint32_t NewFrameRate);
 
-	
+	int GetFramesThisSecond() const;
 
 protected:
 	// Framerate per second / ticks per second
@@ -74,27 +80,31 @@ protected:
 	// Time ms of frame end
 	uint32_t FrameTime;
 
-	// Deltatime
 	uint64_t CounterLastFrame;
 	uint64_t CounterCurrentFrame = SDL_GetPerformanceCounter();
 
+private:
+	int TicksThisSecond;
+	size_t Second;
+
 public:
-	template<class TWindow>
-	FWindow* CreateWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0)
-	{
-		TWindow* NewWindow = new TWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags);
+	/** @Returns engine render class (used for managing windows) */
+	FEnginerRender* GetEngineRender() const;
 
-		WindowsManaged.Push(NewWindow);
-	}
-
-	bool DestroyWindow(FWindow* Window)
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TRenderClass>
+	inline FEnginerRender* GetEngineRenderCasted() const
 	{
-		WindowsManaged.Remove(Window);
+		static_cast<TRenderClass>(GetEngineRender());
 	}
 
 protected:
-	/** Array of windows managed by this engine. */
-	CArray<FWindow*> WindowsManaged;
+	FEnginerRender* EngineRender;
+
+	virtual FEnginerRender* CreateEngineRenderer();
+
+
+
 
 
 

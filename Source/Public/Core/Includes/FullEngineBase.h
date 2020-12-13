@@ -13,6 +13,7 @@
 
 #include "Core/Object.h"
 #include "Core/Engine.h"
+#include "Core/EngineRender.h"
 #include "Core/EngineMain.h"
 #include "Renderer/Window.h"
 #include "Renderer/Renderer.h"

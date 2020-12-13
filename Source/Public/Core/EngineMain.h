@@ -34,6 +34,7 @@ void RunEngine(int argc, char* argv[])
 
 			Engine->UpdateFrameTimeEnd();
 
+			// Delay if required.
 			if (Engine->IsFrameRateLimited())
 			{
 				const uint32_t EngineFrameTime = Engine->GetFrameTime();

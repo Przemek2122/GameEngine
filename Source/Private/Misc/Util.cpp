@@ -98,40 +98,99 @@ namespace FUtil
 		return 0;
 	}
 
-	/* Return current Milisecond */
-	inline long long unsigned int GetMiliseconds()
+	size_t GetNanoSeconds()
+	{
+		return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	}
+
+	size_t GetMircoSeconds()
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	}
 
+	/* Return current Milisecond */
+	size_t GetMiliseconds()
+	{
+		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	}
+
+	size_t GetSeconds()
+	{
+		return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();;
+	}
+
+	time_t GetTime()
+	{
+		return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	}
+
+	int GetSecond(struct tm InTime)
+	{
+		return InTime.tm_sec;
+	}
+
+	int GetMinute(struct tm InTime)
+	{
+		return InTime.tm_min;
+	}
+
+	int GetHour(struct tm InTime)
+	{
+		return InTime.tm_hour;
+	}
+
+	int GetDayOfWeek(struct tm InTime)
+	{
+		return InTime.tm_wday;
+	}
+
+	int GetDayOfMonth(struct tm InTime)
+	{
+		return InTime.tm_mday;
+	}
+
+	int GetDayOfYear(struct tm InTime)
+	{
+		return InTime.tm_yday;
+	}
+
+	int GetMonth(struct tm InTime)
+	{
+		return 0;
+	}
+
+	int GetYear(struct tm InTime)
+	{
+		return 0;
+	}
+
 	/* Starts delay you need variable long long int and pass it as reference */
-	void StartDelay(time_t& StartMs)
+	void StartDelay(size_t& StartMs)
 	{
 		StartMs = GetMiliseconds();
 	}
 
-	bool IsDelayed(time_t& StartMs, time_t& DelayMs)
+	bool IsDelayed(size_t& StartMs, size_t DelayMs)
 	{
-		long long signed int Difference = StartMs + DelayMs;
-
-		if (static_cast<long long signed int>(GetMiliseconds()) >= Difference)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return static_cast<size_t>(GetMiliseconds()) >= StartMs + DelayMs;
 	}
 
 	time_t GetRawtime()
 	{
 		time_t rawtime;
 		time(&rawtime);
+
+		return rawtime;
+	}
+
+	struct tm GetTimeInfo()
+	{
+		time_t rawtime;
+		time(&rawtime);
 		struct tm timeinfo;
 		localtime_s(&timeinfo, &rawtime);
 
-		return rawtime;
+		return timeinfo;
 	}
 
 	std::string GetCurrentTimeNoSpecial()

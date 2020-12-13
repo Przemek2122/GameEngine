@@ -16,7 +16,7 @@ public:
 	inline size_t Size() const override
 	{
 		return Vector.size();
-	};
+	}
 	inline bool IsEmpty() const override
 	{
 		return Vector.empty();
@@ -64,12 +64,12 @@ public:
 		return RemovedElements > 0;
 	}
 
-	inline TType& operator[](size_t Index)
+	INLINE_DEBUGABLE TType& operator[](size_t Index)
 	{
 		return Vector[Index];
 	}
 
-	inline constexpr TType& At(size_t Index)
+	INLINE_DEBUGABLE constexpr TType& At(size_t Index)
 	{
 		return Vector.at(Index);
 	}
@@ -84,6 +84,46 @@ public:
 	inline constexpr void Swap(std::vector<TType>& Other)
 	{
 		Vector.swap(Other);
+	}
+
+	TType& begin()
+	{
+		return Vector.begin();
+	}
+
+	TType& end()
+	{
+		return Vector.end();
+	}
+
+	TType& begin() const
+	{
+		return Vector.begin();
+	}
+
+	TType& end() const
+	{
+		return Vector.end();
+	}
+
+	TType* begin()
+	{
+		return Vector.begin();
+	}
+
+	TType* end()
+	{
+		return Vector.end();
+	}
+
+	TType* begin() const
+	{
+		return Vector.begin();
+	}
+
+	TType* end() const
+	{
+		return Vector.end();
 	}
 
 public:

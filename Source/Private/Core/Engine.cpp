@@ -13,6 +13,8 @@ FEngine::FEngine()
 	, FrameTime(0)
 	, CounterLastFrame(0)
 	, CounterCurrentFrame(SDL_GetPerformanceCounter())
+	, TicksThisSecond(0)
+	, Second(0)
 {
 	FUtil::LogInit();
 
@@ -80,6 +82,8 @@ void FEngine::EngineInit(int argc, char* argv[])
 
 	FUtil::Info("Engine init End");
 
+	EngineRender = CreateEngineRenderer();
+
 	bIsEngineInitialized = true;
 }
 
@@ -94,10 +98,37 @@ void FEngine::PostInit()
 
 void FEngine::EngineTick()
 {
+	// Tick counter
+	{
+		size_t SystemTime = FUtil::GetSeconds();
+
+		if (Second == SystemTime)
+		{
+			TicksThisSecond++;
+		}
+		else
+		{
+			EnginePostSecondTick();
+
+			TicksThisSecond = 0;
+			Second = SystemTime;
+		}
+	}
+
 	Tick();
 }
 
 void FEngine::Tick()
+{
+	EngineRender->StartRenderTick();
+}
+
+void FEngine::EnginePostSecondTick()
+{
+	PostSecondTick();
+}
+
+void FEngine::PostSecondTick()
 {
 }
 
@@ -122,6 +153,7 @@ void FEngine::PreExit()
 
 void FEngine::Clean()
 {
+	delete EngineRender;
 }
 
 bool FEngine::IsEngineInitialized() const
@@ -157,4 +189,19 @@ void FEngine::SetFrameRate(uint32_t NewFrameRate)
 {
 	FPS = NewFrameRate;
 	FrameDelay = 1000 / FPS;
+}
+
+int FEngine::GetFramesThisSecond() const
+{
+	return TicksThisSecond;
+}
+
+FEnginerRender* FEngine::CreateEngineRenderer()
+{
+	return new FEnginerRender();
+}
+
+FEnginerRender* FEngine::GetEngineRender() const
+{
+	return EngineRender;
 }

@@ -32,29 +32,59 @@ namespace FUtil
 	/* Thread for messages on console. */
 	static int MessagesPrinter(void* ptr);
 
-	/* Returns current milisecond since epoch(1 January 1970) */
-	inline long long unsigned int GetMiliseconds();
+	/* @Returns current nano-second since epoch(1 January 1970) - signed integer type of at least 64 bits */
+	INLINE_DEBUGABLE size_t GetNanoSeconds();
+	/* @Returns current micro-second since epoch(1 January 1970) - signed integer type of at least 55 bits */
+	INLINE_DEBUGABLE size_t GetMircoSeconds();
+	/* @Returns current mili-second since epoch(1 January 1970) - signed integer type of at least 45 bits */
+	INLINE_DEBUGABLE size_t GetMiliseconds();
+	/* @Returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
+	INLINE_DEBUGABLE size_t GetSeconds();
+
+	/** @Returns time_t with current time. */
+	INLINE_DEBUGABLE time_t GetTime();
+	/** @Returns time_t with current time. */
+	INLINE_DEBUGABLE struct tm GetTimeInfo();
+
+	/** @Returns second of minute */
+	INLINE_DEBUGABLE int GetSecond(struct tm InTime = GetTimeInfo());
+	/** @Returns minute of hour */
+	INLINE_DEBUGABLE int GetMinute(struct tm InTime = GetTimeInfo());
+	/** @Returns hour of day */
+	INLINE_DEBUGABLE int GetHour(struct tm InTime = GetTimeInfo());
+	/** @Returns day of Week */
+	INLINE_DEBUGABLE int GetDayOfWeek(struct tm InTime = GetTimeInfo());
+	/** @Returns day of month */
+	INLINE_DEBUGABLE int GetDayOfMonth(struct tm InTime = GetTimeInfo());
+	/** @Returns day of month */
+	INLINE_DEBUGABLE int GetDayOfYear(struct tm InTime = GetTimeInfo());
+	/** @Returns month of year */
+	INLINE_DEBUGABLE int GetMonth(struct tm InTime = GetTimeInfo());
+	/** @Returns year */
+	INLINE_DEBUGABLE int GetYear(struct tm InTime = GetTimeInfo());
 
 	/* Starts delay.
 	 * @param startMs should be long long int &.
 	 * This functions sets time in ms. */
-	void StartDelay(time_t& StartMs);
+	void StartDelay(size_t& StartMs);
 
 	/* Checks and returns true if it's delayed enough.
 	 * @param startMs is long long int& set in startDelay().
 	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.*/
-	bool IsDelayed(time_t& StartMs, time_t& DelayMs);
+	bool IsDelayed(size_t& StartMs, size_t DelayMs);
 
 
-	/* Returns safe rawtime 
-	 * @see http://www.cplusplus.com/reference/ctime/ctime/ */
-	inline time_t GetRawtime();
+	/** @Returns rawtime */
+	INLINE_DEBUGABLE time_t GetRawtime();
+	/** @Returns time info */
+	INLINE_DEBUGABLE struct tm GetTimeInfo();
+
 
 	/* Returns current time in format 12_01_2019_12_37_23. */
-	inline std::string GetCurrentTimeNoSpecial(); 
+	INLINE_DEBUGABLE std::string GetCurrentTimeNoSpecial();
 
 	/* Returns current time in format 12:01:2019 12:37:23. */
-	inline std::string GetCurrTime();
+	INLINE_DEBUGABLE std::string GetCurrTime();
 
 
 	/** Logs (Info): with white(default) color. */
