@@ -10,6 +10,9 @@ class FFilesystem;
 class FRenderer;
 class FWindow;
 
+template<class TType = float>
+class FVector2D;
+
 template<typename TType>
 class CContainerBase;
 template<typename TType>

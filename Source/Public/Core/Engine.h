@@ -109,8 +109,12 @@ protected:
 
 	virtual FEngineRender* CreateEngineRenderer();
 
+protected:
+	// First param of main.
+	std::string LaunchExePath;
 
-
+	// Parameters
+	CArray<std::string> LaunchParameters;
 
 
 

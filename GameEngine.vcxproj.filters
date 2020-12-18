@@ -336,9 +336,6 @@
     <ClInclude Include="Source\Public\Containers\Map.h">
       <Filter>Source\Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\Vector2D.h">
-      <Filter>Source\Public\Types</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Misc\Filesystem.h">
       <Filter>Source\Public\Misc</Filter>
     </ClInclude>
@@ -384,6 +381,12 @@
     <ClInclude Include="Source\Public\Core\Includes\ForwardThirdParty.h">
       <Filter>Source\Public\Core\Includes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Types\FVector2D.h">
+      <Filter>Source\Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Misc\Math.h">
+      <Filter>Source\Public\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
@@ -410,9 +413,6 @@
     <ClCompile Include="Source\Private\Containers\Map.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\Vector2D.cpp">
-      <Filter>Source\Private\Types</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp">
       <Filter>Source\Private\Misc</Filter>
     </ClCompile>
@@ -436,6 +436,12 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\EngineRender.cpp">
       <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\FVector2D.cpp">
+      <Filter>Source\Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Misc\Math.cpp">
+      <Filter>Source\Private\Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

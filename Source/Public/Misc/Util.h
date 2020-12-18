@@ -125,12 +125,14 @@ namespace FUtil
 #define LOG_ERROR(Message) FUtil::Error(std::ostringstream().flush() << Message)
 
 
-	/* Print text to console with specified color.
-	 * @param color see link below.
-	 * @see https://stackoverflow.com/questions/4053837/colorizing-text-in-the-console-with-c for color types
+	/* Print text to console with specified Color.
+	 * @param Color see link below.
+	 * @see https://stackoverflow.com/questions/4053837/colorizing-text-in-the-console-with-c for Color types
 	 * This function doesn't log to file. */
-	INLINE_DEBUGABLE void PrintToConsole(std::string& message, const int color = 7);
+	INLINE_DEBUGABLE void PrintToConsole(std::string& Message, const int Color = 7);
 
+	INLINE_DEBUGABLE void SetBit(unsigned char& Value, const int Index);
+	INLINE_DEBUGABLE bool IsBitSet(const unsigned char Value, const int Index);
 
 	/* Path to file with log. */ 
 	extern std::string LogFilePath;

@@ -1,7 +1,6 @@
 //
 
 #include "CoreEngine.h"
-#include "EngineMain.h"
 
 
 FEngine::FEngine()
@@ -30,33 +29,30 @@ FEngine::~FEngine()
 	SDL_Quit();
 }
 
-void FEngine::EngineInit(const int Argc, char* Argv[])
+void FEngine::EngineInit(int Argc, char* Argv[])
 {
 	FUtil::Info("Engine init Start");
 
 	// Read command line flags.
-	while ((++Argv)[0])
+	while (Argc--)
 	{
-		if (Argv[0][0] == '-')
+		if (Argc == 0)
 		{
-			switch (Argv[0][1])
-			{
-				// Left as sample
-				//case 's':
-					//Util::Info("Found s option. Enabling server.");
-					//break;
+			LaunchExePath = Argv[Argc];
 
-			default:
-				LOG_WARN("Unknown option: " << Argv[0]);
-
-				break;
-			}
+			LOG_INFO("Found launch exe path [" << Argc << "] = " << Argv[Argc]);
+		}
+		else
+		{
+			LaunchParameters.Push(Argv[Argc]);
+			
+			LOG_INFO("Found param [" << Argc << "] = " << Argv[Argc]);
 		}
 	}
 
 	// Initialize SDL
-	const auto SDLInitialized = SDL_Init(SDL_INIT_EVERYTHING);
-	if (SDLInitialized == 0)
+	const auto SdlInitialized = SDL_Init(SDL_INIT_EVERYTHING);
+	if (SdlInitialized == 0)
 	{
 		LOG_INFO("SDL Subsystems Initialised!");
 	}

@@ -11,6 +11,8 @@
 #include "Public/Containers/Queue.h"
 #include "Public/Containers/QueueSafe.h"
 
+#include "Public/Types/FVector2D.h"
+
 #include "Core/Object.h"
 #include "Core/Engine.h"
 #include "Core/EngineRender.h"

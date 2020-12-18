@@ -1,4 +1,4 @@
-//
+// Created by Przemys³aw Wiewióra 2020
 
 #pragma once
 
@@ -12,7 +12,7 @@ class FWindow
 public:
 	/**
 	 * Creates SDL Window.
-	 * Take a look here for avaiable flags (or at SDL_vide.h):
+	 * Take a look here for available flags (or at SDL_vide.h):
 	 * https://wiki.libsdl.org/SDL_WindowFlags
 	 */
 	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0);
@@ -36,5 +36,10 @@ public:
 public:
 	/** Call to change window size. */
 	void Resize(const int NewWidth, const int NewHeight);
+
+	/** @returns Window size in px. */
+	_NODISCARD FVector2D<int> GetWindowSize() const;
+	/** @returns Window percent at given location. Window 100 with position 50 will be 0.5. */
+	_NODISCARD FVector2D<float> GetWindowSizePercent(const FVector2D<int> Position) const;
 
 };

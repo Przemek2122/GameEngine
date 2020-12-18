@@ -1,8 +1,9 @@
 //
 
+#include "CoreEngine.h"
 #include "Renderer/Window.h"
 #include "Renderer/Renderer.h"
-#include "CoreEngine.h"
+#include <cmath> 
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
 	: WindowTitle(InTitle)
@@ -16,11 +17,12 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 
 	if (Window != nullptr)
 	{
-		FUtil::Info("Window created!");
+		LOG_INFO("Window created!");
 	}
 	else
 	{
-		FUtil::Error("Can not create window: " + (std::string)SDL_GetError());
+		LOG_ERROR("Can not create window: " << TEXT(SDL_GetError()));
+		
 		exit(-16);
 	}
 
@@ -33,11 +35,11 @@ FWindow::~FWindow()
 	{
 		SDL_DestroyWindow(Window);
 
-		FUtil::Info("Window destroyed!");
+		LOG_INFO("Window destroyed!");
 	}
 	else
 	{
-		FUtil::Warn("Window not destroyed (pointer invalid)!");
+		LOG_WARN("Window not destroyed (pointer invalid)!");
 	}
 
 	delete Renderer;
@@ -56,4 +58,20 @@ void FWindow::Resize(const int NewWidth, const int NewHeight)
 
 	WindowWidth = NewWidth;
 	WindowHeight = NewWidth;
+}
+
+FVector2D<int> FWindow::GetWindowSize() const
+{
+	FVector2D<int> Size;
+
+	SDL_GetWindowSize(Window, &Size.X, &Size.Y);
+	
+	return Size;
+}
+
+FVector2D<float> FWindow::GetWindowSizePercent(const FVector2D<int> Position) const
+{
+	const auto Size = GetWindowSize();
+
+	return (FVector2D<float>(Size) / FVector2D<float>(100)) * Position;
 }

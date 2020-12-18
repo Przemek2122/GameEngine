@@ -46,11 +46,12 @@
     <ClInclude Include="Source\Public\Core\Includes\Statics.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
+    <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
-    <ClInclude Include="Source\Public\Types\Vector2D.h" />
+    <ClInclude Include="Source\Public\Types\FVector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\close_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL.h" />
@@ -165,11 +166,12 @@
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />
+    <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
-    <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
+    <ClCompile Include="Source\Private\Types\FVector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
