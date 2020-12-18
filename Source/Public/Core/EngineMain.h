@@ -2,60 +2,49 @@
 
 #pragma once
 
-#include "CoreEngine.h"
-#include "Engine.h"
-#include "Includes/Statics.h"
+#include "CoreMinimal.h"
 
-template<class FEngineClass = FEngine>
-void RunEngine(int argc, char* argv[])
+inline FEngine* Engine;
+
+/**
+ * Singleton manager for engine class.
+ */
+class FEngineManager
 {
-	// Init
+public:
+	FEngineManager();
+	~FEngineManager();
+
+public:
+
+	/** Call once before doing anything with engine. */
+	template<class TEngineClass = FEngine>
+	void Start(const int InArgc, char* InArgv[])
 	{
 		std::cout << "Game engine initializing ..." << std::endl;
 
-		Engine = new FEngineClass();
+		Engine = new TEngineClass();
+		
+		Init(InArgc, InArgv);
 
-		Engine->PreInit();
+		MainLoop();
 
-		Engine->EngineInit(argc, argv);
-
-		Engine->Init();
-
-		Engine->PostInit();
+		Exit();
 	}
 
-	// Main loop
+	static FEngine* Get();
+	
+	template<typename TEngineClass>
+	static TEngineClass* Get()
 	{
-		while (Engine->CanContinueMainLoop())
-		{
-			Engine->UpdateFrameTimeStart();
-
-			Engine->EngineTick();
-
-			Engine->UpdateFrameTimeEnd();
-
-			// Delay if required.
-			if (Engine->IsFrameRateLimited())
-			{
-				const uint32_t EngineFrameTime = Engine->GetFrameTime();
-				const uint32_t EngineFrameDelay = Engine->GetFrameDelay();
-
-				if (EngineFrameDelay > EngineFrameTime)
-				{
-					SDL_Delay(EngineFrameDelay - EngineFrameTime);
-				}
-			}
-		}
+		return static_cast<TEngineClass>(Engine);
 	}
-
-	// Exit
-	{
-		Engine->PreExit();
-
-		Engine->Clean();
-
-		delete Engine;
-
-		std::cout << "Game engine end." << std::endl;
-	}
-}
+	
+protected:
+	void Init(const int Argc, char* Argv[]); 
+	
+	void MainLoop();
+	
+	void Exit();
+	
+};

@@ -3,16 +3,16 @@
 #include "CoreEngine.h"
 #include "EngineRender.h"
 
-FEnginerRender::FEnginerRender()
+FEngineRender::FEngineRender()
 	: bIsRenderTickFinished(true)
 {
 }
 
-FEnginerRender::~FEnginerRender()
+FEngineRender::~FEngineRender()
 {
 }
 
-void FEnginerRender::StartRenderTick()
+void FEngineRender::StartRenderTick()
 {
 	if (bIsRenderTickFinished)
 	{
@@ -27,18 +27,18 @@ void FEnginerRender::StartRenderTick()
 	}
 }
 
-bool FEnginerRender::IsRenderTickFinished() const
+bool FEngineRender::IsRenderTickFinished() const
 {
 	return bIsRenderTickFinished;
 }
 
-void FEnginerRender::RenderTick()
+void FEngineRender::RenderTick()
 {
-	for (FWindow* Window : ManagedWindows)
+	for (FWindow* Window : ManagedWindows.Vector)
 	{
 		if (Window != nullptr)
 		{
-
+			Window->Render();
 		}
 		else
 		{
@@ -49,24 +49,24 @@ void FEnginerRender::RenderTick()
 	EndRenderTick();
 }
 
-void FEnginerRender::EndRenderTick()
+void FEngineRender::EndRenderTick()
 {
 	bIsRenderTickFinished = true;
 }
 
-void FEnginerRender::DestroyWindow(FWindow* InWindow)
+void FEngineRender::DestroyWindow(FWindow* InWindow)
 {
 	ManagedWindows.Remove(InWindow);
 
 	delete InWindow;
 }
 
-void FEnginerRender::AddWindow(FWindow* InWindow)
+void FEngineRender::AddWindow(FWindow* InWindow)
 {
 	ManagedWindows.Push(InWindow);
 }
 
-void FEnginerRender::RemoveWindow(FWindow* InWindow)
+void FEngineRender::RemoveWindow(FWindow* InWindow)
 {
 	ManagedWindows.Remove(InWindow);
 }

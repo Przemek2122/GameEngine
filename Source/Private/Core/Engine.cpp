@@ -1,20 +1,22 @@
 //
 
 #include "CoreEngine.h"
+#include "EngineMain.h"
+
 
 FEngine::FEngine()
 	: bContinueMainLoop(true)
-	, bIsEngineInitialized(false)
 	, bFrameRateLimited(true)
+	, bIsEngineInitialized(false)
 
-	, FPS(0)
+	, FrameRate(0)
 	, FrameDelay(0)
 	, FrameStart(0)
 	, FrameTime(0)
 	, CounterLastFrame(0)
-	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 	, TicksThisSecond(0)
 	, Second(0)
+	, EngineRender(nullptr)
 {
 	FUtil::LogInit();
 
@@ -23,84 +25,78 @@ FEngine::FEngine()
 
 FEngine::~FEngine()
 {
+	LOG_INFO("Engine finish.");
+	
 	SDL_Quit();
 }
 
-void FEngine::PreInit()
-{
-}
-
-void FEngine::EngineInit(int argc, char* argv[])
+void FEngine::EngineInit(const int Argc, char* Argv[])
 {
 	FUtil::Info("Engine init Start");
 
 	// Read command line flags.
-	while ((++argv)[0])
+	while ((++Argv)[0])
 	{
-		if (argv[0][0] == '-')
+		if (Argv[0][0] == '-')
 		{
-			switch (argv[0][1])
+			switch (Argv[0][1])
 			{
-			case 's':
-				//Util::Info("Found s option. Enabling server.");
-				break;
+				// Left as sample
+				//case 's':
+					//Util::Info("Found s option. Enabling server.");
+					//break;
 
 			default:
-				FUtil::Info("Unknown option: " + (std::string)argv[0]);
+				LOG_WARN("Unknown option: " << Argv[0]);
+
 				break;
 			}
 		}
 	}
 
 	// Initialize SDL
-	const int SDLInitialized = SDL_Init(SDL_INIT_EVERYTHING);
+	const auto SDLInitialized = SDL_Init(SDL_INIT_EVERYTHING);
 	if (SDLInitialized == 0)
 	{
-		FUtil::Info("SDL Subsystems Initialised!");
+		LOG_INFO("SDL Subsystems Initialised!");
 	}
 	else
 	{
-		FUtil::Error("SDL_INIT_EVERYTHING error: " + (std::string)SDL_GetError());
+		LOG_ERROR("SDL_INIT_EVERYTHING error: " << SDL_GetError());
+
 		exit(-2);
 	}
 
 	// Initialize SDL TTF 
 	if (TTF_Init() != 0)
 	{
-		FUtil::Error("TTF_Init: " + (std::string)TTF_GetError());
+		LOG_ERROR("TTF_Init: " << TTF_GetError());
+
 		exit(-4);
 	}
 
 	// Initialize SDL - Load support for the OGG and MOD sample/music formats
-	const int MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
-	const int MixInitialized = Mix_Init(MixFlags);
+	const auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
+	const auto MixInitialized = Mix_Init(MixFlags);
 	if (!MixInitialized)
 	{
-		FUtil::Error("Mix_Init: " + (std::string)Mix_GetError());
+		LOG_ERROR("Mix_Init: " << Mix_GetError());
+
 		exit(-8);
 	}
 
-	FUtil::Info("Engine init End");
+	LOG_INFO("Engine init End");
 
 	EngineRender = CreateEngineRenderer();
 
 	bIsEngineInitialized = true;
 }
 
-void FEngine::Init()
-{
-	
-}
-
-void FEngine::PostInit()
-{
-}
-
 void FEngine::EngineTick()
 {
 	// Tick counter
 	{
-		size_t SystemTime = FUtil::GetSeconds();
+		const auto SystemTime = FUtil::GetSeconds();
 
 		if (Second == SystemTime)
 		{
@@ -116,16 +112,31 @@ void FEngine::EngineTick()
 	}
 
 	Tick();
-}
 
-void FEngine::Tick()
-{
 	EngineRender->StartRenderTick();
 }
 
 void FEngine::EnginePostSecondTick()
 {
 	PostSecondTick();
+}
+
+void FEngine::PreInit()
+{
+}
+
+void FEngine::Init()
+{
+	
+}
+
+void FEngine::PostInit()
+{
+}
+
+void FEngine::Tick()
+{
+	
 }
 
 void FEngine::PostSecondTick()
@@ -185,10 +196,10 @@ uint32_t FEngine::GetFrameDelay() const
 	return FrameDelay;
 }
 
-void FEngine::SetFrameRate(uint32_t NewFrameRate)
+void FEngine::SetFrameRate(const uint32_t NewFrameRate)
 {
-	FPS = NewFrameRate;
-	FrameDelay = 1000 / FPS;
+	FrameRate = NewFrameRate;
+	FrameDelay = 1000 / FrameRate;
 }
 
 int FEngine::GetFramesThisSecond() const
@@ -196,12 +207,12 @@ int FEngine::GetFramesThisSecond() const
 	return TicksThisSecond;
 }
 
-FEnginerRender* FEngine::CreateEngineRenderer()
+FEngineRender* FEngine::CreateEngineRenderer()
 {
-	return new FEnginerRender();
+	return new FEngineRender();
 }
 
-FEnginerRender* FEngine::GetEngineRender() const
+FEngineRender* FEngine::GetEngineRender() const
 {
 	return EngineRender;
 }

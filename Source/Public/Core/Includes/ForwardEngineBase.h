@@ -5,7 +5,7 @@
 // Engine base classes forward declarations
 class FEngineMain;
 class FEngine;
-class FEnginerRender;
+class FEngineRender;
 class FFilesystem;
 class FRenderer;
 class FWindow;

@@ -74,8 +74,6 @@ public:
 		return Vector.at(Index);
 	}
 
-	/** @TODO Add suport for auto. */
-
 	inline void Fill(const TType& Value)
 	{
 		Vector._Ufill(Value);
@@ -86,45 +84,6 @@ public:
 		Vector.swap(Other);
 	}
 
-	TType& begin()
-	{
-		return Vector.begin();
-	}
-
-	TType& end()
-	{
-		return Vector.end();
-	}
-
-	TType& begin() const
-	{
-		return Vector.begin();
-	}
-
-	TType& end() const
-	{
-		return Vector.end();
-	}
-
-	TType* begin()
-	{
-		return Vector.begin();
-	}
-
-	TType* end()
-	{
-		return Vector.end();
-	}
-
-	TType* begin() const
-	{
-		return Vector.begin();
-	}
-
-	TType* end() const
-	{
-		return Vector.end();
-	}
 
 public:
 	/** C++ Vector */

@@ -3,40 +3,46 @@
 #pragma once
 
 #include "CoreMinimal.h"
+class FEngineManager;
 
 class FEngine
 {
-public:
+friend FEngineManager;
+	
+protected:
 	FEngine();
 	virtual ~FEngine();
 
+private:
+	/** Called before tick. Once. */
+	void EngineInit(int Argc, char* Argv[]);
+	
+	/** Is inside of loop. Runs until Exit() is called. */
+	void EngineTick();
+
+	/** Called once a second. */
+	void EnginePostSecondTick();
+public:
 	/** First init ever called. */
 	virtual void PreInit();
 
-	void EngineInit(int argc, char* argv[]);
-
-	/** Init (Inits SDL, Engine stuff). */
+	/** Init (SDL, Engine stuff). */
 	virtual void Init();
 
 	/** Third init function. */
 	virtual void PostInit();
 
-	/** Is inside of loop. Runs until Exit() is called. */
-	void EngineTick();
-
-	/** To be subproject overriden. Called each frame */
+	/** To be sub-project overriden. Called each frame */
 	virtual void Tick();
 
-	void EnginePostSecondTick();
-
-	/** To be subproject overriden. Called every second */
+	/** To be sub-project overriden. Called every second */
 	virtual void PostSecondTick();
 
-	/** MainLoop() runs untill this return false. */
-	virtual bool CanContinueMainLoop() const;
+	/** MainLoop() runs until this return false. */
+	_NODISCARD virtual bool CanContinueMainLoop() const;
 
-	/** True if framerate limit is enabled. */
-	virtual bool IsFrameRateLimited() const;
+	/** True if frame rate limit is enabled. */
+	_NODISCARD virtual bool IsFrameRateLimited() const;
 
 	/** Call to stop main loop. (Exit engine) */
 	virtual void Stop();
@@ -47,8 +53,8 @@ public:
 	/** Clean up memory. (Remember to call parent! Otherwise you will leak memory.) */
 	virtual void Clean();
 
-	/** @Returns true if Init() has finished */
-	bool IsEngineInitialized() const;
+	/** @returns true if Init() has finished */
+	_NODISCARD bool IsEngineInitialized() const;
 
 private:
 	bool bContinueMainLoop;
@@ -61,17 +67,17 @@ public:
 	virtual void UpdateFrameTimeStart();
 	virtual void UpdateFrameTimeEnd();
 
-	uint32_t GetFrameTime() const;
-	uint32_t GetFrameDelay() const;
+	_NODISCARD uint32_t GetFrameTime() const;
+	_NODISCARD uint32_t GetFrameDelay() const;
 
 	// Use to set engine frame rate - ticks per second
-	virtual void SetFrameRate(uint32_t NewFrameRate);
+	virtual void SetFrameRate(const uint32_t NewFrameRate);
 
-	int GetFramesThisSecond() const;
+	_NODISCARD int GetFramesThisSecond() const;
 
 protected:
 	// Framerate per second / ticks per second
-	uint32_t FPS;
+	uint32_t FrameRate;
 	// Cached per frame delay for example 60 FPS will be 60 / 1000 = 16
 	uint32_t FrameDelay;
 
@@ -89,19 +95,19 @@ private:
 
 public:
 	/** @Returns engine render class (used for managing windows) */
-	FEnginerRender* GetEngineRender() const;
+	_NODISCARD FEngineRender* GetEngineRender() const;
 
 	/** Use this if you changed to your own. Will return casted. */
 	template<typename TRenderClass>
-	inline FEnginerRender* GetEngineRenderCasted() const
+	TRenderClass* GetEngineRender() const
 	{
-		static_cast<TRenderClass>(GetEngineRender());
+		return static_cast<TRenderClass>(GetEngineRender());
 	}
 
 protected:
-	FEnginerRender* EngineRender;
+	FEngineRender* EngineRender;
 
-	virtual FEnginerRender* CreateEngineRenderer();
+	virtual FEngineRender* CreateEngineRenderer();
 
 
 

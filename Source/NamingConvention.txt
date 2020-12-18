@@ -1,0 +1,4 @@
+F All other
+T Template
+I Interface
+C Containter?

@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 
 /** Call for managing rendering (windows). */
-class FEnginerRender
+class FEngineRender
 {
 	friend FEngine;
 
 protected:
-	FEnginerRender();
-	~FEnginerRender();
+	FEngineRender();
+	~FEngineRender();
 
 public:
 	/** Called from engine when new render Tick should be started */
