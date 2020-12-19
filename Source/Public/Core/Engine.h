@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+class FEventHandler;
 class FEngineManager;
 
 class FEngine
@@ -107,7 +108,7 @@ public:
 protected:
 	FEngineRender* EngineRender;
 
-	virtual FEngineRender* CreateEngineRenderer();
+	_NODISCARD virtual FEngineRender* CreateEngineRenderer() const;
 
 protected:
 	// First param of main.
@@ -116,9 +117,22 @@ protected:
 	// Parameters
 	CArray<std::string> LaunchParameters;
 
+public:
+	_NODISCARD FEventHandler* GetEventHandler() const;
 
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TEventHandlerClass>
+	TEventHandlerClass* GetEventHandler() const
+	{
+		return static_cast<TEventHandlerClass>(GetEngineRender());
+	}
 
-	static SDL_Event Event;
+protected:
+	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
+
+protected:
+	SDL_Event SdlEvent;
+	FEventHandler* EventHandler;
 	//static AssetsManager* Assets;
 
 

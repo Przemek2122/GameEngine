@@ -17,6 +17,7 @@
 #endif
 
 #define TEXT(Text) const_cast<char*>(Text)
+#define STRING(Text) std::string(Text)
 
 #define DLLEXPORT __declspec(dllexport)
 #define DLLIMPORT __declspec(dllimport)

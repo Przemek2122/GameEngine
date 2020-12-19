@@ -13,11 +13,11 @@ class CArray : public CContainerBase<TType>
 {
 public:
 	/** Begin CContainerBase interface */
-	inline size_t Size() const override
+	_NODISCARD inline size_t Size() const override
 	{
 		return Vector.size();
 	}
-	inline bool IsEmpty() const override
+	_NODISCARD inline bool IsEmpty() const override
 	{
 		return Vector.empty();
 	}
@@ -34,7 +34,7 @@ public:
 
 	inline bool RemoveAt(const size_t Index)
 	{
-		Vector.erase(Vector.begin() + Index);
+		return Vector.erase(Vector.begin() + Index);
 	}
 	/** Remove first match. */
 	inline bool Remove(TType& Value)
@@ -44,20 +44,20 @@ public:
 	/** Remove all matches. */
 	inline bool RemoveAll(TType& Value)
 	{
-		std::vector<int>::iterator Iter = Vector.begin();
+		std::vector<int>::iterator Iterator = Vector.begin();
 
 		size_t RemovedElements = 0;
 
-		while (Iter != Vector.end())
+		while (Iterator != Vector.end())
 		{
-			if (*Iter == Value)
+			if (*Iterator == Value)
 			{
-				Iter = Vector.erase(Iter);
+				Iterator = Vector.erase(Iterator);
 				RemovedElements++;
 			}
 			else 
 			{
-				Iter++;
+				++Iterator;
 			}
 		}
 

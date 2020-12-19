@@ -49,6 +49,12 @@
     <Filter Include="Source\Public\Core\Includes">
       <UniqueIdentifier>{263bba92-4dad-4a97-9797-318404a25e00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Core\Input">
+      <UniqueIdentifier>{b5c4c16d-7bfe-46b9-b262-372ae6f0b9e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Core\Input">
+      <UniqueIdentifier>{1e0bab5b-e471-4070-9d03-5ff249a5b10e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\Core\Object.h">
@@ -387,6 +393,9 @@
     <ClInclude Include="Source\Public\Misc\Math.h">
       <Filter>Source\Public\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
+      <Filter>Source\Public\Core\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
@@ -442,6 +451,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Misc\Math.cpp">
       <Filter>Source\Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
+      <Filter>Source\Private\Core\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

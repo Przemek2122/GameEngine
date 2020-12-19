@@ -1,6 +1,7 @@
 //
 
 #include "CoreEngine.h"
+#include "Input/EventHandler.h"
 
 
 FEngine::FEngine()
@@ -15,7 +16,8 @@ FEngine::FEngine()
 	, CounterLastFrame(0)
 	, TicksThisSecond(0)
 	, Second(0)
-	, EngineRender(nullptr)
+	, EngineRender(CreateEngineRenderer())
+	, EventHandler(CreateEventHandler())
 {
 	FUtil::LogInit();
 
@@ -31,8 +33,12 @@ FEngine::~FEngine()
 
 void FEngine::EngineInit(int Argc, char* Argv[])
 {
-	FUtil::Info("Engine init Start");
-
+#if defined(__DATE__) && defined(__TIME__)
+		LOG_INFO("Engine init start compiled: " << __DATE__ << " " <<__TIME__);
+#else
+		LOG_INFO("Engine init start.");
+#endif
+	
 	// Read command line flags.
 	while (Argc--)
 	{
@@ -83,8 +89,6 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 	LOG_INFO("Engine init End");
 
-	EngineRender = CreateEngineRenderer();
-
 	bIsEngineInitialized = true;
 }
 
@@ -106,6 +110,8 @@ void FEngine::EngineTick()
 			Second = SystemTime;
 		}
 	}
+
+	EventHandler->HandleEvents();
 
 	Tick();
 
@@ -203,9 +209,19 @@ int FEngine::GetFramesThisSecond() const
 	return TicksThisSecond;
 }
 
-FEngineRender* FEngine::CreateEngineRenderer()
+FEngineRender* FEngine::CreateEngineRenderer() const
 {
 	return new FEngineRender();
+}
+
+FEventHandler* FEngine::GetEventHandler() const
+{
+	return EventHandler;
+}
+
+FEventHandler* FEngine::CreateEventHandler() const
+{
+	return new FEventHandler(SdlEvent);
 }
 
 FEngineRender* FEngine::GetEngineRender() const

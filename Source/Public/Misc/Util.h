@@ -73,7 +73,6 @@ namespace FUtil
 	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.*/
 	bool IsDelayed(size_t& StartMs, size_t DelayMs);
 
-
 	/** @Returns rawtime */
 	INLINE_DEBUGABLE time_t GetRawtime();
 	/** @Returns time info */
@@ -88,48 +87,48 @@ namespace FUtil
 
 
 	/** Logs (Info): with white(default) color. */
-	INLINE_DEBUGABLE void Info(std::string Message);
+	inline void Info(std::string Message);
 	/** Logs (Info): with white(default) color. Print any value (std::ostream). */
-	INLINE_DEBUGABLE void Info(std::ostream& Message);
+	void Info(std::ostream& Message);
 
 /** Logs (Info): with white(default) color. */
-#define LOG_INFO(Message) FUtil::Info(std::ostringstream().flush() << Message)
+#define LOG_INFO(Message) (FUtil::Info(std::ostringstream().flush() << Message))
 
 	/** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. */
-	INLINE_DEBUGABLE void Debug(std::string Message);
+	inline void Debug(std::string Message);
 	/** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. Print any value (std::ostream). */
-	INLINE_DEBUGABLE void Debug(std::ostream& Message);
+	void Debug(std::ostream& Message);
 
 #if _DEBUG
 /** Logs (Debug): with log color. LOGS ONLY WHEN IN _DEBUG mode. */
-#define LOG_DEBUG(Message) FUtil::Debug(std::ostringstream().flush() << Message)
+#define LOG_DEBUG(Message) (FUtil::Debug(std::ostringstream().flush() << Message))
 #else
 #define LOG_DEBUG(Message)
 #endif
 
-	/** Logs (Warnning): with yellow color. Has overloads. */
-	INLINE_DEBUGABLE void Warn(std::string Message);
-	/** Logs (Warnning): with yellow color. Print any value (std::ostream). */
-	INLINE_DEBUGABLE void Warn(std::ostream& Message);
+	/** Logs (Warn): with yellow color. Has overloads. */
+	inline void Warn(std::string Message);
+	/** Logs (Warn): with yellow color. Print any value (std::ostream). */
+	void Warn(std::ostream& Message);
 
-/** Logs (Warnning): with yellow color. Has overloads. */
-#define LOG_WARN(Message) FUtil::Warn(std::ostringstream().flush() << Message)
+/** Logs (Warn): with yellow color. Logs with file and line. */
+#define LOG_WARN(Message) (FUtil::Warn(std::ostringstream().flush() << Message << std::endl << " in " << __FILE__ << "@" << __LINE__))
 
 	
 	/** Logs (Error): with red color */
-	INLINE_DEBUGABLE void Error(std::string Message);
+	inline void Error(std::string Message);
 	/** Logs (Error): with red color. Print any value (std::ostream). */
-	INLINE_DEBUGABLE void Error(std::ostream& Message);
-
-/** Logs (Error): with red color */
-#define LOG_ERROR(Message) FUtil::Error(std::ostringstream().flush() << Message)
+	void Error(std::ostream& Message);
+	
+/** Logs (Error): with red color. Logs with file and line. */
+#define LOG_ERROR(Message) (FUtil::Error(std::ostringstream().flush() << Message << std::endl << " in " << __FILE__ << "@" << __LINE__))
 
 
 	/* Print text to console with specified Color.
 	 * @param Color see link below.
 	 * @see https://stackoverflow.com/questions/4053837/colorizing-text-in-the-console-with-c for Color types
 	 * This function doesn't log to file. */
-	INLINE_DEBUGABLE void PrintToConsole(std::string& Message, const int Color = 7);
+	inline void PrintToConsole(std::string& Message, const int Color = 7);
 
 	INLINE_DEBUGABLE void SetBit(unsigned char& Value, const int Index);
 	INLINE_DEBUGABLE bool IsBitSet(const unsigned char Value, const int Index);

@@ -37,8 +37,14 @@ public:
 
 	// Negate
 	
-	FVector2D operator-() { return FVector2D(-X, -Y); }
-	FVector2D operator-() const { return FVector2D(-X, -Y); }
+	FVector2D operator-()
+	{
+		return FVector2D(-X, -Y);
+	}
+	FVector2D operator-() const
+	{
+		return FVector2D(-X, -Y);
+	}
 
 	// Basic calculations
 	
@@ -80,23 +86,59 @@ public:
 		return FVector2D<TType>(static_cast<TType>(L.X) / R.X, static_cast<TType>(L.Y)/ R.Y);
 	}
 
-	FVector2D& operator+=(const FVector2D& V) { X += V.X; Y += V.Y; return *this; }
-	FVector2D& operator-=(const FVector2D& V) { X -= V.X; Y -= V.Y; return *this; }
-	FVector2D& operator*=(const FVector2D& V) { X *= V.X; Y *= V.Y; return *this; }
-	FVector2D& operator/=(const FVector2D& V) { X /= V.X; Y /= V.Y; return *this; }
+	FVector2D& operator+=(const FVector2D& V)
+	{
+		X += V.X; Y += V.Y; return *this;
+	}
+	FVector2D& operator-=(const FVector2D& V)
+	{
+		X -= V.X; Y -= V.Y; return *this;
+	}
+	FVector2D& operator*=(const FVector2D& V)
+	{
+		X *= V.X; Y *= V.Y; return *this;
+	}
+	FVector2D& operator/=(const FVector2D& V)
+	{
+		X /= V.X; Y /= V.Y; return *this;
+	}
 
 	// Comparison
 	
-	friend bool operator==(const FVector2D& L, const FVector2D& R) { return std::tie(L.X, L.Y) == std::tie(R.X, R.Y); }
-	friend bool operator!=(const FVector2D& L, const FVector2D& R) { return !(L == R); }
-	friend bool operator< (const FVector2D& L, const FVector2D& R) { return std::tie(L.X, L.Y) < std::tie(R.X, R.Y); }
-	friend bool operator>=(const FVector2D& L, const FVector2D& R) { return !(L < R); }
-	friend bool operator> (const FVector2D& L, const FVector2D& R) { return   R < L; }
-	friend bool operator<=(const FVector2D& L, const FVector2D& R) { return !(R < L); }
+	friend bool operator==(const FVector2D& L, const FVector2D& R)
+	{
+		return std::tie(L.X, L.Y) == std::tie(R.X, R.Y);
+	}
+	friend bool operator!=(const FVector2D& L, const FVector2D& R)
+	{
+		return !(L == R);
+	}
+	friend bool operator< (const FVector2D& L, const FVector2D& R)
+	{
+		return std::tie(L.X, L.Y) < std::tie(R.X, R.Y);
+	}
+	friend bool operator>=(const FVector2D& L, const FVector2D& R)
+	{
+		return !(L < R);
+	}
+	friend bool operator> (const FVector2D& L, const FVector2D& R)
+	{
+		return   R < L;
+	}
+	friend bool operator<=(const FVector2D& L, const FVector2D& R)
+	{
+		return !(R < L);
+	}
 
 
-	FVector2D& operator*=(const TType& V) { X *= V; Y *= V; return *this; }
-	FVector2D& operator/=(const TType& V) { X /= V; Y /= V; return *this; }
+	FVector2D& operator*=(const TType& V)
+	{
+		X *= V; Y *= V; return *this;
+	}
+	FVector2D& operator/=(const TType& V)
+	{
+		X /= V; Y /= V; return *this;
+	}
 
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }
 	//FVector2D operator*(const FVector2D<TType>& V, const TType& S) { return FVector2D<TType>(V) *= S; }
@@ -123,7 +165,10 @@ public:
 	
 
 	// @Returns 0 - Should be rewritten into some kind of static.
-	FVector2D& Zero() {  }
+	FVector2D& Zero()
+	{
+		return FVector2D(0);
+	}
 
 	// Conversion
 	operator std::ostream () const 

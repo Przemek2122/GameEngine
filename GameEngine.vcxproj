@@ -44,6 +44,7 @@
     <ClInclude Include="Source\Public\Core\Includes\FullEngineBase.h" />
     <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h" />
     <ClInclude Include="Source\Public\Core\Includes\Statics.h" />
+    <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
     <ClInclude Include="Source\Public\Misc\Math.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
+    <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
