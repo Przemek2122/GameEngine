@@ -2,8 +2,8 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Window.h"
-#include "Renderer/Renderer.h"
 #include <cmath> 
+#include "Renderer/Renderer.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
 	: WindowTitle(InTitle)

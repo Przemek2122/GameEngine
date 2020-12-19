@@ -50,6 +50,8 @@
     <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
     <ClInclude Include="Source\Public\Types\FVector2D.h" />
@@ -171,6 +173,8 @@
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\FVector2D.cpp" />

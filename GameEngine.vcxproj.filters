@@ -55,6 +55,12 @@
     <Filter Include="Source\Public\Core\Input">
       <UniqueIdentifier>{1e0bab5b-e471-4070-9d03-5ff249a5b10e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\Renderer\Widgets">
+      <UniqueIdentifier>{3e414f25-c49a-4522-8486-c9193f964c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Renderer\Widgets">
+      <UniqueIdentifier>{7558cf56-0776-47f8-9b76-2dc1881f9265}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\Core\Object.h">
@@ -396,6 +402,12 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
       <Filter>Source\Public\Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
+      <Filter>Source\Public\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h">
+      <Filter>Source\Public\Renderer\Widgets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
@@ -454,6 +466,12 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
       <Filter>Source\Private\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Source\Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp">
+      <Filter>Source\Private\Renderer\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
