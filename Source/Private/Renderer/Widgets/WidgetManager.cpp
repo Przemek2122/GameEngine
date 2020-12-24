@@ -17,13 +17,13 @@ void FWidgetManager::Init()
 {
 }
 
-void FWidgetManager::Update()
+void FWidgetManager::Tick()
 {
 	const auto Size = ManagedWidgets.Size();
 	
-	for (int i = 0; i < Size; i++)
+	for (auto i = 0; i < Size; i++)
 	{
-		ManagedWidgets[i]->Update();
+		ManagedWidgets[i]->Tick();
 	}
 }
 
@@ -31,10 +31,15 @@ void FWidgetManager::Render()
 {
 	const auto Size = ManagedWidgets.Size();
 	
-	for (int i = 0; i < Size; i++)
+	for (auto i = 0; i < Size; i++)
 	{
 		ManagedWidgets[i]->Render();
 	}
+}
+
+bool FWidgetManager::DestroyWidget(FWidget* Widget)
+{
+	return ManagedWidgets.Remove(Widget);
 }
 
 void FWidgetManager::RegisterWidget(FWidget* Widget)

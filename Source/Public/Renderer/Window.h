@@ -3,6 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Widgets/WidgetManager.h"
+
+class FWidgetManager;
+class FWidget;
 
 /**
  * Window class. Has SDL_Window and FRender.
@@ -28,10 +32,13 @@ protected:
 	int WindowHeight;
 	Uint32 WindowFlags;
 public:
-	/**
-	 * Render this window using renderer.
-	 */
+	/** Render this window using renderer. */
+	virtual void Tick();
+	/** Render this window using renderer. */
 	virtual void Render();
+
+protected:
+	_NODISCARD virtual FRenderer* CreateRenderer() const;
 
 public:
 	/** Call to change window size. */
@@ -41,5 +48,22 @@ public:
 	_NODISCARD FVector2D<int> GetWindowSize() const;
 	/** @returns Window percent at given location. Window 100 with position 50 will be 0.5. */
 	_NODISCARD FVector2D<float> GetWindowSizePercent(const FVector2D<int> Position) const;
+
+protected:
+	FWidgetManager* WidgetManager;
+	_NODISCARD virtual FWidgetManager* CreateWidgetManager() const;
+
+public:
+	_NODISCARD INLINE_DEBUGABLE FWidgetManager* GetWidgetManager() const;
+	
+	template<class TWidgetTemplate>
+	INLINE_DEBUGABLE FWidget& CreateWidget() const
+	{
+		return GetWidgetManager().CreateWidget<TWidgetTemplate>();
+	}
+	INLINE_DEBUGABLE bool DestroyWidget(FWidget* Widget) const
+	{
+		return GetWidgetManager()->DestroyWidget(Widget);
+	}
 
 };

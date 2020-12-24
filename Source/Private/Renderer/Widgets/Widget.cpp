@@ -8,7 +8,7 @@
 
 FWidget::FWidget(FWidgetManager* InWidgetManager)
 	: WidgetManager(InWidgetManager)
-	, WidgetVisibility(Visible)
+	, WidgetVisibility(EWidgetVisibility::Visible)
 {
 	InWidgetManager->RegisterWidget(this);
 }
@@ -22,7 +22,7 @@ void FWidget::Init()
 {
 }
 
-void FWidget::Update()
+void FWidget::Tick()
 {
 }
 
@@ -32,7 +32,19 @@ void FWidget::Render()
 
 FWidgetManager const* FWidget::GetWidgetManager() const
 {
+#if _DEBUG
+	if (WidgetManager == nullptr)
+	{
+		ENSURE("Requested FWidgetManager but it has not been created!");
+	}
+#endif
+	
 	return WidgetManager;
+}
+
+void FWidget::GetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
+{
+	WidgetVisibility = InWidgetVisibility;
 }
 
 EWidgetVisibility FWidget::GetWidgetVisibility() const

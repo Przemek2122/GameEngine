@@ -2,7 +2,6 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Window.h"
-#include <cmath> 
 #include "Renderer/Renderer.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
@@ -25,8 +24,9 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 		
 		exit(-16);
 	}
-
-	Renderer = new FRenderer(Window);
+	
+	Renderer = CreateRenderer();
+	WidgetManager = CreateWidgetManager();
 }
 
 FWindow::~FWindow()
@@ -45,11 +45,22 @@ FWindow::~FWindow()
 	delete Renderer;
 }
 
+void FWindow::Tick()
+{
+	WidgetManager->Tick();
+}
+
 void FWindow::Render()
 {
 	Renderer->PreRender();
 	Renderer->Render();
+	WidgetManager->Render();
 	Renderer->PostRender();
+}
+
+FRenderer* FWindow::CreateRenderer() const
+{
+	return new FRenderer(Window);
 }
 
 void FWindow::Resize(const int NewWidth, const int NewHeight)
@@ -74,4 +85,14 @@ FVector2D<float> FWindow::GetWindowSizePercent(const FVector2D<int> Position) co
 	const auto Size = GetWindowSize();
 
 	return (FVector2D<float>(Size) / FVector2D<float>(100)) * Position;
+}
+
+FWidgetManager* FWindow::CreateWidgetManager() const
+{
+	return new FWidgetManager();
+}
+
+FWidgetManager* FWindow::GetWidgetManager() const
+{
+	return WidgetManager;
 }
