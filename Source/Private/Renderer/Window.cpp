@@ -45,6 +45,16 @@ FWindow::~FWindow()
 	delete Renderer;
 }
 
+bool FWindow::IsWindowFocused() const
+{
+	return bIsWindowFocused;
+}
+
+void FWindow::SetWindowFocus(const bool bInNewFocus)
+{
+	bIsWindowFocused = bInNewFocus;
+}
+
 void FWindow::Tick()
 {
 	WidgetManager->Tick();

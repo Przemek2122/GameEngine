@@ -13,10 +13,6 @@ FWidgetManager::~FWidgetManager()
 {
 }
 
-void FWidgetManager::Init()
-{
-}
-
 void FWidgetManager::Tick()
 {
 	const auto Size = ManagedWidgets.Size();

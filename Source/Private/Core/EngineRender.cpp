@@ -70,3 +70,16 @@ void FEngineRender::RemoveWindow(FWindow* InWindow)
 {
 	ManagedWindows.Remove(InWindow);
 }
+
+FWindow* FEngineRender::GetFocusedWindow() const
+{
+	for (int i = 0; i < ManagedWindows.Size(); i++)
+	{
+		if (ManagedWindows[i]->IsWindowFocused())
+		{
+			return ManagedWindows[i];
+		}
+	}
+
+	return nullptr;
+}

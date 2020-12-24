@@ -2,9 +2,7 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Widget.h"
-
 #include "Renderer/Widgets/WidgetManager.h"
-
 
 FWidget::FWidget(FWidgetManager* InWidgetManager)
 	: WidgetManager(InWidgetManager)

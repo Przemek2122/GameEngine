@@ -31,6 +31,14 @@ protected:
 	int WindowWidth;
 	int WindowHeight;
 	Uint32 WindowFlags;
+
+public:
+	bool IsWindowFocused() const;
+	void SetWindowFocus(const bool bInNewFocus);
+
+protected:
+	bool bIsWindowFocused;
+
 public:
 	/** Render this window using renderer. */
 	virtual void Tick();

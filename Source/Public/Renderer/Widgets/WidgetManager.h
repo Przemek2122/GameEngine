@@ -6,6 +6,9 @@
 
 class FWidget;
 
+/**
+ * Interactive UI rendering.
+ */
 class FWidgetManager
 {
 friend FWidget;
@@ -14,9 +17,7 @@ friend FWindow;
 protected:
 	FWidgetManager();
 	~FWidgetManager();
-
-	virtual void Init();
-
+	
 	virtual void Tick();
 
 	virtual void Render();

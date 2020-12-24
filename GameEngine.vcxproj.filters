@@ -408,6 +408,9 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h">
       <Filter>Source\Public\Renderer\Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h">
+      <Filter>Source\Public\Renderer\Widgets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
@@ -471,6 +474,9 @@
       <Filter>Source\Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp">
+      <Filter>Source\Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp">
       <Filter>Source\Private\Renderer\Widgets</Filter>
     </ClCompile>
   </ItemGroup>

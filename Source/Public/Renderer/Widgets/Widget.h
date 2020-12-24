@@ -7,7 +7,10 @@
 enum class EWidgetVisibility : Uint8
 {
 	None,
-	Visible,
+	Visible,				// Visible and interactive
+	VisibleNotInteractive,	// Visible but not interactive
+	Hidden,					// Not visible but interactive
+	Collapsed,				// Not visible and non interactive
 };
 
 class FWidgetManager;

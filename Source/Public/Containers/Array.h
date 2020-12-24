@@ -69,6 +69,11 @@ public:
 		return Vector[Index];
 	}
 
+	INLINE_DEBUGABLE const TType& operator[](size_t Index) const
+	{
+		return Vector[Index];
+	}
+
 	INLINE_DEBUGABLE constexpr TType& At(size_t Index)
 	{
 		return Vector.at(Index);

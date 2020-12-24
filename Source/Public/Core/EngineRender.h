@@ -45,8 +45,13 @@ public:
 	/** Remove window (will not be destroyed in this function). */
 	void RemoveWindow(FWindow* InWindow);
 
+	/** @returns window pointer or nullptr if there is no focused window. */
+	FWindow* GetFocusedWindow() const;
+
 protected:
 	/** Array of windows managed by this engine. */
 	CArray<FWindow*> ManagedWindows;
 
 };
+
+#define FOR_EACH()
