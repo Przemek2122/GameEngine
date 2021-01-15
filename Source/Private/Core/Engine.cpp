@@ -111,16 +111,11 @@ void FEngine::EngineTick()
 		}
 	}
 
-	// 
-	{
-		
-	}
-
 	EventHandler->HandleEvents();
 
 	Tick();
 
-	EngineRender->StartRenderTick();
+	EngineRender->Tick();
 }
 
 void FEngine::EnginePostSecondTick()

@@ -53,11 +53,53 @@ bool FWindow::IsWindowFocused() const
 void FWindow::SetWindowFocus(const bool bInNewFocus)
 {
 	bIsWindowFocused = bInNewFocus;
+	
+	SDL_SetWindowInputFocus(Window);
+}
+
+void FWindow::OnWindowFocusReceive()
+{
+	LOG_DEBUG("FOCUS " << IsWindowFocused());
+}
+
+void FWindow::OnWindowFocusLost()
+{
+	LOG_DEBUG("FOCUS " << IsWindowFocused());
+}
+
+void FWindow::ReceiveTick()
+{
+	Tick();
 }
 
 void FWindow::Tick()
 {
 	WidgetManager->Tick();
+
+	Uint32 SdlWindowFlags = SDL_GetWindowFlags(Window);
+
+	WindowFlags = SdlWindowFlags;
+
+	// Has focus  SDL_WINDOW_INPUT_FOCUS SDL_WINDOW_INPUT_GRABBED SDL_WINDOW_MOUSE_FOCUS
+	if (FUtil::IsBitSet(SdlWindowFlags, SDL_WINDOW_INPUT_FOCUS))
+	{
+		if (!IsWindowFocused())
+		{
+			bIsWindowFocused = true;
+
+			OnWindowFocusReceive();
+		}
+	}
+	// Do not have focus
+	else
+	{
+		if (IsWindowFocused())
+		{
+			bIsWindowFocused = false;
+
+			OnWindowFocusLost();
+		}
+	}
 }
 
 void FWindow::Render()

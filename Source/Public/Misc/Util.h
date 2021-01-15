@@ -39,7 +39,7 @@ namespace FUtil
 	/* @Returns current mili-second since epoch(1 January 1970) - signed integer type of at least 45 bits */
 	INLINE_DEBUGABLE size_t GetMiliseconds();
 	/* @Returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
-	INLINE_DEBUGABLE size_t GetSeconds();
+	size_t GetSeconds();
 
 	/** @Returns time_t with current time. */
 	INLINE_DEBUGABLE time_t GetTime();
@@ -130,8 +130,8 @@ namespace FUtil
 	 * This function doesn't log to file. */
 	inline void PrintToConsole(std::string& Message, const int Color = 7);
 
-	INLINE_DEBUGABLE void SetBit(unsigned char& Value, const int Index);
-	INLINE_DEBUGABLE bool IsBitSet(const unsigned char Value, const int Index);
+	void SetBit(unsigned char& Value, const int Index);
+	bool IsBitSet(const unsigned char Value, const int Index);
 
 	/* Path to file with log. */ 
 	extern std::string LogFilePath;

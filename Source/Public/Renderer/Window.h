@@ -13,6 +13,8 @@ class FWidget;
  */
 class FWindow
 {
+	friend FEngineRender;
+
 public:
 	/**
 	 * Creates SDL Window.
@@ -38,6 +40,12 @@ public:
 
 protected:
 	bool bIsWindowFocused;
+	/** Called when window gets focus. When user selects it or focues by code. */
+	virtual void OnWindowFocusReceive();
+	/** Not focused anymore. */
+	virtual void OnWindowFocusLost();
+
+	void ReceiveTick();
 
 public:
 	/** Render this window using renderer. */

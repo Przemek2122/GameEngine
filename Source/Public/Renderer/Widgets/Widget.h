@@ -15,6 +15,10 @@ enum class EWidgetVisibility : Uint8
 
 class FWidgetManager;
 
+/** 
+ * Widgets can be created only from within FWidgetManager which is inside window.
+ * It's mostly to ensure widget render in proper window. 
+ */
 class FWidget
 {
 	friend FWidgetManager;
@@ -31,7 +35,7 @@ protected:
 
 public:
 	_NODISCARD FWidgetManager const* GetWidgetManager() const;
-	void GetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
+	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
 	
 protected:

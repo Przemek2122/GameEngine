@@ -40,7 +40,7 @@ FWidgetManager const* FWidget::GetWidgetManager() const
 	return WidgetManager;
 }
 
-void FWidget::GetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
+void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 {
 	WidgetVisibility = InWidgetVisibility;
 }

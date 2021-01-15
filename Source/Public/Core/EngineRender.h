@@ -14,6 +14,7 @@ protected:
 	~FEngineRender();
 
 public:
+	void Tick();
 	/** Called from engine when new render Tick should be started */
 	void StartRenderTick();
 	/** @Returns true when rendering for this frame is ended. */

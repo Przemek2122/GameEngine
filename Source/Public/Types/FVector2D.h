@@ -15,6 +15,7 @@ public:
 		: X(InX), Y(InY)
 	{
 	}
+	/** Initialize X and Y with In */
 	FVector2D(const TType In) 
 		: X(In), Y(In)
 	{

@@ -12,6 +12,16 @@ FEngineRender::~FEngineRender()
 {
 }
 
+void FEngineRender::Tick()
+{
+	StartRenderTick();
+	
+	for (FWindow* Window : ManagedWindows.Vector)
+	{
+		Window->ReceiveTick();
+	}
+}
+
 void FEngineRender::StartRenderTick()
 {
 	if (bIsRenderTickFinished)
@@ -21,6 +31,7 @@ void FEngineRender::StartRenderTick()
 		// @TODO Move to thread.
 		RenderTick();
 	}
+
 	else
 	{
 		ENSURE("Called too early");
