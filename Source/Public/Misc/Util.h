@@ -7,7 +7,7 @@
 #include <sstream>
 #include "QueueSafe.h"
 
-enum class ELogMessageType
+enum class ELogMessageType : Uint8
 {
 	Message_Info,
 	Message_Debug,
@@ -41,26 +41,26 @@ namespace FUtil
 	/* @Returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
 	size_t GetSeconds();
 
-	/** @Returns time_t with current time. */
+	/** @returns time_t with current time. */
 	INLINE_DEBUGABLE time_t GetTime();
-	/** @Returns time_t with current time. */
+	/** @returns time_t with current time. */
 	INLINE_DEBUGABLE struct tm GetTimeInfo();
 
-	/** @Returns second of minute */
+	/** @returns second of minute */
 	INLINE_DEBUGABLE int GetSecond(struct tm InTime = GetTimeInfo());
-	/** @Returns minute of hour */
+	/** @returns minute of hour */
 	INLINE_DEBUGABLE int GetMinute(struct tm InTime = GetTimeInfo());
-	/** @Returns hour of day */
+	/** @returns hour of day */
 	INLINE_DEBUGABLE int GetHour(struct tm InTime = GetTimeInfo());
-	/** @Returns day of Week */
+	/** @returns day of Week */
 	INLINE_DEBUGABLE int GetDayOfWeek(struct tm InTime = GetTimeInfo());
-	/** @Returns day of month */
+	/** @returns day of month */
 	INLINE_DEBUGABLE int GetDayOfMonth(struct tm InTime = GetTimeInfo());
-	/** @Returns day of month */
+	/** @returns day of month */
 	INLINE_DEBUGABLE int GetDayOfYear(struct tm InTime = GetTimeInfo());
-	/** @Returns month of year */
+	/** @returns month of year */
 	INLINE_DEBUGABLE int GetMonth(struct tm InTime = GetTimeInfo());
-	/** @Returns year */
+	/** @returns year */
 	INLINE_DEBUGABLE int GetYear(struct tm InTime = GetTimeInfo());
 
 	/* Starts delay.
@@ -73,9 +73,9 @@ namespace FUtil
 	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.*/
 	bool IsDelayed(size_t& StartMs, size_t DelayMs);
 
-	/** @Returns rawtime */
+	/** @returns rawtime */
 	INLINE_DEBUGABLE time_t GetRawtime();
-	/** @Returns time info */
+	/** @returns time info */
 	INLINE_DEBUGABLE struct tm GetTimeInfo();
 
 
@@ -130,16 +130,20 @@ namespace FUtil
 	 * This function doesn't log to file. */
 	inline void PrintToConsole(std::string& Message, const int Color = 7);
 
-	void SetBit(unsigned char& Value, const int Index);
-	bool IsBitSet(const unsigned char Value, const int Index);
+/** Set bit on bitmask */
+#define BITMASK_SET(Variable, Mask) ((Variable) |= (Mask));
+#define BITMASK_UNSET(Variable, Mask) ((Variable) &= ~(Mask));
+#define BITMASK_TOGGLE(Variable, Mask) ((Variable) ^= (Mask));
+/** Use this to check wheater bit on bitmask is set */
+#define BITMASK_IS_SET(Variable, Mask) (((Variable) & (Mask)) == (Mask))
 
 	/* Path to file with log. */ 
 	extern std::string LogFilePath;
 
-	/* Log directory. Deault: "log". */
+	/* Log directory. Default: "log". */
 	extern std::string LogDir;
 
-	/* Log prefix. Defult: "log_". eg: log_13_01_19... */
+	/* Log prefix. Default: "log_". eg: log_13_01_19... */
 	extern std::string LogPrefix;
 
 	/* Sets whether logging to file is enabled or not with LogInit() function. */

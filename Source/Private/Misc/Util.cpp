@@ -8,14 +8,6 @@
 #include <Windows.h>
 #endif
 
-static unsigned char BitMask[] = 
-{ 
-	// @TODO Add Fourth 8 bit
-	8388608, 4194304, 2097152, 1048576, 524288, 262144, 131072, 65536, // Third 8 bit
-	32768, 16384, 8192, 4096, 2048, 1024, 512, 256, // Second 8 bit
-	128, 64, 32, 16, 8, 4, 2, 1 // First 8 bit
-};
-
 namespace FUtil
 {
 	bool isLoggingEnabled = false;
@@ -295,16 +287,6 @@ namespace FUtil
 		// Change color back to white
 		SetConsoleTextAttribute(hConsole, 7);
 #endif
-	}
-
-	void SetBit(unsigned char& Value, const int Index)
-	{
-		Value |= 1UL << BitMask[Index];
-	}
-
-	bool IsBitSet(const unsigned char Value, const int Index)
-	{
-		return ((Value & BitMask[Index]) != 0);
 	}
 }
 

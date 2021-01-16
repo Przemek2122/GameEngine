@@ -16,11 +16,11 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 
 	if (Window != nullptr)
 	{
-		LOG_INFO("Window created!");
+		LOG_INFO("Window created. (" << WindowTitle << ")");
 	}
 	else
 	{
-		LOG_ERROR("Can not create window: " << TEXT(SDL_GetError()));
+		LOG_ERROR("Can not create window: " << TEXT(SDL_GetError()) << " ! (" << WindowTitle << ")");
 		
 		exit(-16);
 	}
@@ -35,11 +35,11 @@ FWindow::~FWindow()
 	{
 		SDL_DestroyWindow(Window);
 
-		LOG_INFO("Window destroyed!");
+		LOG_INFO("Window destroyed. (" << WindowTitle << ")");
 	}
 	else
 	{
-		LOG_WARN("Window not destroyed (pointer invalid)!");
+		LOG_WARN("Window not destroyed (pointer invalid)! ("<< WindowTitle << ")");
 	}
 
 	delete Renderer;
@@ -76,12 +76,12 @@ void FWindow::Tick()
 {
 	WidgetManager->Tick();
 
-	Uint32 SdlWindowFlags = SDL_GetWindowFlags(Window);
+	const Uint32 SdlWindowFlags = SDL_GetWindowFlags(Window);
 
 	WindowFlags = SdlWindowFlags;
 
 	// Has focus  SDL_WINDOW_INPUT_FOCUS SDL_WINDOW_INPUT_GRABBED SDL_WINDOW_MOUSE_FOCUS
-	if (FUtil::IsBitSet(SdlWindowFlags, SDL_WINDOW_INPUT_FOCUS))
+	if (BITMASK_IS_SET(SdlWindowFlags, SDL_WINDOW_MOUSE_FOCUS))
 	{
 		if (!IsWindowFocused())
 		{
