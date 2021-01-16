@@ -20,7 +20,6 @@ int main(int Argc, char* Argv[])
 		{
 			LaunchPath = Argv[Argc];
 		}
-		// Custom path
 		else if (Argc == 1)
 		{
 			LaunchPath = Argv[Argc];

@@ -18,7 +18,7 @@ FGenerateFilters::FGenerateFilters()
 {
 	std::cout << " > Generating filters ..." << std::endl;
 
-	// Backup file
+	// Backup or recover
 	FUtilis::ConditionalBackupRecover(FilterFilePath, FilterFileBackupPath);
 
 	// Clean file

@@ -11,7 +11,7 @@
 
 FGenerateFiles::FGenerateFiles()
 {
-	// Backup and recover
+	// Backup or recover
 	FUtilis::ConditionalBackupRecover(VcxprojFilePath, VcxprojFileBackupPath);
 
 	// Clear file
@@ -62,7 +62,7 @@ FGenerateFiles::FGenerateFiles()
 
 							for (std::string& PrecompiledHeader : PrecompiledHeaders)
 							{
-								if (PrecompiledHeader == FileLocalPath)
+								if (PrecompiledHeader.find(FileLocalPath) != -1)
 								{
 									bContains = true;
 								}

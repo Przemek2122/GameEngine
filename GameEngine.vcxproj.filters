@@ -74,89 +74,23 @@
     <ClInclude Include="Private\Containers">
       <Filter>Private</Filter>
     </ClInclude>
-    <ClInclude Include="Private\Containers\Array.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Containers\ContainerBase.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Containers\Map.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Containers\Queue.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Containers\QueueSafe.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Private\Core">
       <Filter>Private</Filter>
     </ClInclude>
-    <ClInclude Include="Private\Core\CoreEngine.cpp">
-      <Filter>Private\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Core\CoreMinimal.cpp">
-      <Filter>Private\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Core\Engine.cpp">
-      <Filter>Private\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Core\EngineMain.cpp">
-      <Filter>Private\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Core\EngineRender.cpp">
-      <Filter>Private\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Private\Core\Input">
-      <Filter>Private\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Core\Input\EventHandler.cpp">
-      <Filter>Private\Core\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Core\Object.cpp">
       <Filter>Private\Core</Filter>
     </ClInclude>
     <ClInclude Include="Private\Misc">
       <Filter>Private</Filter>
     </ClInclude>
-    <ClInclude Include="Private\Misc\FileSystem.cpp">
-      <Filter>Private\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Misc\Math.cpp">
-      <Filter>Private\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Misc\Util.cpp">
-      <Filter>Private\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Private\Renderer">
       <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Renderer\Renderer.cpp">
-      <Filter>Private\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Private\Renderer\Widgets">
       <Filter>Private\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Private\Renderer\Widgets\Widget.cpp">
-      <Filter>Private\Renderer\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Renderer\Widgets\WidgetInteraction.cpp">
-      <Filter>Private\Renderer\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Renderer\Widgets\WidgetManager.cpp">
-      <Filter>Private\Renderer\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Renderer\Window.cpp">
-      <Filter>Private\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Renderer\WindowAdvanced.cpp">
-      <Filter>Private\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Private\Types">
       <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Private\Types\FVector2D.cpp">
-      <Filter>Private\Types</Filter>
     </ClInclude>
     <ClInclude Include="Public\Assets">
       <Filter>Public</Filter>
@@ -550,6 +484,72 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Private\Core\Engine.cpp">
+      <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Object.cpp">
+      <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\Queue.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\Array.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\EngineMain.cpp">
+      <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Containers\Map.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Misc\FileSystem.cpp">
+      <Filter>Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Misc\Util.cpp">
+      <Filter>Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\CoreMinimal.cpp">
+      <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\CoreEngine.cpp">
+      <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Window.cpp">
+      <Filter>Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp">
+      <Filter>Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
+      <Filter>Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\EngineRender.cpp">
+      <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\FVector2D.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Misc\Math.cpp">
+      <Filter>Private\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" /> 
