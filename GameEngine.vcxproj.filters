@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -66,11 +65,107 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Private\Assets">
+      <Filter>Private</Filter>
+    </ClInclude>
     <ClInclude Include="Private\Assets\AssetsManager.cpp">
       <Filter>Private\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Private\Containers">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Containers\Array.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Containers\ContainerBase.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Containers\Map.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Containers\Queue.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Containers\QueueSafe.cpp">
+      <Filter>Private\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\CoreEngine.cpp">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\CoreMinimal.cpp">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\Engine.cpp">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\EngineMain.cpp">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\EngineRender.cpp">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\Input">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\Input\EventHandler.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Core\Object.cpp">
+      <Filter>Private\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Misc">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Misc\FileSystem.cpp">
+      <Filter>Private\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Misc\Math.cpp">
+      <Filter>Private\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Misc\Util.cpp">
+      <Filter>Private\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\Renderer.cpp">
+      <Filter>Private\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\Widgets">
+      <Filter>Private\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\Widgets\WidgetInteraction.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\Widgets\WidgetManager.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\Window.cpp">
+      <Filter>Private\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Renderer\WindowAdvanced.cpp">
+      <Filter>Private\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Types">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Types\FVector2D.cpp">
+      <Filter>Private\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Assets">
+      <Filter>Public</Filter>
+    </ClInclude>
     <ClInclude Include="Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Containers">
+      <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Public\Containers\Array.h">
       <Filter>Public\Containers</Filter>
@@ -87,6 +182,9 @@
     <ClInclude Include="Public\Containers\QueueSafe.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Core">
+      <Filter>Public</Filter>
+    </ClInclude>
     <ClInclude Include="Public\Core\CoreEngine.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -100,6 +198,9 @@
       <Filter>Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Public\Core\EngineRender.h">
+      <Filter>Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Core\Includes">
       <Filter>Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Public\Core\Includes\EngineMacros.h">
@@ -123,11 +224,17 @@
     <ClInclude Include="Public\Core\Includes\Statics.h">
       <Filter>Public\Core\Includes</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Core\Input">
+      <Filter>Public\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Public\Core\Input\EventHandler.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
     <ClInclude Include="Public\Core\Object.h">
       <Filter>Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Misc">
+      <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Public\Misc\Filesystem.h">
       <Filter>Public\Misc</Filter>
@@ -138,7 +245,13 @@
     <ClInclude Include="Public\Misc\Util.h">
       <Filter>Public\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Renderer">
+      <Filter>Public</Filter>
+    </ClInclude>
     <ClInclude Include="Public\Renderer\Renderer.h">
+      <Filter>Public\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Renderer\Widgets">
       <Filter>Public\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Public\Renderer\Widgets\Widget.h">
@@ -156,8 +269,14 @@
     <ClInclude Include="Public\Renderer\WindowAdvanced.h">
       <Filter>Public\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Types">
+      <Filter>Public</Filter>
+    </ClInclude>
     <ClInclude Include="Public\Types\FVector2D.h">
       <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\SDL">
+      <Filter>ThirdParty</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\SDL\begin_code.h">
       <Filter>ThirdParty\SDL</Filter>
@@ -189,6 +308,12 @@
     <ClInclude Include="ThirdParty\SDL\SDL_config.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\SDL\SDL_config.h.cmake">
+      <Filter>ThirdParty\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\SDL\SDL_config.h.in">
+      <Filter>ThirdParty\SDL</Filter>
+    </ClInclude>
     <ClInclude Include="ThirdParty\SDL\SDL_config_android.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
@@ -196,6 +321,9 @@
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\SDL\SDL_config_macosx.h">
+      <Filter>ThirdParty\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\SDL\SDL_config_macosx.h.orig">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\SDL\SDL_config_minimal.h">
@@ -422,71 +550,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Private\Core\Engine.cpp">
-      <Filter>Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\Object.cpp">
-      <Filter>Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Queue.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Array.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\EngineMain.cpp">
-      <Filter>Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Map.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Misc\FileSystem.cpp">
-      <Filter>Private\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Misc\Util.cpp">
-      <Filter>Private\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\CoreMinimal.cpp">
-      <Filter>Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\CoreEngine.cpp">
-      <Filter>Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Window.cpp">
-      <Filter>Private\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp">
-      <Filter>Private\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
-      <Filter>Private\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\EngineRender.cpp">
-      <Filter>Private\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Types\FVector2D.cpp">
-      <Filter>Private\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Misc\Math.cpp">
-      <Filter>Private\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
-      <Filter>Private\Core\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
-      <Filter>Private\Renderer\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp">
-      <Filter>Private\Renderer\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp">
-      <Filter>Private\Renderer\Widgets</Filter>
-    </ClCompile>
   </ItemGroup>
-</Project>
+  <ItemGroup>
+    <None Include="cpp.hint" /> 
+  </ItemGroup> 
+</Project> 

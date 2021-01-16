@@ -17,7 +17,14 @@ const std::string ItemGroupName = "<ItemGroup>";
 // Count from 0, group with code should have content like this 
 // <ClInclude Include="Source\Public\Containers\Array.h" />
 const int ItemGroup_Files							= 1;
-const int ItemGroup_FilterPrecompiledHeaders		= 3; 
+const int ItemGroup_FilterPrecompiledHeaders		= 3;
+
+inline std::string VcxprojFilePath;
+inline std::string VcxprojFileBackupPath;
+inline std::string FilterFilePath;
+inline std::string FilterFileBackupPath;
+
+inline std::vector<std::string> PrecompiledHeaders;
 
 inline std::string LaunchPath;
 inline std::string ProjectPath;

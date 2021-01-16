@@ -11,9 +11,6 @@
 
 FGenerateFiles::FGenerateFiles()
 {
-	const std::string VcxprojFilePath			= ProjectPath + ProjectName + ".vcxproj";
-	const std::string VcxprojFileBackupPath		= ProjectPath + ProjectName + ".vcxproj.backup";
-
 	// Backup and recover
 	FUtilis::ConditionalBackupRecover(VcxprojFilePath, VcxprojFileBackupPath);
 
@@ -61,9 +58,22 @@ FGenerateFiles::FGenerateFiles()
 
     					if (FUtilis::HasProperExtension(FileLocalPath))
 						{
-							std::cout << "File - add: " << FileLocalPath << std::endl;
+    						bool bContains = false;
 
-    						Vcxproj << "    <ClInclude Include=\"" << FileLocalPath << "\" />" << std::endl;
+							for (std::string& PrecompiledHeader : PrecompiledHeaders)
+							{
+								if (PrecompiledHeader == FileLocalPath)
+								{
+									bContains = true;
+								}
+							}
+
+    						if (!bContains)
+    						{
+    							std::cout << "File - add: " << FileLocalPath << std::endl;
+
+    							Vcxproj << "    <ClInclude Include=\"" << FileLocalPath << "\" />" << std::endl;	
+    						}
 						}
 						else
 						{

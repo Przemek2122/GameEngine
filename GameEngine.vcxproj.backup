@@ -28,28 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Private\Assets\AssetsManager.cpp" />
-    <ClInclude Include="Private\Containers\Array.cpp" />
-    <ClInclude Include="Private\Containers\ContainerBase.cpp" />
-    <ClInclude Include="Private\Containers\Map.cpp" />
-    <ClInclude Include="Private\Containers\Queue.cpp" />
-    <ClInclude Include="Private\Containers\QueueSafe.cpp" />
-    <ClInclude Include="Private\Core\CoreEngine.cpp" />
-    <ClInclude Include="Private\Core\CoreMinimal.cpp" />
-    <ClInclude Include="Private\Core\Engine.cpp" />
-    <ClInclude Include="Private\Core\EngineMain.cpp" />
-    <ClInclude Include="Private\Core\EngineRender.cpp" />
-    <ClInclude Include="Private\Core\Input\EventHandler.cpp" />
-    <ClInclude Include="Private\Core\Object.cpp" />
-    <ClInclude Include="Private\Misc\FileSystem.cpp" />
-    <ClInclude Include="Private\Misc\Math.cpp" />
-    <ClInclude Include="Private\Misc\Util.cpp" />
-    <ClInclude Include="Private\Renderer\Renderer.cpp" />
-    <ClInclude Include="Private\Renderer\Widgets\Widget.cpp" />
-    <ClInclude Include="Private\Renderer\Widgets\WidgetInteraction.cpp" />
-    <ClInclude Include="Private\Renderer\Widgets\WidgetManager.cpp" />
-    <ClInclude Include="Private\Renderer\Window.cpp" />
-    <ClInclude Include="Private\Renderer\WindowAdvanced.cpp" />
-    <ClInclude Include="Private\Types\FVector2D.cpp" />
     <ClInclude Include="Public\Assets\AssetsManager.h" />
     <ClInclude Include="Public\Containers\Array.h" />
     <ClInclude Include="Public\Containers\ContainerBase.h" />
@@ -204,9 +182,6 @@
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\FVector2D.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
