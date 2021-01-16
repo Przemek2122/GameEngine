@@ -413,71 +413,71 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Private\Core\Engine.cpp">
+    <ClCompile Include="Private\Core\Engine.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\Object.cpp">
+    <ClCompile Include="Private\Core\Object.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
+    <ClCompile Include="Private\Containers\ContainerBase.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Queue.cpp">
+    <ClCompile Include="Private\Containers\Queue.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Array.cpp">
+    <ClCompile Include="Private\Containers\Array.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
+    <ClCompile Include="Private\Containers\QueueSafe.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\EngineMain.cpp">
+    <ClCompile Include="Private\Core\EngineMain.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Map.cpp">
+    <ClCompile Include="Private\Containers\Map.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Misc\FileSystem.cpp">
+    <ClCompile Include="Private\Misc\FileSystem.cpp">
       <Filter>Source\Private\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Misc\Util.cpp">
+    <ClCompile Include="Private\Misc\Util.cpp">
       <Filter>Source\Private\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\CoreMinimal.cpp">
+    <ClCompile Include="Private\Core\CoreMinimal.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\CoreEngine.cpp">
+    <ClCompile Include="Private\Core\CoreEngine.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Window.cpp">
+    <ClCompile Include="Private\Renderer\Window.cpp">
       <Filter>Source\Private\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp">
+    <ClCompile Include="Private\Renderer\WindowAdvanced.cpp">
       <Filter>Source\Private\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
+    <ClCompile Include="Private\Renderer\Renderer.cpp">
       <Filter>Source\Private\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\EngineRender.cpp">
-      <Filter>Source\Private\Core</Filter>
+    <ClCompile Include="Private\Core\EngineRender.cpp">
+      <Filter>Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FVector2D.cpp">
-      <Filter>Source\Private\Types</Filter>
+    <ClCompile Include="Private\Types\FVector2D.cpp">
+      <Filter>Private\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Misc\Math.cpp">
-      <Filter>Source\Private\Misc</Filter>
+    <ClCompile Include="Private\Misc\Math.cpp">
+      <Filter>Private\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
-      <Filter>Source\Private\Core\Input</Filter>
+    <ClCompile Include="Private\Core\Input\EventHandler.cpp">
+      <Filter>Private\Core\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
-      <Filter>Source\Private\Renderer\Widgets</Filter>
+    <ClCompile Include="Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp">
-      <Filter>Source\Private\Renderer\Widgets</Filter>
+    <ClCompile Include="Private\Renderer\Widgets\WidgetManager.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp">
-      <Filter>Source\Private\Renderer\Widgets</Filter>
+    <ClCompile Include="Private\Renderer\Widgets\WidgetInteraction.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

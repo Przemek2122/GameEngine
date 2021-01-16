@@ -43,5 +43,4 @@ int main(int Argc, char* Argv[])
 
 	FGenerateFiles GenerateFiles;
 	FGenerateFilters GenerateFilters;
-	
 }

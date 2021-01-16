@@ -14,15 +14,8 @@ FGenerateFiles::FGenerateFiles()
 	const std::string VcxprojFilePath			= ProjectPath + ProjectName + ".vcxproj";
 	const std::string VcxprojFileBackupPath		= ProjectPath + ProjectName + ".vcxproj.backup";
 
-	// Backup file
-	{
-		std::cout << " > Backup file '" << VcxprojFilePath << "' ..." << std::endl;
-		
-		std::ifstream CopySource		(VcxprojFilePath,			std::ios::binary);
-	    std::ofstream CopyDestination	(VcxprojFileBackupPath,		std::ios::binary);
-
-	    CopyDestination << CopySource.rdbuf();
-	}
+	// Backup and recover
+	FUtilis::ConditionalBackupRecover(VcxprojFilePath, VcxprojFileBackupPath);
 
 	// Clear file
 	{
@@ -92,7 +85,7 @@ FGenerateFiles::FGenerateFiles()
 		Vcxproj.close();
 		VcxprojBackup.close();
 		
-	    std::cout << " > Files generated!" << std::endl;		
+	    std::cout << " > Files generated." << std::endl;		
 	}
 }
 
