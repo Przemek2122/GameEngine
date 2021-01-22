@@ -11,13 +11,14 @@ class FVector2D
 public:
 	FVector2D() : X(TType(0)), Y(TType(0)) {}
 
-	FVector2D(const TType InX, const TType InY) 
-		: X(InX), Y(InY)
-	{
-	}
 	/** Initialize X and Y with In */
 	FVector2D(const TType In) 
 		: X(In), Y(In)
+	{
+	}
+	
+	FVector2D(const TType InX, const TType InY) 
+		: X(InX), Y(InY)
 	{
 	}
 
@@ -163,13 +164,6 @@ public:
 
 	////Return the point where two lines intersect.
 	//template<class TType> Vector2d<TType> GetIntersect(const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&)
-	
-
-	// @Returns 0 - Should be rewritten into some kind of static.
-	FVector2D& Zero()
-	{
-		return FVector2D(0);
-	}
 
 	// Conversion
 	operator std::ostream () const 

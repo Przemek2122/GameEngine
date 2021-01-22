@@ -44,75 +44,71 @@ FGenerateFilters::FGenerateFilters()
 		// Filters
 		{
 			FilterFile << "  <ItemGroup>" << std::endl;
-						
-			for (const auto & File : std::filesystem::recursive_directory_iterator(SourcePath))
-			{
-    			const std::string FilePath = File.path().string();
-    			const std::string FileLocalPath = FilePath.substr(FilePath.find(CodeDirectory) + CodeDirectory.length() + 1, FilePath.length());
 
-    			if (!FUtilis::HasProperExtension(FileLocalPath) && FUtilis::IsDirectory(FilePath))
-				{
-					std::cout << "Filter - add dir: " << FileLocalPath << std::endl;
+	    	for (const std::string Directory : Directories)
+	    	{
+	    		std::cout << "Filter - add dir: " << Directory << std::endl;
 
-    				FilterFile << "    <Filter Include=\"" << FileLocalPath + "\">" << std::endl;
-					FilterFile << "      <UniqueIdentifier>{" << FUtilis::GetRandomUniqueIdentifier() << "}</UniqueIdentifier>" << std::endl;
-					FilterFile << "    </Filter>" << std::endl;
-				}
-			}
-
+    			FilterFile << "    <Filter Include=\"" << Directory + "\">" << std::endl;
+				FilterFile << "      <UniqueIdentifier>{" << FUtilis::GetRandomUniqueIdentifier() << "}</UniqueIdentifier>" << std::endl;
+				FilterFile << "    </Filter>" << std::endl;
+	    	}
+	    	
 			FilterFile << "  </ItemGroup>" << std::endl;
+	    	
+			std::cout << " > Filter groups generated." << std::endl;
 		}
 
-		// Filter files
+		// Filter files include
 		{
 			FilterFile << "  <ItemGroup>" << std::endl;
 
-			for (const auto & File : std::filesystem::recursive_directory_iterator(SourcePath))
+			for (const std::string& IncludeFile : IncludeFiles)
 			{
-				const std::string FilePath = File.path().string();
-    			const std::string FileLocalPath = FilePath.substr(FilePath.find(CodeDirectory) + CodeDirectory.length() + 1, FilePath.length());
-
-				bool bContains = false;
-
-				for (std::string& PrecompiledHeader : PrecompiledHeaders)
+				if (IsDebugEnabled)
 				{
-					if (PrecompiledHeader == FileLocalPath)
-					{
-						bContains = true;
-					}
+    				std::cout << "Filter - add (include): " << IncludeFile << std::endl;
 				}
 
-				if (!bContains)
-				{
-					int WasFound;
-					std::string ResultPath = FUtilis::GetPathWithOutFile(FileLocalPath, WasFound);
-
-					if (WasFound != -1)
-					{
-						FilterFile << "    <ClInclude Include=\"" << FileLocalPath + "\">" << std::endl;
-						FilterFile << "      <Filter>" << ResultPath + "</Filter>" << std::endl;
-						FilterFile << "    </ClInclude>" << std::endl;	
-					}	
-				}
-			}
-						
-			FilterFile << "  </ItemGroup>" << std::endl;
-		}
-
-		// Precompiled headers
-		{
-			FilterFile << "  <ItemGroup>" << std::endl;
-
-			for (std::string& PrecompiledHeader : PrecompiledHeaders)
-			{
 				int WasFound;
-				std::string ResultPath = FUtilis::GetPathWithOutFile(PrecompiledHeader, WasFound);
-							
-				FilterFile << "    <ClCompile Include=\"" << CodeDirectory + "\\" << PrecompiledHeader + "\">" << std::endl;
+				std::string ResultPath = FUtilis::GetPathWithOutFile(IncludeFile, WasFound);
+				
+				FilterFile << "    <ClInclude Include=\"" << CodeDirectory + "\\" << IncludeFile + "\">" << std::endl;
 				FilterFile << "      <Filter>" << ResultPath + "</Filter>" << std::endl;
-				FilterFile << "    </ClCompile>" << std::endl;	
+				FilterFile << "    </ClInclude>" << std::endl;
+			}	
+						
+			FilterFile << "  </ItemGroup>" << std::endl;
+	    	
+			std::cout << " > Filter include generated." << std::endl;
+		}
+		
+		// Filter files compile
+		{
+			FilterFile << "  <ItemGroup>" << std::endl;
+
+			for (const std::string& CompileFile : CompileFiles)
+			{
+				if (IsDebugEnabled)
+				{
+    				std::cout << "Filter - add (compile): " << CompileFile << std::endl;
+				}
+				
+				int WasFound;
+				std::string ResultPath = FUtilis::GetPathWithOutFile(CompileFile, WasFound);
+				
+				if (WasFound)
+				{
+					FilterFile << "    <ClCompile Include=\"" << CodeDirectory + "\\" << CompileFile + "\">" << std::endl;
+					FilterFile << "      <Filter>" << ResultPath + "</Filter>" << std::endl;
+					FilterFile << "    </ClCompile>" << std::endl;		
+				}
+				else
+				{
+					std::cout << "Missing file? Maybe it has no extension? File: " << CompileFile << std::endl;
+				}
 			}
-					
+			
 			FilterFile << "  </ItemGroup>" << std::endl;
 		}
 
@@ -120,7 +116,7 @@ FGenerateFilters::FGenerateFilters()
 
 		FilterFile.close();
 		
-	    std::cout << " > Filters generated." << std::endl;		
+	    std::cout << " > Filter compile generated." << std::endl;		
 	}
 	
 	std::cout << " > Generated filters" << std::endl;

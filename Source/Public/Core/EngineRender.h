@@ -17,8 +17,8 @@ public:
 	void Tick();
 	/** Called from engine when new render Tick should be started */
 	void StartRenderTick();
-	/** @Returns true when rendering for this frame is ended. */
-	bool IsRenderTickFinished() const;
+	/** @returns true when rendering for this frame is ended. */
+	_NODISCARD bool IsRenderTickFinished() const;
 
 protected:
 	bool bIsRenderTickFinished;
@@ -37,7 +37,10 @@ public:
 		TWindow* NewWindow = new TWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags);
 
 		ManagedWindows.Push(NewWindow);
-	};
+
+		return NewWindow;
+	}
+	
 	/** Destroy and remove window by class. */
 	void DestroyWindow(FWindow* InWindow);
 
@@ -47,7 +50,7 @@ public:
 	void RemoveWindow(FWindow* InWindow);
 
 	/** @returns window pointer or nullptr if there is no focused window. */
-	FWindow* GetFocusedWindow() const;
+	_NODISCARD FWindow* GetFocusedWindow() const;
 
 protected:
 	/** Array of windows managed by this engine. */

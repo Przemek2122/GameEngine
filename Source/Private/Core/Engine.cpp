@@ -34,9 +34,9 @@ FEngine::~FEngine()
 void FEngine::EngineInit(int Argc, char* Argv[])
 {
 #if defined(__DATE__) && defined(__TIME__)
-		LOG_INFO("Engine init start compiled: " << __DATE__ << " " <<__TIME__);
+	LOG_INFO("Engine init start compiled: " << __DATE__ << " " <<__TIME__);
 #else
-		LOG_INFO("Engine init start.");
+	LOG_INFO("Engine init start.");
 #endif
 	
 	// Read command line flags.
@@ -216,6 +216,13 @@ FEngineRender* FEngine::CreateEngineRenderer() const
 
 FEventHandler* FEngine::GetEventHandler() const
 {
+#if _DEBUG
+	if (EventHandler == nullptr)
+	{
+		ENSURE("Missing EventHanlder. This will cause issues");
+	}
+#endif
+	
 	return EventHandler;
 }
 
@@ -226,5 +233,12 @@ FEventHandler* FEngine::CreateEventHandler() const
 
 FEngineRender* FEngine::GetEngineRender() const
 {
+#if _DEBUG
+	if (EngineRender == nullptr)
+	{
+		ENSURE("Missing EngineRender. This will cause issues");
+	}
+#endif
+	
 	return EngineRender;
 }

@@ -89,6 +89,14 @@ public:
 		Vector.swap(Other);
 	}
 
+	inline void Clear()
+	{
+		Vector.clear();		
+	}
+	inline void Empty()
+	{
+		Vector.empty();
+	}
 
 public:
 	/** C++ Vector */

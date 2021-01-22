@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 /**
- * Static math for mathematics.
+ * Static math
  */
 class FMath
 {

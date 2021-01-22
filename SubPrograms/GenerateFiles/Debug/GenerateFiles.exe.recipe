@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>E:\Repos\2DGameEngine\SubPrograms\GenerateFiles\Release\GenerateFiles.exe</FullPath>
+      <FullPath>E:\Repos\2DGameEngine\SubPrograms\GenerateFiles\Debug\GenerateFiles.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

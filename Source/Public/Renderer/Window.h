@@ -21,8 +21,10 @@ public:
 	 * Take a look here for available flags (or at SDL_vide.h):
 	 * https://wiki.libsdl.org/SDL_WindowFlags
 	 */
-	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0);
+	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = SDL_WINDOW_RESIZABLE);
 	virtual ~FWindow();
+
+	SDL_Window* GetSdlWindow() const;
 
 protected:
 	SDL_Window* Window;
@@ -54,20 +56,24 @@ public:
 	virtual void Render();
 
 protected:
-	_NODISCARD virtual FRenderer* CreateRenderer() const;
+	_NODISCARD virtual FRenderer* CreateRenderer();
 
 public:
 	/** Call to change window size. */
 	void Resize(const int NewWidth, const int NewHeight);
+
+	_NODISCARD FRenderer* GetRenderer() const;
 
 	/** @returns Window size in px. */
 	_NODISCARD FVector2D<int> GetWindowSize() const;
 	/** @returns Window percent at given location. Window 100 with position 50 will be 0.5. */
 	_NODISCARD FVector2D<float> GetWindowSizePercent(const FVector2D<int> Position) const;
 
+	_NODISCARD FVector2D<int> GetWindowLocation() const;
+
 protected:
 	FWidgetManager* WidgetManager;
-	_NODISCARD virtual FWidgetManager* CreateWidgetManager() const;
+	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
 
 public:
 	_NODISCARD INLINE_DEBUGABLE FWidgetManager* GetWidgetManager() const;

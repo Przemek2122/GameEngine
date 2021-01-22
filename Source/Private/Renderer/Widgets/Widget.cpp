@@ -4,20 +4,34 @@
 #include "Renderer/Widgets/Widget.h"
 #include "Renderer/Widgets/WidgetManager.h"
 
-FWidget::FWidget(FWidgetManager* InWidgetManager)
+FWidget::FWidget(FWidgetManager* InWidgetManager, const std::string InWidgetName)
 	: WidgetManager(InWidgetManager)
 	, WidgetVisibility(EWidgetVisibility::Visible)
+	, WidgetName(InWidgetName)
 {
-	InWidgetManager->RegisterWidget(this);
+#if _DEBUG
+	if (WidgetManager == nullptr)
+	{
+		static std::string WidgetManagerInNotValidNotify = "Widget with no widget manager should not exists! Please fix InWidgetManager pointer.";
+		LOG_ERROR(WidgetManagerInNotValidNotify);
+		ENSURE(WidgetManagerInNotValidNotify.c_str());
+	}
+#endif
+	
+	WidgetManager->RegisterWidget(this);
 }
 
 FWidget::~FWidget()
 {
+#if _DEBUG
+	if (WidgetManager == nullptr)
+	{
+		static std::string WidgetManagerOutNotValidNotify = "Widget with no widget manager should not exists!.";
+		ENSURE(WidgetManagerOutNotValidNotify.c_str());
+	}
+#endif
+	
 	WidgetManager->UnRegisterWidget(this);
-}
-
-void FWidget::Init()
-{
 }
 
 void FWidget::Tick()
@@ -28,16 +42,27 @@ void FWidget::Render()
 {
 }
 
-FWidgetManager const* FWidget::GetWidgetManager() const
+FWidgetManager* FWidget::GetWidgetManager() const
 {
 #if _DEBUG
 	if (WidgetManager == nullptr)
 	{
-		ENSURE("Requested FWidgetManager but it has not been created!");
+		static std::string WidgetManagerGetNotValidNotify = "Requested FWidgetManager but it has not been created!";
+		ENSURE(WidgetManagerGetNotValidNotify.c_str());
 	}
 #endif
 	
 	return WidgetManager;
+}
+
+FWindow* FWidget::GetWindow() const
+{
+	return WidgetManager->GetOwnerWindow();
+}
+
+FRenderer* FWidget::GetRenderer() const
+{
+	return GetWindow()->GetRenderer();
 }
 
 void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
@@ -48,4 +73,9 @@ void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
+}
+
+std::string FWidget::GetName() const
+{
+	return WidgetName;
 }

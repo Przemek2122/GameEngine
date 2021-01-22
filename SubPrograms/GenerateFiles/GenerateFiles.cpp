@@ -14,7 +14,7 @@ FGenerateFiles::FGenerateFiles()
 	// Backup or recover
 	FUtilis::ConditionalBackupRecover(VcxprojFilePath, VcxprojFileBackupPath);
 
-	// Clear file
+	// Clean file
 	{
 		std::cout << " > Clean old file ..." << std::endl;
 		
@@ -34,8 +34,6 @@ FGenerateFiles::FGenerateFiles()
 
 		int CurrentItemGroup = 0;
 		bool bGroupStart = false;
-
-		const std::string ItemGroupName = "<ItemGroup>";
 		
 		while (std::getline(VcxprojBackup, VcxprojBackupLine)) 
 		{
@@ -45,49 +43,194 @@ FGenerateFiles::FGenerateFiles()
 				bGroupStart = true;
 			}
 
-			if (CurrentItemGroup == ItemGroup_Files)
+			switch (CurrentItemGroup)
+			{
+			case ItemGroup_Files_Include:
+				{
+					if (bGroupStart)
+					{
+						Vcxproj << "  <ItemGroup>" << std::endl;
+
+						for (std::string& File : IncludeFiles)
+						{
+							// Skip if precompiled header
+							if (File.find(PreCompiledEngine + ".h") != -1)
+							{
+								continue;
+							}
+							
+							int SourceDirIndex = File.find(CodeDirectory);
+
+							if (IsDebugEnabled)
+							{
+    							std::cout << "File - add (include): " << File << std::endl;
+							}
+    								
+    						if (SourceDirIndex != -1)
+    						{
+    							Vcxproj << "    <ClInclude Include=\"" << File << "\" />" << std::endl;	
+    						}
+							else
+							{
+    							Vcxproj << "    <ClInclude Include=\"" << CodeDirectory + "\\" << File << "\" />" << std::endl;		
+							}
+						}
+
+						Vcxproj << "  </ItemGroup>" << std::endl;
+					}
+					
+					break;
+				}
+
+			case ItemGroup_Files_Compile:
+				{
+					if (bGroupStart)
+					{
+						Vcxproj << "  <ItemGroup>" << std::endl;
+
+						if (IsDebugEnabled)
+						{
+    						std::cout << "File - add (Precompiled header): " << PreCompiledEngine << ".cpp/.h" << std::endl;
+						}
+						
+						// Precompiled header
+						{
+							Vcxproj << "    <ClCompile Include=\"Source\\Private\\Core\\CoreEngine.cpp\">" << std::endl;
+							for (const std::string& SolutionConfiguration : SolutionConfigurations)
+							{
+								for (const std::string& SolutionPlatform : SolutionPlatforms)
+								{
+									Vcxproj << "      <PrecompiledHeader Condition=\"'$(Configuration)|$(Platform)'=='" << SolutionConfiguration << "|" << SolutionPlatform << "'\">Create</PrecompiledHeader>" << std::endl;
+									Vcxproj << "      <PrecompiledHeaderFile Condition=\"'$(Configuration)|$(Platform)'=='" << SolutionConfiguration << "|" << SolutionPlatform << "'\">" << PreCompiledEngine + ".h" << "</PrecompiledHeaderFile>" << std::endl;
+								}
+							}
+							Vcxproj << "    </ClCompile>" << std::endl;
+						}
+							
+						for (std::string& File : CompileFiles)
+						{
+							if (IsDebugEnabled)
+							{
+    							std::cout << "File - add (compile): " << File << std::endl;
+							}
+
+							// Skip if precompiled header
+							if (File.find(PreCompiledEngine + ".cpp") != -1)
+							{
+								continue;
+							}
+							
+							int SourceDirIndex = File.find(CodeDirectory);
+    								
+    						if (SourceDirIndex == -1)
+							{
+    							Vcxproj << "    <ClCompile Include=\"" << CodeDirectory + "\\" << File << "\" />" << std::endl;		
+							}
+							else
+    						{
+    							Vcxproj << "    <ClCompile Include=\"" << File << "\" />" << std::endl;	
+    						}
+						}
+
+						Vcxproj << "  </ItemGroup>" << std::endl;
+					}
+					
+					break;
+				}
+
+			default:
+				{
+					Vcxproj << VcxprojBackupLine << std::endl;
+				}
+			}
+
+			/*
+			if (CurrentItemGroup == ItemGroup_Files_Include)
 			{
 				if (bGroupStart)
 				{
 					Vcxproj << "  <ItemGroup>" << std::endl;
-					
-					for (const auto & File : std::filesystem::recursive_directory_iterator(SourcePath))
-				    {
-    					const std::string FilePath = File.path().string();
-    					const std::string FileLocalPath = FilePath.substr(FilePath.find(CodeDirectory) + CodeDirectory.length() + 1, FilePath.length());
 
-    					if (FUtilis::HasProperExtension(FileLocalPath))
+					for (std::string& File : IncludeFiles)
+					{
+						int SourceDirIndex = File.find(CodeDirectory);
+
+						if (IsDebugEnabled)
 						{
-    						bool bContains = false;
-
-							for (std::string& PrecompiledHeader : PrecompiledHeaders)
-							{
-								if (PrecompiledHeader.find(FileLocalPath) != -1)
-								{
-									bContains = true;
-								}
-							}
-
-    						if (!bContains)
-    						{
-    							std::cout << "File - add: " << FileLocalPath << std::endl;
-
-    							Vcxproj << "    <ClInclude Include=\"" << FileLocalPath << "\" />" << std::endl;	
-    						}
+    						std::cout << "File - add (include): " << File << std::endl;
 						}
+    							
+    					if (SourceDirIndex != -1)
+    					{
+    						Vcxproj << "    <ClInclude Include=\"" << File << "\" />" << std::endl;	
+    					}
 						else
 						{
-							std::cout << "File - ignored: " << FileLocalPath << std::endl;	
+    						Vcxproj << "    <ClInclude Include=\"" << CodeDirectory + "\\" << File << "\" />" << std::endl;		
 						}
 					}
 
 					Vcxproj << "  </ItemGroup>" << std::endl;
 				}	
 			}
+			else if (CurrentItemGroup == ItemGroup_Files_Compile)
+			{
+				if (bGroupStart)
+				{
+					Vcxproj << "  <ItemGroup>" << std::endl;
+
+					if (IsDebugEnabled)
+					{
+    					std::cout << "File - add (Precompiled header): " << PreCompiledEngineHeader << std::endl;
+					}
+
+					// Precompiled header
+					{
+						Vcxproj << "  <ClCompile Include=\"Source\\Private\\Core\\CoreEngine.cpp\">" << std::endl;
+						for (const std::string& SolutionConfiguration : SolutionConfigurations)
+						{
+							for (const std::string& SolutionPlatform : SolutionPlatforms)
+							{
+								Vcxproj << "    <PrecompiledHeader Condition=\"'$(Configuration)|$(Platform)'=='" << SolutionConfiguration << "|" << SolutionPlatform << "'\">Create</PrecompiledHeader>" << std::endl;
+								Vcxproj << "    <PrecompiledHeaderFile Condition=\"'$(Configuration)|$(Platform)'=='" << SolutionConfiguration << "|" << SolutionPlatform << "'\">" << PreCompiledEngineHeader << "</PrecompiledHeaderFile>" << std::endl;
+							}
+						}
+						Vcxproj << "  </ClCompile>" << std::endl;
+					}
+						
+					for (std::string& File : CompileFiles)
+					{
+						// Skip if precompiled header
+						if (File.find(PreCompiledEngineHeader) != -1)
+						{
+							return;
+						}
+
+						if (IsDebugEnabled)
+						{
+    						std::cout << "File - add (compile): " << File << std::endl;
+						}
+						
+						int SourceDirIndex = File.find(CodeDirectory);
+    							
+    					if (SourceDirIndex == -1)
+						{
+    						Vcxproj << "    <ClCompile Include=\"" << CodeDirectory + "\\" << File << "\" />" << std::endl;		
+						}
+						else
+    					{
+    						Vcxproj << "    <ClCompile Include=\"" << File << "\" />" << std::endl;	
+    					}
+					}
+
+					Vcxproj << "  </ItemGroup>" << std::endl;
+				}
+			}
 			else
 			{
 				Vcxproj << VcxprojBackupLine << std::endl;
 			}
+			*/
 
 			bGroupStart = false;
 		}

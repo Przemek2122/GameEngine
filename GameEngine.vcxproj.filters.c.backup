@@ -414,12 +414,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core\Engine.cpp">
-      <Filter>Source\Private\Core</Filter>
+      <Filter>Private\Core</Filter>
     </ClCompile>
     <ClCompile Include="Private\Core\Object.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Private\Containers\ContainerBase.cpp">
+    <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
       <Filter>Source\Private\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Private\Containers\Queue.cpp">

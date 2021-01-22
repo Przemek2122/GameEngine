@@ -4,13 +4,21 @@
 #include "Renderer/Widgets/WidgetManager.h"
 #include "Renderer/Widgets/Widget.h"
 
-
-FWidgetManager::FWidgetManager()
+FWidgetManager::FWidgetManager(FWindow* InOwnerWindow)
+	: OwnerWindow(InOwnerWindow)
 {
 }
 
 FWidgetManager::~FWidgetManager()
 {
+	const auto Size = ManagedWidgets.Size();
+	
+	for (auto i = 0; i < Size; i++)
+	{
+		delete ManagedWidgets[i];
+	}
+
+	ManagedWidgets.Clear();
 }
 
 void FWidgetManager::Tick()
@@ -35,7 +43,42 @@ void FWidgetManager::Render()
 
 bool FWidgetManager::DestroyWidget(FWidget* Widget)
 {
-	return ManagedWidgets.Remove(Widget);
+	const bool bIsRemoved = ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName());
+	
+	return bIsRemoved;
+}
+
+bool FWidgetManager::DestroyWidget(const std::string& InWidgetName)
+{
+	if (ManagedWidgetsMap.ContainsKey(InWidgetName))
+	{
+		if (FWidget* Widget = GetWidgetByName(InWidgetName))
+		{
+			return ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(InWidgetName);		
+		}
+	}
+
+	return false;
+}
+
+FWidget* FWidgetManager::GetWidgetByName(const std::string& InWidgetName)
+{
+	return ManagedWidgetsMap.FindByKey(InWidgetName);
+}
+
+bool FWidgetManager::HasWidget(const std::string& InWidgetName)
+{
+	return ManagedWidgetsMap.ContainsKey(InWidgetName);
+}
+
+bool FWidgetManager::HasWidget(FWidget* InWidget)
+{
+	return ManagedWidgetsMap.ContainsValue(InWidget);
+}
+
+FWindow* FWidgetManager::GetOwnerWindow() const
+{
+	return OwnerWindow;
 }
 
 void FWidgetManager::RegisterWidget(FWidget* Widget)

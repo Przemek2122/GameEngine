@@ -7,11 +7,17 @@ class FEngineMain;
 class FEngine;
 class FEngineRender;
 class FFilesystem;
+
 class FRenderer;
 class FWindow;
 
+class FWidget;
+class FWidgetManager;
+class IWidgetInteraction;
+
 template<class TType = float>
 class FVector2D;
+class FColorRGBA;
 
 template<typename TType>
 class CContainerBase;
@@ -20,6 +26,6 @@ class CArray;
 template<typename TKey, typename TValue>
 class CMap;
 template<typename TType>
-class CQueue;
+class CDeque;
 template<typename TType>
 class CQueueSafe;

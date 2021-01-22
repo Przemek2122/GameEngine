@@ -98,6 +98,25 @@ std::string FUtilis::GetPathWithOutFile(const std::string& InPath, int& WasFound
 	return "";
 }
 
+std::string FUtilis::GetFileFromPath(const std::string& InPath)
+{
+	return InPath.substr(InPath.find_last_of(GetPlatformSlash()), InPath.length());
+}
+
+std::string FUtilis::GetFileExtension(const std::string& InPathOrFile)
+{
+	const int DotIndex = InPathOrFile.find_last_of('.');
+
+	if (DotIndex != -1)
+	{
+		return InPathOrFile.substr(DotIndex, InPathOrFile.length());	
+	}
+	else
+	{
+		return "";
+	}
+}
+
 char FUtilis::GetPlatformSlash()
 {
 #if _WIN32 || _WIN64
@@ -140,12 +159,12 @@ long long int FUtilis::GetNumOfLinesInFile(const std::string& FilePath)
 	return NumOfLines;
 }
 
-void FUtilis::ConditionalBackupRecover(const std::string& FileOriginal, const std::string& FileBackup)
+void FUtilis::ConditionalBackupRecover(const std::string& FileOriginal, const std::string& FileBackup, const int NumOfLinesToRecover)
 {
 	long long int NumOfLines = FUtilis::GetNumOfLinesInFile(FileOriginal);
 
 	// Backup
-	if (NumOfLines > 100)
+	if (NumOfLines > NumOfLinesToRecover)
 	{
 		std::cout << " > Backup file '" << FileOriginal << "' ..." << std::endl;
 	

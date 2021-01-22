@@ -91,7 +91,7 @@ namespace FUtil
 				}
 
 				// Remove item
-				MessagesQueue.PopSafe();
+				MessagesQueue.DequeFrontSafe();
 			}
 		}
 
@@ -227,7 +227,7 @@ namespace FUtil
 	{
 		Message = GetCurrTime() + " (Info): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Info, Message });
+		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Info, Message });
 	}
 
 	void Info(std::ostream& Message)
@@ -240,7 +240,7 @@ namespace FUtil
 #ifdef _DEBUG // if debug
 		Message = GetCurrTime() + " (Debug): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Debug, Message });
+		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Debug, Message });
 #endif
 	}
 
@@ -253,7 +253,7 @@ namespace FUtil
 	{
 		Message = GetCurrTime() + " (Warn): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Warning, Message });
+		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Warning, Message });
 	}
 
 	void Warn(std::ostream& Message)
@@ -265,7 +265,7 @@ namespace FUtil
 	{
 		Message = GetCurrTime() + " (Error): " + Message;
 
-		MessagesQueue.PushSafe({ ELogMessageType::Message_Error, Message });
+		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Error, Message });
 	}
 
 	void Error(std::ostream& Message)

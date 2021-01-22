@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Queue.h"
+#include "Deque.h"
 #include "ThirdParty/SDL/SDL.h"
 
 /*
@@ -10,31 +10,54 @@
  * Thread safe
  */
 template<typename TType>
-class CQueueSafe : public CQueue<TType>
+class CQueueSafe : public CDeque<TType>
 {
 public:
 	/* Add element at end. */
-	inline void PushSafe(const TType& Value)
+	inline void PushFrontSafe(const TType& Value)
 	{
 		while (!Mutex.try_lock())
 		{
 			SDL_Delay(1);
 		}
 
-		CQueue<TType>::Push(Value);
+		CDeque<TType>::PushFront(Value);
+
+		Mutex.unlock();
+	}
+	inline void PushBackSafe(const TType& Value)
+	{
+		while (!Mutex.try_lock())
+		{
+			SDL_Delay(1);
+		}
+
+		CDeque<TType>::PushBack(Value);
 
 		Mutex.unlock();
 	}
 
 	/* Delete first element. */
-	inline void PopSafe()
+	inline void DequeFrontSafe()
 	{
 		while (!Mutex.try_lock())
 		{
 			SDL_Delay(1);
 		}
 
-		CQueue<TType>::Pop();
+		CDeque<TType>::DequeFront();
+
+		Mutex.unlock();
+	}
+	/* Delete last element. */
+	inline void DequeBackSafe()
+	{
+		while (!Mutex.try_lock())
+		{
+			SDL_Delay(1);
+		}
+
+		CDeque<TType>::DequeBack();
 
 		Mutex.unlock();
 	}

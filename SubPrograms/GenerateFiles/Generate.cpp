@@ -52,44 +52,43 @@ int main(int Argc, char* Argv[])
 
 	// Get precompiled headers
 	{
-	    std::cout << " > Searching for pre compiled headers ..." << std::endl;
+	    std::cout << " > Indexing files ..." << std::endl;
 	
-		std::ifstream FilterFileBackupRead(FilterFileBackupPath.c_str());
-		std::string FilterFileBackupLine;
-
-		int CurrentItemGroup = 0;
-		
-		const std::string FirstPartClCompile = "<ClCompile Include=\"";
-		const std::string LastPartClCompile = "\">";
-		const std::string ToErase = CodeDirectory + "\\";
-		
-		while (std::getline(FilterFileBackupRead, FilterFileBackupLine)) 
+		for (const auto & File : std::filesystem::recursive_directory_iterator(SourcePath))
 		{
-			if (FilterFileBackupLine.find(ItemGroupName) != std::string::npos)
+    		const std::string FilePath = File.path().string();
+    		const std::string FileLocalPath = FilePath.substr(FilePath.find(CodeDirectory) + CodeDirectory.length() + 1, FilePath.length());
+			const std::string FileNameWithExt = FUtilis::GetFileFromPath(FilePath);
+			const std::string FileExtension = FUtilis::GetFileExtension(FilePath);
+
+			if (FileExtension == ".cpp")
 			{
-				CurrentItemGroup++;
+				CompileFiles.push_back(FileLocalPath);
 			}
-
-			if (CurrentItemGroup == ItemGroup_FilterPrecompiledHeaders)
+			else if (FileExtension == ".h")
 			{
-				const int ItemIndex = FilterFileBackupLine.find(FirstPartClCompile);
-				
-				if (ItemIndex != -1)
-				{
-					std::string PrecompiledHeaderLine = FilterFileBackupLine.substr(ItemIndex + FirstPartClCompile.length(), FilterFileBackupLine.length());
-
-					PrecompiledHeaderLine = PrecompiledHeaderLine.substr(0, PrecompiledHeaderLine.find(LastPartClCompile));
-					
-					FUtilis::EraseAllSubStr(PrecompiledHeaderLine, ToErase);
-					
-					PrecompiledHeaders.emplace_back(PrecompiledHeaderLine);
-				}
+				IncludeFiles.push_back(FileLocalPath);
+			}
+			else if (FileExtension == ".hpp")
+			{
+				IncludeFiles.push_back(FileLocalPath);
+			}
+			else if (FileExtension == ".c")
+			{
+				CompileFiles.push_back(FileLocalPath);
+			}
+			else if (FileExtension == ".inl")
+			{
+				IncludeFiles.push_back(FileLocalPath);
+			}
+			else if (!FUtilis::HasProperExtension(FileLocalPath) && FUtilis::IsDirectory(FilePath))
+			{
+				Directories.push_back(FileLocalPath);
 			}
 		}
-	
-		FilterFileBackupRead.close();
 		
-	    std::cout << " > " << PrecompiledHeaders.size() << " Precompiled headers found." << std::endl;		
+	    std::cout << " > " << IncludeFiles.size() << " .cpp files to include found." << std::endl;		
+	    std::cout << " > " << CompileFiles.size() << " .h files to compile found." << std::endl;		
 	}
 
 	FGenerateFiles GenerateFiles;

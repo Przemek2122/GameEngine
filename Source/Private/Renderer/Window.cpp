@@ -42,7 +42,13 @@ FWindow::~FWindow()
 		LOG_WARN("Window not destroyed (pointer invalid)! ("<< WindowTitle << ")");
 	}
 
-	delete Renderer;
+	delete Renderer;	
+	delete WidgetManager;
+}
+
+SDL_Window* FWindow::GetSdlWindow() const
+{
+	return Window;
 }
 
 bool FWindow::IsWindowFocused() const
@@ -110,9 +116,9 @@ void FWindow::Render()
 	Renderer->PostRender();
 }
 
-FRenderer* FWindow::CreateRenderer() const
+FRenderer* FWindow::CreateRenderer()
 {
-	return new FRenderer(Window);
+	return new FRenderer(this);
 }
 
 void FWindow::Resize(const int NewWidth, const int NewHeight)
@@ -121,6 +127,11 @@ void FWindow::Resize(const int NewWidth, const int NewHeight)
 
 	WindowWidth = NewWidth;
 	WindowHeight = NewWidth;
+}
+
+FRenderer* FWindow::GetRenderer() const
+{
+	return Renderer;
 }
 
 FVector2D<int> FWindow::GetWindowSize() const
@@ -134,14 +145,23 @@ FVector2D<int> FWindow::GetWindowSize() const
 
 FVector2D<float> FWindow::GetWindowSizePercent(const FVector2D<int> Position) const
 {
-	const auto Size = GetWindowSize();
+	const FVector2D<int> WindowSize = GetWindowSize();
 
-	return (FVector2D<float>(Size) / FVector2D<float>(100)) * Position;
+	return (FVector2D<float>(WindowSize) / FVector2D<float>(100)) * Position;
 }
 
-FWidgetManager* FWindow::CreateWidgetManager() const
+FVector2D<int> FWindow::GetWindowLocation() const
 {
-	return new FWidgetManager();
+	FVector2D<int> WindowLocation;
+	
+	SDL_GetWindowPosition(Window, &WindowLocation.X, &WindowLocation.Y);
+
+	return WindowLocation;
+}
+
+FWidgetManager* FWindow::CreateWidgetManager()
+{
+	return new FWidgetManager(this);
 }
 
 FWidgetManager* FWindow::GetWidgetManager() const
