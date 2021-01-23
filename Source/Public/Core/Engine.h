@@ -77,6 +77,11 @@ public:
 
 	_NODISCARD int GetFramesThisSecond() const;
 
+	virtual double GetMaxDeltaTime() const;
+	virtual void SetDeltaTime(const double &InDeltaTime);
+	_NODISCARD float GetDeltaTime() const;
+	_NODISCARD double GetDeltaTimeDouble() const;
+
 protected:
 	// Framerate per second / ticks per second
 	uint32_t FrameRate;
@@ -89,7 +94,10 @@ protected:
 	uint32_t FrameTime;
 
 	uint64_t CounterLastFrame;
-	uint64_t CounterCurrentFrame = SDL_GetPerformanceCounter();
+	uint64_t CounterCurrentFrame;
+
+	float DeltaTimeFloat;
+	double DeltaTimeDouble;
 
 private:
 	int TicksThisSecond;

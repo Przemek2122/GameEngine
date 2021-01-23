@@ -288,5 +288,15 @@ namespace FUtil
 		SetConsoleTextAttribute(hConsole, 7);
 #endif
 	}
+
+	FColorRGBA GetRandomColor()
+	{
+		return FColorRGBA(
+			GetRandomValue(0, 255),
+			GetRandomValue(0, 255),
+			GetRandomValue(0, 255),
+			255
+		);
+	}
 }
 

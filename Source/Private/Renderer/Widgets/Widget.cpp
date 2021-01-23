@@ -4,7 +4,7 @@
 #include "Renderer/Widgets/Widget.h"
 #include "Renderer/Widgets/WidgetManager.h"
 
-FWidget::FWidget(FWidgetManager* InWidgetManager, const std::string InWidgetName)
+FWidget::FWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
 	: WidgetManager(InWidgetManager)
 	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetName(InWidgetName)

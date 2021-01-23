@@ -33,6 +33,13 @@ void FEngineManager::MainLoop()
 	{
 		Engine->UpdateFrameTimeStart();
 
+		// Calculate DeltaTime
+		{
+			Engine->CounterCurrentFrame = SDL_GetPerformanceCounter();
+			auto DeltaTime = static_cast<double>(Engine->CounterCurrentFrame - Engine->CounterLastFrame) / static_cast<double>(SDL_GetPerformanceFrequency());
+			Engine->SetDeltaTime(DeltaTime);
+		}
+		
 		Engine->EngineTick();
 
 		Engine->UpdateFrameTimeEnd();
@@ -48,6 +55,8 @@ void FEngineManager::MainLoop()
 				SDL_Delay(EngineFrameDelay - EngineFrameTime);
 			}
 		}
+
+		Engine->CounterLastFrame = Engine->CounterCurrentFrame;
 	}
 }
 

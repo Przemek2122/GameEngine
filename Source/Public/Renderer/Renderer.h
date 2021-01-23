@@ -45,13 +45,13 @@ protected:
 public:
 	/** Draw single point. */
 	void DrawPointAt(const FColorPoint& ColorPoint) const;
-	/** Draw multiple points with different colors (Use other overload if all colors all same). */
-	void DrawPointsAt(const CArray<FColorPoint>& ColorPoints) const;
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<FVector2D<int>>& Points, FColorRGBA& Color) const;
+	void DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA AllPointsColor) const;
+	/** Draw multiple points with same colors. */
+	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA AllPointsColor) const;
 
-	void DrawCircle(const FVector2D<int> Location, const int Radius);
-	void DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength);
+	void DrawCircle(const FVector2D<int> Location, const int Radius) const;
+	void DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength) const;
 
 protected:
 	SDL_Renderer* Renderer;

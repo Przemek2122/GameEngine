@@ -74,6 +74,12 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Font.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Texture.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Containers\Array.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
@@ -431,6 +437,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Font.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Texture.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Containers\Array.cpp">

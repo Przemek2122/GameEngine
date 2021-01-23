@@ -4,10 +4,20 @@
 
 #include "CoreMinimal.h"
 
+struct FSpark
+{
+	FSpark();
+	FSpark(const FVector2D<int>& InLocation, const float InSpeed, const int InRotationDegree);
+	
+	FVector2D<float> Location;
+	float Speed;
+	int Angle;
+};
+
 class FMouseSparkWidget : public FWidget
 {
 public:
-	FMouseSparkWidget(FWidgetManager* InWidgetManager, std::string InWidgetName);
+	FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName);
 	virtual ~FMouseSparkWidget() override;
 
 	/** Begin FWidget interface */
@@ -15,10 +25,10 @@ public:
 	virtual void Render() override;
 	/** End FWidget interface */
 
-	virtual void RenderSparkAt(const FVector2D<int>& ScreenPosition);
-
 protected:
-	CDeque<FVector2D<int>> ScreenLocations;	
-	int NumOfFrames;
+	CDeque<FSpark> Sparks;
+	CArray<SDL_Point> Points;
+	int MaxNumOfPoints;
+	int PointPerTick;
 	
 };

@@ -13,6 +13,7 @@ FEngine::FEngine()
 	, FrameDelay(0)
 	, FrameStart(0)
 	, FrameTime(0)
+	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 	, CounterLastFrame(0)
 	, TicksThisSecond(0)
 	, Second(0)
@@ -207,6 +208,27 @@ void FEngine::SetFrameRate(const uint32_t NewFrameRate)
 int FEngine::GetFramesThisSecond() const
 {
 	return TicksThisSecond;
+}
+
+double FEngine::GetMaxDeltaTime() const
+{
+	return 0.3;
+}
+
+void FEngine::SetDeltaTime(const double &InDeltaTime)
+{
+	const auto LocalDeltaTimeMax = GetMaxDeltaTime();
+	
+	if (InDeltaTime < LocalDeltaTimeMax)
+	{
+		DeltaTimeDouble = InDeltaTime;
+		DeltaTimeFloat = static_cast<float>(InDeltaTime);	
+	}
+	else
+	{
+		DeltaTimeDouble = LocalDeltaTimeMax;
+		DeltaTimeFloat = static_cast<float>(LocalDeltaTimeMax);
+	}
 }
 
 FEngineRender* FEngine::CreateEngineRenderer() const

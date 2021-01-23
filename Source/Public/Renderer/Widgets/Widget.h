@@ -23,7 +23,7 @@ class FWidget
 
 protected:
 	/** If creating outside manager make sure to send proper InWidgetManager. Otherwise exception will be thrown in debug. */
-	FWidget(FWidgetManager* InWidgetManager, const std::string InWidgetName);
+	FWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName);
 	virtual ~FWidget();
 	
 	virtual void Tick();

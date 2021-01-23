@@ -136,6 +136,31 @@ namespace FUtil
 #define BITMASK_TOGGLE(Variable, Mask) ((Variable) ^= (Mask));
 /** Use this to check wheater bit on bitmask is set */
 #define BITMASK_IS_SET(Variable, Mask) (((Variable) & (Mask)) == (Mask))
+	
+	template<typename TValue = int>
+	TValue GetRandomValue(TValue Min, TValue Max)
+	{
+		return ((rand() % Max) + Min);
+	}
+
+	template<typename TValue = float>
+	TValue GetRandomValueFloating(TValue Min, TValue Max)
+	{
+		return Min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (Max - Min)));
+	}
+
+	FColorRGBA GetRandomColor();
+	
+	template<typename TValue = int>
+	FVector2D<TValue> GetPointAngle(const TValue Distance, const TValue Angle)
+	{
+		FVector2D<TValue> Vector;
+		
+		Vector.X = cos(Angle) * Distance;
+		Vector.Y = sin(Angle) * Distance;
+
+		return Vector;
+	}
 
 	/* Path to file with log. */ 
 	extern std::string LogFilePath;

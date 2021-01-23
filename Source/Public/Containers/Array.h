@@ -89,6 +89,11 @@ public:
 		Vector.swap(Other);
 	}
 
+	inline void SetNum(size_t NewSize)
+	{
+		Vector.resize(NewSize);
+	}
+	
 	inline void Clear()
 	{
 		Vector.clear();		

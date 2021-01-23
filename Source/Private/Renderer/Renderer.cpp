@@ -67,7 +67,7 @@ void FRenderer::Render()
 
 void FRenderer::PostRender()
 {
-	SDL_SetRenderDrawColor(Renderer, 100, 100, 100, 255); // Background color
+	SDL_SetRenderDrawColor(Renderer, 34, 34, 34, 255); // Background color
 	SDL_RenderPresent(Renderer);
 }
 
@@ -88,29 +88,34 @@ void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const
 	SDL_RenderDrawPoint(Renderer, ColorPoint.Location.X, ColorPoint.Location.Y);
 }
 
-void FRenderer::DrawPointsAt(const CArray<FColorPoint>& ColorPoints) const
+void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA AllPointsColor) const
 {
-	for (size_t i = 0; i < ColorPoints.Size(); i++)
-	{
-		SDL_SetRenderDrawColor(Renderer, ColorPoints[i].Color.R, ColorPoints[i].Color.G, ColorPoints[i].Color.B, ColorPoints[i].Color.A);
-		SDL_RenderDrawPoint(Renderer, ColorPoints[i].Location.X, ColorPoints[i].Location.Y);
-	}
+	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
+	
+	const auto AllPointsNum = static_cast<Uint32>(Points.Size());
 
-	// @TODO consider change to https://wiki.libsdl.org/SDL_RenderDrawPoints
+	if (AllPointsNum == 0)
+	{
+		return;
+	}
+	
+	std::vector<SDL_Point> PointsArray(AllPointsNum);
+
+	for (unsigned int Index = 0; Index < AllPointsNum; Index++)
+	{
+		PointsArray[Index] = { Points[Index].X, Points[Index].Y };
+	}
+	
+	SDL_RenderDrawPoints(Renderer, PointsArray.data(), static_cast<int>(PointsArray.size()));
 }
 
-void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, FColorRGBA& Color) const
+void FRenderer::DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA AllPointsColor) const
 {
-	for (size_t i = 0; i < Points.Size(); i++)
-	{
-		SDL_SetRenderDrawColor(Renderer, Color.R, Color.G, Color.B, Color.A);
-		SDL_RenderDrawPoint(Renderer, Points[i].X, Points[i].Y);
-	}
-
-	// @TODO change to https://wiki.libsdl.org/SDL_RenderDrawPoints
+	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
+	SDL_RenderDrawPoints(Renderer, Points.Vector.data(), static_cast<int>(Points.Size()));
 }
 
-void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius)
+void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius) const
 {
 	int nx = Radius - 1;
 	int ny = 0;
@@ -145,7 +150,7 @@ void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius)
 	}
 }
 
-void FRenderer::DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength)
+void FRenderer::DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength) const
 {
 	int dx = abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
 	int dy = abs(y2 - y1), sy = y1 < y2 ? 1 : -1;

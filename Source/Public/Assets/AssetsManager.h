@@ -6,5 +6,14 @@
 
 class FAssetsManager
 {
+	friend FEngine;
+	
+protected:
+	FAssetsManager();
+	~FAssetsManager();
+
+public:
+
+protected:
 	
 };

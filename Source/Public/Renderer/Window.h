@@ -76,14 +76,14 @@ protected:
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
 
 public:
-	_NODISCARD INLINE_DEBUGABLE FWidgetManager* GetWidgetManager() const;
+	_NODISCARD FWidgetManager* GetWidgetManager() const;
 	
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE FWidget& CreateWidget() const
+	FWidget& CreateWidget() const
 	{
 		return GetWidgetManager().CreateWidget<TWidgetTemplate>();
 	}
-	INLINE_DEBUGABLE bool DestroyWidget(FWidget* Widget) const
+	bool DestroyWidget(FWidget* Widget) const
 	{
 		return GetWidgetManager()->DestroyWidget(Widget);
 	}

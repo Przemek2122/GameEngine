@@ -4,9 +4,24 @@
 #include "Renderer/Widgets/Samples/MouseSparkWidget.h"
 #include "Input/EventHandler.h"
 
-FMouseSparkWidget::FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string InWidgetName)
+FSpark::FSpark()
+	: Location(0)
+	, Speed(0)
+	, Angle(0)
+{
+}
+
+FSpark::FSpark(const FVector2D<int>& InLocation, const float InSpeed, const int InRotationDegree)
+	: Location(InLocation)
+	, Speed(InSpeed)
+	, Angle(InRotationDegree)
+{
+}
+
+FMouseSparkWidget::FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
 	: FWidget(InWidgetManager, InWidgetName)
-	, NumOfFrames(125)
+	, MaxNumOfPoints(256)
+	, PointPerTick(8)
 {
 }
 
@@ -20,15 +35,36 @@ void FMouseSparkWidget::Tick()
 
 	if (GetWidgetManager()->GetOwnerWindow()->IsWindowFocused())
 	{
-		auto* EventHandler = Engine->GetEventHandler();
+		FEventHandler* EventHandler = Engine->GetEventHandler();
 
 		const FVector2D<int> MouseLocation = EventHandler->GetMouseLocationCurrent();
 
-		ScreenLocations.PushBack(MouseLocation);
-
-		if (ScreenLocations.Size() > static_cast<unsigned int>(NumOfFrames))
+		for (int i = 0; i < PointPerTick; i++)
 		{
-			ScreenLocations.DequeFront();
+			Sparks.PushBack(FSpark(
+				MouseLocation, 
+				FUtil::GetRandomValueFloating<float>(0.1f, 0.4f), 
+				FUtil::GetRandomValue<int>(0, 359)
+			));
+		}
+
+		while (Sparks.Size() > static_cast<unsigned int>(MaxNumOfPoints))
+		{
+			Sparks.DequeFront();
+		}
+
+		Points.Clear();
+		Points.SetNum(Sparks.Size());
+		
+		for (size_t i = 0; i < Sparks.Size(); i++)
+		{
+			FSpark& Spark = Sparks[i];
+			
+			const FVector2D<float> LocationChange = FUtil::GetPointAngle<float>(Spark.Speed, static_cast<float>(Spark.Angle));
+			
+			Sparks[i].Location += LocationChange;
+
+			Points[i] = Sparks[i].Location;
 		}
 	}
 }
@@ -36,17 +72,9 @@ void FMouseSparkWidget::Tick()
 void FMouseSparkWidget::Render()
 {
 	Super::Render();
-
-	for (size_t i = 0; i < ScreenLocations.Size(); i++)
-	{
-		RenderSparkAt(ScreenLocations[i]);
-	}
-}
-
-void FMouseSparkWidget::RenderSparkAt(const FVector2D<int>& ScreenPosition)
-{
+	
 	if (FRenderer* Renderer = GetRenderer())
 	{
-		Renderer->DrawPointAt(FColorPoint(ScreenPosition, FColorRGBA(200, 30, 70)));
+		Renderer->DrawPointsAt(Points, FColorRGBA(0, 153, 154));
 	}
 }

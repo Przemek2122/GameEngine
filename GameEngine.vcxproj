@@ -28,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
+    <ClInclude Include="Source\Public\Assets\Font.h" />
+    <ClInclude Include="Source\Public\Assets\Texture.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
     <ClInclude Include="Source\Public\Containers\Deque.h" />
@@ -162,6 +164,8 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">CoreEngine.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp" />
+    <ClCompile Include="Source\Private\Assets\Font.cpp" />
+    <ClCompile Include="Source\Private\Assets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\Array.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
     <ClCompile Include="Source\Private\Containers\Map.cpp" />

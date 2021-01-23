@@ -30,8 +30,8 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
-    <ClInclude Include="Source\Public\Containers\Map.h" />
     <ClInclude Include="Source\Public\Containers\Deque.h" />
+    <ClInclude Include="Source\Public\Containers\Map.h" />
     <ClInclude Include="Source\Public\Containers\QueueSafe.h" />
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
@@ -56,7 +56,8 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
-    <ClInclude Include="Source\Public\Types\FVector2D.h" />
+    <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
+    <ClInclude Include="Source\Public\Types\Vector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\close_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL.h" />
@@ -182,7 +183,8 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
-    <ClCompile Include="Source\Private\Types\FVector2D.cpp" />
+    <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
+    <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

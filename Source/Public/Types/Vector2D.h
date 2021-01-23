@@ -166,11 +166,19 @@ public:
 	//template<class TType> Vector2d<TType> GetIntersect(const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&)
 
 	// Conversion
-	operator std::ostream () const 
+	operator SDL_Point() const
+	{
+		SDL_Point Point;
+		Point.x = X;
+		Point.y = Y;
+		return Point;
+	}
+	
+	operator std::ostream() const 
 	{ 
 		return "(" << X << "," << Y << ")";
 	}
-	operator std::string () const 
+	operator std::string() const 
 	{ 
 		return "(" + std::to_string(X) + ", " + std::to_string(Y) + ")"; 
 	}
