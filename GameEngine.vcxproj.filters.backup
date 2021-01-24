@@ -15,63 +15,75 @@
     <Filter Include="Private\Core\Input">
       <UniqueIdentifier>{xnjnubla-n060a-i16ru-4zcbr-b2zx58gz80eg}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Misc">
+    <Filter Include="Private\Core\Test">
       <UniqueIdentifier>{smlreuiu-3a08o-f1yb8-j1h6x-945a7j6n5etj}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer">
+    <Filter Include="Private\Misc">
       <UniqueIdentifier>{c26d549s-951zg-scg4y-kiipf-031e2itwfajc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer\Widgets">
+    <Filter Include="Private\Renderer">
       <UniqueIdentifier>{d3goutr6-56cm0-fjsok-yuewu-1xxtmljcr41j}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer\Widgets\Samples">
+    <Filter Include="Private\Renderer\Widgets">
       <UniqueIdentifier>{laf7zbel-is0kz-1g2xm-sutpy-6fpa152xg2nz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types">
+    <Filter Include="Private\Renderer\Widgets\Samples">
       <UniqueIdentifier>{n3w3sh5k-5zh9r-8zi6l-62fc9-gz5lh3466b5m}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public">
+    <Filter Include="Private\Types">
       <UniqueIdentifier>{9iraf6i2-zu3rx-4ibkx-p8i8u-l4swg2kulgnc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets">
+    <Filter Include="Public">
       <UniqueIdentifier>{x148t2a4-7bwhj-es1e5-rylio-hliu5hnwhtfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Containers">
+    <Filter Include="Public\Assets">
       <UniqueIdentifier>{545unj2g-tgiml-6ha08-751y2-jjee2jadsyco}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core">
+    <Filter Include="Public\Containers">
       <UniqueIdentifier>{w72wsst8-gf8m9-tya7g-sybhm-0j4tuu70h1uc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Includes">
+    <Filter Include="Public\Core">
       <UniqueIdentifier>{14acxo7b-5xg8o-084jb-unf8g-86dkj6149wab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Input">
+    <Filter Include="Public\Core\Includes">
       <UniqueIdentifier>{uukon1kl-msi95-nckyf-o1mbi-sywixbw44h25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Misc">
+    <Filter Include="Public\Core\Input">
       <UniqueIdentifier>{5pbukado-b61dl-zxj70-2ds6o-t0gdx0fzb3hd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer">
+    <Filter Include="Public\Core\Test">
       <UniqueIdentifier>{astniys5-nfj1w-4ih3r-0jzxt-fooxkb2id47p}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets">
+    <Filter Include="Public\Misc">
       <UniqueIdentifier>{9btedf0e-tpi1k-71ma8-7g43l-7oczrpfophcu}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\Samples">
+    <Filter Include="Public\Renderer">
       <UniqueIdentifier>{rme5xgzc-jlxje-tnfk3-hh5s4-bc71unuyt1as}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types">
+    <Filter Include="Public\Renderer\Widgets">
       <UniqueIdentifier>{tklelt4o-7n83f-u4sad-sr2id-djg4tcllj78t}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty">
+    <Filter Include="Public\Renderer\Widgets\Samples">
       <UniqueIdentifier>{3tono71z-rcmb6-ulb8j-kzi60-nbt2w5knpbh1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\SDL">
+    <Filter Include="Public\Types">
       <UniqueIdentifier>{ghhz4xso-uzdls-z0w68-f0amc-k31ktadojp4x}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{a33eg931-oo54t-nnz3h-kw5mt-s52tto2w3sch}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\SDL">
+      <UniqueIdentifier>{y45dhyod-kk4ya-ao5dj-g1ff7-eettkns6yaw7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Font.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Texture.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Containers\Array.h">
@@ -122,7 +134,7 @@
     <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h">
       <Filter>Public\Core\Includes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\Includes\Statics.h">
+    <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h">
       <Filter>Public\Core\Includes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
@@ -130,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Object.h">
       <Filter>Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\TestCase.h">
+      <Filter>Public\Core\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\TestManager.h">
+      <Filter>Public\Core\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\TestTypes.h">
+      <Filter>Public\Core\Test</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Misc\Filesystem.h">
       <Filter>Public\Misc</Filter>
@@ -162,6 +183,21 @@
       <Filter>Public\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\ColorRGBA.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\DelegateBase.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\FunctorBase.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\FunctorBaseObject.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\FunctorLambda.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\FunctorStatic.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\Vector2D.h">
@@ -433,6 +469,12 @@
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Font.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Texture.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Containers\Array.cpp">
       <Filter>Private\Containers</Filter>
     </ClCompile>
@@ -469,6 +511,15 @@
     <ClCompile Include="Source\Private\Core\Object.cpp">
       <Filter>Private\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\TestCase.cpp">
+      <Filter>Private\Core\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\TestManager.cpp">
+      <Filter>Private\Core\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp">
+      <Filter>Private\Core\Test</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp">
       <Filter>Private\Misc</Filter>
     </ClCompile>
@@ -500,6 +551,21 @@
       <Filter>Private\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\DelegateBase.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\FunctorBase.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\FunctorBaseObject.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\FunctorLambda.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\FunctorStatic.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\Vector2D.cpp">

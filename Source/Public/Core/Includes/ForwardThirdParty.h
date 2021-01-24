@@ -7,4 +7,5 @@ struct SDL_Renderer;
 struct SDL_Window;
 union SDL_Event;
 struct SDL_Thread;
+struct SDL_Rect;
 

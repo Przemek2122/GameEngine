@@ -13,6 +13,7 @@
 
 #include "Public/Types/Vector2D.h"
 #include "Public/Types/ColorRGBA.h"
+#include "Public/Types/FunctorBase.h"
 
 #include "Core/Object.h"
 #include "Core/Engine.h"

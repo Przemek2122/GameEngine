@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-class FFOnt
+class FFont
 {
 protected:
 	

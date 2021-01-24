@@ -1,4 +1,4 @@
-// 
+// Created by Przemys³aw Wiewióra 2020
 
 #pragma once
 
@@ -143,6 +143,14 @@ protected:
 	SDL_Event SdlEvent;
 	FEventHandler* EventHandler;
 	//static AssetsManager* Assets;
+
+
+protected:
+#if ENGINE_TESTS
+	virtual class FTestManager* CreateTestManager() const;
+	
+	class FTestManager* TestManager;
+#endif
 
 
 };

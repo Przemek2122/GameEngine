@@ -1,8 +1,12 @@
-//
+// Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
+#if ENGINE_TESTS
+#include "Test/TestManager.h"
+#include "Test/TestTypes.h"
+#endif
 
 FEngine::FEngine()
 	: bContinueMainLoop(true)
@@ -20,6 +24,10 @@ FEngine::FEngine()
 	, EngineRender(CreateEngineRenderer())
 	, EventHandler(CreateEventHandler())
 {
+#if ENGINE_TESTS
+	TestManager = CreateTestManager();
+#endif
+	
 	FUtil::LogInit();
 
 	SetFrameRate(60);
@@ -87,6 +95,10 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 		exit(-8);
 	}
+
+#if ENGINE_TESTS && ENGINE_RUN_ENGINE_TESTS
+	TestManager->SpawnTestCaseByClass<FTestTypes>();
+#endif
 
 	LOG_INFO("Engine init End");
 
@@ -251,6 +263,11 @@ FEventHandler* FEngine::GetEventHandler() const
 FEventHandler* FEngine::CreateEventHandler() const
 {
 	return new FEventHandler(SdlEvent);
+}
+
+FTestManager* FEngine::CreateTestManager() const
+{
+	return new FTestManager;
 }
 
 FEngineRender* FEngine::GetEngineRender() const

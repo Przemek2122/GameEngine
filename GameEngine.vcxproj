@@ -45,9 +45,13 @@
     <ClInclude Include="Source\Public\Core\Includes\FullCppIncludes.h" />
     <ClInclude Include="Source\Public\Core\Includes\FullEngineBase.h" />
     <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h" />
-    <ClInclude Include="Source\Public\Core\Includes\Statics.h" />
+    <ClInclude Include="Source\Public\Core\Includes\GlobalDefines.h" />
+    <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestTypes.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
     <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
@@ -59,6 +63,11 @@
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
+    <ClInclude Include="Source\Public\Types\DelegateBase.h" />
+    <ClInclude Include="Source\Public\Types\FunctorBase.h" />
+    <ClInclude Include="Source\Public\Types\FunctorBaseObject.h" />
+    <ClInclude Include="Source\Public\Types\FunctorLambda.h" />
+    <ClInclude Include="Source\Public\Types\FunctorStatic.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\close_code.h" />
@@ -177,6 +186,9 @@
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
@@ -188,6 +200,11 @@
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
+    <ClCompile Include="Source\Private\Types\DelegateBase.cpp" />
+    <ClCompile Include="Source\Private\Types\FunctorBase.cpp" />
+    <ClCompile Include="Source\Private\Types\FunctorBaseObject.cpp" />
+    <ClCompile Include="Source\Private\Types\FunctorLambda.cpp" />
+    <ClCompile Include="Source\Private\Types\FunctorStatic.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,8 @@ FSpark::FSpark(const FVector2D<int>& InLocation, const float InSpeed, const int 
 
 FMouseSparkWidget::FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
 	: FWidget(InWidgetManager, InWidgetName)
+	, MinMaxSpeedRange(0.1f, 0.4f)
+	, MinMaxAngleRange(0, 359)
 	, MaxNumOfPoints(256)
 	, PointPerTick(8)
 {
@@ -43,8 +45,8 @@ void FMouseSparkWidget::Tick()
 		{
 			Sparks.PushBack(FSpark(
 				MouseLocation, 
-				FUtil::GetRandomValueFloating<float>(0.1f, 0.4f), 
-				FUtil::GetRandomValue<int>(0, 359)
+				FUtil::GetRandomValueFloating<float>(MinMaxSpeedRange.X, MinMaxSpeedRange.Y), 
+				FUtil::GetRandomValue<int>(MinMaxAngleRange.X, MinMaxAngleRange.Y)
 			));
 		}
 

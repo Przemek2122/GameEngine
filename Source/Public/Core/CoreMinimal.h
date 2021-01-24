@@ -9,4 +9,5 @@
 #include "Includes/ForwardThirdParty.h"
 #include "Includes/ForwardEngineBase.h"
 #include "Includes/EngineMacros.h"
-
+#include "Includes/GlobalProperties.h"
+#include "Includes/GlobalDefines.h"
