@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <sstream>
 #include "Vector2D.h"
 
 /* Two dimensional vector. */

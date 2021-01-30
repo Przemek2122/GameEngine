@@ -205,10 +205,12 @@ void FEventHandler::AddInput(std::string InputName)
 	InputMap.Emplace(InputName, Default);
 }
 
-void FEventHandler::RemoveInput(std::string InputName)
+void FEventHandler::RemoveInput(const std::string& InputName)
 {
 	if (InputMap.Remove(InputName))
 	{
-		ENSURE("Not removed - not found.");
+#ifdef _DEBUG
+		ENSURE_VALID_MESSAGE(false, "Not removed - not found.");
+#endif
 	}
 }

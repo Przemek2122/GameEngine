@@ -18,7 +18,7 @@ class IWidgetInteraction;
 template<class TType = float>
 class FVector2D;
 class FColorRGBA;
-template<typename TReturnType = void, typename TInParams = void()>
+template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
 
 template<typename TType>

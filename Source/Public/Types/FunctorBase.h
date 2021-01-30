@@ -5,21 +5,25 @@
 #include "CoreMinimal.h"
 
 /**
- * Function storage class. Supports:
+ * A functor (or function object) is a C++ class that acts like a function.
+ * Supports:
  * NOTHING! It's abstract class used as base.
  *
- * Can be used to call stored function on child, @see operator()
- *
- * As this is base, some link will be provided
- * https://isocpp.org/wiki/faq/pointers-to-members
+ * IsValid() - Use to check if function is bound.
+ * operator() - Use to call stored function.
  */
-template<typename TReturnType, typename TInParams>
-class FFunctorBase
+template<typename TReturnType, typename... TInParams>
+class FFunctorBase<TReturnType(TInParams ...)>
 {
-public:
+protected:
+	FFunctorBase() = default;
+	virtual ~FFunctorBase() = default;
+	
+public:	
 	/** This function calls stored function */
-	virtual TReturnType operator()(TInParams Params = nullptr) = 0; // TInParams InParams = nullptr
+	virtual TReturnType operator()(TInParams... Params) = 0; // TInParams InParams = nullptr
 
 	/** True if any function was bound. */                                                                                                                                                
 	_NODISCARD virtual bool IsValid() const = 0;
+	
 };

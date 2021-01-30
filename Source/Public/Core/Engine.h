@@ -144,13 +144,11 @@ protected:
 	FEventHandler* EventHandler;
 	//static AssetsManager* Assets;
 
-
 protected:
 #if ENGINE_TESTS
 	virtual class FTestManager* CreateTestManager() const;
 	
 	class FTestManager* TestManager;
 #endif
-
 
 };

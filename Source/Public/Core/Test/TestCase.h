@@ -6,12 +6,16 @@
 
 #if ENGINE_TESTS
 
+class FTestManager;
+
 /**
  * Base class for testing.
  * Do once test.
  */
 class FTestCase
 {
+	friend FTestManager;
+	
 public:
 	FTestCase();
 	virtual ~FTestCase();
@@ -23,13 +27,21 @@ public:
 	void StartTest();
 	/** Test should be performed in this function. */
 	virtual void DoTest() = 0;
+
+	void DestroyTest();
 	
-	virtual char* GetTestName() const;
+	_NODISCARD virtual char* GetTestName() const;
+
+protected:
+	void RegisterTest(FTestManager* InTestManager);
+	void UnRegisterTest();
 
 protected:
 	bool bIsTestDone;
 	bool bAutoStartTest;
 	bool bAutoDeleteTest;
+
+	FTestManager* TestManager;
 	
 };
 

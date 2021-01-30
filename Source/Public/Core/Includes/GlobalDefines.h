@@ -3,6 +3,6 @@
 #pragma once
 
 /** Should any type of tests be available? */
-#define ENGINE_TESTS true
+#define ENGINE_TESTS				false
 /** Should default tests be performed? */
-#define ENGINE_RUN_ENGINE_TESTS true
+#define ENGINE_RUN_ENGINE_TESTS		false

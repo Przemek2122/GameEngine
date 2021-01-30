@@ -12,9 +12,7 @@ FWidget::FWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetNam
 #if _DEBUG
 	if (WidgetManager == nullptr)
 	{
-		static std::string WidgetManagerInNotValidNotify = "Widget with no widget manager should not exists! Please fix InWidgetManager pointer.";
-		LOG_ERROR(WidgetManagerInNotValidNotify);
-		ENSURE(WidgetManagerInNotValidNotify.c_str());
+		ENSURE_VALID_MESSAGE(false, "Widget with no widget manager should not exists! Please fix InWidgetManager pointer.");
 	}
 #endif
 	
@@ -26,8 +24,7 @@ FWidget::~FWidget()
 #if _DEBUG
 	if (WidgetManager == nullptr)
 	{
-		static std::string WidgetManagerOutNotValidNotify = "Widget with no widget manager should not exists!.";
-		ENSURE(WidgetManagerOutNotValidNotify.c_str());
+		ENSURE_VALID_MESSAGE(false, "Widget with no widget manager should not exists!.");
 	}
 #endif
 	
@@ -47,8 +44,7 @@ FWidgetManager* FWidget::GetWidgetManager() const
 #if _DEBUG
 	if (WidgetManager == nullptr)
 	{
-		static std::string WidgetManagerGetNotValidNotify = "Requested FWidgetManager but it has not been created!";
-		ENSURE(WidgetManagerGetNotValidNotify.c_str());
+		ENSURE_VALID_MESSAGE(false, "Requested FWidgetManager but it has not been created!");
 	}
 #endif
 	

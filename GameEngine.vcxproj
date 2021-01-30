@@ -65,7 +65,7 @@
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
     <ClInclude Include="Source\Public\Types\DelegateBase.h" />
     <ClInclude Include="Source\Public\Types\FunctorBase.h" />
-    <ClInclude Include="Source\Public\Types\FunctorBaseObject.h" />
+    <ClInclude Include="Source\Public\Types\FunctorObject.h" />
     <ClInclude Include="Source\Public\Types\FunctorLambda.h" />
     <ClInclude Include="Source\Public\Types\FunctorStatic.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
@@ -202,7 +202,7 @@
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
     <ClCompile Include="Source\Private\Types\DelegateBase.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorBase.cpp" />
-    <ClCompile Include="Source\Private\Types\FunctorBaseObject.cpp" />
+    <ClCompile Include="Source\Private\Types\FunctorObject.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorLambda.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorStatic.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />

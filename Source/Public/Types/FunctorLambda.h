@@ -2,24 +2,43 @@
 
 #pragma once
 
+#include <functional>
+
 #include "CoreMinimal.h"
 
 /**
  * Function storage class. Supports:
- * NOTHING! It's abstract class used as base.
- *
- * Can be used to call stored function on child, @see operator()
- *
- * As this is base, some link will be provided
- * https://isocpp.org/wiki/faq/pointers-to-members
+ * Lambda
  */
-template<typename TReturnType, typename TInParams>
-class FFunctorBase
+template<typename TReturnType, typename... TInParams> 
+class FFunctorLambda : public FFunctorBase<TReturnType(TInParams...)>
 {
 public:
-	/** This function calls stored function */
-	virtual TReturnType operator()(TInParams Params = nullptr) = 0; // TInParams InParams = nullptr
+	FFunctorLambda(std::function<TReturnType(TInParams ...)>&& InFunction)
+		: Function(std::move(InFunction))
+	{
+    }
+	FFunctorLambda(std::function<TReturnType(TInParams ...)>& InFunction)
+		: Function(std::move(InFunction))
+	{
+    }
+	FFunctorLambda(TReturnType* InFunction)
+		: Function(std::function(InFunction))
+	{
+    }
+	
+	/** Begin FFunctorBase interface */
+	virtual TReturnType operator()(TInParams... Params) override
+	{
+		return Function(Params ...);
+	}                                                                                                                                               
+	_NODISCARD virtual bool IsValid() const override
+	{
+		return false;
+	}
+	/** End FFunctorBase interface */
 
-	/** True if any function was bound. */                                                                                                                                                
-	_NODISCARD virtual bool IsValid() const = 0;
+protected:
+	/** Stored lambda */
+	std::function<TReturnType(TInParams ...)> Function;
 };

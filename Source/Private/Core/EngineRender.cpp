@@ -31,11 +31,12 @@ void FEngineRender::StartRenderTick()
 		// @TODO Move to thread.
 		RenderTick();
 	}
-
+#if _DEBUG
 	else
 	{
-		ENSURE("Called too early");
+		ENSURE_VALID_MESSAGE(false, "Called too early");
 	}
+#endif
 }
 
 bool FEngineRender::IsRenderTickFinished() const
@@ -51,10 +52,12 @@ void FEngineRender::RenderTick()
 		{
 			Window->Render();
 		}
+#ifdef _DEBUG
 		else
 		{
-			ENSURE("Empty pointer found!");
+			ENSURE_VALID_MESSAGE(false, "Empty pointer found!");
 		}
+#endif
 	}
 
 	EndRenderTick();

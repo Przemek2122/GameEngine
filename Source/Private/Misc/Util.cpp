@@ -74,9 +74,9 @@ namespace FUtil
 					break;
 
 				default:
-					// Should be impossible (infinite loop may happen)
-					ENSURE("Debug break");
-
+#ifdef _DEBUG
+		ENSURE_VALID_MESSAGE(false, "Should be impossible (infinite loop may happen)");
+#endif
 					break;
 				}
 
@@ -109,7 +109,7 @@ namespace FUtil
 	}
 
 	/* Return current Milisecond */
-	size_t GetMiliseconds()
+	size_t GetMiliSeconds()
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	}
@@ -167,12 +167,12 @@ namespace FUtil
 	/* Starts delay you need variable long long int and pass it as reference */
 	void StartDelay(size_t& StartMs)
 	{
-		StartMs = GetMiliseconds();
+		StartMs = GetMiliSeconds();
 	}
 
 	bool IsDelayed(size_t& StartMs, size_t DelayMs)
 	{
-		return static_cast<size_t>(GetMiliseconds()) >= StartMs + DelayMs;
+		return static_cast<size_t>(GetMiliSeconds()) >= StartMs + DelayMs;
 	}
 
 	time_t GetRawtime()

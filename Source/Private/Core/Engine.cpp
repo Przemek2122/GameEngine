@@ -251,12 +251,9 @@ FEngineRender* FEngine::CreateEngineRenderer() const
 FEventHandler* FEngine::GetEventHandler() const
 {
 #if _DEBUG
-	if (EventHandler == nullptr)
-	{
-		ENSURE("Missing EventHanlder. This will cause issues");
-	}
+		ENSURE_VALID_MESSAGE((EventHandler != nullptr), "Missing EventHandler. This will cause issues");
 #endif
-	
+		
 	return EventHandler;
 }
 
@@ -265,18 +262,17 @@ FEventHandler* FEngine::CreateEventHandler() const
 	return new FEventHandler(SdlEvent);
 }
 
+#if ENGINE_TESTS
 FTestManager* FEngine::CreateTestManager() const
 {
 	return new FTestManager;
 }
+#endif
 
 FEngineRender* FEngine::GetEngineRender() const
 {
 #if _DEBUG
-	if (EngineRender == nullptr)
-	{
-		ENSURE("Missing EngineRender. This will cause issues");
-	}
+		ENSURE_VALID_MESSAGE((EngineRender != nullptr), "Missing EngineRender. This will cause issues");
 #endif
 	
 	return EngineRender;

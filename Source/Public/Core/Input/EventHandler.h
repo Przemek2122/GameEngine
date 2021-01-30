@@ -23,7 +23,7 @@ public:
 
 protected:
 	void AddInput(std::string InputName);
-	void RemoveInput(std::string InputName);
+	void RemoveInput(const std::string& InputName);
 
 protected:
 	SDL_Event Event;

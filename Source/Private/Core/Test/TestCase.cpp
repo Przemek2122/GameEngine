@@ -2,11 +2,15 @@
 
 #include "CoreEngine.h"
 #include "Test/TestCase.h"
+#include "Test/TestManager.h"
+
+#if ENGINE_TESTS
 
 FTestCase::FTestCase()
 	: bIsTestDone(false)
 	, bAutoStartTest(true)
 	, bAutoDeleteTest(true)
+	, TestManager(nullptr)
 {
 }
 
@@ -26,16 +30,15 @@ bool FTestCase::ShouldAutoStartTest() const
 
 void FTestCase::StartTest()
 {
-	LOG_DEBUG("StartTest() - Test nammed: '" << GetTestName() << "' starting ...");
-	const auto Nanosecond_Start = FUtil::GetNanoSeconds();
-	LOG_DEBUG("Test start (nanoseconds): " << std::to_string(Nanosecond_Start).c_str());
+	LOG_DEBUG("Test nammed: '" << GetTestName() << "' starting ...");
+	const size_t Nanosecond_Start = FUtil::GetNanoSeconds();
 	
 	DoTest();
 	
-	const auto Nanosecond_End = FUtil::GetNanoSeconds();
-	LOG_DEBUG("Test end (nanoseconds): " << std::to_string(Nanosecond_End).c_str());
-	const auto Nanosecond_TestDuration = Nanosecond_End - Nanosecond_Start;
-	LOG_DEBUG("Test duration (nanoseconds): " << std::to_string(Nanosecond_TestDuration).c_str());
+	const size_t Nanosecond_End = FUtil::GetNanoSeconds();
+	const size_t Nanosecond_TestDuration = Nanosecond_End - Nanosecond_Start;
+	const std::string ActualTimeString = std::to_string(FUtil::NanoSecondToSecond<float>(Nanosecond_TestDuration));
+	LOG_DEBUG("Test duration (nanoseconds): " + ActualTimeString + "s.");
 
 	if (bAutoDeleteTest)
 	{
@@ -45,7 +48,26 @@ void FTestCase::StartTest()
 	}
 }
 
+void FTestCase::DestroyTest()
+{
+}
+
 char* FTestCase::GetTestName() const
 {
 	return TEXT("Unnamed test case.");
 }
+
+void FTestCase::RegisterTest(FTestManager* InTestManager)
+{
+	TestManager = InTestManager;
+}
+
+void FTestCase::UnRegisterTest()
+{
+	if (TestManager != nullptr)
+	{
+		TestManager->RemoveTest(this);
+	}
+}
+
+#endif

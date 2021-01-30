@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <string>
 #include <sstream>
 #include "QueueSafe.h"
 
@@ -32,14 +31,39 @@ namespace FUtil
 	/* Thread for messages on console. */
 	static int MessagesPrinter(void* ptr);
 
-	/* @Returns current nano-second since epoch(1 January 1970) - signed integer type of at least 64 bits */
+	/* @returns current nano-second since epoch(1 January 1970) - signed integer type of at least 64 bits */
 	INLINE_DEBUGABLE size_t GetNanoSeconds();
-	/* @Returns current micro-second since epoch(1 January 1970) - signed integer type of at least 55 bits */
+	/* @returns current micro-second since epoch(1 January 1970) - signed integer type of at least 55 bits */
 	INLINE_DEBUGABLE size_t GetMircoSeconds();
-	/* @Returns current mili-second since epoch(1 January 1970) - signed integer type of at least 45 bits */
-	INLINE_DEBUGABLE size_t GetMiliseconds();
-	/* @Returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
+	/* @returns current mili-second since epoch(1 January 1970) - signed integer type of at least 45 bits */
+	INLINE_DEBUGABLE size_t GetMiliSeconds();
+	/* @returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
 	size_t GetSeconds();
+	
+	/* Convert nanoseconds to seconds */
+	template <class TTypeOut = double>
+	INLINE_DEBUGABLE TTypeOut NanoSecondToSecond(const size_t InNanosecond)
+	{
+		const static size_t FullNanoSecond = 1e9;
+		
+		return (static_cast<double>(InNanosecond) / static_cast<double>(FullNanoSecond));
+	}
+	/* Convert MicroSeconds to seconds */
+	template <typename TTypeOut = double>
+	INLINE_DEBUGABLE TTypeOut MicroSecondToSecond(const size_t InNanosecond)
+	{
+		const static size_t FullMicroSecond = 1e6;
+		
+		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMicroSecond));
+	}
+	/* Convert MiliSeconds to seconds */
+	template <typename TTypeOut = double>
+	INLINE_DEBUGABLE TTypeOut MiliSecondToSecond(const size_t InNanosecond)
+	{
+		const static size_t FullMiliSecond = 1e3;
+		
+		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMiliSecond));
+	}
 
 	/** @returns time_t with current time. */
 	INLINE_DEBUGABLE time_t GetTime();

@@ -15,13 +15,14 @@ FTestManager::~FTestManager()
 
 void FTestManager::AddTest(FTestCase* InTestCase, const bool bAutoStartTest)
 {
-	if (bAutoStartTest && !InTestCase->IsTestDone() && InTestCase->ShouldAutoStartTest())
-	{
-		InTestCase->StartTest();
-	}
-
 	if (InTestCase != nullptr)
 	{
+		if (bAutoStartTest && !InTestCase->IsTestDone() && InTestCase->ShouldAutoStartTest())
+		{
+			InTestCase->StartTest();
+		}
+		
+		InTestCase->RegisterTest(this);
 		RunningTests.Push(InTestCase);	
 	}
 }

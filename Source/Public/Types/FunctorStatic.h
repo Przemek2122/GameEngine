@@ -8,20 +8,24 @@
  * Function storage class. Supports:
  * - Static function
  */
-template<typename TReturnType = void, typename TInParams = void()>
-class FFunctorStatic : public FFunctorBase<TReturnType, TInParams>
+template<typename TReturnType, typename... TInParams>
+class FFunctorStatic : public FFunctorBase<TReturnType(TInParams...)>
 {
 public:	
 	/** For static functions */
-	FFunctorStatic(TReturnType (*InFunctionPointer)(TInParams))
+	FFunctorStatic(TReturnType (*InFunctionPointer)(TInParams...))
 		: FunctionPointer(InFunctionPointer)
 	{
 	}
+	virtual ~FFunctorStatic() override
+	{
+		//delete FunctionPointer;
+	}
 
 	/** Begin FFunctorBase interface */
-	virtual TReturnType operator()(TInParams Params = nullptr)
+	virtual TReturnType operator()(TInParams... Params) override
     {
-		return FunctionPointer(Params);
+		return FunctionPointer(Params...); // Params ...
     }
 	
 	_NODISCARD virtual bool IsValid() const override
@@ -40,5 +44,5 @@ public:
 
 protected:
 	/** Stored function */
-	TReturnType (*FunctionPointer)(TInParams);
+	TReturnType (*FunctionPointer)(TInParams ...);
 };

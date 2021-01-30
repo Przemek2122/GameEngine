@@ -12,7 +12,7 @@ class FTestTypes : public FTestCase
 public:
 	void DoTest() override;
 
-	char* GetTestName() const override;
+	_NODISCARD char* GetTestName() const override;
 		
 };
 
