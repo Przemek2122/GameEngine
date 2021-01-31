@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Private\Types\Delegate.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
     <ClInclude Include="Source\Public\Assets\Font.h" />
     <ClInclude Include="Source\Public\Assets\Texture.h" />
@@ -45,6 +46,7 @@
     <ClInclude Include="Source\Public\Core\Includes\FullCppIncludes.h" />
     <ClInclude Include="Source\Public\Core\Includes\FullEngineBase.h" />
     <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h" />
+    <ClInclude Include="Source\Public\Core\Includes\GlobalDefines.h" />
     <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
@@ -55,7 +57,10 @@
     <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
@@ -64,8 +69,8 @@
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
     <ClInclude Include="Source\Public\Types\DelegateBase.h" />
     <ClInclude Include="Source\Public\Types\FunctorBase.h" />
-    <ClInclude Include="Source\Public\Types\FunctorBaseObject.h" />
     <ClInclude Include="Source\Public\Types\FunctorLambda.h" />
+    <ClInclude Include="Source\Public\Types\FunctorObject.h" />
     <ClInclude Include="Source\Public\Types\FunctorStatic.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
@@ -192,7 +197,10 @@
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
@@ -201,10 +209,11 @@
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
     <ClCompile Include="Source\Private\Types\DelegateBase.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorBase.cpp" />
-    <ClCompile Include="Source\Private\Types\FunctorBaseObject.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorLambda.cpp" />
+    <ClCompile Include="Source\Private\Types\FunctorObject.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorStatic.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
+    <ClCompile Include="Source\Public\Types\Delegate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

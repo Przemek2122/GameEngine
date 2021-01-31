@@ -24,6 +24,7 @@ public:
 	}
 	/** End CContainerBase interface */
 
+	/** Removes all elements from the container (which are destroyed), leaving the container with a size of 0. */
 	_NODISCARD SDL_FORCE_INLINE void Clear()
 	{
 		Map.clear();

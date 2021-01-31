@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -102,6 +101,9 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreEngine.h">
+      <Filter>Public\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -165,7 +167,16 @@
     <ClInclude Include="Source\Public\Renderer\Renderer.h">
       <Filter>Public\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
@@ -186,6 +197,9 @@
     <ClInclude Include="Source\Public\Types\ColorRGBA.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Types\Delegate.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Types\DelegateBase.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
@@ -193,6 +207,9 @@
       <Filter>Public\Types</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\FunctorLambda.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\FunctorObject.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\FunctorStatic.h">
@@ -462,9 +479,6 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_vulkan.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorObject.h">
-      <Filter>Public\Types</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
@@ -533,7 +547,16 @@
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
       <Filter>Private\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
@@ -554,6 +577,9 @@
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Types\Delegate.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Types\DelegateBase.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
@@ -563,17 +589,17 @@
     <ClCompile Include="Source\Private\Types\FunctorLambda.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Types\FunctorObject.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Types\FunctorStatic.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\Vector2D.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorObject.cpp">
-      <Filter>Private\Types</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-  </ItemGroup>
-</Project>
+    <None Include="cpp.hint" /> 
+  </ItemGroup> 
+</Project> 

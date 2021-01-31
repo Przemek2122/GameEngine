@@ -25,7 +25,7 @@ void FWidgetManager::Tick()
 {
 	const auto Size = ManagedWidgets.Size();
 	
-	for (auto i = 0; i < Size; i++)
+	for (size_t i = 0; i < Size; i++)
 	{
 		ManagedWidgets[i]->Tick();
 	}
@@ -35,7 +35,7 @@ void FWidgetManager::Render()
 {
 	const auto Size = ManagedWidgets.Size();
 	
-	for (auto i = 0; i < Size; i++)
+	for (size_t i = 0; i < Size; i++)
 	{
 		ManagedWidgets[i]->Render();
 	}

@@ -77,6 +77,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Private\Types\Delegate.h">
+      <Filter>Private\Types</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
@@ -134,6 +137,9 @@
     <ClInclude Include="Source\Public\Core\Includes\FullThirdParty.h">
       <Filter>Public\Core\Includes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Includes\GlobalDefines.h">
+      <Filter>Public\Core\Includes</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h">
       <Filter>Public\Core\Includes</Filter>
     </ClInclude>
@@ -164,7 +170,16 @@
     <ClInclude Include="Source\Public\Renderer\Renderer.h">
       <Filter>Public\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
@@ -191,10 +206,10 @@
     <ClInclude Include="Source\Public\Types\FunctorBase.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorBaseObject.h">
+    <ClInclude Include="Source\Public\Types\FunctorLambda.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorLambda.h">
+    <ClInclude Include="Source\Public\Types\FunctorObject.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\FunctorStatic.h">
@@ -532,7 +547,16 @@
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
       <Filter>Private\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
@@ -559,10 +583,10 @@
     <ClCompile Include="Source\Private\Types\FunctorBase.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorBaseObject.cpp">
+    <ClCompile Include="Source\Private\Types\FunctorLambda.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorLambda.cpp">
+    <ClCompile Include="Source\Private\Types\FunctorObject.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\FunctorStatic.cpp">
@@ -570,6 +594,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Types\Vector2D.cpp">
       <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Public\Types\Delegate.cpp">
+      <Filter>Public\Types</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

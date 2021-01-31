@@ -28,6 +28,10 @@ public:
 	template<class TWidgetTemplate>
 	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName)
 	{
+#ifdef _DEBUG
+		ENSURE_VALID_MESSAGE(!ManagedWidgetsMap.ContainsKey(InWidgetName), "Widget with this name already exists! Duplicate: " << InWidgetName);
+#endif
+		
 		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName);
 		
 		ManagedWidgets.Push(CreatedWidget);
@@ -43,6 +47,12 @@ public:
 
 	/** @returns widget by name SLOW */
 	_NODISCARD FWidget* GetWidgetByName(const std::string& InWidgetName);
+	/** @returns widget by name SLOW - This implementation does auto deduction of type. */
+	template<typename FWidgetAuto>
+	_NODISCARD FWidgetAuto GetWidgetByName(const std::string& InWidgetName)
+	{
+		return dynamic_cast<FWidgetAuto>(GetWidgetByName(InWidgetName));
+	}
 	
 	/** @returns true if widget with this name exists SLOW */
 	bool HasWidget(const std::string& InWidgetName);

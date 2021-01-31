@@ -35,6 +35,7 @@ void FMouseSparkWidget::Tick()
 {
 	Super::Tick();
 
+	// Add sparks is focused
 	if (GetWidgetManager()->GetOwnerWindow()->IsWindowFocused())
 	{
 		FEventHandler* EventHandler = Engine->GetEventHandler();
@@ -49,25 +50,31 @@ void FMouseSparkWidget::Tick()
 				FUtil::GetRandomValue<int>(MinMaxAngleRange.X, MinMaxAngleRange.Y)
 			));
 		}
+	}
+	// Deque one by one (This will execute only when mouse is not on window)
+	else if (Sparks.Size())
+	{
+		Sparks.DequeFront();
+	}
 
-		while (Sparks.Size() > static_cast<unsigned int>(MaxNumOfPoints))
-		{
-			Sparks.DequeFront();
-		}
+	// Limit sparks
+	while (Sparks.Size() > static_cast<unsigned int>(MaxNumOfPoints))
+	{
+		Sparks.DequeFront();
+	}
 
-		Points.Clear();
-		Points.SetNum(Sparks.Size());
+	Points.Clear();
+	Points.SetNum(Sparks.Size());
 		
-		for (size_t i = 0; i < Sparks.Size(); i++)
-		{
-			FSpark& Spark = Sparks[i];
+	for (size_t i = 0; i < Sparks.Size(); i++)
+	{
+		FSpark& Spark = Sparks[i];
 			
-			const FVector2D<float> LocationChange = FUtil::GetPointAngle<float>(Spark.Speed, static_cast<float>(Spark.Angle));
-			
-			Sparks[i].Location += LocationChange;
+		const FVector2D<float> LocationChange = FUtil::GetPointAngle<float>(Spark.Speed, static_cast<float>(Spark.Angle));
+		
+		Sparks[i].Location += LocationChange;
 
-			Points[i] = Sparks[i].Location;
-		}
+		Points[i] = Sparks[i].Location;
 	}
 }
 

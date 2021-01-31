@@ -1,6 +1,6 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "Types/DelegateBase.h"
+#include "Renderer/Widgets/Samples/ImageWidget.h"
 
 

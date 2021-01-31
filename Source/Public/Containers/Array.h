@@ -29,7 +29,7 @@ public:
 		Vector.push_back(Value);
 	}
 	template<typename TTypeAuto>
-	SDL_FORCE_INLINE void Push(TTypeAuto Value)const
+	SDL_FORCE_INLINE void Push(TTypeAuto Value) const
 	{
 		Vector.push_back(Value);
 	}
@@ -140,13 +140,10 @@ public:
 		Vector.resize(NewSize);
 	}
 	
+	/** Removes all elements from the container (which are destroyed), leaving the container with a size of 0. */
 	SDL_FORCE_INLINE void Clear()
 	{
 		Vector.clear();		
-	}
-	SDL_FORCE_INLINE void Empty()
-	{
-		Vector.empty();
 	}
 
 public:
