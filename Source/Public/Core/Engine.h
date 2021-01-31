@@ -47,7 +47,7 @@ public:
 	_NODISCARD virtual bool IsFrameRateLimited() const;
 
 	/** Call to stop main loop. (Exit engine) */
-	virtual void Stop();
+	virtual void RequestExit();
 
 	/** Called when main loops stop but before destructor. */
 	virtual void PreExit();

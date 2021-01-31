@@ -63,7 +63,7 @@ bool FWidgetManager::DestroyWidget(const std::string& InWidgetName)
 
 FWidget* FWidgetManager::GetWidgetByName(const std::string& InWidgetName)
 {
-	return ManagedWidgetsMap.FindByKey(InWidgetName);
+	return ManagedWidgetsMap.FindValueByKey(InWidgetName);
 }
 
 bool FWidgetManager::HasWidget(const std::string& InWidgetName)

@@ -13,36 +13,62 @@ class CArray : public CContainerBase<TType>
 {
 public:
 	/** Begin CContainerBase interface */
-	_NODISCARD inline size_t Size() const override
+	_NODISCARD SDL_FORCE_INLINE size_t Size() const override
 	{
 		return Vector.size();
 	}
-	_NODISCARD inline bool IsEmpty() const override
+	_NODISCARD SDL_FORCE_INLINE bool IsEmpty() const override
 	{
 		return Vector.empty();
 	}
 	/** End CContainerBase interface */
-
-	inline void Push(TType& Value)
+	
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE void Push(TTypeAuto Value)
 	{
 		Vector.push_back(Value);
 	}
-	inline void Push(const TType& Value)
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE void Push(TTypeAuto Value)const
 	{
 		Vector.push_back(Value);
 	}
-
-	inline bool RemoveAt(const size_t Index)
+	
+	SDL_FORCE_INLINE bool RemoveAt(const size_t Index)
 	{
-		return Vector.erase(Vector.begin() + Index);
+		if (Index >= 0 && Index < Size())
+		{
+			Vector.erase(Vector.begin() + Index);
+			
+			return true;
+		}
+#ifdef _DEBUG
+		else
+		{
+			ENSURE_VALID_MESSAGE(false, "CArray::RemoveAt(" << Index << "): Given index is out of range.");
+		}
+#endif
+
+		return false;
 	}
+	
 	/** Remove first match. */
-	inline bool Remove(TType& Value)
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE bool Remove(TTypeAuto Value)
 	{
-		return Vector.erase(std::remove(Vector.begin(), Vector.end(), Value), Vector.end()) != Vector.end();
+		auto DeleteIndex = FindIndexOf(Value);
+
+		if (DeleteIndex != -1)
+		{
+			return RemoveAt(DeleteIndex);
+		}
+		
+		return false;
 	}
+	
 	/** Remove all matches. */
-	inline bool RemoveAll(TType& Value)
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE bool RemoveAll(TTypeAuto Value)
 	{
 		std::vector<int>::iterator Iterator = Vector.begin();
 
@@ -64,41 +90,61 @@ public:
 		return RemovedElements > 0;
 	}
 
-	INLINE_DEBUGABLE TType& operator[](size_t Index)
+	SDL_FORCE_INLINE TType& operator[](size_t Index)
 	{
 		return Vector[Index];
 	}
 
-	INLINE_DEBUGABLE const TType& operator[](size_t Index) const
+	SDL_FORCE_INLINE const TType& operator[](size_t Index) const
 	{
 		return Vector[Index];
 	}
-
-	INLINE_DEBUGABLE constexpr TType& At(size_t Index)
+	
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE constexpr TType& At(TTypeAuto Index)
 	{
 		return Vector.at(Index);
 	}
 
-	inline void Fill(const TType& Value)
+	/** @return Index or -1 if not found */
+	template<typename TTypeAuto>
+	_NODISCARD SDL_FORCE_INLINE int FindIndexOf(TTypeAuto Value)
+	{
+		const int VectorSize = Vector.size();
+		
+		for (int i = 0; i < VectorSize; i++)
+		{
+			if (Vector[i] == Value)
+			{
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE void Fill(TTypeAuto Value)
 	{
 		Vector._Ufill(Value);
 	}
-
-	inline constexpr void Swap(std::vector<TType>& Other)
+	
+	SDL_FORCE_INLINE constexpr void Swap(std::vector<TType>& Other)
 	{
 		Vector.swap(Other);
 	}
-
-	inline void SetNum(size_t NewSize)
+	
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE void SetNum(TTypeAuto NewSize)
 	{
 		Vector.resize(NewSize);
 	}
 	
-	inline void Clear()
+	SDL_FORCE_INLINE void Clear()
 	{
 		Vector.clear();		
 	}
-	inline void Empty()
+	SDL_FORCE_INLINE void Empty()
 	{
 		Vector.empty();
 	}

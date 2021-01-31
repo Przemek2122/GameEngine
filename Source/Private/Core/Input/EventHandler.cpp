@@ -7,25 +7,25 @@ FEventHandler::FEventHandler(SDL_Event InEvent)
 	: Event(InEvent)
 	, QuitInputDetected(false)
 {
-	AddInput("M_LMB"); // MOUSE- Left mouse button
-	AddInput("M_RMB"); // MOUSE- Right mouse button
-	AddInput("M_MID"); // MOUSE- Middle mouse button
+	AddPrimaryInput("M_LMB");	// MOUSE- Left mouse button
+	AddPrimaryInput("M_RMB");	// MOUSE- Right mouse button
+	AddPrimaryInput("M_MID");	// MOUSE- Middle mouse button
 	
-	AddInput("K_A"); // KEYBOARD - A
-	AddInput("K_B"); // KEYBOARD - B
-	AddInput("K_C"); // KEYBOARD - C
-	AddInput("K_D"); // KEYBOARD - D
+	AddPrimaryInput("K_A");		// KEYBOARD - A
+	AddPrimaryInput("K_B");		// KEYBOARD - B
+	AddPrimaryInput("K_C");		// KEYBOARD - C
+	AddPrimaryInput("K_D");		// KEYBOARD - D
 	
-	AddInput("K_1"); // KEYBOARD - Number - 1
-	AddInput("K_2"); // KEYBOARD - Number - 2
-	AddInput("K_3"); // KEYBOARD - Number - 3
-	AddInput("K_4"); // KEYBOARD - Number - 4
-	AddInput("K_5"); // KEYBOARD - Number - 5
-	AddInput("K_6"); // KEYBOARD - Number - 6
-	AddInput("K_7"); // KEYBOARD - Number - 7
-	AddInput("K_8"); // KEYBOARD - Number - 8
-	AddInput("K_9"); // KEYBOARD - Number - 9
-	AddInput("K_0"); // KEYBOARD - Number - 0
+	AddPrimaryInput("K_1");		// KEYBOARD - Number - 1
+	AddPrimaryInput("K_2");		// KEYBOARD - Number - 2
+	AddPrimaryInput("K_3");		// KEYBOARD - Number - 3
+	AddPrimaryInput("K_4");		// KEYBOARD - Number - 4
+	AddPrimaryInput("K_5");		// KEYBOARD - Number - 5
+	AddPrimaryInput("K_6");		// KEYBOARD - Number - 6
+	AddPrimaryInput("K_7");		// KEYBOARD - Number - 7
+	AddPrimaryInput("K_8");		// KEYBOARD - Number - 8
+	AddPrimaryInput("K_9");		// KEYBOARD - Number - 9
+	AddPrimaryInput("K_0");		// KEYBOARD - Number - 0
 }
 
 FEventHandler::~FEventHandler()
@@ -57,21 +57,21 @@ void FEventHandler::HandleEvents()
 			{
 			case SDL_BUTTON_LEFT:
 				{
-					InputMap["M_LMB"] = true;
+					PrimaryInputMap["M_LMB"] = true;
 					
 					break;
 				}
 
 			case SDL_BUTTON_RIGHT:
 				{
-					InputMap["M_RMB"] = true;
+					PrimaryInputMap["M_RMB"] = true;
 					
 					break;
 				}
 
 			case SDL_BUTTON_MIDDLE:
 				{
-					InputMap["M_MID"] = true;
+					PrimaryInputMap["M_MID"] = true;
 					
 					break;
 				}
@@ -86,61 +86,61 @@ void FEventHandler::HandleEvents()
 			{
 			case SDLK_1:
 				{
-					InputMap["K_1"] = true;
+					PrimaryInputMap["K_1"] = true;
 
 					break;
 				}
 			case SDLK_2:
 				{
-					InputMap["K_2"] = true;
+					PrimaryInputMap["K_2"] = true;
 
 					break;
 				}
 			case SDLK_3:
 				{
-					InputMap["K_3"] = true;
+					PrimaryInputMap["K_3"] = true;
 
 					break;
 				}
 			case SDLK_4:
 				{
-					InputMap["K_4"] = true;
+					PrimaryInputMap["K_4"] = true;
 
 					break;
 				}
 			case SDLK_5:
 				{
-					InputMap["K_5"] = true;
+					PrimaryInputMap["K_5"] = true;
 
 					break;
 				}
 			case SDLK_6:
 				{
-					InputMap["K_6"] = true;
+					PrimaryInputMap["K_6"] = true;
 
 					break;
 				}
 			case SDLK_7:
 				{
-					InputMap["K_7"] = true;
+					PrimaryInputMap["K_7"] = true;
 
 					break;
 				}
 			case SDLK_8:
 				{
-					InputMap["K_8"] = true;
+					PrimaryInputMap["K_8"] = true;
 
 					break;
 				}
 			case SDLK_9:
 				{
-					InputMap["K_9"] = true;
+					PrimaryInputMap["K_9"] = true;
 
 					break;
 				}
 			case SDLK_0:
 				{
-					InputMap["K_0"] = true;
+					PrimaryInputMap["K_0"] = true;
 
 					break;
 				}
@@ -156,7 +156,9 @@ void FEventHandler::HandleEvents()
 			{
 				QuitInputDetected = false;
 				
-				LOG_DEBUG("Unknown mouse input found.");
+				LOG_DEBUG("Quit input.");
+
+				Engine->RequestExit();
 				
 				break;
 			}
@@ -170,17 +172,7 @@ void FEventHandler::HandleEvents()
 
 void FEventHandler::ResetAllButtons()
 {
-	InputMap.SetAll(false);
-}
-
-bool FEventHandler::HasInput(std::string InputName)
-{
-	return InputMap.HasKey(InputName);
-}
-
-bool FEventHandler::GetInput(std::string InputName)
-{
-	return InputMap[static_cast<std::string>(InputName)];
+	PrimaryInputMap.SetAll(false);
 }
 
 bool FEventHandler::HasMouseMoved() const
@@ -198,19 +190,85 @@ FVector2D<int> FEventHandler::GetMouseLocationLast() const
 	return MouseLocationLast;
 }
 
-void FEventHandler::AddInput(std::string InputName)
+bool FEventHandler::HasPrimaryInput(std::string InputName)
 {
-	bool Default = false;
-	
-	InputMap.Emplace(InputName, Default);
+	return PrimaryInputMap.HasKey(InputName);
 }
 
-void FEventHandler::RemoveInput(const std::string& InputName)
+bool FEventHandler::GetPrimaryInput(std::string InputName)
 {
-	if (InputMap.Remove(InputName))
+	return PrimaryInputMap[InputName];
+}
+
+void FEventHandler::AddPrimaryInput(const std::string& InPrimaryName)
+{
+	PrimaryInputMap.Emplace(InPrimaryName, false);
+}
+
+void FEventHandler::RemovePrimaryInput(const std::string& InPrimaryName)
+{
+	if (PrimaryInputMap.Remove(InPrimaryName))
 	{
 #ifdef _DEBUG
 		ENSURE_VALID_MESSAGE(false, "Not removed - not found.");
 #endif
 	}
+}
+
+void FEventHandler::RemoveSecondaryInput(const std::string& InSecondaryName)
+{
+	const bool bIsRemoved = SecondaryInputMap.Remove(InSecondaryName);
+
+#ifdef _DEBUG
+		ENSURE_VALID_MESSAGE(bIsRemoved > 0, "Not removed - not found.");
+#endif
+}
+
+void FEventHandler::SetSecondaryInput(const std::string& InSecondaryName, const std::string& InPrimaryName)
+{
+	if (PrimaryInputMap.ContainsKey(InPrimaryName))
+	{
+		if (SecondaryInputMap.ContainsValue(InSecondaryName))
+		{
+			SecondaryInputMap.Remove(InSecondaryName);
+		}
+		
+		SecondaryInputMap.InsertOrAssign(InSecondaryName, InPrimaryName);
+	}
+#ifdef _DEBUG
+	else
+	{
+		ENSURE_VALID_MESSAGE(false, "Missing primary key.");
+	}
+#endif
+}
+
+bool FEventHandler::HasSecondaryInput(const std::string& InputName)
+{
+	if (SecondaryInputMap.ContainsKey(InputName))
+	{
+		if (PrimaryInputMap.ContainsKey(SecondaryInputMap.FindValueByKey(InputName)))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool FEventHandler::GetSecondaryInput(const std::string& InputName)
+{
+	if (SecondaryInputMap.ContainsKey(InputName))
+	{
+		const std::string SecondaryValue = SecondaryInputMap.FindValueByKey(InputName);
+		
+		if (PrimaryInputMap.ContainsKey(SecondaryValue))
+		{
+			return PrimaryInputMap.FindValueByKey(SecondaryValue);
+		}
+	}
+
+	ENSURE_VALID_MESSAGE(false, "FEventHandler::GetSecondaryInput(): Unable to find input.");
+
+	return false;
 }

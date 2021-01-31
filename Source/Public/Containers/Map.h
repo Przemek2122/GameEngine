@@ -14,59 +14,58 @@ class CMap : public CContainerBase<TValue>
 {
 public:
 	/** Begin CContainerBase interface */
-	_NODISCARD inline size_t Size() const override
+	_NODISCARD SDL_FORCE_INLINE size_t Size() const override
 	{
 		return Map.size();
-	};
-	_NODISCARD inline bool IsEmpty() const override
+	}
+	_NODISCARD SDL_FORCE_INLINE bool IsEmpty() const override
 	{
 		return Map.empty();
 	}
 	/** End CContainerBase interface */
 
-	_NODISCARD inline void Clear()
+	_NODISCARD SDL_FORCE_INLINE void Clear()
 	{
 		Map.clear();
 	}
 	
-	_NODISCARD inline bool HasKey(TKey& Key)
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE bool HasKey(TAutoType Key)
 	{
 		return Map.find(Key) != Map.end();
 	}
 
-	INLINE_DEBUGABLE TValue& operator[](TKey& Index)
+	template<typename TAutoType>
+	INLINE_DEBUGABLE SDL_FORCE_INLINE TValue& operator[](TAutoType Index)
 	{
 		return Map[Index];
 	}
-	INLINE_DEBUGABLE TValue& operator[](TKey Index)
-	{
-		return Map[Index];
-	}
-
-	_NODISCARD inline void Emplace(TKey& Key, TValue& Value)
+	
+	template<typename TKeyAuto, typename TValueAuto>
+	_NODISCARD SDL_FORCE_INLINE void Emplace(TKeyAuto Key, TValueAuto Value)
 	{
 		Map.emplace(Key, Value);
 	}
-	_NODISCARD inline void Emplace(TKey& Key, TValue& Value) const
+	template<typename TKeyAuto, typename TValueAuto>
+	_NODISCARD SDL_FORCE_INLINE void Emplace(TKeyAuto Key, TValueAuto Value) const
 	{
 		Map.emplace(Key, Value);
 	}
 
-	_NODISCARD inline void InsertOrAssign(TKey& Key, TValue& Value)
-	{
-		Map.insert_or_assign(Key, Value);
-	}
-	_NODISCARD inline void InsertOrAssign(TKey& Key, TValue& Value) const
+	template<typename TKeyAuto, typename TValueAuto>
+	_NODISCARD SDL_FORCE_INLINE void InsertOrAssign(TKeyAuto Key, TValueAuto Value)
 	{
 		Map.insert_or_assign(Key, Value);
 	}
 	
-	_NODISCARD inline bool Remove(TKey Key)
+	template<typename TAutoType>
+	SDL_FORCE_INLINE bool Remove(TAutoType Key)
 	{
 		return Map.erase(Key);
 	}
-
-	_NODISCARD inline bool ContainsKey(TKey Key)
+	
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE bool ContainsKey(TAutoType Key)
 	{
 		for (auto& Pair : Map)
 		{
@@ -78,7 +77,8 @@ public:
 
 		return false;
 	}
-	_NODISCARD inline bool ContainsKey(TKey Key) const
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE bool ContainsKey(TAutoType Key) const
 	{
 		for (auto& Pair : Map)
 		{
@@ -90,7 +90,8 @@ public:
 
 		return false;
 	}
-	_NODISCARD inline bool ContainsValue(TValue Value)
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE bool ContainsValue(TAutoType Value)
 	{
 		for (auto& Pair : Map)
 		{
@@ -102,7 +103,8 @@ public:
 
 		return false;
 	}
-	_NODISCARD inline bool ContainsValue(TValue Value) const
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE bool ContainsValue(TAutoType Value) const
 	{
 		for (auto& Pair : Map)
 		{
@@ -115,29 +117,23 @@ public:
 		return false;
 	}
 	
-	_NODISCARD inline TValue FindByKey(TKey Key)
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE TValue FindValueByKey(TAutoType Key)
 	{
 		return Map.find(Key)->second;
 	}
-	_NODISCARD inline TValue FindByValue(TValue Value)
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE TValue FindKeyByValue(TAutoType Value)
 	{
 		return Map.find(Value);
 	}
-
-	_NODISCARD inline void SetAll(TValue& Value)
+	
+	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE void SetAll(TAutoType Value)
 	{
 		typename std::map<TKey, TValue>::iterator Iterator;
 		
-		for (Iterator = Map.begin(); Iterator != Map.end(); Iterator++)
-		{
-			Iterator->second = Value;
-		}
-	}
-	_NODISCARD inline void SetAll(TValue Value)
-	{
-		typename std::map<TKey, TValue>::iterator Iterator;
-		
-		for (Iterator = Map.begin(); Iterator != Map.end(); Iterator++)
+		for (Iterator = Map.begin(); Iterator != Map.end(); ++Iterator)
 		{
 			Iterator->second = Value;
 		}

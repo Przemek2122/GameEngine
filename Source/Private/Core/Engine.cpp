@@ -168,7 +168,7 @@ bool FEngine::IsFrameRateLimited() const
 	return bFrameRateLimited;
 }
 
-void FEngine::Stop()
+void FEngine::RequestExit()
 {
 	bContinueMainLoop = false;
 }

@@ -9,7 +9,7 @@ template<typename TType>
 class CContainerBase
 {
 public:
-	inline virtual size_t Size() const = 0;
-	inline virtual bool IsEmpty() const = 0;
+	SDL_FORCE_INLINE virtual size_t Size() const = 0;
+	SDL_FORCE_INLINE virtual bool IsEmpty() const = 0;
 
 };
