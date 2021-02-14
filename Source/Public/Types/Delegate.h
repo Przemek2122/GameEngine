@@ -3,18 +3,31 @@
 #pragma once
 
 #include "DelegateBase.h"
+#include "FunctorLambda.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
+ *
+ * Note:
+ * All functions passed in are deleted at end of this object life.
  */
-template<typename TReturnType = void, typename... TInParams>
-class FDelegate : public FDelegateBase<TReturnType, TInParams...>
+template<typename... TInParams>
+class FDelegate : public FDelegateBase<void, TInParams...>
 {
-using DelegateBase = FDelegateBase<TReturnType, TInParams...>;
+using DelegateBase = FDelegateBase<void, TInParams...>;
 	
 public:
 	FDelegate() = default;
-	virtual ~FDelegate() = default;
+	virtual ~FDelegate() override
+	{
+		const auto FunctorsNum = DelegateBase::Functors.Size();
+
+		// Delete Lambdas
+		for (int i = 0; i < FunctorsNum; i++)
+		{
+			delete DelegateBase::Functors[i];
+		}
+	}
 	
 	/** Begin FDelegateBase interface */
 	/** Executes all bound functions. */
@@ -24,23 +37,37 @@ public:
 	
 		for (int i = 0; i < FunctorsNum; i++)
 		{
-			DelegateBase::Functors[i](InParams ...);
+			DelegateBase::Functors[i]->operator()(InParams ...);
 		}
 	}
 	/** End FDelegateBase interface */
 
-	/** Add function by functor reference. */
-	template<typename TTypeAuto>
-	void BindFunctionRef(TTypeAuto Functor)
+	/** You can make new FFunctorLambda<TReturnType, TInParams...>, Lambdas will be auto destroyed with this delegate. */
+	void BindLambda(FFunctorLambda<void, TInParams...>* Lambda)
 	{
-		DelegateBase::Functors.Push(Functor);
+		DelegateBase::Functors.Push(Lambda);
 	}
-
-	/** Remove function by functor reference. */
-	template<typename TTypeAuto>
-	void UnBindFunctionRef(TTypeAuto Functor)
+	template <typename TTypeAuto>
+	void BindLambda(TTypeAuto Lambda)
 	{
-		DelegateBase::Functors.Remove(Functor);
+		DelegateBase::Functors.Push(new FFunctorLambda<void, TInParams...>(Lambda));
+	}
+	/*
+	void BindLambda(FFunctorLambda<TReturnType, TInParams...> Lambda)
+	{
+		FFunctorLambda<TReturnType, TInParams...>* Ptr = *(std::move(Lambda));
+		
+		DelegateBase::Functors.Push(Ptr);
+	}
+	*/
+	
+	void UnBindLambda(FFunctorLambda<void, TInParams...>& Lambda)
+	{
+		DelegateBase::Functors.Remove(Lambda);
+	}
+	void UnBindLambda(FFunctorLambda<void, TInParams...>&& Lambda)
+	{
+		DelegateBase::Functors.Remove(Lambda);
 	}
 	
 	/** Remove function by functor reference. Use with caution. */

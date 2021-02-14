@@ -20,10 +20,10 @@ FSpark::FSpark(const FVector2D<int>& InLocation, const float InSpeed, const int 
 
 FMouseSparkWidget::FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
 	: FWidget(InWidgetManager, InWidgetName)
-	, MinMaxSpeedRange(0.1f, 0.4f)
+	, MinMaxSpeedRange(0.04f, 0.3f)
 	, MinMaxAngleRange(0, 359)
-	, MaxNumOfPoints(256)
-	, PointPerTick(8)
+	, MaxNumOfPoints(128)
+	, PointPerTick(2)
 {
 }
 

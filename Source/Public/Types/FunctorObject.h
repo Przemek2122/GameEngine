@@ -9,7 +9,7 @@
  * Function on objects
  */
 template<typename TClass, typename TReturnType, typename... TInParams>
-class FFunctorObject : public FFunctorBase<TReturnType(TInParams...)>
+class FFunctorObject : public FFunctorBase<TReturnType, TInParams...>
 {
 public:
 	FFunctorObject(TClass* InClassObject, TReturnType (TClass::*InFunctionPointer)(TInParams...))

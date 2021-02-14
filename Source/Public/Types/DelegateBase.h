@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Containers/Array.h"
 
 /**
  * Base Delegate storing functors.
@@ -11,7 +12,7 @@
 template<typename TReturnType, typename... TInParams>
 class FDelegateBase
 {
-	using Functor = FFunctorBase<TReturnType, TInParams...>;
+using Functor = FFunctorBase<TReturnType, TInParams...>;
 	
 public:
 	FDelegateBase() = default;
@@ -27,6 +28,6 @@ public:
 	virtual void Execute(TInParams... InParams) = 0;
 
 protected:
-	CArray<Functor> Functors;
+	CArray<Functor*> Functors;
 	
 };

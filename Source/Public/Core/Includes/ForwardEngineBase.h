@@ -20,6 +20,7 @@ class FVector2D;
 class FColorRGBA;
 template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
+#include "Types/Delegate.h"
 
 template<typename TType>
 class CContainerBase;

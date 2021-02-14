@@ -11,10 +11,11 @@
  * Lambda
  */
 template<typename TReturnType, typename... TInParams> 
-class FFunctorLambda : public FFunctorBase<TReturnType(TInParams...)>
+class FFunctorLambda : public FFunctorBase<TReturnType, TInParams...>
 {
 public:
-	FFunctorLambda(std::function<TReturnType(TInParams ...)>&& InFunction)
+	template<typename TTypeAuto>
+	FFunctorLambda(TTypeAuto InFunction)
 		: Function(std::move(InFunction))
 	{
     }
@@ -22,8 +23,8 @@ public:
 		: Function(std::move(InFunction))
 	{
     }
-	FFunctorLambda(TReturnType* InFunction)
-		: Function(std::function(InFunction))
+	FFunctorLambda(std::function<TReturnType(TInParams ...)>&& InFunction)
+		: Function(std::move(InFunction))
 	{
     }
 	

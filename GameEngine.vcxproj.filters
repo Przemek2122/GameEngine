@@ -149,6 +149,9 @@
     <ClInclude Include="Source\Public\Core\Test\TestCase.h">
       <Filter>Public\Core\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\TestDelegate.h">
+      <Filter>Public\Core\Test</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\TestManager.h">
       <Filter>Public\Core\Test</Filter>
     </ClInclude>
@@ -171,6 +174,9 @@
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InteractionBaseWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h">
@@ -529,6 +535,9 @@
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp">
       <Filter>Private\Core\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp">
+      <Filter>Private\Core\Test</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp">
       <Filter>Private\Core\Test</Filter>
     </ClCompile>
@@ -551,6 +560,9 @@
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InteractionBaseWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp">

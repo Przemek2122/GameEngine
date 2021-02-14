@@ -29,7 +29,7 @@ FRenderer::FRenderer(FWindow* InWindow)
 	}
 	else
 	{
-		LOG_ERROR("Can not create renderer: " << TEXT(SDL_GetError()));
+		LOG_ERROR("Can not create renderer: " << STRING(SDL_GetError()));
 		
 		exit(-32);
 	}
@@ -113,6 +113,19 @@ void FRenderer::DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA A
 {
 	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
 	SDL_RenderDrawPoints(Renderer, Points.Vector.data(), static_cast<int>(Points.Size()));
+}
+
+void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const
+{
+	SDL_SetRenderDrawColor(Renderer, InColor.R, InColor.G, InColor.B, InColor.A);
+	
+	SDL_Rect Rect;
+	Rect.x = RectLocation.X;
+	Rect.y = RectLocation.Y;
+	Rect.w = RectSize.X;
+	Rect.h = RectSize.Y;
+	
+	SDL_RenderFillRect(Renderer, &Rect);
 }
 
 void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius) const

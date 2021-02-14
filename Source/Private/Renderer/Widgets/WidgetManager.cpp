@@ -27,6 +27,11 @@ void FWidgetManager::Tick()
 	
 	for (size_t i = 0; i < Size; i++)
 	{
+		ManagedWidgets[i]->HandleInput();
+	}
+	
+	for (size_t i = 0; i < Size; i++)
+	{
 		ManagedWidgets[i]->Tick();
 	}
 }
@@ -37,7 +42,10 @@ void FWidgetManager::Render()
 	
 	for (size_t i = 0; i < Size; i++)
 	{
-		ManagedWidgets[i]->Render();
+		if (ManagedWidgets[i]->ShouldBeRendered())
+		{
+			ManagedWidgets[i]->Render();
+		}
 	}
 }
 
@@ -81,8 +89,29 @@ FWindow* FWidgetManager::GetOwnerWindow() const
 	return OwnerWindow;
 }
 
+void FWidgetManager::ChangeWidgetOrder(FWidget* InWidget)
+{
+	const auto ManagedWidgetsNum = ManagedWidgets.Size();
+	const int WidgetOrder = InWidget->GetWidgetOrder();
+
+	for (int i = 0; i < ManagedWidgetsNum; i++)
+	{
+		FWidget* CurrentWidget = ManagedWidgets[i];
+		
+		if (CurrentWidget->GetWidgetOrder() < WidgetOrder)
+		{
+			ManagedWidgets.Remove(InWidget);
+			ManagedWidgets.InsertAt(i, CurrentWidget);
+		}
+	}	
+}
+
 void FWidgetManager::RegisterWidget(FWidget* Widget)
 {
+#if _DEBUG
+	ENSURE_VALID_MESSAGE(ManagedWidgets.FindIndexOf(Widget) == -1, "Re-Register of widget is not allowed");
+#endif
+	
 	ManagedWidgets.Push(Widget);
 }
 

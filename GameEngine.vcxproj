@@ -50,6 +50,7 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestDelegate.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestTypes.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
@@ -58,6 +59,7 @@
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InteractionBaseWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
@@ -191,6 +193,7 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />
@@ -199,6 +202,7 @@
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InteractionBaseWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />

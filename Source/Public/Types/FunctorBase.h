@@ -13,17 +13,15 @@
  * operator() - Use to call stored function.
  */
 template<typename TReturnType, typename... TInParams>
-class FFunctorBase<TReturnType(TInParams ...)>
+class FFunctorBase
 {
-protected:
+public:
 	FFunctorBase() = default;
 	virtual ~FFunctorBase() = default;
 	
-public:	
 	/** This function calls stored function */
-	virtual TReturnType operator()(TInParams... Params) = 0; // TInParams InParams = nullptr
+	virtual TReturnType operator()(TInParams... Params) = 0;
 
 	/** True if any function was bound. */                                                                                                                                                
 	_NODISCARD virtual bool IsValid() const = 0;
-	
 };

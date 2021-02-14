@@ -2,7 +2,10 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+
 #include "ContainerBase.h"
+
 #include <vector>
 
 /**
@@ -23,6 +26,24 @@ public:
 	}
 	/** End CContainerBase interface */
 	
+	SDL_FORCE_INLINE void Push(TType Value)
+	{
+		Vector.push_back(Value);
+	}
+	SDL_FORCE_INLINE void Push(TType Value) const
+	{
+		Vector.push_back(Value);
+	}
+	SDL_FORCE_INLINE void Push(TType* Value)
+	{
+		Vector.push_back(Value);
+	}
+	SDL_FORCE_INLINE void Push(TType* Value) const
+	{
+		Vector.push_back(Value);
+	}
+	
+	/*
 	template<typename TTypeAuto>
 	SDL_FORCE_INLINE void Push(TTypeAuto Value)
 	{
@@ -33,6 +54,13 @@ public:
 	{
 		Vector.push_back(Value);
 	}
+	*/
+
+	template<typename TTypeAuto>
+	SDL_FORCE_INLINE void InsertAt(int Index, TTypeAuto Value)
+	{
+		Vector.insert(Vector.begin() + Index, Value); 
+	}
 	
 	SDL_FORCE_INLINE bool RemoveAt(const size_t Index)
 	{
@@ -42,11 +70,10 @@ public:
 			
 			return true;
 		}
-#ifdef _DEBUG
-		else
-		{
-			ENSURE_VALID_MESSAGE(false, "CArray::RemoveAt(" << Index << "): Given index is out of range.");
-		}
+		
+#if _DEBUG
+		// @TODO Fix
+		//ENSURE_VALID_MESSAGE(false, std::string("CArray::RemoveAt(") + std::to_string(Index) + "): Given index is out of range.");
 #endif
 
 		return false;
@@ -89,12 +116,11 @@ public:
 
 		return RemovedElements > 0;
 	}
-
+	
 	SDL_FORCE_INLINE TType& operator[](size_t Index)
 	{
 		return Vector[Index];
 	}
-
 	SDL_FORCE_INLINE const TType& operator[](size_t Index) const
 	{
 		return Vector[Index];

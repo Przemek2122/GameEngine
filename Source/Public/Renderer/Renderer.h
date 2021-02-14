@@ -50,6 +50,9 @@ public:
 	/** Draw multiple points with same colors. */
 	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA AllPointsColor) const;
 
+	/** Draw single rectangle */
+	void DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const;
+	
 	void DrawCircle(const FVector2D<int> Location, const int Radius) const;
 	void DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength) const;
 

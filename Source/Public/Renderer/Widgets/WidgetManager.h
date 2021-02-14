@@ -63,8 +63,17 @@ public:
 	_NODISCARD FWindow* GetOwnerWindow() const;
 
 protected:
+	/** Called by wiget when order is changed. */
+	void ChangeWidgetOrder(FWidget* InWidget);
+
+protected:
+	/** Has all widgets. First renders last, last first.... */
 	CArray<FWidget*> ManagedWidgets;
+	
+	/** Maps string to widget. */
 	CMap<std::string, FWidget*> ManagedWidgetsMap;
+	
+	/** Window where widgets are rendered */
 	FWindow* OwnerWindow;
 
 public:

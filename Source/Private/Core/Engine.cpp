@@ -5,6 +5,8 @@
 
 #if ENGINE_TESTS
 #include "Test/TestManager.h"
+
+#include "Test/TestDelegate.h"
 #include "Test/TestTypes.h"
 #endif
 
@@ -98,6 +100,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 #if ENGINE_TESTS && ENGINE_RUN_ENGINE_TESTS
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
+	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
 
 	LOG_INFO("Engine init End");
@@ -126,6 +129,11 @@ void FEngine::EngineTick()
 
 	EventHandler->HandleEvents();
 
+	if (EventHandler->QuitInputDetected())
+	{
+		Engine->RequestExit();
+	}
+
 	Tick();
 
 	EngineRender->Tick();
@@ -151,7 +159,6 @@ void FEngine::PostInit()
 
 void FEngine::Tick()
 {
-	
 }
 
 void FEngine::PostSecondTick()

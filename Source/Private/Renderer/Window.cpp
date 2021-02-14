@@ -20,7 +20,7 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 	}
 	else
 	{
-		LOG_ERROR("Can not create window: " << TEXT(SDL_GetError()) << " ! (" << WindowTitle << ")");
+		LOG_ERROR("Can not create window: " << STRING(SDL_GetError()) << " ! (" << WindowTitle << ")");
 		
 		exit(-16);
 	}

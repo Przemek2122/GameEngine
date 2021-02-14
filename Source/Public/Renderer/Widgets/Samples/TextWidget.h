@@ -6,6 +6,6 @@
 
 class FTextWidget : public FWidget
 {
+public:
 	
 };
-

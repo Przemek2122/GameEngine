@@ -40,6 +40,8 @@ public:
 	/** Use to check primary input. Will use map to get primary input. */
 	_NODISCARD bool GetSecondaryInput(const std::string& InputName);
 
+	_NODISCARD bool QuitInputDetected() const;
+
 protected:
 	SDL_Event Event;
 
@@ -51,6 +53,6 @@ protected:
 	FVector2D<int> MouseLocationCurrent;
 	FVector2D<int> MouseLocationLast;
 	
-	bool QuitInputDetected;
+	bool bQuitInputDetected;
 	
 };
