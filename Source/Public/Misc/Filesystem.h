@@ -11,4 +11,9 @@ public:
 
 	static bool DeleteDirrectory(const std::string Path, const bool bRecursive = false);
 
+	static bool FileExists(const std::string& InPath);
+
+	/** @returns slash for current filesystem */
+	static char* GetPlatformSlash();
+	
 };

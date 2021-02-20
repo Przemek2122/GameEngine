@@ -33,54 +33,66 @@
     <Filter Include="Private\Types">
       <UniqueIdentifier>{9iraf6i2-zu3rx-4ibkx-p8i8u-l4swg2kulgnc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public">
+    <Filter Include="Private\Types\SmartPointer">
       <UniqueIdentifier>{x148t2a4-7bwhj-es1e5-rylio-hliu5hnwhtfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets">
+    <Filter Include="Public">
       <UniqueIdentifier>{545unj2g-tgiml-6ha08-751y2-jjee2jadsyco}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Containers">
+    <Filter Include="Public\Assets">
       <UniqueIdentifier>{w72wsst8-gf8m9-tya7g-sybhm-0j4tuu70h1uc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core">
+    <Filter Include="Public\Containers">
       <UniqueIdentifier>{14acxo7b-5xg8o-084jb-unf8g-86dkj6149wab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Includes">
+    <Filter Include="Public\Core">
       <UniqueIdentifier>{uukon1kl-msi95-nckyf-o1mbi-sywixbw44h25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Input">
+    <Filter Include="Public\Core\Includes">
       <UniqueIdentifier>{5pbukado-b61dl-zxj70-2ds6o-t0gdx0fzb3hd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test">
+    <Filter Include="Public\Core\Input">
       <UniqueIdentifier>{astniys5-nfj1w-4ih3r-0jzxt-fooxkb2id47p}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Misc">
+    <Filter Include="Public\Core\Test">
       <UniqueIdentifier>{9btedf0e-tpi1k-71ma8-7g43l-7oczrpfophcu}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer">
+    <Filter Include="Public\Misc">
       <UniqueIdentifier>{rme5xgzc-jlxje-tnfk3-hh5s4-bc71unuyt1as}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets">
+    <Filter Include="Public\Renderer">
       <UniqueIdentifier>{tklelt4o-7n83f-u4sad-sr2id-djg4tcllj78t}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\Samples">
+    <Filter Include="Public\Renderer\Widgets">
       <UniqueIdentifier>{3tono71z-rcmb6-ulb8j-kzi60-nbt2w5knpbh1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types">
+    <Filter Include="Public\Renderer\Widgets\Samples">
       <UniqueIdentifier>{ghhz4xso-uzdls-z0w68-f0amc-k31ktadojp4x}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty">
+    <Filter Include="Public\Types">
       <UniqueIdentifier>{a33eg931-oo54t-nnz3h-kw5mt-s52tto2w3sch}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\SDL">
+    <Filter Include="Public\Types\SmartPointer">
       <UniqueIdentifier>{y45dhyod-kk4ya-ao5dj-g1ff7-eettkns6yaw7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{osixkmgj-7l04a-a4mpn-8de5p-k1720ugk6xzz}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\SDL">
+      <UniqueIdentifier>{c5cjbppz-trlsa-ngy7t-lm69p-9uhpd0m7rx7h}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Public\Assets\AssetBase.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Assets\Font.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Assets\FontAsset.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Assets\Texture.h">
@@ -220,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Types\FunctorStatic.h">
       <Filter>Public\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\SmartPointer\SmartSharedPointer.h">
+      <Filter>Public\Types\SmartPointer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\Vector2D.h">
       <Filter>Public\Types</Filter>
@@ -487,10 +502,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Private\Assets\AssetBase.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\Font.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\FontAsset.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\Texture.cpp">
@@ -606,6 +627,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Types\FunctorStatic.cpp">
       <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\SmartPointer\SmartSharedPointer.cpp">
+      <Filter>Private\Types\SmartPointer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\Vector2D.cpp">
       <Filter>Private\Types</Filter>

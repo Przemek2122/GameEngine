@@ -10,6 +10,8 @@
 #include "Test/TestTypes.h"
 #endif
 
+#include "Assets/FontAsset.h"
+
 FEngine::FEngine()
 	: bContinueMainLoop(true)
 	, bFrameRateLimited(true)
@@ -19,26 +21,28 @@ FEngine::FEngine()
 	, FrameDelay(0)
 	, FrameStart(0)
 	, FrameTime(0)
-	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 	, CounterLastFrame(0)
+	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 	, TicksThisSecond(0)
 	, Second(0)
 	, EngineRender(CreateEngineRenderer())
 	, EventHandler(CreateEventHandler())
+	, AssetsManager(CreateAssetsManager())
 {
 #if ENGINE_TESTS
 	TestManager = CreateTestManager();
 #endif
 	
 	FUtil::LogInit();
-
+	
 	SetFrameRate(60);
 }
 
 FEngine::~FEngine()
 {
 	LOG_INFO("Engine finish.");
-	
+
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -55,7 +59,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	{
 		if (Argc == 0)
 		{
-			LaunchExePath = Argv[Argc];
+			LaunchFullPath = Argv[Argc];
 
 			LOG_INFO("Found launch exe path [" << Argc << "] = " << Argv[Argc]);
 		}
@@ -66,6 +70,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 			LOG_INFO("Found param [" << Argc << "] = " << Argv[Argc]);
 		}
 	}
+
+	LaunchRelativePath = LaunchFullPath.substr(0, LaunchFullPath.find_last_of('\\'));
 
 	// Initialize SDL
 	const auto SdlInitialized = SDL_Init(SDL_INIT_EVERYTHING);
@@ -102,6 +108,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
+
+	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Fonts\\OpensSans\\OpenSans-Regular.ttf");
 
 	LOG_INFO("Engine init End");
 
@@ -255,6 +263,16 @@ FEngineRender* FEngine::CreateEngineRenderer() const
 	return new FEngineRender();
 }
 
+const std::string& FEngine::GetLaunchFullPath() const
+{
+	return LaunchFullPath;
+}
+
+const std::string& FEngine::GetLaunchRelativePath() const
+{
+	return LaunchRelativePath;
+}
+
 FEventHandler* FEngine::GetEventHandler() const
 {
 #if _DEBUG
@@ -264,9 +282,19 @@ FEventHandler* FEngine::GetEventHandler() const
 	return EventHandler;
 }
 
+FAssetsManager* FEngine::GetAssetsManager() const
+{
+	return AssetsManager;
+}
+
 FEventHandler* FEngine::CreateEventHandler() const
 {
 	return new FEventHandler(SdlEvent);
+}
+
+FAssetsManager* FEngine::CreateAssetsManager() const
+{
+	return new FAssetsManager;
 }
 
 #if ENGINE_TESTS

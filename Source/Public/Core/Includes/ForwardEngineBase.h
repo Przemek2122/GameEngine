@@ -8,6 +8,9 @@ class FEngine;
 class FEngineRender;
 class FFilesystem;
 
+class FAssetsManager;
+class FAssetBase;
+
 class FRenderer;
 class FWindow;
 

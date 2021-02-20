@@ -8,8 +8,8 @@
 // Not inline in debug to be able to see callstack.
 #define INLINE_DEBUGABLE
 // Just a stop, can be continued
-#define ENSURE_VALID(Condition) if (!Condition) { __debugbreak(); }
-#define ENSURE_VALID_MESSAGE(Condition, Message) if (!Condition) { __debugbreak(); LOG_WARN(Message); }
+#define ENSURE_VALID(Condition) if (!(Condition)) { __debugbreak(); }
+#define ENSURE_VALID_MESSAGE(Condition, Message) if (!(Condition)) { __debugbreak(); LOG_WARN(Message); }
 #else
 // Inline in release
 #define INLINE_DEBUGABLE SDL_FORCE_INLINE

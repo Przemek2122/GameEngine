@@ -5,6 +5,9 @@
 // Engine
 #include "Misc/Util.h"
 
+#include "Assets/AssetBase.h"
+#include "Assets/AssetsManager.h"
+
 #include "Public/Containers/ContainerBase.h"
 #include "Public/Containers/Array.h"
 #include "Public/Containers/Map.h"

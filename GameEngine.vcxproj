@@ -27,8 +27,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Public\Assets\AssetBase.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
     <ClInclude Include="Source\Public\Assets\Font.h" />
+    <ClInclude Include="Source\Public\Assets\FontAsset.h" />
     <ClInclude Include="Source\Public\Assets\Texture.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
@@ -74,6 +76,7 @@
     <ClInclude Include="Source\Public\Types\FunctorLambda.h" />
     <ClInclude Include="Source\Public\Types\FunctorObject.h" />
     <ClInclude Include="Source\Public\Types\FunctorStatic.h" />
+    <ClInclude Include="Source\Public\Types\SmartPointer\SmartSharedPointer.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\close_code.h" />
@@ -178,8 +181,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">CoreEngine.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Source\Private\Assets\AssetBase.cpp" />
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp" />
     <ClCompile Include="Source\Private\Assets\Font.cpp" />
+    <ClCompile Include="Source\Private\Assets\FontAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\Array.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
@@ -217,6 +222,7 @@
     <ClCompile Include="Source\Private\Types\FunctorLambda.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorObject.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorStatic.cpp" />
+    <ClCompile Include="Source\Private\Types\SmartPointer\SmartSharedPointer.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>

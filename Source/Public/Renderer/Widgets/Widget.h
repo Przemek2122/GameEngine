@@ -51,11 +51,11 @@ public:
 	void SetWidgetOrder(const int InWidgetOrder);
 	virtual void OnWidgetOrderChanged();
 
-	_NODISCARD FVector2D<int> GetWidgetLocation() const;
-	void SetWidgetLocation(const FVector2D<int> InWidgetLocation);
+	_NODISCARD virtual FVector2D<int> GetWidgetLocation() const;
+	virtual void SetWidgetLocation(const FVector2D<int> InWidgetLocation);
 	
-	_NODISCARD FVector2D<int> GetWidgetSize() const;
-	_NODISCARD void SetWidgetSize(const FVector2D<int> InWidgetSize);
+	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
+	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize);
 
 protected:
 	/** Owner manager */

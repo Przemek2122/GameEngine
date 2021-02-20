@@ -43,19 +43,6 @@ public:
 		Vector.push_back(Value);
 	}
 	
-	/*
-	template<typename TTypeAuto>
-	SDL_FORCE_INLINE void Push(TTypeAuto Value)
-	{
-		Vector.push_back(Value);
-	}
-	template<typename TTypeAuto>
-	SDL_FORCE_INLINE void Push(TTypeAuto Value) const
-	{
-		Vector.push_back(Value);
-	}
-	*/
-
 	template<typename TTypeAuto>
 	SDL_FORCE_INLINE void InsertAt(int Index, TTypeAuto Value)
 	{

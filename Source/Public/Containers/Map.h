@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ContainerBase.h"
+
 #include <map>
 
 /*
@@ -31,15 +32,31 @@ public:
 	}
 	
 	template<typename TAutoType>
-	_NODISCARD SDL_FORCE_INLINE bool HasKey(TAutoType Key)
+	_NODISCARD bool HasKey(TAutoType Key)
 	{
 		return Map.find(Key) != Map.end();
 	}
 
 	template<typename TAutoType>
-	INLINE_DEBUGABLE SDL_FORCE_INLINE TValue& operator[](TAutoType Index)
+	SDL_FORCE_INLINE TValue& operator[](TAutoType Index)
 	{
 		return Map[Index];
+	}
+	template<typename TAutoType>
+	SDL_FORCE_INLINE TValue& operator[](TAutoType Index) const
+	{
+		return Map[Index];
+	}
+	
+	template<typename TAutoType>
+	SDL_FORCE_INLINE TValue At(TAutoType Index)
+	{
+		return Map.at(Index);
+	}
+	template<typename TAutoType>
+	SDL_FORCE_INLINE TValue At(TAutoType Index) const
+	{
+		return Map.at(Index);
 	}
 	
 	template<typename TKeyAuto, typename TValueAuto>

@@ -22,3 +22,16 @@ bool FFilesystem::DeleteDirrectory(const std::string Path, const bool bRecursive
         return fs::remove(Path) != false;
     }
 }
+
+bool FFilesystem::FileExists(const std::string& InPath)
+{
+
+
+	std::ifstream f(InPath.c_str());
+    return f.good();
+}
+
+char* FFilesystem::GetPlatformSlash()
+{
+	return TEXT("\\");
+}

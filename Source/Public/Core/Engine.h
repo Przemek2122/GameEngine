@@ -119,9 +119,15 @@ protected:
 
 	_NODISCARD virtual FEngineRender* CreateEngineRenderer() const;
 
+public:
+	const std::string& GetLaunchFullPath() const;
+	const std::string& GetLaunchRelativePath() const;
+
 protected:
-	// First param of main.
-	std::string LaunchExePath;
+	/** First param of main. Absolute location C:/Programs/ThisProgram/Program.exe */
+	std::string LaunchFullPath;
+	/** Location of exe without exe. Like C:/Programs/ThisProgram */
+	std::string LaunchRelativePath;
 
 	// Parameters
 	CArray<std::string> LaunchParameters;
@@ -135,14 +141,24 @@ public:
 	{
 		return static_cast<TEventHandlerClass>(GetEngineRender());
 	}
+	
+	_NODISCARD FAssetsManager* GetAssetsManager() const;
+
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TAssetsManager>
+	TAssetsManager* GetAssetsManager() const
+	{
+		return static_cast<TAssetsManager>(GetAssetsManager());
+	}
 
 protected:
 	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
+	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
 
 protected:
 	SDL_Event SdlEvent;
 	FEventHandler* EventHandler;
-	//static AssetsManager* Assets;
+	FAssetsManager* AssetsManager;
 
 protected:
 #if ENGINE_TESTS

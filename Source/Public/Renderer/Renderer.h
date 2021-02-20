@@ -30,6 +30,9 @@ protected:
 	FWindow* Window;
 
 public:
+	SDL_Renderer* GetSDLRenderer() const { return Renderer; };
+
+protected:
 	/** Before render - Clear scene */
 	virtual void PreRender();
 	/** Gather render data */
