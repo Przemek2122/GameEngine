@@ -66,7 +66,7 @@ public:
 
 	/** @returns Window size in px. */
 	_NODISCARD FVector2D<int> GetWindowSize() const;
-	/** @returns Window percent at given location. Window 100 with position 50 will be 0.5. */
+	/** @returns Window percent at given location. Window { 100, 200 } with position { 50, 50 } will be { 0.5, 0.25 }. */
 	_NODISCARD FVector2D<float> GetWindowSizePercent(const FVector2D<int> Position) const;
 
 	_NODISCARD FVector2D<int> GetWindowLocation() const;

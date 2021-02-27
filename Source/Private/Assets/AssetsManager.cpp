@@ -26,10 +26,8 @@ void FAssetsManager::RemoveAsset(const std::string& InAssetName)
 std::_Ptr_base<FAssetBase>::element_type* FAssetsManager::GetAsset(const std::string& InAssetName) const
 {
 	if (AllAssetsMap.ContainsKey(InAssetName))
-	{
-		//std::_Ptr_base<FAssetBase>::element_type* T = AllAssetsMap.At(InAssetName).get();
-			
-		// @TODO Compile fix
+	{	
+		// @TODO dangling pointer
 		return AllAssetsMap.At(InAssetName).get();
 	}
 
@@ -41,14 +39,21 @@ std::_Ptr_base<FFont>::element_type* FAssetsManager::GetFont(const std::string& 
 	const std::string FontNameFull = InFontAssetName + "_" + std::to_string(InFontSize);
 	
 	auto* Font = TryFindFont(FontNameFull);
-	
+
 	if (Font != nullptr)
 	{
+		// Return font from map.
 		return Font;
 	}
 	
-	std::_Ptr_base<FFontAsset>::element_type* FontAsset = dynamic_cast<std::_Ptr_base<FFontAsset>::element_type*>(GetAsset(InFontAssetName));
-		
+	auto* FontAsset = dynamic_cast<std::_Ptr_base<FFontAsset>::element_type*>(GetAsset(InFontAssetName));
+
+	// If we do not have font asset we can not create new size of Font
+	if (FontAsset == nullptr)
+	{
+		return nullptr;
+	}
+	
 	return MakeFont(FontAsset, FontNameFull, InFontSize);
 }
 
@@ -56,7 +61,7 @@ std::_Ptr_base<FFont>::element_type* FAssetsManager::GetFont(FFontAsset* FontAss
 {
 	const std::string FontNameFull = FontAsset->GetAssetName() + "_" + std::to_string(InFontSize);
 
-	auto Font  = TryFindFont(FontNameFull);
+	auto* const Font  = TryFindFont(FontNameFull);
 	
 	if (Font != nullptr)
 	{
@@ -86,6 +91,8 @@ std::_Ptr_base<FFont>::element_type* FAssetsManager::MakeFont(FFontAsset* FontAs
 		FontsMap.Emplace(NewFontName, NewFontPtr);
 
 		// @TODO This should be fixed
+		// Pointers to stack memory should be avoided.
+		// But it works for now
 		return NewFontPtr.get();
 	}
 
@@ -96,5 +103,5 @@ std::string FAssetsManager::GetFullFilePath(const std::string& InPathRelative)
 {
 	char* Slash = FFilesystem::GetPlatformSlash();
 	
-	return Engine->GetLaunchRelativePath() + Slash + "Assets" + Slash + InPathRelative;
+	return Engine->GetLaunchRelativePath() + Slash + FFilesystem::GetAssetDirName() + Slash + InPathRelative;
 }

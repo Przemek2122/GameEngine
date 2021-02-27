@@ -80,7 +80,7 @@ void FWindow::ReceiveTick()
 
 void FWindow::Tick()
 {
-	WidgetManager->Tick();
+	WidgetManager->TickWidgets();
 
 	const Uint32 SdlWindowFlags = SDL_GetWindowFlags(Window);
 
@@ -112,7 +112,7 @@ void FWindow::Render()
 {
 	Renderer->PreRender();
 	Renderer->Render();
-	WidgetManager->Render();
+	WidgetManager->RenderWidgets();
 	Renderer->PostRender();
 }
 

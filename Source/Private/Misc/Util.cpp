@@ -23,8 +23,7 @@ namespace FUtil
 	{
 		if (EnableLogging)
 		{
-			// @TODO uncomment
-			FFilesystem::CreateDirrectory(LogDir);
+			FFilesystem::CreateFolder(LogDir);
 
 			isLoggingEnabled = true;
 
@@ -35,7 +34,7 @@ namespace FUtil
 			isLoggingEnabled = false;
 		}
 
-		SDL_CreateThread(MessagesPrinter, "Log", (void*)NULL);
+		SDL_CreateThread(MessagesPrinter, "Log", nullptr);
 	}
 
 	static int MessagesPrinter(void* ptr)
@@ -237,7 +236,7 @@ namespace FUtil
 
 	void Debug(std::string Message)
 	{
-#ifdef _DEBUG // if debug
+#ifdef _DEBUG
 		Message = GetCurrTime() + " (Debug): " + Message;
 
 		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Debug, Message });

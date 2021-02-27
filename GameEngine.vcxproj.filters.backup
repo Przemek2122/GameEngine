@@ -92,6 +92,9 @@
     <ClInclude Include="Source\Public\Assets\Font.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\FontAsset.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\Texture.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
@@ -506,6 +509,9 @@
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\Font.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\FontAsset.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\Texture.cpp">

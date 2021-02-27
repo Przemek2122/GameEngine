@@ -4,21 +4,17 @@
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
 #include "FunctorLambda.h"
 
-FButtonWidget::FButtonWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
-	: FInteractionBaseWidget(InWidgetManager, InWidgetName)
+FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName)
+	: FInteractionBaseWidget(InWidgetManagementInterface, InWidgetName)
 	, ButtonColor(200, 33, 150)
 {
-	WidgetLocation = { 50, 50 };
-	WidgetSize = { 200, 40 };
+	SetWidgetSize({ 200, 40 });
 
 	OnClicked.BindLambda(
 	[]
 	{
 		LOG_WARN("Button clicked!");
 	});
-
-	
-
 }
 
 FButtonWidget::~FButtonWidget()
@@ -34,7 +30,7 @@ void FButtonWidget::Render()
 {
 	Super::Render();
 
-	GetRenderer()->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), ButtonColor);
+	GetRenderer()->DrawRectangle(GetWidgetLocationAbsolute(), GetWidgetSize(), ButtonColor);
 }
 
 void FButtonWidget::NativeClick()

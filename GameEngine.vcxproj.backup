@@ -30,6 +30,7 @@
     <ClInclude Include="Source\Public\Assets\AssetBase.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
     <ClInclude Include="Source\Public\Assets\Font.h" />
+    <ClInclude Include="Source\Public\Assets\FontAsset.h" />
     <ClInclude Include="Source\Public\Assets\Texture.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="Source\Private\Assets\AssetBase.cpp" />
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp" />
     <ClCompile Include="Source\Private\Assets\Font.cpp" />
+    <ClCompile Include="Source\Private\Assets\FontAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\Array.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />

@@ -7,7 +7,7 @@
 class FTextWidget : public FWidget
 {
 public:
-	FTextWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName);
+	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
 	virtual ~FTextWidget() override;
 
 	void Render() override;
@@ -15,7 +15,7 @@ public:
 	void SetText(const std::string& InText);
 	_NODISCARD std::string GetText() const;
 	
-	void SetWidgetSize(const FVector2D<int> InWidgetSize) override;
+	void SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true) override;
 
 protected:
 	void AutoAdjustSize();

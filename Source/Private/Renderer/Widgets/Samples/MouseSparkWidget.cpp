@@ -18,8 +18,8 @@ FSpark::FSpark(const FVector2D<int>& InLocation, const float InSpeed, const int 
 {
 }
 
-FMouseSparkWidget::FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
-	: FWidget(InWidgetManager, InWidgetName)
+FMouseSparkWidget::FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName)
+	: FWidget(InWidgetManagementInterface, InWidgetName)
 	, MinMaxSpeedRange(0.04f, 0.3f)
 	, MinMaxAngleRange(0, 359)
 	, MaxNumOfPoints(128)
@@ -36,7 +36,7 @@ void FMouseSparkWidget::Tick()
 	Super::Tick();
 
 	// Add sparks is focused
-	if (GetWidgetManager()->GetOwnerWindow()->IsWindowFocused())
+	if (GetManagementInterface()->GetOwnerWindow()->IsWindowFocused())
 	{
 		FEventHandler* EventHandler = Engine->GetEventHandler();
 

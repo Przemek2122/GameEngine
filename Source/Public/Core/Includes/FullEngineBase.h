@@ -27,5 +27,6 @@
 #include "Renderer/Renderer.h"
 
 #include "Renderer/Widgets/Widget.h"
+#include "Renderer/Widgets/WidgetsManagementInterface.h"
 #include "Renderer/Widgets/WidgetManager.h"
 #include "Renderer/Widgets/WidgetInteraction.h"

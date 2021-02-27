@@ -8,7 +8,7 @@
 class FInteractionBaseWidget : public FWidget
 {
 public:
-	FInteractionBaseWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName);
+	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
 	virtual ~FInteractionBaseWidget() override;
 	
 	/** Begin FWidget interface */

@@ -16,6 +16,7 @@ class FWindow;
 
 class FWidget;
 class FWidgetManager;
+class IWidgetManagementInterface;
 class IWidgetInteraction;
 
 template<class TType = float>

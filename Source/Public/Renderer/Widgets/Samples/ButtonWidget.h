@@ -8,7 +8,7 @@
 class FButtonWidget : public FInteractionBaseWidget
 {
 public:
-	FButtonWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName);
+	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
 	virtual ~FButtonWidget() override;
 
 	virtual void Tick() override;

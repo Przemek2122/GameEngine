@@ -3,81 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Widget.h"
+#include "WidgetsManagementInterface.h"
 
 /**
  * Interactive UI rendering.
  */
-class FWidgetManager
+class FWidgetManager : public IWidgetManagementInterface
 {
-friend FWidget;
-friend FWindow;
+	friend FWindow;
 	
 protected:
 	FWidgetManager(FWindow* InOwnerWindow);
-	virtual ~FWidgetManager();
-	
-	virtual void Tick();
-	virtual void Render();
+	virtual ~FWidgetManager() override;
 
-public:
-	/**
-	 * Create new widget from template.
-	 * Auto managed.
-	 */
-	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName)
-	{
-#ifdef _DEBUG
-		ENSURE_VALID_MESSAGE(!ManagedWidgetsMap.ContainsKey(InWidgetName), "Widget with this name already exists! Duplicate: " << InWidgetName);
-#endif
-		
-		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName);
-		
-		ManagedWidgets.Push(CreatedWidget);
-		ManagedWidgetsMap.Map.emplace(InWidgetName, CreatedWidget);
+	/** Begin IWidgetManagementInterface */
+	virtual FVector2D<int> GetWidgetManagerOffset() const override;
+	virtual FVector2D<int> GetWidgetManagerSize() const override;
+	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
+	/** End IWidgetManagementInterface */
 
-		return CreatedWidget;
-	}
-
-	/** Best to call Destroy widget. @returns true on success. */
-	INLINE_DEBUGABLE bool DestroyWidget(FWidget* Widget);
-	/** Slower overload which destroys by name. @returns true on success. */
-	INLINE_DEBUGABLE bool DestroyWidget(const std::string& InWidgetName);
-
-	/** @returns widget by name SLOW */
-	_NODISCARD FWidget* GetWidgetByName(const std::string& InWidgetName);
-	/** @returns widget by name SLOW - This implementation does auto deduction of type. */
-	template<typename FWidgetAuto>
-	_NODISCARD FWidgetAuto GetWidgetByName(const std::string& InWidgetName)
-	{
-		return dynamic_cast<FWidgetAuto>(GetWidgetByName(InWidgetName));
-	}
-	
-	/** @returns true if widget with this name exists SLOW */
-	bool HasWidget(const std::string& InWidgetName);
-	/** @returns true if widget exists SLOW */
-	bool HasWidget(FWidget* InWidget);
-	
-	/** @returns Window which created this manager */
-	_NODISCARD FWindow* GetOwnerWindow() const;
-
-protected:
-	/** Called by wiget when order is changed. */
-	void ChangeWidgetOrder(FWidget* InWidget);
-
-protected:
-	/** Has all widgets. First renders last, last first.... */
-	CArray<FWidget*> ManagedWidgets;
-	
-	/** Maps string to widget. */
-	CMap<std::string, FWidget*> ManagedWidgetsMap;
-	
+private:
 	/** Window where widgets are rendered */
 	FWindow* OwnerWindow;
 
-public:
-	void RegisterWidget(FWidget* Widget);
-	void UnRegisterWidget(FWidget* Widget);
+	/** Window size */
+	FVector2D<int> WidgetManagerSize;
 	
 };

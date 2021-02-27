@@ -4,8 +4,8 @@
 #include "Renderer/Widgets/Samples/InteractionBaseWidget.h"
 #include "Input/EventHandler.h"
 
-FInteractionBaseWidget::FInteractionBaseWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
-	: FWidget(InWidgetManager, InWidgetName)
+FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName)
+	: FWidget(InWidgetManagementInterface, InWidgetName)
 	, bWasClicked(false)
 {
 }

@@ -17,7 +17,7 @@ struct FSpark
 class FMouseSparkWidget : public FWidget
 {
 public:
-	FMouseSparkWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName);
+	FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
 	virtual ~FMouseSparkWidget() override;
 
 	/** Begin FWidget interface */

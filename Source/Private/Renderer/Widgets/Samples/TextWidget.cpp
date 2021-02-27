@@ -5,8 +5,8 @@
 #include "Assets/Font.h"
 #include "Assets/FontAsset.h"
 
-FTextWidget::FTextWidget(FWidgetManager* InWidgetManager, const std::string& InWidgetName)
-	: FWidget(InWidgetManager, InWidgetName)
+FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName)
+	: FWidget(InWidgetManagementInterface, InWidgetName)
 	, Text("Sample text")
 	, TextSize(16)
 	, Font(nullptr)
@@ -27,6 +27,8 @@ FTextWidget::FTextWidget(FWidgetManager* InWidgetManager, const std::string& InW
 	TextColor.a = 255;
 
 	GetFont();
+
+	SetText("Default text.");
 }
 
 FTextWidget::~FTextWidget()
@@ -57,11 +59,13 @@ std::string FTextWidget::GetText() const
 	return Text;
 }
 
-void FTextWidget::SetWidgetSize(const FVector2D<int> InWidgetSize)
-{
+void FTextWidget::SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bUpdateAnchor)
+{	
 	Super::SetWidgetSize(InWidgetSize);
-	
+
 	RecalculateSize();
+
+	UpdateAnchor();
 }
 
 void FTextWidget::AutoAdjustSize()
@@ -72,16 +76,10 @@ void FTextWidget::AutoAdjustSize()
 	}
 	
 	FVector2D<int> NewWidgetSize;
-	NewWidgetSize.X = 200;
-	NewWidgetSize.Y = TTF_FontHeight(Font->GetFont());
 
 	if(TTF_SizeUTF8(Font->GetFont(), Text.c_str(), &NewWidgetSize.X, &NewWidgetSize.Y)) 
 	{
 		LOG_ERROR("Text could not be rendered. " << TTF_GetError());
-	}
-	else 
-	{
-	    LOG_WARN("New size" << NewWidgetSize.X, NewWidgetSize.Y);
 	}
 	
 	SetWidgetSize(NewWidgetSize);
@@ -89,8 +87,8 @@ void FTextWidget::AutoAdjustSize()
 
 void FTextWidget::RecalculateSize() const
 {
-	SDLRect->x = GetWidgetLocation().X;
-	SDLRect->y = GetWidgetLocation().Y;
+	SDLRect->x = GetWidgetLocationAbsolute().X;
+	SDLRect->y = GetWidgetLocationAbsolute().Y;
 	SDLRect->w = GetWidgetSize().X;
 	SDLRect->h = GetWidgetSize().Y;
 }
@@ -123,6 +121,8 @@ void FTextWidget::RedrawText()
 	
 	SDL_FreeSurface(SdlSurface);
 	SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
+
+	AutoAdjustSize();
 }
 
 void FTextWidget::GetFont()

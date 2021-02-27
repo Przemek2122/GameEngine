@@ -3,15 +3,17 @@
 #include "CoreEngine.h"
 #include "Misc/Filesystem.h"
 
-#include <filesystem>
 namespace fs = std::filesystem;
 
-bool FFilesystem::CreateDirrectory(const std::string Path)
+static char* AssetsDir = TEXT("Assets");
+static char* PlatformSlash = TEXT("\\");
+
+bool FFilesystem::CreateFolder(const std::string& Path)
 {
     return fs::create_directory(Path);
 }
 
-bool FFilesystem::DeleteDirrectory(const std::string Path, const bool bRecursive)
+bool FFilesystem::DeleteFolder(const std::string& Path, const bool bRecursive)
 {
     if (bRecursive)
     {
@@ -25,13 +27,16 @@ bool FFilesystem::DeleteDirrectory(const std::string Path, const bool bRecursive
 
 bool FFilesystem::FileExists(const std::string& InPath)
 {
-
-
-	std::ifstream f(InPath.c_str());
-    return f.good();
+	std::ifstream FileCheck(InPath.c_str());
+    return FileCheck.good();
 }
 
 char* FFilesystem::GetPlatformSlash()
 {
-	return TEXT("\\");
+	return PlatformSlash;
+}
+
+char* FFilesystem::GetAssetDirName()
+{
+	return AssetsDir;
 }
