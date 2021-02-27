@@ -5,8 +5,8 @@
 #include "Assets/Font.h"
 #include "Assets/FontAsset.h"
 
-FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName)
-	: FWidget(InWidgetManagementInterface, InWidgetName)
+FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, Text("Sample text")
 	, TextSize(16)
 	, Font(nullptr)

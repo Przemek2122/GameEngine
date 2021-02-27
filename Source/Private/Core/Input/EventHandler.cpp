@@ -7,9 +7,13 @@ FEventHandler::FEventHandler(SDL_Event InEvent)
 	: Event(InEvent)
 	, bQuitInputDetected(false)
 {
-	AddPrimaryInput("M_LMB");	// MOUSE- Left mouse button
-	AddPrimaryInput("M_RMB");	// MOUSE- Right mouse button
-	AddPrimaryInput("M_MID");	// MOUSE- Middle mouse button
+	AddPrimaryInput("M_LMB_P");	// MOUSE- Left mouse button pressed
+	AddPrimaryInput("M_RMB_P");	// MOUSE- Right mouse button pressed
+	AddPrimaryInput("M_MID_P");	// MOUSE- Middle mouse button pressed
+	
+	AddPrimaryInput("M_LMB_R");	// MOUSE- Left mouse button released
+	AddPrimaryInput("M_RMB_R");	// MOUSE- Right mouse button released
+	AddPrimaryInput("M_MID_R");	// MOUSE- Middle mouse button released
 	
 	AddPrimaryInput("K_A");		// KEYBOARD - A
 	AddPrimaryInput("K_B");		// KEYBOARD - B
@@ -267,21 +271,55 @@ void FEventHandler::HandleEvents()
 				{
 					case SDL_BUTTON_LEFT:
 					{
-						PrimaryInputMap["M_LMB"] = true;
+						PrimaryInputMap["M_LMB_P"] = true;
 							
 						break;
 					}
 
 					case SDL_BUTTON_RIGHT:
 					{
-						PrimaryInputMap["M_RMB"] = true;
+						PrimaryInputMap["M_RMB_P"] = true;
 							
 						break;
 					}
 
 					case SDL_BUTTON_MIDDLE:
 					{
-						PrimaryInputMap["M_MID"] = true;
+						PrimaryInputMap["M_MID_P"] = true;
+							
+						break;
+					}
+						
+					default:
+					{
+						LOG_DEBUG("Unknown mouse input found.");
+					}
+				}
+
+				break;
+			}
+			
+			case SDL_MOUSEBUTTONUP:
+			{
+				switch (Event.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+					{
+						PrimaryInputMap["M_LMB_R"] = true;
+							
+						break;
+					}
+
+					case SDL_BUTTON_RIGHT:
+					{
+						PrimaryInputMap["M_RMB_R"] = true;
+							
+						break;
+					}
+
+					case SDL_BUTTON_MIDDLE:
+					{
+						PrimaryInputMap["M_MID_R"] = true;
 							
 						break;
 					}

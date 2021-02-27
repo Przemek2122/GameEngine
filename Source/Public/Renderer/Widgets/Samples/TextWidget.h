@@ -7,7 +7,7 @@
 class FTextWidget : public FWidget
 {
 public:
-	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
+	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
 	virtual ~FTextWidget() override;
 
 	void Render() override;

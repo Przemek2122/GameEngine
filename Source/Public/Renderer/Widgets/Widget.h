@@ -43,7 +43,7 @@ class FWidget : public IWidgetManagementInterface
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
-	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string InWidgetName);
+	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string InWidgetName, const int InWidgetOrder = 0);
 	virtual ~FWidget() override;
 
 	virtual void ReceiveTick();

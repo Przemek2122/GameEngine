@@ -11,6 +11,7 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 	, WindowWidth(InWidth)
 	, WindowHeight(InHeight)
 	, WindowFlags(InFlags)
+	, bIsWindowFocused(false)
 {
 	Window = SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags);
 

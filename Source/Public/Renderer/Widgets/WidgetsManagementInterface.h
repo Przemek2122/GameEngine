@@ -42,13 +42,13 @@ public:
 	 * Auto managed.
 	 */
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName)
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName, const int InWidgetOrder = 0)
 	{
 #ifdef _DEBUG
 		ENSURE_VALID_MESSAGE(!ManagedWidgetsMap.ContainsKey(InWidgetName), "Widget with this name already exists! Duplicate: " << InWidgetName);
 #endif
 		
-		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName);
+		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName, InWidgetOrder);
 
 		return CreatedWidget;
 	}

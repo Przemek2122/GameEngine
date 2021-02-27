@@ -6,7 +6,9 @@
 #include <sstream>
 #include "Vector2D.h"
 
-/* Two dimensional vector. */
+/**
+ * Color type
+ */
 class FColorRGBA
 {
 public:
@@ -42,21 +44,22 @@ public:
 	 */
 	FColorRGBA(FVector2D<double>& OldVector);
 
-	void SetColorRange(const float InColorRangeMin = 0.f, const float InColorRangeMax = 1.f);
+	/** Initialize this by other object of FColorRGBA */
+	FColorRGBA(const FColorRGBA& OtherColor);	
+
+	void SetColorRange(const Uint8 InColorRangeMin = 0, const Uint8 InColorRangeMax = 255);
 
 	/** Clamps values to be between min and max of 'ColorRange'. */
 	void NormalizeValues();
 
+	FColorRGBA& operator=(const FColorRGBA& OldColor);
+
+	bool operator==(const FColorRGBA& OldColor) const;
+
 	// Conversion
-	operator std::ostream&() const 
-	{
-		return std::ostringstream().flush() << "(" + std::to_string(R) + ", " + std::to_string(R) + ")";
-	}
-	operator std::string() const 
-	{ 
-		return "(" + std::to_string(R) + ", " + std::to_string(R) + ")"; 
-	}
-	
+	explicit operator std::ostream&() const;
+	explicit operator std::string() const;
+
 public:
 	Uint8 R;
 	Uint8 G;
@@ -66,4 +69,21 @@ public:
 protected:
 	Uint8 ColorRangeMin;
 	Uint8 ColorRangeMax;
+
+public:
+	/** Begin of static predefined colors */
+	static FColorRGBA ColorWhite();
+	static FColorRGBA ColorBlack();
+	static FColorRGBA ColorLightGray();
+	static FColorRGBA ColorGray();
+	static FColorRGBA ColorDarkGray();
+	static FColorRGBA ColorDodgerBlue();
+	static FColorRGBA ColorLightGreen();
+	static FColorRGBA ColorGreen();
+	static FColorRGBA ColorPurple();
+	static FColorRGBA ColorPink();
+	static FColorRGBA ColorYellow();
+	static FColorRGBA ColorOrange();
+	static FColorRGBA ColorRed();
+	/** End of predefined colors */
 };
