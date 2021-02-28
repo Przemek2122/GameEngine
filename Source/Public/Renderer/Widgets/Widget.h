@@ -32,6 +32,14 @@ enum class EAnchor : Uint8
 	RightCenter				// Center of right edge
 };
 
+/** What should happen if widget is too big? */
+enum class EClipping : Uint8
+{
+	None,					// Do not clip
+	Resize,					// Use SDL to resize if available
+	Cut,					// Just cut if too big
+};
+
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
  * It's mostly to ensure widget render in proper window. 
@@ -43,7 +51,7 @@ class FWidget : public IWidgetManagementInterface
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
-	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string InWidgetName, const int InWidgetOrder = 0);
+	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = 0);
 	virtual ~FWidget() override;
 
 	virtual void ReceiveTick();
@@ -57,8 +65,10 @@ protected:
 	virtual void Render();
 
 	/** Begin IWidgetManagementInterface */
-	virtual FVector2D<int> GetWidgetManagerOffset() const override;
-	virtual FVector2D<int> GetWidgetManagerSize() const override;
+	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
+	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const override;
+	_NODISCARD virtual bool HasWidgetManagerOwner() const override;
+	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const override;
 	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
 	/** End IWidgetManagementInterface */
 	
@@ -101,7 +111,7 @@ public:
 	virtual void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation);
 	
 	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
-	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true);
+	virtual void SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true);
 
 private:
 	/** Current widget location top left corner location */
@@ -123,14 +133,25 @@ private:
 	EAnchor DefaultAnchor;
 
 public:
-	_NODISCARD IWidgetManagementInterface* GetManagementInterface() const;
+	/** @returns parent IWidgetManagementInterface pointer */
+	_NODISCARD IWidgetManagementInterface* GetParent() const;
+	/** @returns first parent (top of tree) */
+	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
+
+private:
+	EClipping ClippingMethod;
+
+public:
+	_NODISCARD EClipping GetClippingMethod() const;
+	void SetClippingMethod(EClipping NewClippingMethod);
+	virtual void OnClippingMethodChanged(EClipping NewClipping);
 
 private:
 	/** Owner manager */
 	IWidgetManagementInterface* WidgetManagementInterface;
 
 protected:
-	/** True if WidgetManagementInterface decied to render this widget. */
+	/** True if WidgetManagementInterface decided to render this widget. */
 	bool bWasRenderedThisFrame;
 	
 };

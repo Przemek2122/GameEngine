@@ -16,14 +16,17 @@ public:
 	IWidgetManagementInterface();
 	virtual ~IWidgetManagementInterface();
 
-	/** This is used to move widgets by default to relative location. */
+	/** @returns size, this is used to move widgets by default to relative location. */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const = 0;
 
-	/** Size of this interface. */
+	/** @returns Size of this interface. */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const = 0;
 
+	/** Get owner or nullptr if there is none */
+	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const = 0;
+
 	/** True if has owner */
-	_NODISCARD virtual bool HasWidgetManagerOwner() const { return bHasWidgetManagerOwner; }
+	_NODISCARD virtual bool HasWidgetManagerOwner() const = 0;
 
 	/**
 	 * Ticking widgets works different than render.
@@ -85,8 +88,6 @@ protected:
 	
 	/** Maps string to widget. */
 	CMap<std::string, FWidget*> ManagedWidgetsMap;
-
-	bool bHasWidgetManagerOwner;
 
 public:
 	void RegisterWidget(FWidget* Widget);

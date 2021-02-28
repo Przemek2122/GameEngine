@@ -36,7 +36,7 @@ void FMouseSparkWidget::Tick()
 	Super::Tick();
 
 	// Add sparks is focused
-	if (GetManagementInterface()->GetOwnerWindow()->IsWindowFocused())
+	if (GetParent()->GetOwnerWindow()->IsWindowFocused())
 	{
 		FEventHandler* EventHandler = Engine->GetEventHandler();
 

@@ -17,8 +17,10 @@ protected:
 	virtual ~FWidgetManager() override;
 
 	/** Begin IWidgetManagementInterface */
-	virtual FVector2D<int> GetWidgetManagerOffset() const override;
-	virtual FVector2D<int> GetWidgetManagerSize() const override;
+	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
+	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const override;
+	_NODISCARD virtual bool HasWidgetManagerOwner() const override;
+	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const override;
 	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
 	/** End IWidgetManagementInterface */
 

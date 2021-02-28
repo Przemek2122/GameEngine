@@ -4,7 +4,6 @@
 #include "Renderer/Widgets/WidgetsManagementInterface.h"
 
 IWidgetManagementInterface::IWidgetManagementInterface()
-	: bHasWidgetManagerOwner(false)
 {
 }
 

@@ -28,9 +28,13 @@ public:
 protected:
 	CDeque<FSpark> Sparks;
 	CArray<SDL_Point> Points;
+	
 	FVector2D<float> MinMaxSpeedRange;
 	FVector2D<int> MinMaxAngleRange;
+	
 	int MaxNumOfPoints;
 	int PointPerTick;
+
+	
 	
 };

@@ -5,13 +5,14 @@
 
 #include <Windows.h>
 
-FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string InWidgetName, const int InWidgetOrder)
-	: WidgetManagementInterface(InWidgetManagementInterface)
-	, WidgetVisibility(EWidgetVisibility::Visible)
-	, Anchor(EAnchor::None)
-	, DefaultAnchor(EAnchor::Center)
+FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder)
+	: WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetName(std::move(InWidgetName))
 	, WidgetOrder(InWidgetOrder)
+	, Anchor(EAnchor::None)
+	, DefaultAnchor(EAnchor::Center)
+	, ClippingMethod(EClipping::Cut)
+	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bWasRenderedThisFrame(false)
 {
 #if _DEBUG
@@ -79,6 +80,16 @@ FVector2D<int> FWidget::GetWidgetManagerOffset() const
 FVector2D<int> FWidget::GetWidgetManagerSize() const
 {
 	return GetWidgetSize();
+}
+
+bool FWidget::HasWidgetManagerOwner() const
+{
+	return true;
+}
+
+IWidgetManagementInterface* FWidget::GetWidgetManagerOwner() const
+{
+	return GetParent();
 }
 
 FWindow* FWidget::GetOwnerWindow() const
@@ -163,8 +174,46 @@ FVector2D<int> FWidget::GetWidgetSize() const
 	return WidgetSize;
 }
 
-void FWidget::SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bUpdateAnchor)
+void FWidget::SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor)
 {
+	switch (ClippingMethod)
+	{
+	case EClipping::None:
+		break;
+		
+	case EClipping::Resize:
+		{
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
+
+			if (ParentSize.X < InWidgetSize.X)
+			{
+				InWidgetSize.X = ParentSize.X;
+			}
+
+			if (ParentSize.Y < InWidgetSize.Y)
+			{
+				InWidgetSize.Y = ParentSize.Y;
+			}
+		}
+		break;
+	case EClipping::Cut:
+		{
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
+
+			if (ParentSize.X < InWidgetSize.X)
+			{
+				InWidgetSize.X = ParentSize.X;
+			}
+
+			if (ParentSize.Y < InWidgetSize.Y)
+			{
+				InWidgetSize.Y = ParentSize.Y;
+			}
+		}
+		break;
+	default: ;
+	}
+	
 	WidgetSize = InWidgetSize;
 
 	if (bUpdateAnchor)
@@ -207,7 +256,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::Center:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 			
 			FVector2D<int> RelativeCenter;
@@ -227,7 +276,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::LeftBottom:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -241,7 +290,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::RightTop:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -255,7 +304,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::RightBottom:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -269,7 +318,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::TopCenter:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -283,7 +332,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::LeftCenter:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -297,7 +346,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::BottomCenter:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -311,7 +360,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 		
 	case EAnchor::RightCenter:
 		{
-			const FVector2D<int> ParentSize = GetManagementInterface()->GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -325,7 +374,7 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 	}
 }
 
-IWidgetManagementInterface* FWidget::GetManagementInterface() const
+IWidgetManagementInterface* FWidget::GetParent() const
 {
 #if _DEBUG
 	if (WidgetManagementInterface == nullptr)
@@ -335,4 +384,39 @@ IWidgetManagementInterface* FWidget::GetManagementInterface() const
 #endif
 	
 	return WidgetManagementInterface;
+}
+
+IWidgetManagementInterface* FWidget::GetParentRoot() const
+{
+	if (WidgetManagementInterface != nullptr)
+	{
+		if (auto* ParentWidget = dynamic_cast<FWidget*>(WidgetManagementInterface))
+		{
+			return ParentWidget->GetParentRoot();
+		}
+		
+		if (WidgetManagementInterface->HasWidgetManagerOwner())
+		{
+			WidgetManagementInterface->GetWidgetManagerOwner();
+		}
+	}
+}
+
+EClipping FWidget::GetClippingMethod() const
+{
+	return ClippingMethod;
+}
+
+void FWidget::SetClippingMethod(EClipping NewClippingMethod)
+{
+	if (ClippingMethod != NewClippingMethod)
+	{
+		ClippingMethod = NewClippingMethod;
+		
+		OnClippingMethodChanged(NewClippingMethod);
+	}
+}
+
+void FWidget::OnClippingMethodChanged(EClipping NewClipping)
+{
 }
