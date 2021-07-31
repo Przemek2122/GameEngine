@@ -67,6 +67,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsManagementInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsManagementInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
