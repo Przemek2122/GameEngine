@@ -4,18 +4,33 @@
 
 // Public macros
 
+#include "CoreMinimal.h"
+
+inline auto Inline_ENSURE_VALID_Lambda = [](auto Condition) -> bool
+{
+	if (Condition)
+	{
+		return true;
+	}
+	else
+	{
+		__debugbreak();
+		return false;
+	}
+};
+
 #if _DEBUG
 // Not inline in debug to be able to see callstack.
 #define INLINE_DEBUGABLE
 // Just a stop, can be continued
-#define ENSURE_VALID(Condition) if (!(Condition)) { __debugbreak(); }
-#define ENSURE_VALID_MESSAGE(Condition, Message) if (!(Condition)) { __debugbreak(); LOG_WARN(Message); }
+#define ENSURE_VALID(Condition) Inline_ENSURE_VALID_Lambda(Condition)
+//#define ENSURE_VALID_MESSAGE(Condition, Message) Inline_ENSURE_VALID_MESSAGE_Lambda(Condition, Message)
 #else
 // Inline in release
 #define INLINE_DEBUGABLE SDL_FORCE_INLINE
 // No throw in release
 #define ENSURE_VALID(Condition)
-#define ENSURE_VALID_MESSAGE(Condition, Message)
+//#define ENSURE_VALID_MESSAGE(Condition, Message)
 #endif
 
 #define TEXT(Text) const_cast<char*>(Text)

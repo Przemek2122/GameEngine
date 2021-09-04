@@ -32,8 +32,7 @@ public:
 		}
 		else
 		{
-			// Tried to add asset which does not exists.
-			// @see FullFilePath
+			// Tried to add asset which does not exists, see FullFilePath
 			ENSURE_VALID(false);
 		}
 	}

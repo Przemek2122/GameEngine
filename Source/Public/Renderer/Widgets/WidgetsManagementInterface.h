@@ -39,6 +39,9 @@ public:
 	 * First parent is rendered than all its child and it's children ...
 	 */
 	virtual void RenderWidgets();
+
+	/** Add child by moving from other interface */
+	virtual bool AddChild(FWidget* InWidget);
 	
 	/**
 	 * Create new widget from template.
@@ -48,7 +51,10 @@ public:
 	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName, const int InWidgetOrder = 0)
 	{
 #ifdef _DEBUG
-		ENSURE_VALID_MESSAGE(!ManagedWidgetsMap.ContainsKey(InWidgetName), "Widget with this name already exists! Duplicate: " << InWidgetName);
+		if (!ENSURE_VALID(!ManagedWidgetsMap.ContainsKey(InWidgetName)))
+		{
+			LOG_ERROR("Widget with this name already exists! Duplicate: " << InWidgetName);
+		}
 #endif
 		
 		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName, InWidgetOrder);
@@ -90,7 +96,7 @@ protected:
 	CMap<std::string, FWidget*> ManagedWidgetsMap;
 
 public:
-	void RegisterWidget(FWidget* Widget);
-	void UnRegisterWidget(FWidget* Widget);
+	virtual void RegisterWidget(FWidget* Widget);
+	virtual void UnRegisterWidget(FWidget* Widget);
 	
 };

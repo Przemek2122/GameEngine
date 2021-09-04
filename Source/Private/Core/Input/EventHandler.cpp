@@ -381,7 +381,7 @@ void FEventHandler::RemovePrimaryInput(const std::string& InPrimaryName)
 	if (PrimaryInputMap.Remove(InPrimaryName))
 	{
 #ifdef _DEBUG
-		ENSURE_VALID_MESSAGE(false, "Not removed - not found.");
+		ENSURE_VALID(false);
 #endif
 	}
 }
@@ -391,7 +391,7 @@ void FEventHandler::RemoveSecondaryInput(const std::string& InSecondaryName)
 	const bool bIsRemoved = SecondaryInputMap.Remove(InSecondaryName);
 
 #ifdef _DEBUG
-		ENSURE_VALID_MESSAGE(bIsRemoved > 0, "Not removed - not found.");
+		ENSURE_VALID(bIsRemoved > 0);
 #endif
 }
 
@@ -409,7 +409,7 @@ void FEventHandler::SetSecondaryInput(const std::string& InSecondaryName, const 
 #ifdef _DEBUG
 	else
 	{
-		ENSURE_VALID_MESSAGE(false, "Missing primary key.");
+		ENSURE_VALID(false);
 	}
 #endif
 }
@@ -439,7 +439,7 @@ bool FEventHandler::GetSecondaryInput(const std::string& InputName)
 		}
 	}
 
-	ENSURE_VALID_MESSAGE(false, "FEventHandler::GetSecondaryInput(): Unable to find input.");
+	ENSURE_VALID(false);
 
 	return false;
 }

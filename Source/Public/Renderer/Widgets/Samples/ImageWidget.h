@@ -6,6 +6,9 @@
 
 class FImageWidget : public FWidget
 {
+public:
+	FImageWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
+	
 	
 };
 

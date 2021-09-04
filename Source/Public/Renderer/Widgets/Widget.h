@@ -111,7 +111,11 @@ public:
 	virtual void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation);
 	
 	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
-	virtual void SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true);
+	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor = true);
+
+	/** Called when parent widget is changed or when widget itself is changed.  */
+	virtual void RefreshWidget();
+	virtual void RefreshWidgetSize();
 
 private:
 	/** Current widget location top left corner location */
@@ -121,11 +125,11 @@ private:
 	FVector2D<int> WidgetSize;
 
 public:
-	void SetAnchor(EAnchor NewAnchor);
+	void RefreshAnchor();
+	void SetAnchor(const EAnchor NewAnchor);
 	_NODISCARD EAnchor GetAnchor() const;
-	void UpdateAnchor();
 
-	virtual void OnAnchorChanged(EAnchor NewAnchor);
+	virtual void OnAnchorChanged(const EAnchor NewAnchor);
 
 private:
 	/** Anchor of this widget. Used to align to parent. */
@@ -143,7 +147,7 @@ private:
 
 public:
 	_NODISCARD EClipping GetClippingMethod() const;
-	void SetClippingMethod(EClipping NewClippingMethod);
+	void SetClippingMethod(const EClipping NewClippingMethod);
 	virtual void OnClippingMethodChanged(EClipping NewClipping);
 
 private:

@@ -11,6 +11,9 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, TextSize(16)
 	, Font(nullptr)
+	, FontAsset(nullptr)
+	, TextRenderColor(255)
+	, TextBackgroundRenderColor({ 255, 0, 0})
 	, SDLRect(new SDL_Rect)
 	, TextTexture(nullptr)
 	, LastTextTextureSize({ 0, 0 })
@@ -19,21 +22,19 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 {
 	FontAsset = Engine->GetAssetsManager()->GetAsset<FFontAsset>("OpenSans");
 
+	const bool bIsFontAssetValid = FontAsset != nullptr;
+	
+	if (bIsFontAssetValid)
+	{
+		UpdateFont();
+		
+		SetText(DefaultText);
+	}
+
 #if _DEBUG
 	// Unable to find font asset.
-	ENSURE_VALID(FontAsset != nullptr);
+	ENSURE_VALID(bIsFontAssetValid);
 #endif
-	
-	TextRenderColor.r = 255;
-	TextRenderColor.g = 255;
-	TextRenderColor.b = 255;
-	TextRenderColor.a = 255;
-
-	TextBackgroundRenderColor.r = 255;
-
-	GetFont();
-
-	SetText(DefaultText);
 }
 
 FTextWidget::~FTextWidget()
@@ -45,6 +46,20 @@ FTextWidget::~FTextWidget()
 void FTextWidget::Render()
 {
 	SDL_RenderCopy(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
+}
+
+void FTextWidget::SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation)
+{
+	Super::SetWidgetLocationAbsolute(InWidgetLocation);
+
+	RecalculateSize();
+}
+
+void FTextWidget::SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation)
+{
+	Super::SetWidgetLocationRelative(InWidgetLocation);
+
+	RecalculateSize();
 }
 
 void FTextWidget::SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor)
@@ -216,9 +231,19 @@ void FTextWidget::RedrawText()
 	SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
 }
 
-void FTextWidget::GetFont()
+void FTextWidget::UpdateFont()
 {
-	Font = Engine->GetAssetsManager()->GetFont(FontAsset, TextSize);	
+	FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+	
+	if (AssetsManager != nullptr)
+	{
+		Font = AssetsManager->GetFont(FontAsset, TextSize);
+	}
+
+#if _DEBUG
+	// Unable to find font asset.
+	ENSURE_VALID(Font != nullptr);
+#endif
 }
 
 void FTextWidget::SetTextRenderMode(ETextRenderMode NewTextRenderMode)

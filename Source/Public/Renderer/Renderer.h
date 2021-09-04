@@ -55,6 +55,8 @@ public:
 
 	/** Draw single rectangle */
 	void DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const;
+	/** Draw single rectangle but without interior */
+	void DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const;
 	
 	void DrawCircle(const FVector2D<int> Location, const int Radius) const;
 	void DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength) const;

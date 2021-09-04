@@ -276,7 +276,7 @@ const std::string& FEngine::GetLaunchRelativePath() const
 FEventHandler* FEngine::GetEventHandler() const
 {
 #if _DEBUG
-		ENSURE_VALID_MESSAGE((EventHandler != nullptr), "Missing EventHandler. This will cause issues");
+		ENSURE_VALID(EventHandler != nullptr);
 #endif
 		
 	return EventHandler;
@@ -307,7 +307,7 @@ FTestManager* FEngine::CreateTestManager() const
 FEngineRender* FEngine::GetEngineRender() const
 {
 #if _DEBUG
-		ENSURE_VALID_MESSAGE((EngineRender != nullptr), "Missing EngineRender. This will cause issues");
+		ENSURE_VALID(EngineRender != nullptr);
 #endif
 	
 	return EngineRender;

@@ -191,7 +191,13 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\HorizontalBoxWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputTextWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InteractionBaseWidget.h">
@@ -201,6 +207,9 @@
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
@@ -589,7 +598,13 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\HorizontalBoxWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputTextWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InteractionBaseWidget.cpp">
@@ -599,6 +614,9 @@
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">

@@ -14,6 +14,7 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 
 	ButtonRenderColor = ButtonNormalColor;
 
+#if _DEBUG
 	OnClickPress.BindLambda(
 	[]
 	{
@@ -25,6 +26,7 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 	{
 		LOG_WARN("Button released!");
 	});
+#endif
 }
 
 FButtonWidget::~FButtonWidget()

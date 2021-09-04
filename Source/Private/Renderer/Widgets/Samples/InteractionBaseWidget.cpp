@@ -141,7 +141,7 @@ void FInteractionBaseWidget::OnHoverStateChanged()
 	switch (HoverState)
 	{
 	case EHoverState::None:
-		ENSURE_VALID(false, "Should be for internal use only.")
+		ENSURE_VALID(false);
 		break;
 	case EHoverState::Entered:
 		NativeMouseEnterWidget();

@@ -2,6 +2,7 @@
 
 #include "CoreEngine.h"
 #include "ColorRGBA.h"
+#include "Vector2D.h"
 
 static Uint8 ColorRangeMinDefault = 0;
 static Uint8 ColorRangeMaxDefault = 255;
@@ -118,6 +119,18 @@ FColorRGBA& FColorRGBA::operator=(const FColorRGBA& OldColor)
 	A = OldColor.A;
 		
 	return *this;
+}
+
+FColorRGBA::operator SDL_Color() const
+{
+	SDL_Color Rect;
+
+	Rect.r = R;
+	Rect.g = G;
+	Rect.b = B;
+	Rect.a = A;
+
+	return Rect;
 }
 
 bool FColorRGBA::operator==(const FColorRGBA& OldColor) const

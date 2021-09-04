@@ -18,7 +18,7 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 #if _DEBUG
 	if (WidgetManagementInterface == nullptr)
 	{
-		ENSURE_VALID_MESSAGE(false, "Widget with no IWidgetManagementInterface should not exists! Please fix pointer.");
+		ENSURE_VALID(false);
 	}
 #endif
 	
@@ -32,7 +32,7 @@ FWidget::~FWidget()
 #if _DEBUG
 	if (WidgetManagementInterface == nullptr)
 	{
-		ENSURE_VALID_MESSAGE(false, "Widget with no widget manager should not exists!");
+		ENSURE_VALID(false);
 	}
 #endif
 	
@@ -174,7 +174,31 @@ FVector2D<int> FWidget::GetWidgetSize() const
 	return WidgetSize;
 }
 
-void FWidget::SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor)
+void FWidget::SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor)
+{
+	RefreshWidgetSize();
+	
+	WidgetSize = InWidgetSize;
+
+	if (bRefreshAnchor)
+	{
+		RefreshAnchor();
+	}
+}
+
+void FWidget::RefreshWidget()
+{
+	RefreshWidgetSize();
+	RefreshAnchor();
+	//RefreshWidgetLocation();
+
+	for (size_t i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		ManagedWidgets[i]->RefreshWidget();
+	}
+}
+
+void FWidget::RefreshWidgetSize()
 {
 	switch (ClippingMethod)
 	{
@@ -185,14 +209,14 @@ void FWidget::SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAncho
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 
-			if (ParentSize.X < InWidgetSize.X)
+			if (ParentSize.X < WidgetSize.X)
 			{
-				InWidgetSize.X = ParentSize.X;
+				WidgetSize.X = ParentSize.X;
 			}
 
-			if (ParentSize.Y < InWidgetSize.Y)
+			if (ParentSize.Y < WidgetSize.Y)
 			{
-				InWidgetSize.Y = ParentSize.Y;
+				WidgetSize.Y = ParentSize.Y;
 			}
 		}
 		break;
@@ -200,51 +224,23 @@ void FWidget::SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAncho
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 
-			if (ParentSize.X < InWidgetSize.X)
+			if (ParentSize.X < WidgetSize.X)
 			{
-				InWidgetSize.X = ParentSize.X;
+				WidgetSize.X = ParentSize.X;
 			}
 
-			if (ParentSize.Y < InWidgetSize.Y)
+			if (ParentSize.Y < WidgetSize.Y)
 			{
-				InWidgetSize.Y = ParentSize.Y;
+				WidgetSize.Y = ParentSize.Y;
 			}
 		}
 		break;
-	default: ;
-	}
-	
-	WidgetSize = InWidgetSize;
-
-	if (bUpdateAnchor)
-	{
-		UpdateAnchor();
 	}
 }
 
-void FWidget::SetAnchor(EAnchor NewAnchor)
+void FWidget::RefreshAnchor()
 {
-	if (Anchor != NewAnchor)
-	{
-		OnAnchorChanged(NewAnchor);
-	}
-}
-
-EAnchor FWidget::GetAnchor() const
-{
-	return Anchor;
-}
-
-void FWidget::UpdateAnchor()
-{
-	OnAnchorChanged(GetAnchor());
-}
-
-void FWidget::OnAnchorChanged(EAnchor NewAnchor)
-{
-	Anchor = NewAnchor;
-	
-	switch (NewAnchor)
+	switch (Anchor)
 	{
 	case EAnchor::None:
 		{
@@ -374,12 +370,32 @@ void FWidget::OnAnchorChanged(EAnchor NewAnchor)
 	}
 }
 
+void FWidget::SetAnchor(const EAnchor NewAnchor)
+{
+	if (Anchor != NewAnchor)
+	{
+		OnAnchorChanged(NewAnchor);
+	}
+}
+
+EAnchor FWidget::GetAnchor() const
+{
+	return Anchor;
+}
+
+void FWidget::OnAnchorChanged(const EAnchor NewAnchor)
+{
+	Anchor = NewAnchor;
+	
+	RefreshAnchor();
+}
+
 IWidgetManagementInterface* FWidget::GetParent() const
 {
 #if _DEBUG
 	if (WidgetManagementInterface == nullptr)
 	{
-		ENSURE_VALID_MESSAGE(false, "Requested FWidgetManager but it has not been created!");
+		ENSURE_VALID(false);
 	}
 #endif
 	
@@ -397,9 +413,11 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 		
 		if (WidgetManagementInterface->HasWidgetManagerOwner())
 		{
-			WidgetManagementInterface->GetWidgetManagerOwner();
+			return WidgetManagementInterface->GetWidgetManagerOwner();
 		}
 	}
+
+	return nullptr;
 }
 
 EClipping FWidget::GetClippingMethod() const
@@ -407,7 +425,7 @@ EClipping FWidget::GetClippingMethod() const
 	return ClippingMethod;
 }
 
-void FWidget::SetClippingMethod(EClipping NewClippingMethod)
+void FWidget::SetClippingMethod(const EClipping NewClippingMethod)
 {
 	if (ClippingMethod != NewClippingMethod)
 	{

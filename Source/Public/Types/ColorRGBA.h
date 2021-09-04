@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include <sstream>
-#include "Vector2D.h"
 
 /**
  * Color type
@@ -14,13 +13,24 @@ class FColorRGBA
 public:
 	FColorRGBA();
 	
-	/** Initialize R, G, B with In, A(1), ColorRangeMin(0.f), ColorRangeMax(1.f) */
+	/**
+	 * Initialize R, G, B with In,
+	 * A(1),
+	 * ColorRangeMin(0.f), ColorRangeMax(1.f)
+	 */
 	FColorRGBA(const Uint8 In);
 
-	/** Initialize R, G, B, A(1), ColorRangeMin(0.f), ColorRangeMax(1.f)*/
+	/**
+	 * Initialize R, G, B,
+	 * A(1),
+	 * ColorRangeMin(0.f), ColorRangeMax(1.f)
+	 */
 	FColorRGBA(const Uint8 InR, const Uint8 InG, const Uint8 InB);
 	
-	/** Initialize R, G, B, A, ColorRangeMin(0.f), ColorRangeMax(1.f) */
+	/**
+	 * Initialize R, G, B, A,
+	 * ColorRangeMin(0.f), ColorRangeMax(1.f)
+	 */
 	FColorRGBA(const Uint8 InR, const Uint8 InG, const Uint8 InB, const Uint8 InA);
 
 	/** Full initializer */
@@ -28,19 +38,25 @@ public:
 	
 	/**
 	 * Initialize from FVector
-	 * R = X, G = Y, B(0), A(1), ColorRangeMin(0.f), ColorRangeMax(1.f)
+	 * R = X, G = Y,
+	 * B(0), A(1),
+	 * ColorRangeMin(0.f), ColorRangeMax(1.f)
 	 */
 	FColorRGBA(FVector2D<int>& OldVector);
 	
 	/**
 	 * Initialize from FVector
-	 * R = X, G = Y, B(0), A(1), ColorRangeMin(0.f), ColorRangeMax(1.f)
+	 * R = X, G = Y,
+	 * B(0), A(1),
+	 * ColorRangeMin(0.f), ColorRangeMax(1.f)
 	 */
 	FColorRGBA(FVector2D<float>& OldVector);
 	
 	/**
 	 * Initialize from FVector
-	 * R = X, G = Y, B(0), A(1), ColorRangeMin(0.f), ColorRangeMax(1.f)
+	 * R = X, G = Y,
+	 * B(0), A(1),
+	 * ColorRangeMin(0.f), ColorRangeMax(1.f)
 	 */
 	FColorRGBA(FVector2D<double>& OldVector);
 
@@ -51,12 +67,13 @@ public:
 
 	/** Clamps values to be between min and max of 'ColorRange'. */
 	void NormalizeValues();
-
+	
+	/** Comparison */
 	FColorRGBA& operator=(const FColorRGBA& OldColor);
-
 	bool operator==(const FColorRGBA& OldColor) const;
 
-	// Conversion
+	/** Conversion */
+	operator SDL_Color() const;
 	explicit operator std::ostream&() const;
 	explicit operator std::string() const;
 

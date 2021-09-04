@@ -34,7 +34,7 @@ void FEngineRender::StartRenderTick()
 #if _DEBUG
 	else
 	{
-		ENSURE_VALID_MESSAGE(false, "Called too early");
+		ENSURE_VALID(false);
 	}
 #endif
 }
@@ -55,7 +55,7 @@ void FEngineRender::RenderTick()
 #ifdef _DEBUG
 		else
 		{
-			ENSURE_VALID_MESSAGE(false, "Empty pointer found!");
+			ENSURE_VALID(false);
 		}
 #endif
 	}

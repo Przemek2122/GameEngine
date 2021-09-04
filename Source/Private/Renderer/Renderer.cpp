@@ -128,6 +128,19 @@ void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D
 	SDL_RenderFillRect(Renderer, &Rect);
 }
 
+void FRenderer::DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const
+{
+	SDL_SetRenderDrawColor(Renderer, InColor.R, InColor.G, InColor.B, InColor.A);
+	
+	SDL_Rect Rect;
+	Rect.x = RectLocation.X;
+	Rect.y = RectLocation.Y;
+	Rect.w = RectSize.X;
+	Rect.h = RectSize.Y;
+	
+	SDL_RenderDrawRect(Renderer, &Rect);
+}
+
 void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius) const
 {
 	int nx = Radius - 1;

@@ -74,7 +74,7 @@ namespace FUtil
 
 				default:
 #ifdef _DEBUG
-		ENSURE_VALID_MESSAGE(false, "Should be impossible (infinite loop may happen)");
+		ENSURE_VALID(false);
 #endif
 					break;
 				}

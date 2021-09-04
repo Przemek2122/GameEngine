@@ -44,6 +44,25 @@ void IWidgetManagementInterface::RenderWidgets()
 	}
 }
 
+bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
+{
+	if (InWidget != nullptr)
+	{
+		IWidgetManagementInterface* ParentInterface = InWidget->GetParent();
+
+		if (ParentInterface != nullptr)
+		{
+			ParentInterface->UnRegisterWidget(InWidget);
+
+			RegisterWidget(InWidget);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool IWidgetManagementInterface::DestroyWidget(FWidget* Widget)
 {
 	const bool bIsRemoved = ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName());
@@ -100,18 +119,23 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 {
 #if _DEBUG
 	const auto WidgetIndex = ManagedWidgets.FindIndexOf(Widget);
-	ENSURE_VALID_MESSAGE(WidgetIndex == -1, "Re-Register of widget is not allowed");
+	ENSURE_VALID(WidgetIndex == -1);
 #endif
 	
 	ManagedWidgets.Push(Widget);
 	ManagedWidgetsMap.InsertOrAssign(Widget->GetName(), Widget);
+
+	if (Widget->GetParent() != this)
+	{
+		Widget->WidgetManagementInterface = this;
+	}
 }
 
 void IWidgetManagementInterface::UnRegisterWidget(FWidget* Widget)
 {
 #if _DEBUG
 	const auto IndexToDelete = ManagedWidgets.FindIndexOf(Widget);
-	ENSURE_VALID_MESSAGE(IndexToDelete != -1, "Tried to remove not existing widget!");
+	ENSURE_VALID(IndexToDelete != -1);
 #endif
 	
 	ManagedWidgets.Remove(Widget);
@@ -119,7 +143,6 @@ void IWidgetManagementInterface::UnRegisterWidget(FWidget* Widget)
 
 #if _DEBUG
 	const auto NotDeletedIndex = ManagedWidgets.FindIndexOf(Widget);
-	ENSURE_VALID_MESSAGE(NotDeletedIndex == -1, "Widget not removed!");
+	ENSURE_VALID(NotDeletedIndex == -1);
 #endif
 }
-

@@ -34,7 +34,5 @@ protected:
 	
 	int MaxNumOfPoints;
 	int PointPerTick;
-
-	
 	
 };

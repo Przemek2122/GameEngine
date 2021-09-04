@@ -20,6 +20,8 @@ public:
 
 	/** Begin FWidget */
 	virtual void Render() override;
+	virtual void SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation) override;
+	virtual void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation) override;
 	virtual void SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true) override;
 	virtual void OnClippingMethodChanged(EClipping NewClipping) override;
 	/** End FWidget */
@@ -40,7 +42,7 @@ protected:
 	/** Makes new texture for text */
 	void RedrawText();
 	/** Returns font asset dependent on font and font size */
-	void GetFont();
+	void UpdateFont();
 
 protected:
 	std::string DesiredText;
@@ -50,8 +52,9 @@ protected:
 	FFont* Font;
 	FFontAsset* FontAsset;
 	
-	SDL_Color TextRenderColor;
-	SDL_Color TextBackgroundRenderColor;
+	FColorRGBA TextRenderColor;
+	FColorRGBA TextBackgroundRenderColor;
+
 	SDL_Rect* SDLRect;
 	SDL_Texture* TextTexture;
 
