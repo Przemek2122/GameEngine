@@ -9,7 +9,7 @@ FColorPoint::FColorPoint()
 {
 }
 
-FColorPoint::FColorPoint(const FVector2D<int> InLocation, const FColorRGBA InColor)
+FColorPoint::FColorPoint(const FVector2D<int> InLocation, const FColorRGBA& InColor)
 	: Location(InLocation)
 	, Color(InColor)
 {
@@ -17,20 +17,19 @@ FColorPoint::FColorPoint(const FVector2D<int> InLocation, const FColorRGBA InCol
 
 FRenderer::FRenderer(FWindow* InWindow)
 	: Window(InWindow)
-	, LastWindowSize(0)
+	, Renderer(SDL_CreateRenderer(InWindow->GetSdlWindow(), -1, 0))
+	, bNeedsRepaint(false)
 {
-	Renderer = SDL_CreateRenderer(InWindow->GetSdlWindow(), -1, 0);
-
 	if (Renderer)
 	{
 		LOG_INFO("Renderer created!");
-		
+
 		SDL_SetRenderDrawColor(Renderer, 34, 91, 211, 255);
 	}
 	else
 	{
 		LOG_ERROR("Can not create renderer: " << STRING(SDL_GetError()));
-		
+
 		exit(-32);
 	}
 }
@@ -42,11 +41,9 @@ FRenderer::~FRenderer()
 
 void FRenderer::PreRender()
 {
-	const FVector2D<int> CurrentWindowSize = Window->GetWindowSize();
-
-	if (CurrentWindowSize != LastWindowSize)
+	if (bNeedsRepaint)
 	{
-		OnWindowSizeChanged();
+		Repaint();
 	}
 	
 	SDL_RenderClear(Renderer);
@@ -67,19 +64,57 @@ void FRenderer::Render()
 
 void FRenderer::PostRender()
 {
-	SDL_SetRenderDrawColor(Renderer, 34, 34, 34, 255); // Background color
+	PaintDefaultBackground();
+
 	SDL_RenderPresent(Renderer);
 }
 
-void FRenderer::OnWindowSizeChanged()
+void FRenderer::PaintDefaultBackground()
+{
+	SDL_SetRenderDrawColor(Renderer, 34, 34, 34, 255); // Background color
+}
+
+void FRenderer::Repaint()
 {
 	const FVector2D<int> CurrentWindowLocation = Window->GetWindowLocation();
-		
+	const FVector2D<int> CurrentWindowSize = Window->GetWindowSize();
+	
 	SDL_Rect ViewportSize;
-	ViewportSize.w = LastWindowSize.X;
-	ViewportSize.h = LastWindowSize.Y;
+	ViewportSize.w = CurrentWindowSize.X;
+	ViewportSize.h = CurrentWindowSize.Y;
 	ViewportSize.x = CurrentWindowLocation.X;
 	ViewportSize.y = CurrentWindowLocation.Y;
+
+	RepaintWindowToSize(ViewportSize);
+
+	SDL_Delay(25);
+}
+
+void FRenderer::RepaintWindowToSize(const SDL_Rect& ViewportSize)
+{
+	SetWindowSize(FVector2D<int>(ViewportSize.w, ViewportSize.h), false);
+
+    SDL_UpdateWindowSurface(GetSdlWindow());
+}
+
+SDL_Window* FRenderer::GetSdlWindow() const
+{
+	return Window->GetSdlWindow();
+}
+
+SDL_Surface* FRenderer::GetSdlWindowSurface() const
+{
+	return SDL_GetWindowSurface(Window->GetSdlWindow());
+}
+
+FVector2D<int> FRenderer::GetWindowSize() const
+{
+	return Window->GetWindowSize();
+}
+
+void FRenderer::SetWindowSize(const FVector2D<int> NewWindowSize, const bool bUpdateSDL) const
+{
+	Window->SetWindowSize(NewWindowSize.X, NewWindowSize.Y, bUpdateSDL);
 }
 
 void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const
@@ -88,7 +123,7 @@ void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const
 	SDL_RenderDrawPoint(Renderer, ColorPoint.Location.X, ColorPoint.Location.Y);
 }
 
-void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA AllPointsColor) const
+void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor) const
 {
 	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
 	
@@ -109,13 +144,13 @@ void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorR
 	SDL_RenderDrawPoints(Renderer, PointsArray.data(), static_cast<int>(PointsArray.size()));
 }
 
-void FRenderer::DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA AllPointsColor) const
+void FRenderer::DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor) const
 {
 	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
 	SDL_RenderDrawPoints(Renderer, Points.Vector.data(), static_cast<int>(Points.Size()));
 }
 
-void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const
+void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const
 {
 	SDL_SetRenderDrawColor(Renderer, InColor.R, InColor.G, InColor.B, InColor.A);
 	
@@ -128,7 +163,7 @@ void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D
 	SDL_RenderFillRect(Renderer, &Rect);
 }
 
-void FRenderer::DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const
+void FRenderer::DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const
 {
 	SDL_SetRenderDrawColor(Renderer, InColor.R, InColor.G, InColor.B, InColor.A);
 	
@@ -176,18 +211,18 @@ void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius) cons
 	}
 }
 
-void FRenderer::DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength) const
+void FRenderer::DrawLimitedLine(int X1, int Y1, const int X2, const int Y2, const int LineLength) const
 {
-	int dx = abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
-	int dy = abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
+	int dx = abs(X2 - X1), sx = X1 < X2 ? 1 : -1;
+	int dy = abs(Y2 - Y1), sy = Y1 < Y2 ? 1 : -1;
 	int err = (dx > dy ? dx : -dy) / 2;
 
 	int i = 0;
-	while (SDL_RenderDrawPoint(Renderer, x1, y1), i < lineLength)
+	while (SDL_RenderDrawPoint(Renderer, X1, Y1), i < LineLength)
 	{
 		int e2 = err;
-		if (e2 > -dx) { err -= dy; x1 += sx; }
-		if (e2 < dy) { err += dx; y1 += sy; }
+		if (e2 > -dx) { err -= dy; X1 += sx; }
+		if (e2 < dy) { err += dx; Y1 += sy; }
 		i++;
 	}
 }

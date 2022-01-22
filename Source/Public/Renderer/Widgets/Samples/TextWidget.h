@@ -41,15 +41,13 @@ protected:
 	void RecalculateSize() const;
 	/** Makes new texture for text */
 	void RedrawText();
-	/** Returns font asset dependent on font and font size */
-	void UpdateFont();
 
 protected:
 	std::string DesiredText;
 	std::string RenderedText;
 	int TextSize;
 
-	FFont* Font;
+	FAssetsManager* AssetsManager;
 	FFontAsset* FontAsset;
 	
 	FColorRGBA TextRenderColor;

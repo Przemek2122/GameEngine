@@ -5,7 +5,7 @@
 #include "Renderer/Renderer.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
-	: WindowTitle(InTitle)
+	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags)), WindowTitle(InTitle)
 	, WindowPositionX(InPositionX)
 	, WindowPositionY(InPositionY)
 	, WindowWidth(InWidth)
@@ -13,11 +13,14 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 	, WindowFlags(InFlags)
 	, bIsWindowFocused(false)
 {
-	Window = SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags);
-
 	if (Window != nullptr)
 	{
 		LOG_INFO("Window created. (" << WindowTitle << ")");
+
+		WindowId = SDL_GetWindowID(Window);
+
+		Renderer = CreateRenderer();
+		WidgetManager = CreateWidgetManager();
 	}
 	else
 	{
@@ -25,9 +28,6 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 		
 		exit(-16);
 	}
-	
-	Renderer = CreateRenderer();
-	WidgetManager = CreateWidgetManager();
 }
 
 FWindow::~FWindow()
@@ -45,16 +45,6 @@ FWindow::~FWindow()
 
 	delete Renderer;	
 	delete WidgetManager;
-}
-
-SDL_Window* FWindow::GetSdlWindow() const
-{
-	return Window;
-}
-
-bool FWindow::IsWindowFocused() const
-{
-	return bIsWindowFocused;
 }
 
 void FWindow::SetWindowFocus(const bool bInNewFocus)
@@ -122,9 +112,12 @@ FRenderer* FWindow::CreateRenderer()
 	return new FRenderer(this);
 }
 
-void FWindow::Resize(const int NewWidth, const int NewHeight)
+void FWindow::SetWindowSize(const int NewWidth, const int NewHeight, const bool bUpdateSDL)
 {
-	SDL_SetWindowSize(Window, NewWidth, NewHeight);
+	if (bUpdateSDL)
+	{
+		SDL_SetWindowSize(Window, NewWidth, NewHeight);
+	}
 
 	WindowWidth = NewWidth;
 	WindowHeight = NewWidth;

@@ -5,25 +5,20 @@
 #include "CoreMinimal.h"
 #include "AssetBase.h"
 
-enum class EFontLoadMethod
-{
-	Instant,
-	Lazy
-};
-
 /**
  * For loading storing and using font.
  */
 class FFont
 {
 public:
-	explicit FFont(const std::string& InFontName, std::_Ptr_base<FFontAsset>::element_type* InFontAsset, const int InFontSize);
+	explicit FFont(FFontAsset* InFontAsset, const int InFontSize);
 	virtual ~FFont();
 
-	_NODISCARD TTF_Font* GetFont();
+	_NODISCARD TTF_Font* GetFont() const;
 	_NODISCARD int GetFontSize() const;
 
-	_NODISCARD EFontLoadMethod GetFontLoadMethod() const;
+	void Reinitialize();
+
 	_NODISCARD std::string GetFontName() const;
 	_NODISCARD std::string GetFontAssetName() const;
 	
@@ -33,10 +28,7 @@ protected:
 
 	TTF_Font *Font;
 	
-	const std::string& FontName;
-	std::_Ptr_base<FFontAsset>::element_type* FontAsset;
+	FFontAsset* FontAsset;
 	int FontSize;
-
-	EFontLoadMethod FontLoadMethod;
 	
 };

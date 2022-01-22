@@ -5,17 +5,12 @@
 
 #include "Assets/FontAsset.h"
 
-FFont::FFont(const std::string& InFontName, std::_Ptr_base<FFontAsset>::element_type* InFontAsset, const int InFontSize)
+FFont::FFont(FFontAsset* InFontAsset, const int InFontSize)
 	: Font(nullptr)
-	, FontName(InFontName)
 	, FontAsset(InFontAsset)
 	, FontSize(InFontSize)
-	, FontLoadMethod(EFontLoadMethod::Lazy)
 {
-	if (FontLoadMethod == EFontLoadMethod::Instant)
-	{
-		InitializeFont();
-	}
+	InitializeFont();
 }
 
 FFont::~FFont()
@@ -23,13 +18,8 @@ FFont::~FFont()
 	DeInitializeFont();
 }
 
-TTF_Font* FFont::GetFont()
+TTF_Font* FFont::GetFont() const
 {
-	if (Font == nullptr)
-	{
-		InitializeFont();
-	}
-
 	return Font;
 }
 
@@ -38,14 +28,9 @@ int FFont::GetFontSize() const
 	return FontSize;
 }
 
-EFontLoadMethod FFont::GetFontLoadMethod() const
+void FFont::Reinitialize()
 {
-	return FontLoadMethod;
-}
-
-std::string FFont::GetFontName() const
-{
-	return FontName;
+	Font = nullptr;
 }
 
 std::string FFont::GetFontAssetName() const

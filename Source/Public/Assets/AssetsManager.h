@@ -8,7 +8,6 @@
 
 class FAssetBase;
 class FFontAsset;
-
 class FFont;
 
 class FAssetsManager
@@ -41,43 +40,22 @@ public:
 	void RemoveAsset(const std::string& InAssetName);
 	
 	/** @returns Asset created in AddAsset(...) */
-	_NODISCARD std::_Ptr_base<FAssetBase>::element_type* GetAsset(const std::string& InAssetName) const;
+	_NODISCARD std::shared_ptr<FAssetBase> GetAsset(const std::string& InAssetName) const;
 
 	/** @returns Asset created in AddAsset(...) */
 	template<typename TAssetSubClass>
 	_NODISCARD TAssetSubClass* GetAsset(const std::string& InAssetName) const
 	{
-		return dynamic_cast<TAssetSubClass*>(GetAsset(InAssetName));
+		return dynamic_cast<TAssetSubClass*>(GetAsset(InAssetName).get());
 	}
-	
-	/**
-	 * @note
-	 * Font asset must exists
-	 *
-	 * @returns
-	 * Either returns already existing or creates new font.
-	 */
-	std::_Ptr_base<FFont>::element_type* GetFont(const std::string& InFontAssetName, const int InFontSize);
-	
-	/**
-	 * @note
-	 * Font asset must exists
-	 *
-	 * @returns
-	 * Either returns already existing or creates new font.
-	 */
-	std::_Ptr_base<FFont>::element_type* GetFont(FFontAsset* FontAsset, const int InFontSize);
+
+	const FFontAsset& GetFont(const std::string& InFontAssetName, const int InFontSize);
 
 protected:
-	std::_Ptr_base<FFont>::element_type* TryFindFont(const std::string& InFontName);
-	std::_Ptr_base<FFont>::element_type* MakeFont(FFontAsset* FontAsset, const std::string& NewFontName, const int NewFontSize);
-
 	static std::string GetFullFilePath(const std::string& InPathRelative);
 
 protected:
-	/** All types of assets array */
+	/** All types of assets */
 	CMap<std::string, std::shared_ptr<FAssetBase>> AllAssetsMap;
-	/** Array of FFont only (not asset). */
-	CMap<std::string, std::shared_ptr<FFont>> FontsMap;
 	
 };

@@ -131,8 +131,7 @@ void FEventHandler::HandleEvents()
 					
 			        case SDL_WINDOWEVENT_FOCUS_GAINED:
 					{
-			            SDL_Log("Window %d gained keyboard focus",
-			                    Event.window.windowID);
+			            SDL_Log("Window %d gained keyboard focus", Event.window.windowID);
 			            break;
 					}
 					
@@ -391,7 +390,7 @@ void FEventHandler::RemoveSecondaryInput(const std::string& InSecondaryName)
 	const bool bIsRemoved = SecondaryInputMap.Remove(InSecondaryName);
 
 #ifdef _DEBUG
-		ENSURE_VALID(bIsRemoved > 0);
+	ENSURE_VALID(bIsRemoved);
 #endif
 }
 

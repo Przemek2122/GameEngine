@@ -3,13 +3,9 @@
 #include "CoreEngine.h"
 #include "Assets/AssetBase.h"
 
-FAssetBase::FAssetBase(const std::string& InAssetName, const std::string& InAssetPath)
-	: AssetName(InAssetName)
-	, AssetPath(InAssetPath)
-{
-}
-
-FAssetBase::~FAssetBase()
+FAssetBase::FAssetBase(std::string InAssetName, std::basic_string<char> InAssetPath)
+	: AssetName(std::move(InAssetName))
+	, AssetPath(std::move(InAssetPath))
 {
 }
 

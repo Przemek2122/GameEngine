@@ -59,17 +59,14 @@ void FWidget::ReceiveRender()
 
 void FWidget::HandleInput()
 {
-	
 }
 
 void FWidget::Tick()
 {
-	
 }
 
 void FWidget::Render()
 {
-	
 }
 
 FVector2D<int> FWidget::GetWidgetManagerOffset() const
@@ -406,7 +403,7 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 {
 	if (WidgetManagementInterface != nullptr)
 	{
-		if (auto* ParentWidget = dynamic_cast<FWidget*>(WidgetManagementInterface))
+		if (const FWidget* ParentWidget = dynamic_cast<FWidget*>(WidgetManagementInterface))
 		{
 			return ParentWidget->GetParentRoot();
 		}

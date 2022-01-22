@@ -7,7 +7,7 @@
 struct FColorPoint
 {
 	FColorPoint();
-	FColorPoint(const FVector2D<int> InLocation, const FColorRGBA InColor);
+	FColorPoint(const FVector2D<int> InLocation, const FColorRGBA& InColor);
 
 	FVector2D<int> Location;
 	FColorRGBA Color;
@@ -25,14 +25,7 @@ friend FWindow;
 protected:
 	FRenderer(FWindow* InWindow);
 	virtual ~FRenderer();
-
-protected:
-	FWindow* Window;
-
-public:
-	SDL_Renderer* GetSDLRenderer() const { return Renderer; };
-
-protected:
+	
 	/** Before render - Clear scene */
 	virtual void PreRender();
 	/** Gather render data */
@@ -40,29 +33,39 @@ protected:
 	/** After render - do render */
 	virtual void PostRender();
 
-	virtual void OnWindowSizeChanged();
+	virtual void PaintDefaultBackground();
+
+	virtual void Repaint();
+	
+	virtual void RepaintWindowToSize(const SDL_Rect& ViewportSize);
+
+public:
+	_NODISCARD SDL_Renderer* GetSDLRenderer() const { return Renderer; }
+	INLINE_DEBUGABLE SDL_Window* GetSdlWindow() const;
+	INLINE_DEBUGABLE SDL_Surface* GetSdlWindowSurface() const;
+	_NODISCARD FVector2D<int> GetWindowSize() const;
+	void SetWindowSize(const FVector2D<int> NewWindowSize, const bool bUpdateSDL = true) const;
 
 protected:
-	FVector2D<int> LastWindowSize;
+	FWindow* Window;
+	SDL_Renderer* Renderer;
+	CDeque<FColorPoint> PointsToDrawDeque;
+	bool bNeedsRepaint;
 
 public:
 	/** Draw single point. */
 	void DrawPointAt(const FColorPoint& ColorPoint) const;
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA AllPointsColor) const;
+	void DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor) const;
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA AllPointsColor) const;
+	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor) const;
 
 	/** Draw single rectangle */
-	void DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const;
+	void DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const;
 	/** Draw single rectangle but without interior */
-	void DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA InColor) const;
+	void DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const;
 	
 	void DrawCircle(const FVector2D<int> Location, const int Radius) const;
-	void DrawLimitedLine(int x1, int y1, int x2, int y2, int lineLength) const;
-
-protected:
-	SDL_Renderer* Renderer;
-	CDeque<FColorPoint> PointsToDrawDeque;
+	void DrawLimitedLine(int X1, int Y1, int X2, int Y2, int LineLength) const;
 
 };

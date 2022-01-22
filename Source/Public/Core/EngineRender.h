@@ -52,9 +52,21 @@ public:
 	/** @returns window pointer or nullptr if there is no focused window. */
 	_NODISCARD FWindow* GetFocusedWindow() const;
 
+	_NODISCARD FWindow* GetWindowById(Uint32 WindowId);
+
+	void OnWindowExposed(Uint32 WindowId);
+	void OnWindowHidden(Uint32 WindowId);
+
+	void OnWindowMoved(Uint32 WindowId, Sint32 X, Sint32 Y);
+	void OnWindowResized(Uint32 WindowId, Sint32 X, Sint32 Y);
+	void OnWindowSizeChanged(Uint32 WindowId, Sint32 X, Sint32 Y);
+	void OnWindowMinimized(Uint32 WindowId);
+	void OnWindowMaximized(Uint32 WindowId);
+
 protected:
 	/** Array of windows managed by this engine. */
 	CArray<FWindow*> ManagedWindows;
+	CMap<Uint32, FWindow*> WindowToIdMap;
 
 };
 

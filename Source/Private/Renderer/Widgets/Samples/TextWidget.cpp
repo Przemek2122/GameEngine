@@ -2,6 +2,8 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/TextWidget.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_ttf.h"
 #include "Assets/Font.h"
 #include "Assets/FontAsset.h"
 
@@ -10,9 +12,8 @@ static const char* DefaultText = "Default text.";
 FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, TextSize(16)
-	, Font(nullptr)
-	, FontAsset(nullptr)
-	, TextRenderColor(255)
+	, AssetsManager(Engine->GetAssetsManager())
+	, FontAsset(AssetsManager->GetAsset<FFontAsset>("OpenSans")), TextRenderColor(255)
 	, TextBackgroundRenderColor({ 255, 0, 0})
 	, SDLRect(new SDL_Rect)
 	, TextTexture(nullptr)
@@ -20,14 +21,10 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	, TextRenderMode(ETextRenderMode::Blended)
 	, bAutoScaleWidget(true)
 {
-	FontAsset = Engine->GetAssetsManager()->GetAsset<FFontAsset>("OpenSans");
-
 	const bool bIsFontAssetValid = FontAsset != nullptr;
 	
 	if (bIsFontAssetValid)
 	{
-		UpdateFont();
-		
 		SetText(DefaultText);
 	}
 
@@ -95,11 +92,6 @@ std::string FTextWidget::GetRenderedText() const
 
 void FTextWidget::AutoAdjustSize(const bool bLimitToParentSize)
 {
-	if (Font == nullptr)
-	{
-		return;
-	}
-	
 	FVector2D<int> NewWidgetSize;
 
 	if (bLimitToParentSize)
@@ -143,7 +135,13 @@ void FTextWidget::AutoAdjustTextSize(const FVector2D<int>& InMaxSize)
 
 int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) const
 {
-	auto ErrorState = TTF_SizeUTF8(Font->GetFont(), RenderedText.c_str(), &InOutSize.X, &InOutSize.Y);
+	int ErrorState = -1;
+
+	TTF_Font* Font = FontAsset->GetFont(TextSize);
+	if (Font != nullptr)
+	{
+		ErrorState = TTF_SizeUTF8(Font, RenderedText.c_str(), &InOutSize.X, &InOutSize.Y);
+	}
 	
 	if (ErrorState) 
 	{
@@ -163,8 +161,11 @@ void FTextWidget::RecalculateSize() const
 
 void FTextWidget::RedrawText()
 {
-	if (Font == nullptr)
+	if (FontAsset == nullptr)
 	{
+		// Without FontAsset it has no chance of working, font is required.
+		ENSURE_VALID(false);
+
 		return;
 	}
 
@@ -174,28 +175,33 @@ void FTextWidget::RedrawText()
 	}
 
 	SDL_Surface* SdlSurface = nullptr;
-	
-	switch (TextRenderMode)
+
+	TTF_Font* Font = FontAsset->GetFont(TextSize);
+
+	if (Font != nullptr)
 	{
-	case ETextRenderMode::Solid:
+		switch (TextRenderMode)
 		{
-			SdlSurface = TTF_RenderText_Solid(Font->GetFont(), RenderedText.c_str(), TextRenderColor);
+		case ETextRenderMode::Solid:
+			{
+				SdlSurface = TTF_RenderText_Solid(Font, RenderedText.c_str(), TextRenderColor);
+			}
+			break;
+		case ETextRenderMode::Blended:
+			{
+				SdlSurface = TTF_RenderText_Blended(Font, RenderedText.c_str(), TextRenderColor);
+			}
+			break;
+		case ETextRenderMode::Shaded:
+			{
+				SdlSurface = TTF_RenderText_Shaded(Font, RenderedText.c_str(), TextRenderColor, TextBackgroundRenderColor);
+			}
+			break;
+		default:
+			// Text will not be rendered
+			// Due to default case
+			ENSURE_VALID(false);
 		}
-		break;
-	case ETextRenderMode::Blended:
-		{
-			SdlSurface = TTF_RenderText_Blended(Font->GetFont(), RenderedText.c_str(), TextRenderColor);
-		}
-		break;
-	case ETextRenderMode::Shaded:
-		{
-			SdlSurface = TTF_RenderText_Shaded(Font->GetFont(), RenderedText.c_str(), TextRenderColor, TextBackgroundRenderColor);
-		}
-		break;
-	default:
-		// Text will not be rendered
-		// Due to default case
-		ENSURE_VALID(false);
 	}
 
 	if (SdlSurface == nullptr)
@@ -229,21 +235,6 @@ void FTextWidget::RedrawText()
 	
 	SDL_FreeSurface(SdlSurface);
 	SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
-}
-
-void FTextWidget::UpdateFont()
-{
-	FAssetsManager* AssetsManager = Engine->GetAssetsManager();
-	
-	if (AssetsManager != nullptr)
-	{
-		Font = AssetsManager->GetFont(FontAsset, TextSize);
-	}
-
-#if _DEBUG
-	// Unable to find font asset.
-	ENSURE_VALID(Font != nullptr);
-#endif
 }
 
 void FTextWidget::SetTextRenderMode(ETextRenderMode NewTextRenderMode)

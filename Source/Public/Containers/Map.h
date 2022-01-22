@@ -32,6 +32,12 @@ public:
 	}
 	
 	template<typename TAutoType>
+	_NODISCARD SDL_FORCE_INLINE void IsValidKey(const TAutoType Key) const
+	{
+		return HasKey(Key);
+	}
+	
+	template<typename TAutoType>
 	_NODISCARD bool HasKey(TAutoType Key)
 	{
 		return Map.find(Key) != Map.end();
@@ -154,6 +160,30 @@ public:
 		for (Iterator = Map.begin(); Iterator != Map.end(); ++Iterator)
 		{
 			Iterator->second = Value;
+		}
+	}
+
+	void MapIterator(FFunctorLambda<void, TKey, TValue> Delegate)
+	{
+		for (auto it = Map.begin(); it != Map.end(); ++it)
+		{
+			Delegate(it->first, it->second);
+		}
+	}
+
+	void MapIteratorByIndexOnly(FFunctorLambda<void, TKey> Delegate)
+	{
+		for (auto it = Map.begin(); it != Map.end(); ++it)
+		{
+			Delegate(it->first);
+		}
+	}
+
+	void MapIteratorByValueOnly(FFunctorLambda<void, TValue> Delegate)
+	{
+		for (auto it = Map.begin(); it != Map.end(); ++it)
+		{
+			Delegate(it->second);
 		}
 	}
 

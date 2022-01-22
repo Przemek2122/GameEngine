@@ -18,13 +18,13 @@ class FWindow
 public:
 	/**
 	 * Creates SDL Window.
-	 * Take a look here for available flags (or at SDL_vide.h):
-	 * https://wiki.libsdl.org/SDL_WindowFlags
+	 * Take a look here for available flags (or at SDL_vide.h): https://wiki.libsdl.org/SDL_WindowFlags
 	 */
 	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = SDL_WINDOW_RESIZABLE);
 	virtual ~FWindow();
 
-	SDL_Window* GetSdlWindow() const;
+	_NODISCARD SDL_Window* GetSdlWindow() const { return Window; }
+	_NODISCARD Uint32 GetWindowId() const { return WindowId; }
 
 protected:
 	SDL_Window* Window;
@@ -35,9 +35,10 @@ protected:
 	int WindowWidth;
 	int WindowHeight;
 	Uint32 WindowFlags;
+	Uint32 WindowId;
 
 public:
-	bool IsWindowFocused() const;
+	_NODISCARD bool IsWindowFocused() const { return bIsWindowFocused; }
 	void SetWindowFocus(const bool bInNewFocus);
 
 protected:
@@ -60,7 +61,7 @@ protected:
 
 public:
 	/** Call to change window size. */
-	void Resize(const int NewWidth, const int NewHeight);
+	void SetWindowSize(const int NewWidth, const int NewHeight, const bool bUpdateSDL = true);
 
 	_NODISCARD FRenderer* GetRenderer() const;
 
@@ -79,7 +80,7 @@ public:
 	_NODISCARD FWidgetManager* GetWidgetManager() const;
 	
 	template<class TWidgetTemplate>
-	FWidget& CreateWidget() const
+	_NODISCARD FWidget& CreateWidget() const
 	{
 		return GetWidgetManager().CreateWidget<TWidgetTemplate>();
 	}

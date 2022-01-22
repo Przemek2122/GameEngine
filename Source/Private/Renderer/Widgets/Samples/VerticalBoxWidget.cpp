@@ -31,6 +31,23 @@ void FVerticalBoxWidget::UnRegisterWidget(FWidget* Widget)
 
 void FVerticalBoxWidget::AlignWidgets()
 {
+	switch (VerticalBoxAlignMethod)
+	{
+		case Default:
+		{
+			AlignDefault();
+			break;
+		}
+		case Even:
+		{
+			AlignEven();
+			break;
+		}
+	}
+}
+
+void FVerticalBoxWidget::AlignDefault()
+{
 	const FVector2D<int> VerticalBoxLocation = GetWidgetLocationRelative();
 	const FVector2D<int> VerticalBoxSize = GetWidgetSize();
 
@@ -38,6 +55,8 @@ void FVerticalBoxWidget::AlignWidgets()
 
 	FVector2D<int> VerticalBoxLocationLast = {0, 0};
 	FVector2D<int> VerticalBoxSizeLast = {0, 0};
+
+	//float TotalHeight = 0.f;
 	
 	for (size_t i = 0; i < ManagedWidgets.Size(); i++)
 	{
@@ -70,4 +89,18 @@ void FVerticalBoxWidget::AlignWidgets()
 
 		ChildWidget->RefreshWidget();
 	}
+}
+
+void FVerticalBoxWidget::AlignEven()
+{
+}
+
+void FVerticalBoxWidget::SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod)
+{
+	VerticalBoxAlignMethod = InVerticalBoxAlignMethod;
+}
+
+EVerticalBoxAlignMethod FVerticalBoxWidget::GetVerticalBoxAlignMethod() const
+{
+	return VerticalBoxAlignMethod;
 }

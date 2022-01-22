@@ -5,6 +5,14 @@
 #include "CoreMinimal.h"
 #include "../Widget.h"
 
+enum EVerticalBoxAlignMethod
+{
+	/** One by one starting from the top of the widget */
+	Default,
+	/** Try to evenly divide space if possible */
+	Even
+};
+
 class FVerticalBoxWidget : public FWidget
 {
 public:
@@ -21,4 +29,13 @@ public:
 	
 	void AlignWidgets();
 
+	void AlignDefault();
+	void AlignEven();
+
+	void SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod);
+	_NODISCARD EVerticalBoxAlignMethod GetVerticalBoxAlignMethod() const;
+		 
+protected:
+	EVerticalBoxAlignMethod VerticalBoxAlignMethod = Default;
+	
 };
