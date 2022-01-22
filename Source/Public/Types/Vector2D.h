@@ -169,8 +169,8 @@ public:
 	operator SDL_Point() const
 	{
 		SDL_Point Point;
-		Point.x = X;
-		Point.y = Y;
+		Point.x = static_cast<TType>(X);
+		Point.y = static_cast<TType>(Y);
 		return Point;
 	}
 	

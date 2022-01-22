@@ -22,6 +22,4 @@ protected:
 	/** Different font sizes */
 	CMap<int, std::shared_ptr<FFont>> Fonts;
 
-
-
 };

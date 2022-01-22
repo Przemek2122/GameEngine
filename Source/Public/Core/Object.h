@@ -9,7 +9,7 @@ public:
 	UObject();
 	virtual ~UObject();
 	
-	std::string GetObjectName() const;
+	_NODISCARD std::string GetObjectName() const;
 	
 };
 

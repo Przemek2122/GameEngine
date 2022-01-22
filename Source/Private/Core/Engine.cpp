@@ -16,7 +16,6 @@ FEngine::FEngine()
 	: bContinueMainLoop(true)
 	, bFrameRateLimited(true)
 	, bIsEngineInitialized(false)
-
 	, FrameRate(0)
 	, FrameDelay(0)
 	, FrameStart(0)
@@ -103,6 +102,13 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 		exit(-8);
 	}
+
+	/**
+	 * @TODO HACK
+	 * https://stackoverflow.com/questions/40312553/sdl2-crashes-on-window-resize
+	 * Workarround for crash. Should be changed in feature but it does not matter for now.
+	 */
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
 #if ENGINE_TESTS && ENGINE_RUN_ENGINE_TESTS
 	TestManager->SpawnTestCaseByClass<FTestTypes>();

@@ -121,11 +121,11 @@ public:
 
 	/** @return Index or -1 if not found */
 	template<typename TTypeAuto>
-	_NODISCARD SDL_FORCE_INLINE int FindIndexOf(TTypeAuto Value)
+	_NODISCARD SDL_FORCE_INLINE size_t FindIndexOf(TTypeAuto Value)
 	{
-		const int VectorSize = Vector.size();
+		const size_t VectorSize = Vector.size();
 		
-		for (int i = 0; i < VectorSize; i++)
+		for (size_t i = 0; i < VectorSize; i++)
 		{
 			if (Vector[i] == Value)
 			{
@@ -158,6 +158,77 @@ public:
 	{
 		Vector.clear();		
 	}
+
+	/** Begin of bucket functions */
+	_NODISCARD SDL_FORCE_INLINE auto begin() noexcept -> auto
+	{
+		return Vector.begin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cbegin() noexcept -> auto
+	{
+		return Vector.cbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rbegin() noexcept -> auto
+	{
+		return Vector.rbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crbegin() noexcept -> auto
+	{
+		return Vector.crbegin();
+	}
+	
+	_NODISCARD SDL_FORCE_INLINE auto end() noexcept -> auto
+	{
+		return Vector.end();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cend() noexcept -> auto
+	{
+		return Vector.cend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rend() noexcept -> auto
+	{
+		return Vector.rend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crend() noexcept -> auto
+	{
+		return Vector.crend();
+	}
+
+
+	_NODISCARD SDL_FORCE_INLINE auto begin() const noexcept -> auto
+	{
+		return Vector.begin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cbegin() const noexcept -> auto
+	{
+		return Vector.cbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rbegin() const noexcept -> auto
+	{
+		return Vector.rbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crbegin() const noexcept -> auto
+	{
+		return Vector.crbegin();
+	}
+	
+	_NODISCARD SDL_FORCE_INLINE auto end() const noexcept -> auto
+	{
+		return Vector.end();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cend() const noexcept -> auto
+	{
+		return Vector.cend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rend() const noexcept -> auto
+	{
+		return Vector.rend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crend() const noexcept -> auto
+	{
+		return Vector.crend();
+	}
+	/** End of bucket functions */
 
 public:
 	/** C++ Vector */

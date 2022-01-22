@@ -12,80 +12,86 @@
     <Filter Include="Private\Core">
       <UniqueIdentifier>{cd4uozp6-8opub-7yr6p-esp1c-uro4j82679xp}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Core\Input">
+    <Filter Include="Private\Core\ECS">
       <UniqueIdentifier>{xnjnubla-n060a-i16ru-4zcbr-b2zx58gz80eg}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Core\Test">
+    <Filter Include="Private\Core\Input">
       <UniqueIdentifier>{smlreuiu-3a08o-f1yb8-j1h6x-945a7j6n5etj}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Misc">
+    <Filter Include="Private\Core\Test">
       <UniqueIdentifier>{c26d549s-951zg-scg4y-kiipf-031e2itwfajc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Network">
+    <Filter Include="Private\Misc">
       <UniqueIdentifier>{d3goutr6-56cm0-fjsok-yuewu-1xxtmljcr41j}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer">
+    <Filter Include="Private\Network">
       <UniqueIdentifier>{laf7zbel-is0kz-1g2xm-sutpy-6fpa152xg2nz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer\Widgets">
+    <Filter Include="Private\Renderer">
       <UniqueIdentifier>{n3w3sh5k-5zh9r-8zi6l-62fc9-gz5lh3466b5m}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer\Widgets\Samples">
+    <Filter Include="Private\Renderer\Widgets">
       <UniqueIdentifier>{9iraf6i2-zu3rx-4ibkx-p8i8u-l4swg2kulgnc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types">
+    <Filter Include="Private\Renderer\Widgets\Samples">
       <UniqueIdentifier>{x148t2a4-7bwhj-es1e5-rylio-hliu5hnwhtfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types\SmartPointer">
+    <Filter Include="Private\Types">
       <UniqueIdentifier>{545unj2g-tgiml-6ha08-751y2-jjee2jadsyco}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public">
+    <Filter Include="Private\Types\SmartPointer">
       <UniqueIdentifier>{w72wsst8-gf8m9-tya7g-sybhm-0j4tuu70h1uc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets">
+    <Filter Include="Public">
       <UniqueIdentifier>{14acxo7b-5xg8o-084jb-unf8g-86dkj6149wab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Containers">
+    <Filter Include="Public\Assets">
       <UniqueIdentifier>{uukon1kl-msi95-nckyf-o1mbi-sywixbw44h25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core">
+    <Filter Include="Public\Containers">
       <UniqueIdentifier>{5pbukado-b61dl-zxj70-2ds6o-t0gdx0fzb3hd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Includes">
+    <Filter Include="Public\Core">
       <UniqueIdentifier>{astniys5-nfj1w-4ih3r-0jzxt-fooxkb2id47p}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Input">
+    <Filter Include="Public\Core\ECS">
       <UniqueIdentifier>{9btedf0e-tpi1k-71ma8-7g43l-7oczrpfophcu}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test">
+    <Filter Include="Public\Core\Includes">
       <UniqueIdentifier>{rme5xgzc-jlxje-tnfk3-hh5s4-bc71unuyt1as}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Misc">
+    <Filter Include="Public\Core\Input">
       <UniqueIdentifier>{tklelt4o-7n83f-u4sad-sr2id-djg4tcllj78t}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Network">
+    <Filter Include="Public\Core\Test">
       <UniqueIdentifier>{3tono71z-rcmb6-ulb8j-kzi60-nbt2w5knpbh1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer">
+    <Filter Include="Public\Misc">
       <UniqueIdentifier>{ghhz4xso-uzdls-z0w68-f0amc-k31ktadojp4x}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets">
+    <Filter Include="Public\Network">
       <UniqueIdentifier>{a33eg931-oo54t-nnz3h-kw5mt-s52tto2w3sch}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\Samples">
+    <Filter Include="Public\Renderer">
       <UniqueIdentifier>{y45dhyod-kk4ya-ao5dj-g1ff7-eettkns6yaw7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types">
+    <Filter Include="Public\Renderer\Widgets">
       <UniqueIdentifier>{osixkmgj-7l04a-a4mpn-8de5p-k1720ugk6xzz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\SmartPointer">
+    <Filter Include="Public\Renderer\Widgets\Samples">
       <UniqueIdentifier>{c5cjbppz-trlsa-ngy7t-lm69p-9uhpd0m7rx7h}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty">
+    <Filter Include="Public\Types">
       <UniqueIdentifier>{5enwo8rd-eeyr7-jn3ni-0xghk-c3bmxozl4022}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\SDL">
+    <Filter Include="Public\Types\SmartPointer">
       <UniqueIdentifier>{fpksluhp-eswzy-olb40-tjl8z-klhwrcresfgo}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{ida9mbpt-xyfdg-91m4c-2p7x2-yiise4rjioap}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\SDL">
+      <UniqueIdentifier>{wklk70sc-ey18h-9ofew-n44or-lww08ppfogdt}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,11 +125,26 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
+      <Filter>Public\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreEngine.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Component.h">
+      <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h">
+      <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Entity.h">
+      <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\EntityManager.h">
+      <Filter>Public\Core\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine.h">
       <Filter>Public\Core</Filter>
@@ -344,6 +365,9 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_haptic.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ThirdParty\SDL\SDL_hidapi.h">
+      <Filter>ThirdParty\SDL</Filter>
+    </ClInclude>
     <ClInclude Include="Source\ThirdParty\SDL\SDL_hints.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
@@ -362,6 +386,9 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_loadso.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ThirdParty\SDL\SDL_locale.h">
+      <Filter>ThirdParty\SDL</Filter>
+    </ClInclude>
     <ClInclude Include="Source\ThirdParty\SDL\SDL_log.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
@@ -372,6 +399,9 @@
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
     <ClInclude Include="Source\ThirdParty\SDL\SDL_metal.h">
+      <Filter>ThirdParty\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ThirdParty\SDL\SDL_misc.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
     <ClInclude Include="Source\ThirdParty\SDL\SDL_mixer.h">
@@ -535,19 +565,7 @@
     <ClCompile Include="Source\Private\Assets\Texture.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Array.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Map.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\Queue.cpp">
-      <Filter>Private\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Containers\QueueSafe.cpp">
       <Filter>Private\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\CoreEngine.cpp">
@@ -555,6 +573,18 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp">
       <Filter>Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Component.cpp">
+      <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp">
+      <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Entity.cpp">
+      <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp">
+      <Filter>Private\Core\ECS</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
       <Filter>Private\Core</Filter>

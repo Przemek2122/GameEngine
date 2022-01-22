@@ -2,6 +2,8 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Window.h"
+
+#include "ECS/EntityManager.h"
 #include "Renderer/Renderer.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
@@ -32,6 +34,9 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 
 FWindow::~FWindow()
 {
+	delete Renderer;	
+	delete WidgetManager;
+
 	if (Window != nullptr)
 	{
 		SDL_DestroyWindow(Window);
@@ -42,9 +47,6 @@ FWindow::~FWindow()
 	{
 		LOG_WARN("Window not destroyed (pointer invalid)! ("<< WindowTitle << ")");
 	}
-
-	delete Renderer;	
-	delete WidgetManager;
 }
 
 void FWindow::SetWindowFocus(const bool bInNewFocus)
@@ -112,15 +114,26 @@ FRenderer* FWindow::CreateRenderer()
 	return new FRenderer(this);
 }
 
-void FWindow::SetWindowSize(const int NewWidth, const int NewHeight, const bool bUpdateSDL)
+void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 {
 	if (bUpdateSDL)
 	{
-		SDL_SetWindowSize(Window, NewWidth, NewHeight);
+		SDL_SetWindowSize(Window, X, Y);
 	}
 
-	WindowWidth = NewWidth;
-	WindowHeight = NewWidth;
+	WindowWidth = X;
+	WindowHeight = Y;
+}
+
+void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)
+{
+	if (bUpdateSDL)
+	{
+		SDL_SetWindowPosition(Window, X, Y);
+	}
+
+	WindowPositionX = X;
+	WindowPositionY = Y;
 }
 
 FRenderer* FWindow::GetRenderer() const
@@ -161,4 +174,14 @@ FWidgetManager* FWindow::CreateWidgetManager()
 FWidgetManager* FWindow::GetWidgetManager() const
 {
 	return WidgetManager;
+}
+
+FEntityManager* FWindow::GetEntityManager() const
+{
+	return EntityManager;
+}
+
+FEntityManager* FWindow::CreateEntityManager() const
+{
+	return new FEntityManager();
 }

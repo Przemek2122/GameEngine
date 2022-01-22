@@ -116,7 +116,7 @@ FWindow* FEngineRender::GetWindowById(Uint32 WindowId)
 	return nullptr;
 }
 
-void FEngineRender::OnWindowExposed(Uint32 WindowId)
+void FEngineRender::OnWindowExposed(const Uint32 WindowId)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
@@ -125,7 +125,7 @@ void FEngineRender::OnWindowExposed(Uint32 WindowId)
 	}
 }
 
-void FEngineRender::OnWindowHidden(Uint32 WindowId)
+void FEngineRender::OnWindowHidden(const Uint32 WindowId)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
@@ -134,38 +134,34 @@ void FEngineRender::OnWindowHidden(Uint32 WindowId)
 	}
 }
 
-void FEngineRender::OnWindowMoved(Uint32 WindowId, Sint32 X, Sint32 Y)
+void FEngineRender::OnWindowMoved(const Uint32 WindowId, const Sint32 X, const Sint32 Y)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		Window->Renderer->SetWindowSize(FVector2D<int>(X, Y));
+		Window->SetWindowLocation(X, Y, false);
 	}
 }
 
-void FEngineRender::OnWindowResized(Uint32 WindowId, Sint32 X, Sint32 Y)
+void FEngineRender::OnWindowResized(const Uint32 WindowId, const Sint32 X, const Sint32 Y)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		Window->Renderer->SetWindowSize(FVector2D<int>(X, Y));
-
-
+		Window->Renderer->SetWindowSize(X, Y, false);
 	}
 }
 
-void FEngineRender::OnWindowSizeChanged(Uint32 WindowId, Sint32 X, Sint32 Y)
+void FEngineRender::OnWindowSizeChanged(const Uint32 WindowId, const Sint32 X, const Sint32 Y)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-
-
-
+		Window->Renderer->SetWindowSize(X, Y, false);
 	}
 }
 
-void FEngineRender::OnWindowMinimized(Uint32 WindowId)
+void FEngineRender::OnWindowMinimized(const Uint32 WindowId)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
@@ -174,7 +170,7 @@ void FEngineRender::OnWindowMinimized(Uint32 WindowId)
 	}
 }
 
-void FEngineRender::OnWindowMaximized(Uint32 WindowId)
+void FEngineRender::OnWindowMaximized(const Uint32 WindowId)
 {
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)

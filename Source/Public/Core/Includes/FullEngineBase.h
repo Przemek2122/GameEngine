@@ -11,6 +11,7 @@
 #include "Public/Containers/ContainerBase.h"
 #include "Public/Containers/Array.h"
 #include "Public/Containers/Map.h"
+#include "Public/Containers/UnorderedMap.h"
 #include "Public/Containers/Deque.h"
 #include "Public/Containers/QueueSafe.h"
 

@@ -37,14 +37,16 @@ protected:
 
 	virtual void Repaint();
 	
-	virtual void RepaintWindowToSize(const SDL_Rect& ViewportSize);
+	virtual void RepaintWindow();
+
+	virtual void MarkNeedsRepaint();
 
 public:
 	_NODISCARD SDL_Renderer* GetSDLRenderer() const { return Renderer; }
 	INLINE_DEBUGABLE SDL_Window* GetSdlWindow() const;
 	INLINE_DEBUGABLE SDL_Surface* GetSdlWindowSurface() const;
 	_NODISCARD FVector2D<int> GetWindowSize() const;
-	void SetWindowSize(const FVector2D<int> NewWindowSize, const bool bUpdateSDL = true) const;
+	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true) const;
 
 protected:
 	FWindow* Window;

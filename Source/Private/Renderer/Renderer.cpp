@@ -76,25 +76,17 @@ void FRenderer::PaintDefaultBackground()
 
 void FRenderer::Repaint()
 {
-	const FVector2D<int> CurrentWindowLocation = Window->GetWindowLocation();
-	const FVector2D<int> CurrentWindowSize = Window->GetWindowSize();
-	
-	SDL_Rect ViewportSize;
-	ViewportSize.w = CurrentWindowSize.X;
-	ViewportSize.h = CurrentWindowSize.Y;
-	ViewportSize.x = CurrentWindowLocation.X;
-	ViewportSize.y = CurrentWindowLocation.Y;
-
-	RepaintWindowToSize(ViewportSize);
-
-	SDL_Delay(25);
+	RepaintWindow();
 }
 
-void FRenderer::RepaintWindowToSize(const SDL_Rect& ViewportSize)
+void FRenderer::RepaintWindow()
 {
-	SetWindowSize(FVector2D<int>(ViewportSize.w, ViewportSize.h), false);
-
     SDL_UpdateWindowSurface(GetSdlWindow());
+}
+
+void FRenderer::MarkNeedsRepaint()
+{
+	bNeedsRepaint = true;
 }
 
 SDL_Window* FRenderer::GetSdlWindow() const
@@ -112,9 +104,9 @@ FVector2D<int> FRenderer::GetWindowSize() const
 	return Window->GetWindowSize();
 }
 
-void FRenderer::SetWindowSize(const FVector2D<int> NewWindowSize, const bool bUpdateSDL) const
+void FRenderer::SetWindowSize(const int X, const int Y, const bool bUpdateSDL) const
 {
-	Window->SetWindowSize(NewWindowSize.X, NewWindowSize.Y, bUpdateSDL);
+	Window->SetWindowSize(X, Y, bUpdateSDL);
 }
 
 void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const

@@ -32,6 +32,8 @@ template<typename TType>
 class CArray;
 template<typename TKey, typename TValue>
 class CMap;
+template<typename TKey, typename TValue>
+class CUnorderedMap;
 template<typename TType>
 class CDeque;
 template<typename TType>

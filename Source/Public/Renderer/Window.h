@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/WidgetManager.h"
 
+class FEntityManager;
 class FWidgetManager;
 class FWidget;
 
@@ -61,7 +62,9 @@ protected:
 
 public:
 	/** Call to change window size. */
-	void SetWindowSize(const int NewWidth, const int NewHeight, const bool bUpdateSDL = true);
+	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true);
+
+	void SetWindowLocation(const int X, const int Y, const bool bUpdateSDL);
 
 	_NODISCARD FRenderer* GetRenderer() const;
 
@@ -74,10 +77,15 @@ public:
 
 protected:
 	FWidgetManager* WidgetManager;
+	FEntityManager* EntityManager;
+	
+protected:
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
+	_NODISCARD virtual FEntityManager* CreateEntityManager() const;
 
 public:
 	_NODISCARD FWidgetManager* GetWidgetManager() const;
+	_NODISCARD FEntityManager* GetEntityManager() const;
 	
 	template<class TWidgetTemplate>
 	_NODISCARD FWidget& CreateWidget() const

@@ -96,8 +96,8 @@ protected:
 	uint64_t CounterLastFrame;
 	uint64_t CounterCurrentFrame;
 
-	float DeltaTimeFloat;
-	double DeltaTimeDouble;
+	float DeltaTimeFloat{};
+	double DeltaTimeDouble{};
 
 private:
 	int TicksThisSecond;
@@ -120,8 +120,8 @@ protected:
 	_NODISCARD virtual FEngineRender* CreateEngineRenderer() const;
 
 public:
-	const std::string& GetLaunchFullPath() const;
-	const std::string& GetLaunchRelativePath() const;
+	_NODISCARD const std::string& GetLaunchFullPath() const;
+	_NODISCARD const std::string& GetLaunchRelativePath() const;
 
 protected:
 	/** First param of main. Absolute location C:/Programs/ThisProgram/Program.exe */
@@ -136,10 +136,10 @@ public:
 	_NODISCARD FEventHandler* GetEventHandler() const;
 
 	/** Use this if you changed to your own. Will return casted. */
-	template<typename TEventHandlerClass>
-	TEventHandlerClass* GetEventHandler() const
+	template<typename TEngineRenderClass>
+	TEngineRenderClass* GetEventHandler() const
 	{
-		return static_cast<TEventHandlerClass>(GetEngineRender());
+		return static_cast<TEngineRenderClass>(GetEngineRender());
 	}
 	
 	_NODISCARD FAssetsManager* GetAssetsManager() const;
@@ -156,7 +156,7 @@ protected:
 	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
 
 protected:
-	SDL_Event SdlEvent;
+	SDL_Event SdlEvent{};
 	FEventHandler* EventHandler;
 	FAssetsManager* AssetsManager;
 

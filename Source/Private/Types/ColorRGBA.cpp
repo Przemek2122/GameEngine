@@ -8,9 +8,9 @@ static Uint8 ColorRangeMinDefault = 0;
 static Uint8 ColorRangeMaxDefault = 255;
 
 FColorRGBA::FColorRGBA()
-	: R(0.f)
-	, G(0.f)
-	, B(0.f)
+	: R(0)
+	, G(0)
+	, B(0)
 	, A(255)
 	, ColorRangeMin(ColorRangeMinDefault)
 	, ColorRangeMax(ColorRangeMaxDefault)

@@ -37,7 +37,12 @@
     <ClInclude Include="Source\Public\Containers\Deque.h" />
     <ClInclude Include="Source\Public\Containers\Map.h" />
     <ClInclude Include="Source\Public\Containers\QueueSafe.h" />
+    <ClInclude Include="Source\Public\Containers\UnorderedMap.h" />
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Component.h" />
+    <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Entity.h" />
+    <ClInclude Include="Source\Public\Core\ECS\EntityManager.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
@@ -111,16 +116,19 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_gamecontroller.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_gesture.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_haptic.h" />
+    <ClInclude Include="Source\ThirdParty\SDL\SDL_hidapi.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_hints.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_image.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_joystick.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_keyboard.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_keycode.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_loadso.h" />
+    <ClInclude Include="Source\ThirdParty\SDL\SDL_locale.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_log.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_main.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_messagebox.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_metal.h" />
+    <ClInclude Include="Source\ThirdParty\SDL\SDL_misc.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_mixer.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_mouse.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_mutex.h" />
@@ -190,12 +198,12 @@
     <ClCompile Include="Source\Private\Assets\Font.cpp" />
     <ClCompile Include="Source\Private\Assets\FontAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Texture.cpp" />
-    <ClCompile Include="Source\Private\Containers\Array.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
-    <ClCompile Include="Source\Private\Containers\Map.cpp" />
-    <ClCompile Include="Source\Private\Containers\Queue.cpp" />
-    <ClCompile Include="Source\Private\Containers\QueueSafe.cpp" />
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Entity.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
@@ -358,7 +366,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>CoreEngine.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -393,7 +401,7 @@
       <PrecompiledHeaderFile>CoreEngine.h</PrecompiledHeaderFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -425,7 +433,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>CoreEngine.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
@@ -463,7 +471,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>CoreEngine.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
@@ -504,7 +512,7 @@
       <PrecompiledHeaderFile>CoreEngine.h</PrecompiledHeaderFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -541,7 +549,7 @@
       <PrecompiledHeaderFile>CoreEngine.h</PrecompiledHeaderFile>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).PCH.h</PrecompiledHeaderOutputFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>

@@ -187,6 +187,77 @@ public:
 		}
 	}
 
+	/** Begin of bucket functions */
+	_NODISCARD SDL_FORCE_INLINE auto begin() noexcept -> auto
+	{
+		return Map.begin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cbegin() noexcept -> auto
+	{
+		return Map.cbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rbegin() noexcept -> auto
+	{
+		return Map.rbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crbegin() noexcept -> auto
+	{
+		return Map.crbegin();
+	}
+	
+	_NODISCARD SDL_FORCE_INLINE auto end() noexcept -> auto
+	{
+		return Map.end();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cend() noexcept -> auto
+	{
+		return Map.cend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rend() noexcept -> auto
+	{
+		return Map.rend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crend() noexcept -> auto
+	{
+		return Map.crend();
+	}
+
+
+	_NODISCARD SDL_FORCE_INLINE auto begin() const noexcept -> auto
+	{
+		return Map.begin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cbegin() const noexcept -> auto
+	{
+		return Map.cbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rbegin() const noexcept -> auto
+	{
+		return Map.rbegin();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crbegin() const noexcept -> auto
+	{
+		return Map.crbegin();
+	}
+	
+	_NODISCARD SDL_FORCE_INLINE auto end() const noexcept -> auto
+	{
+		return Map.end();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto cend() const noexcept -> auto
+	{
+		return Map.cend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto rend() const noexcept -> auto
+	{
+		return Map.rend();
+	}
+	_NODISCARD SDL_FORCE_INLINE auto crend() const noexcept -> auto
+	{
+		return Map.crend();
+	}
+	/** End of bucket functions */
+
 public:
 	// C++ Map
 	std::map<TKey, TValue> Map;
