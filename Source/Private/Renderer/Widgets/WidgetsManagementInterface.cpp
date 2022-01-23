@@ -9,9 +9,7 @@ IWidgetManagementInterface::IWidgetManagementInterface()
 
 IWidgetManagementInterface::~IWidgetManagementInterface()
 {
-	const auto Size = ManagedWidgets.Size();
-	
-	for (auto i = 0; i < Size; i++)
+	for (auto i = ManagedWidgets.Size() - 1; i >= 0; i--)
 	{
 		delete ManagedWidgets[i];
 	}

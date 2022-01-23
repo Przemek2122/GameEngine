@@ -36,7 +36,8 @@ FRenderer::FRenderer(FWindow* InWindow)
 
 FRenderer::~FRenderer()
 {
-	SDL_DestroyRenderer(Renderer);
+	// @TODO Crashes when exiting
+	//SDL_DestroyRenderer(Renderer);
 }
 
 void FRenderer::PreRender()

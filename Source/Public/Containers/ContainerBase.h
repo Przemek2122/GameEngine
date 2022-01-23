@@ -5,12 +5,13 @@
 /**
  * Base class for containers.
  */
-template<typename TType>
+template<typename TType, typename TSizeType = int>
 class CContainerBase
 {
 public:
 	virtual ~CContainerBase() = default;
-	SDL_FORCE_INLINE virtual size_t Size() const = 0;
+
+	SDL_FORCE_INLINE virtual TSizeType Size() const = 0;
 	SDL_FORCE_INLINE virtual bool IsEmpty() const = 0;
 
 };

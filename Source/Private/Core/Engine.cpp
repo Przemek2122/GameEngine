@@ -201,6 +201,9 @@ void FEngine::PreExit()
 void FEngine::Clean()
 {
 	delete EngineRender;
+	delete EventHandler;
+	delete AssetsManager;
+	delete TestManager;
 }
 
 bool FEngine::IsEngineInitialized() const

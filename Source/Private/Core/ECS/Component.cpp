@@ -4,7 +4,7 @@
 #include "ECS/Component.h"
 
 UComponent::UComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: ComponentManagerInterface(InComponentManagerInterface)
+	: IComponentManagerInterface(InComponentManagerInterface)
 {
 }
 

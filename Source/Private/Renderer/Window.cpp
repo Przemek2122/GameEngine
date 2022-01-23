@@ -20,9 +20,6 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 		LOG_INFO("Window created. (" << WindowTitle << ")");
 
 		WindowId = SDL_GetWindowID(Window);
-
-		Renderer = CreateRenderer();
-		WidgetManager = CreateWidgetManager();
 	}
 	else
 	{
@@ -47,6 +44,13 @@ FWindow::~FWindow()
 	{
 		LOG_WARN("Window not destroyed (pointer invalid)! ("<< WindowTitle << ")");
 	}
+}
+
+void FWindow::Init()
+{
+	Renderer = CreateRenderer();
+	WidgetManager = CreateWidgetManager();
+	EntityManager = GetEntityManager();
 }
 
 void FWindow::SetWindowFocus(const bool bInNewFocus)
@@ -171,6 +175,11 @@ FWidgetManager* FWindow::CreateWidgetManager()
 	return new FWidgetManager(this);
 }
 
+FEntityManager* FWindow::CreateEntityManager() const
+{
+	return new FEntityManager();
+}
+
 FWidgetManager* FWindow::GetWidgetManager() const
 {
 	return WidgetManager;
@@ -179,9 +188,4 @@ FWidgetManager* FWindow::GetWidgetManager() const
 FEntityManager* FWindow::GetEntityManager() const
 {
 	return EntityManager;
-}
-
-FEntityManager* FWindow::CreateEntityManager() const
-{
-	return new FEntityManager();
 }

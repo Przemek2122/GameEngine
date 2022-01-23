@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <sstream>
 #include "QueueSafe.h"
 
 enum class ELogMessageType : Uint8

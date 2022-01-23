@@ -24,6 +24,9 @@ protected:
 	bool bIsRenderTickFinished;
 
 protected:
+	void AddWindow(FWindow* InWindow);
+	void RemoveWindow(FWindow* InWindow);
+
 	/** Render thread tick. */
 	void RenderTick();
 	/** Called when RenderTick finishes */
@@ -31,23 +34,20 @@ protected:
 
 public:
 	/** Create window from template class */
-	template<class TWindow>
-	FWindow* CreateWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0)
+	template<class TWindow, typename... TInParams>
+	FWindow* CreateWindow(TInParams... InParams)
 	{
-		TWindow* NewWindow = new TWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags);
+		TWindow* NewWindow = new TWindow(InParams...);
 
-		ManagedWindows.Push(NewWindow);
+		NewWindow->Init();
+
+		AddWindow(NewWindow);
 
 		return NewWindow;
 	}
 	
 	/** Destroy and remove window by class. */
 	void DestroyWindow(FWindow* InWindow);
-
-	/** Add window created outside to this class manager. */
-	void AddWindow(FWindow* InWindow);
-	/** Remove window (will not be destroyed in this function). */
-	void RemoveWindow(FWindow* InWindow);
 
 	/** @returns window pointer or nullptr if there is no focused window. */
 	_NODISCARD FWindow* GetFocusedWindow() const;

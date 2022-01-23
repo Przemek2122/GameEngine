@@ -8,15 +8,17 @@
 
 #include <vector>
 
+#include "Includes/EngineMacros.h"
+
 /**
  * Dynamic array template for any type.
  */
-template<typename TType>
-class CArray : public CContainerBase<TType>
+template<typename TType, typename TSizeType = int>
+class CArray : public CContainerBase<TType, TSizeType>
 {
 public:
 	/** Begin CContainerBase interface */
-	_NODISCARD SDL_FORCE_INLINE size_t Size() const override
+	_NODISCARD SDL_FORCE_INLINE TSizeType Size() const override
 	{
 		return Vector.size();
 	}
@@ -25,6 +27,11 @@ public:
 		return Vector.empty();
 	}
 	/** End CContainerBase interface */
+
+	bool IsValidIndex(const TSizeType Index) const
+	{
+		return (Index >= 0 && Index < Size());
+	}
 	
 	SDL_FORCE_INLINE void Push(TType Value)
 	{
@@ -49,7 +56,7 @@ public:
 		Vector.insert(Vector.begin() + Index, Value); 
 	}
 	
-	SDL_FORCE_INLINE bool RemoveAt(const size_t Index)
+	SDL_FORCE_INLINE bool RemoveAt(const TSizeType Index)
 	{
 		if (Index >= 0 && Index < Size())
 		{
@@ -86,7 +93,7 @@ public:
 	{
 		std::vector<int>::iterator Iterator = Vector.begin();
 
-		size_t RemovedElements = 0;
+		TSizeType RemovedElements = 0;
 
 		while (Iterator != Vector.end())
 		{
@@ -104,13 +111,37 @@ public:
 		return RemovedElements > 0;
 	}
 	
-	SDL_FORCE_INLINE TType& operator[](size_t Index)
+	SDL_FORCE_INLINE TType& operator[](TSizeType Index)
 	{
-		return Vector[Index];
+		if (IsValidIndex(Index))
+		{
+			return Vector[Index];
+		}
+		else
+		{
+			// Request out of range.
+			Inline_ENSURE_VALID_Lambda(false);
+
+			TType DefaultType = TType();
+
+			return DefaultType;
+		}
 	}
-	SDL_FORCE_INLINE const TType& operator[](size_t Index) const
+	SDL_FORCE_INLINE const TType& operator[](TSizeType Index) const
 	{
-		return Vector[Index];
+		if (IsValidIndex(Index))
+		{
+			return Vector[Index];
+		}
+		else
+		{
+			// Request out of range.
+			Inline_ENSURE_VALID_Lambda(false);
+
+			TType DefaultType = TType();
+
+			return DefaultType;
+		}
 	}
 	
 	template<typename TTypeAuto>
@@ -121,11 +152,11 @@ public:
 
 	/** @return Index or -1 if not found */
 	template<typename TTypeAuto>
-	_NODISCARD SDL_FORCE_INLINE size_t FindIndexOf(TTypeAuto Value)
+	_NODISCARD SDL_FORCE_INLINE TSizeType FindIndexOf(TTypeAuto Value)
 	{
-		const size_t VectorSize = Vector.size();
+		const TSizeType VectorSize = Vector.size();
 		
-		for (size_t i = 0; i < VectorSize; i++)
+		for (TSizeType i = 0; i < VectorSize; ++i)
 		{
 			if (Vector[i] == Value)
 			{

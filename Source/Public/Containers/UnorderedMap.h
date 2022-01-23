@@ -10,12 +10,12 @@
  * Class for safe queue.
  * Not thread safe
  */
-template<typename TKey, typename TValue>
-class CUnorderedMap : public CContainerBase<TValue>
+template<typename TKey, typename TValue, typename TSizeType = int>
+class CUnorderedMap : public CContainerBase<TValue, TSizeType>
 {
 public:
 	/** Begin CContainerBase interface */
-	_NODISCARD SDL_FORCE_INLINE size_t Size() const override
+	_NODISCARD SDL_FORCE_INLINE TSizeType Size() const override
 	{
 		return Map.size();
 	}

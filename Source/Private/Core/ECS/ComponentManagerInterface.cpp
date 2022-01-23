@@ -3,7 +3,9 @@
 #include "CoreEngine.h"
 #include "ECS/ComponentManagerInterface.h"
 
-IComponentManagerInterface::IComponentManagerInterface()
+IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterface* InComponentManagerInterfaceParent)
+	: ComponentManagerInterfaceParent(InComponentManagerInterfaceParent)
+	, bDoesHaveComponentManagerInterfaceParent(InComponentManagerInterfaceParent != nullptr)
 {
 }
 
@@ -52,4 +54,21 @@ void IComponentManagerInterface::OnComponentCreated(const std::string& Component
 
 void IComponentManagerInterface::OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent)
 {
+}
+
+IComponentManagerInterface* IComponentManagerInterface::GetOwner() const
+{
+	return ComponentManagerInterfaceParent;
+}
+
+IComponentManagerInterface* IComponentManagerInterface::GetOwnerTop() const
+{
+	IComponentManagerInterface* CurrentChainElement = ComponentManagerInterfaceParent;
+
+	if (CurrentChainElement->HasOwner())
+	{
+		CurrentChainElement = CurrentChainElement->GetOwner();
+	}
+
+	return CurrentChainElement;
 }

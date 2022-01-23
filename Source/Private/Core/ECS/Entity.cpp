@@ -4,6 +4,7 @@
 #include "ECS/Entity.h"
 
 EEntity::EEntity(FEntityManager* InEntityManager)
+	: IComponentManagerInterface(nullptr)
 {
 }
 

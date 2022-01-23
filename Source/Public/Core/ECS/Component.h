@@ -11,7 +11,5 @@ class UComponent : public UObject, public IComponentManagerInterface
 public:
 	UComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UComponent() override;
-
-protected:
-	IComponentManagerInterface* ComponentManagerInterface;
+	
 };

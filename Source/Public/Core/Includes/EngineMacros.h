@@ -6,7 +6,7 @@
 
 #include "CoreMinimal.h"
 
-inline auto Inline_ENSURE_VALID_Lambda = [](auto Condition) -> bool
+SDL_FORCE_INLINE bool Inline_ENSURE_VALID_Lambda(auto Condition)
 {
 	if (Condition)
 	{
@@ -15,6 +15,7 @@ inline auto Inline_ENSURE_VALID_Lambda = [](auto Condition) -> bool
 	else
 	{
 		__debugbreak();
+
 		return false;
 	}
 };

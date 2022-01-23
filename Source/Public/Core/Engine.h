@@ -162,7 +162,7 @@ protected:
 
 protected:
 #if ENGINE_TESTS
-	virtual class FTestManager* CreateTestManager() const;
+	_NODISCARD virtual class FTestManager* CreateTestManager() const;
 	
 	class FTestManager* TestManager;
 #endif

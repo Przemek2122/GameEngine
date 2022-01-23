@@ -11,6 +11,10 @@ UObject::~UObject()
 {
 }
 
+void UObject::Init()
+{
+}
+
 std::string UObject::GetObjectName() const
 {
 	return typeid(this).name();

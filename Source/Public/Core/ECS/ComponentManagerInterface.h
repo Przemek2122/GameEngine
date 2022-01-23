@@ -7,11 +7,11 @@ class UComponent;
 class IComponentManagerInterface
 {
 protected:
-	IComponentManagerInterface();
+	IComponentManagerInterface(IComponentManagerInterface* InComponentManagerInterfaceParent);
 	virtual ~IComponentManagerInterface();
 
 public:
-	template<typename TComponentClass, typename... TInParams>
+	template<class TComponentClass, typename... TInParams>
 	TComponentClass* CreateComponent(std::string ComponentName, TInParams... InParams)
 	{
 		auto NewComponent = std::make_shared<TComponentClass>(this, InParams);
@@ -53,7 +53,7 @@ public:
 		{
 			if (typeid(ComponentPair.second) == typeid(TComponentClass))
 			{
-				
+				return ComponentPair.second;
 			}
 		}
 
@@ -65,7 +65,19 @@ public:
 	/** Called before destroying component. */
 	virtual void OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent);
 
+	/** @returns true if has owner and GetOwner() is safe to call. */
+	_NODISCARD bool HasOwner() const { return bDoesHaveComponentManagerInterfaceParent; }
+	/** @return cached owner. */
+	_NODISCARD IComponentManagerInterface* GetOwner() const;
+	/** Iterate all elements to the top returning top level owner, most likely EEntity. */
+	_NODISCARD IComponentManagerInterface* GetOwnerTop() const;
+
 protected:
+	/** Parent, could be other component or  */
+	IComponentManagerInterface* ComponentManagerInterfaceParent;
+	/** Components accessible by strings passed when creating components which are component names. */
 	CUnorderedMap<std::string, std::shared_ptr<UComponent>> ComponentsMap;
+	/** Cached in constructor (ComponentManagerInterfaceParent != nullptr) */
+	bool bDoesHaveComponentManagerInterfaceParent;
 
 };

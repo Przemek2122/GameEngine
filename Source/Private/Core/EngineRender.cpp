@@ -10,7 +10,7 @@ FEngineRender::FEngineRender()
 
 FEngineRender::~FEngineRender()
 {
-	for (auto i = ManagedWindows.Size() - 1; ManagedWindows.Size() > 0; i--)
+	for (auto i = ManagedWindows.Size() - 1; i >= 0; i--)
 	{
 		DestroyWindow(ManagedWindows[i]);
 	}
@@ -48,6 +48,20 @@ bool FEngineRender::IsRenderTickFinished() const
 	return bIsRenderTickFinished;
 }
 
+void FEngineRender::AddWindow(FWindow* InWindow)
+{
+	ManagedWindows.Push(InWindow);
+
+	WindowToIdMap.Emplace(SDL_GetWindowID(InWindow->GetSdlWindow()), InWindow);
+}
+
+void FEngineRender::RemoveWindow(FWindow* InWindow)
+{
+	ManagedWindows.Remove(InWindow);
+
+	WindowToIdMap.Remove(InWindow->WindowId);
+}
+
 void FEngineRender::RenderTick()
 {
 	for (FWindow* Window : ManagedWindows.Vector)
@@ -79,23 +93,9 @@ void FEngineRender::DestroyWindow(FWindow* InWindow)
 	delete InWindow;
 }
 
-void FEngineRender::AddWindow(FWindow* InWindow)
-{
-	ManagedWindows.Push(InWindow);
-
-	WindowToIdMap.Emplace(SDL_GetWindowID(InWindow->GetSdlWindow()), InWindow);
-}
-
-void FEngineRender::RemoveWindow(FWindow* InWindow)
-{
-	ManagedWindows.Remove(InWindow);
-
-	WindowToIdMap.Remove(InWindow->WindowId);
-}
-
 FWindow* FEngineRender::GetFocusedWindow() const
 {
-	for (auto i = 0; i < ManagedWindows.Size(); i++)
+	for (size_t i = 0; i < ManagedWindows.Size(); i++)
 	{
 		if (ManagedWindows[i]->IsWindowFocused())
 		{
@@ -106,7 +106,7 @@ FWindow* FEngineRender::GetFocusedWindow() const
 	return nullptr;
 }
 
-FWindow* FEngineRender::GetWindowById(Uint32 WindowId)
+FWindow* FEngineRender::GetWindowById(const Uint32 WindowId)
 {
 	if (WindowToIdMap.HasKey(WindowId))
 	{

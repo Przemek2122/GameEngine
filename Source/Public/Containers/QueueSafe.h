@@ -9,8 +9,8 @@
  * Class for safe queue.
  * Thread safe
  */
-template<typename TType>
-class CQueueSafe : public CDeque<TType>
+template<typename TType, typename TSizeType = int>
+class CQueueSafe : public CDeque<TType, TSizeType>
 {
 public:
 	/* Add element at end. */

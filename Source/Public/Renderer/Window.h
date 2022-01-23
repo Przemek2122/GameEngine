@@ -16,7 +16,7 @@ class FWindow
 {
 	friend FEngineRender;
 
-public:
+protected:
 	/**
 	 * Creates SDL Window.
 	 * Take a look here for available flags (or at SDL_vide.h): https://wiki.libsdl.org/SDL_WindowFlags
@@ -24,6 +24,9 @@ public:
 	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = SDL_WINDOW_RESIZABLE);
 	virtual ~FWindow();
 
+	virtual void Init();
+
+public:
 	_NODISCARD SDL_Window* GetSdlWindow() const { return Window; }
 	_NODISCARD Uint32 GetWindowId() const { return WindowId; }
 

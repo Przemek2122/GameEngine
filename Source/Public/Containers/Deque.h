@@ -8,12 +8,12 @@
  * Class for safe queue.
  * Not thread safe
  */
-template<typename TType>
-class CDeque : public CContainerBase<TType>
+template<typename TType, typename TSizeType = int>
+class CDeque : public CContainerBase<TType, TSizeType>
 {
 public:
 	/** Begin CContainerBase interface */
-	SDL_FORCE_INLINE size_t Size() const override
+	SDL_FORCE_INLINE TSizeType Size() const override
 	{
 		return Deque.size();
 	};

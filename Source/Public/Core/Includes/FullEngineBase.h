@@ -24,6 +24,8 @@
 #include "Core/EngineRender.h"
 #include "Core/EngineMain.h"
 
+#include "ECS/EntityManager.h"
+
 #include "Renderer/Window.h"
 #include "Renderer/Renderer.h"
 

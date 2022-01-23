@@ -19,6 +19,10 @@ class FWidgetManager;
 class IWidgetManagementInterface;
 class IWidgetInteraction;
 
+class FEntityManager;
+class EEntity;
+class UComponent;
+
 template<class TType = float>
 class FVector2D;
 class FColorRGBA;
@@ -26,15 +30,15 @@ template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
 #include "Types/Delegate.h"
 
-template<typename TType>
+template<typename TType, typename TSizeType>
 class CContainerBase;
-template<typename TType>
+template<typename TType, typename TSizeType>
 class CArray;
-template<typename TKey, typename TValue>
+template<typename TKey, typename TValue, typename TSizeType>
 class CMap;
-template<typename TKey, typename TValue>
+template<typename TKey, typename TValue, typename TSizeType>
 class CUnorderedMap;
-template<typename TType>
+template<typename TType, typename TSizeType>
 class CDeque;
-template<typename TType>
+template<typename TType, typename TSizeType>
 class CQueueSafe;
