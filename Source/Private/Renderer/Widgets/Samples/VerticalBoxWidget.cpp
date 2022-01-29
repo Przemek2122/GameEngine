@@ -5,14 +5,31 @@
 
 FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
+	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::Default)
 {
+}
+
+void FVerticalBoxWidget::Init()
+{
+	FWidget::Init();
+
+	SetWidgetSize({200, 300});
 }
 
 void FVerticalBoxWidget::Render()
 {
+	Super::Render();
+
 #if _DEBUG
 	GetRenderer()->DrawRectangle(GetWidgetLocationAbsolute(), GetWidgetSize(), FColorRGBA::ColorPink());
 #endif
+}
+
+void FVerticalBoxWidget::ReCalculate()
+{
+	FWidget::ReCalculate();
+
+	AlignWidgets();
 }
 
 void FVerticalBoxWidget::RegisterWidget(FWidget* Widget)
@@ -33,12 +50,12 @@ void FVerticalBoxWidget::AlignWidgets()
 {
 	switch (VerticalBoxAlignMethod)
 	{
-		case Default:
+		case EVerticalBoxAlignMethod::Default:
 		{
 			AlignDefault();
 			break;
 		}
-		case Even:
+		case EVerticalBoxAlignMethod::Even:
 		{
 			AlignEven();
 			break;
@@ -58,7 +75,7 @@ void FVerticalBoxWidget::AlignDefault()
 
 	//float TotalHeight = 0.f;
 	
-	for (size_t i = 0; i < ManagedWidgets.Size(); i++)
+	for (auto i = 0; i < ManagedWidgets.Size(); i++)
 	{
 		FWidget* ChildWidget = ManagedWidgets[i];
 
@@ -84,7 +101,7 @@ void FVerticalBoxWidget::AlignDefault()
 		VerticalBoxLocationLast += VerticalBoxLocation;
 		VerticalBoxSizeLast += VerticalBoxSizeLast;
 		
-		ChildWidget->SetWidgetLocationAbsolute(NewChildLocation);
+		ChildWidget->SetWidgetLocationRelative(NewChildLocation);
 		ChildWidget->SetWidgetSize(ChildWidgetSize, false);
 
 		ChildWidget->RefreshWidget();

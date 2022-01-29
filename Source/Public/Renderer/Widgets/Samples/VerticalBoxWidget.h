@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "../Widget.h"
 
-enum EVerticalBoxAlignMethod
+enum class EVerticalBoxAlignMethod
 {
 	/** One by one starting from the top of the widget */
 	Default,
@@ -19,7 +19,9 @@ public:
 	FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
 
 	/** Begin FWidget interface */
+	virtual void Init() override;
 	virtual void Render() override;
+	void ReCalculate() override;
 	/** End FWidget interface */
 
 	/** Begin IWidgetManagementInterface interface */
@@ -36,6 +38,6 @@ public:
 	_NODISCARD EVerticalBoxAlignMethod GetVerticalBoxAlignMethod() const;
 		 
 protected:
-	EVerticalBoxAlignMethod VerticalBoxAlignMethod = Default;
+	EVerticalBoxAlignMethod VerticalBoxAlignMethod;
 	
 };

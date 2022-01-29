@@ -21,16 +21,9 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	, TextRenderMode(ETextRenderMode::Blended)
 	, bAutoScaleWidget(true)
 {
-	const bool bIsFontAssetValid = FontAsset != nullptr;
-	
-	if (bIsFontAssetValid)
-	{
-		SetText(DefaultText);
-	}
-
 #if _DEBUG
 	// Unable to find font asset.
-	ENSURE_VALID(bIsFontAssetValid);
+	ENSURE_VALID(FontAsset != nullptr);
 #endif
 }
 
@@ -40,9 +33,24 @@ FTextWidget::~FTextWidget()
 	delete SDLRect;
 }
 
+void FTextWidget::Init()
+{
+	FWidget::Init();
+
+	if (FontAsset != nullptr)
+	{
+		SetText(DefaultText);
+	}
+}
+
 void FTextWidget::Render()
 {
 	SDL_RenderCopy(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
+}
+
+void FTextWidget::ReCalculate()
+{
+	FWidget::ReCalculate();
 }
 
 void FTextWidget::SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation)

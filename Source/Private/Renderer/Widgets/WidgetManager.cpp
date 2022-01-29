@@ -38,3 +38,11 @@ FWindow* FWidgetManager::GetOwnerWindow() const
 {
 	return OwnerWindow;
 }
+
+void FWidgetManager::OnWindowChanged()
+{
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->OnWindowChanged();
+	}
+}

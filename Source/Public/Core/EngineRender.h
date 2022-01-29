@@ -58,10 +58,21 @@ public:
 	void OnWindowHidden(Uint32 WindowId);
 
 	void OnWindowMoved(Uint32 WindowId, Sint32 X, Sint32 Y);
+
 	void OnWindowResized(Uint32 WindowId, Sint32 X, Sint32 Y);
 	void OnWindowSizeChanged(Uint32 WindowId, Sint32 X, Sint32 Y);
+
 	void OnWindowMinimized(Uint32 WindowId);
 	void OnWindowMaximized(Uint32 WindowId);
+
+	void SetWindowFocus(Uint32 WindowId, const bool bIsFocused);
+
+protected:
+	virtual void OnWindowMadeVisible(FWindow* Window);
+	virtual void OnWindowMadeInVisible(FWindow* Window);
+
+	virtual void OnWindowSizeChanged(FWindow* Window, Sint32 X, Sint32 Y);
+	virtual void OnWindowLocationChanged(FWindow* Window, Sint32 X, Sint32 Y);
 
 protected:
 	/** Array of windows managed by this engine. */

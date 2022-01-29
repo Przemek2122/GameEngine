@@ -16,32 +16,12 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, bWasRenderedThisFrame(false)
 {
 #if _DEBUG
-	if (WidgetManagementInterface == nullptr)
-	{
-		ENSURE_VALID(false);
-	}
+	ENSURE_VALID(WidgetManagementInterface != nullptr);
 #endif
-	
-	WidgetManagementInterface->RegisterWidget(this);
-
-	SetAnchor(DefaultAnchor);
-}
-
-FWidget::~FWidget()
-{
-#if _DEBUG
-	if (WidgetManagementInterface == nullptr)
-	{
-		ENSURE_VALID(false);
-	}
-#endif
-	
-	WidgetManagementInterface->UnRegisterWidget(this);
 }
 
 void FWidget::ReceiveTick()
 {
-	// Call on all children
 	TickWidgets();
 	
 	HandleInput();
@@ -52,9 +32,29 @@ void FWidget::ReceiveTick()
 void FWidget::ReceiveRender()
 {
 	Render();
-
-	// Call on all children
+	
 	RenderWidgets();
+}
+
+void FWidget::Init()
+{
+	WidgetManagementInterface->RegisterWidget(this);
+
+	SetAnchor(DefaultAnchor);
+
+	RefreshWidget();
+}
+
+void FWidget::DeInit()
+{
+#if _DEBUG
+	if (ENSURE_VALID(WidgetManagementInterface != nullptr))
+	{
+		WidgetManagementInterface->UnRegisterWidget(this);
+	}
+#else
+	WidgetManagementInterface->UnRegisterWidget(this);
+#endif
 }
 
 void FWidget::HandleInput()
@@ -67,6 +67,16 @@ void FWidget::Tick()
 
 void FWidget::Render()
 {
+}
+
+void FWidget::ReCalculate()
+{
+	RefreshWidget(false);
+
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->OnWindowChanged();
+	}
 }
 
 FVector2D<int> FWidget::GetWidgetManagerOffset() const
@@ -92,6 +102,11 @@ IWidgetManagementInterface* FWidget::GetWidgetManagerOwner() const
 FWindow* FWidget::GetOwnerWindow() const
 {
 	return WidgetManagementInterface->GetOwnerWindow();
+}
+
+void FWidget::OnWindowChanged()
+{
+	ReCalculate();
 }
 
 bool FWidget::ShouldBeRendered() const
@@ -153,7 +168,9 @@ FVector2D<int> FWidget::GetWidgetLocationAbsolute() const
 
 void FWidget::SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation)
 {
-	WidgetLocation = InWidgetLocation;
+	SetWidgetLocationAbsoluteInternal(InWidgetLocation);
+
+	SetAnchor(EAnchor::None);
 }
 
 FVector2D<int> FWidget::GetWidgetLocationRelative() const
@@ -162,6 +179,18 @@ FVector2D<int> FWidget::GetWidgetLocationRelative() const
 }
 
 void FWidget::SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation)
+{
+	SetWidgetLocationRelativeInternal(InWidgetLocation);
+
+	SetAnchor(EAnchor::None);
+}
+
+void FWidget::SetWidgetLocationAbsoluteInternal(const FVector2D<int> InWidgetLocation)
+{
+	WidgetLocation = InWidgetLocation;
+}
+
+void FWidget::SetWidgetLocationRelativeInternal(const FVector2D<int> InWidgetLocation)
 {
 	WidgetLocation = WidgetManagementInterface->GetWidgetManagerOffset() + InWidgetLocation;
 }
@@ -173,9 +202,7 @@ FVector2D<int> FWidget::GetWidgetSize() const
 
 void FWidget::SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor)
 {
-	RefreshWidgetSize();
-	
-	WidgetSize = InWidgetSize;
+	SetWidgetSizeInternal(InWidgetSize);
 
 	if (bRefreshAnchor)
 	{
@@ -183,15 +210,22 @@ void FWidget::SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bRefre
 	}
 }
 
-void FWidget::RefreshWidget()
+void FWidget::SetWidgetSizeInternal(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor)
+{
+	WidgetSize = InWidgetSize;
+}
+
+void FWidget::RefreshWidget(const bool bRefreshChilds)
 {
 	RefreshWidgetSize();
 	RefreshAnchor();
-	//RefreshWidgetLocation();
 
-	for (size_t i = 0; i < ManagedWidgets.Size(); i++)
+	if (bRefreshChilds)
 	{
-		ManagedWidgets[i]->RefreshWidget();
+		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		{
+			ManagedWidgets[i]->RefreshWidget();
+		}
 	}
 }
 
@@ -241,11 +275,9 @@ void FWidget::RefreshAnchor()
 	{
 	case EAnchor::None:
 		{
-			// This should be for internal use only.
-			// Old Anchor location will be used.
-			ENSURE_VALID(false);
+			// This option means user do not want to use Anchor system.
+			break;
 		}
-		break;
 		
 	case EAnchor::Center:
 		{
@@ -257,15 +289,15 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = (ParentSize.X - ThisWidgetSize.X) / 2;
 			RelativeCenter.Y = (ParentSize.Y - ThisWidgetSize.Y) / 2;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::LeftTop:
 		{
-			SetWidgetLocationRelative(0);
+			SetWidgetLocationAbsoluteInternal(0);
+			break;
 		}
-		break;
 		
 	case EAnchor::LeftBottom:
 		{
@@ -277,9 +309,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = 0;
 			RelativeCenter.Y = ParentSize.Y - ThisWidgetSize.Y;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::RightTop:
 		{
@@ -291,9 +323,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = ParentSize.X - ThisWidgetSize.X;
 			RelativeCenter.Y = 0;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::RightBottom:
 		{
@@ -305,9 +337,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = ParentSize.X - ThisWidgetSize.X;
 			RelativeCenter.Y = ParentSize.Y - ThisWidgetSize.Y;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::TopCenter:
 		{
@@ -319,9 +351,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = (ParentSize.X - ThisWidgetSize.X) / 2;
 			RelativeCenter.Y = 0;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::LeftCenter:
 		{
@@ -333,9 +365,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = 0;
 			RelativeCenter.Y = (ParentSize.Y - ThisWidgetSize.Y) / 2;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::BottomCenter:
 		{
@@ -347,9 +379,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = (ParentSize.X - ThisWidgetSize.X) / 2;
 			RelativeCenter.Y = ParentSize.Y - ThisWidgetSize.Y;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 		
 	case EAnchor::RightCenter:
 		{
@@ -361,9 +393,9 @@ void FWidget::RefreshAnchor()
 			RelativeCenter.X = ParentSize.X - ThisWidgetSize.X;
 			RelativeCenter.Y = (ParentSize.Y - ThisWidgetSize.Y) / 2;
 			
-			SetWidgetLocationRelative(RelativeCenter);
+			SetWidgetLocationAbsoluteInternal(RelativeCenter);
+			break;
 		}
-		break;
 	}
 }
 
@@ -389,13 +421,6 @@ void FWidget::OnAnchorChanged(const EAnchor NewAnchor)
 
 IWidgetManagementInterface* FWidget::GetParent() const
 {
-#if _DEBUG
-	if (WidgetManagementInterface == nullptr)
-	{
-		ENSURE_VALID(false);
-	}
-#endif
-	
 	return WidgetManagementInterface;
 }
 

@@ -22,6 +22,7 @@ protected:
 	_NODISCARD virtual bool HasWidgetManagerOwner() const override;
 	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const override;
 	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
+	virtual void OnWindowChanged() override;
 	/** End IWidgetManagementInterface */
 
 private:

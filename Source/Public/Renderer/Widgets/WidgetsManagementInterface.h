@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 /**
- * Class responsible for managing widgets.
+ * Class responsible for managing widgets. \n
  * It will be on WidgetManager class as well as on each widget as we can add widget to each of those.
  */
 class IWidgetManagementInterface
@@ -29,24 +29,31 @@ public:
 	_NODISCARD virtual bool HasWidgetManagerOwner() const = 0;
 
 	/**
-	 * Ticking widgets works different than render.
+	 * Ticking widgets works different than render. \n
 	 * First child widgets are ticked than parent.
 	 */
 	virtual void TickWidgets();
 	
 	/**
-	 * Rendering of widgets.
+	 * Rendering of widgets. \n
 	 * First parent is rendered than all its child and it's children ...
 	 */
 	virtual void RenderWidgets();
 
-	/** Add child by moving from other interface */
+	/**
+	 * Add child by moving from other interface. \n
+	 * We do not have RemoveChild because this AddChild handles removing previous parent.
+	 */
 	virtual bool AddChild(FWidget* InWidget);
 	
-	/**
-	 * Create new widget from template.
-	 * Auto managed.
-	 */
+	/** Create new widget from template, auto-managed. */
+	template<class TWidgetTemplate>
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(const char* InWidgetName, const int InWidgetOrder = 0)
+	{
+		return CreateWidget<TWidgetTemplate>(std::string(InWidgetName), InWidgetOrder);
+	}
+
+	/** Create new widget from template, auto-managed. */
 	template<class TWidgetTemplate>
 	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName, const int InWidgetOrder = 0)
 	{
@@ -58,6 +65,10 @@ public:
 #endif
 		
 		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName, InWidgetOrder);
+
+		CreatedWidget->Init();
+
+		OnWidgetCreated(CreatedWidget);
 
 		return CreatedWidget;
 	}
@@ -83,6 +94,14 @@ public:
 	
 	/** @returns Window which created this manager */
 	_NODISCARD virtual FWindow* GetOwnerWindow() const = 0;
+
+	/** Called when window */
+	virtual void OnWindowChanged() = 0;
+
+	_NODISCARD const CArray<FWidget*>& GetManagedWidgets() const { return ManagedWidgets; }
+
+	virtual void OnWidgetCreated(FWidget* NewWidget);
+	virtual void OnWidgetDestroyed(FWidget* NewWidget);
 
 protected:
 	/** Called by wiget when order is changed. */

@@ -21,7 +21,7 @@ void IWidgetManagementInterface::TickWidgets()
 {
 	const auto Size = ManagedWidgets.Size();
 	
-	for (size_t i = 0; i < Size; i++)
+	for (auto i = 0; i < Size; i++)
 	{
 		ManagedWidgets[i]->ReceiveTick();
 	}
@@ -31,7 +31,7 @@ void IWidgetManagementInterface::RenderWidgets()
 {
 	const auto Size = ManagedWidgets.Size();
 	
-	for (size_t i = 0; i < Size; i++)
+	for (auto i = 0; i < Size; i++)
 	{
 		ManagedWidgets[i]->bWasRenderedThisFrame = ManagedWidgets[i]->ShouldBeRendered();
 		
@@ -63,18 +63,30 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 
 bool IWidgetManagementInterface::DestroyWidget(FWidget* Widget)
 {
-	const bool bIsRemoved = ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName());
+	if (ENSURE_VALID(Widget != nullptr))
+	{
+		Widget->DeInit();
+
+		OnWidgetDestroyed(Widget);
+
+		return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName()));
+	}
 	
-	return bIsRemoved;
+	return false;
 }
 
 bool IWidgetManagementInterface::DestroyWidget(const std::string& InWidgetName)
 {
 	if (ManagedWidgetsMap.ContainsKey(InWidgetName))
 	{
-		if (FWidget* Widget = GetWidgetByName(InWidgetName))
+		FWidget* Widget = GetWidgetByName(InWidgetName);
+		if (ENSURE_VALID(Widget != nullptr))
 		{
-			return ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(InWidgetName);		
+			Widget->DeInit();
+
+			OnWidgetDestroyed(Widget);
+
+			return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(InWidgetName));		
 		}
 	}
 
@@ -96,12 +108,21 @@ bool IWidgetManagementInterface::HasWidget(FWidget* InWidget)
 	return ManagedWidgetsMap.ContainsValue(InWidget);
 }
 
+void IWidgetManagementInterface::OnWidgetCreated(FWidget* NewWidget)
+{
+	AddChild(NewWidget);
+}
+
+void IWidgetManagementInterface::OnWidgetDestroyed(FWidget* NewWidget)
+{
+}
+
 void IWidgetManagementInterface::ChangeWidgetOrder(FWidget* InWidget)
 {
 	const auto ManagedWidgetsNum = ManagedWidgets.Size();
 	const int WidgetOrder = InWidget->GetWidgetOrder();
 
-	for (int i = 0; i < ManagedWidgetsNum; i++)
+	for (auto i = 0; i < ManagedWidgetsNum; i++)
 	{
 		FWidget* CurrentWidget = ManagedWidgets[i];
 		
@@ -125,7 +146,8 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 
 	if (Widget->GetParent() != this)
 	{
-		Widget->WidgetManagementInterface = this;
+		// This means re-register to same parent and it's not supported
+		ENSURE_VALID(false);
 	}
 }
 

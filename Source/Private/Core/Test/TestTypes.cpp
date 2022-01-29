@@ -165,7 +165,7 @@ void FTestTypes::DoTest()
 
 char* FTestTypes::GetTestName() const
 {
-	return TEXT("FTestTypes");
+	return TEXT_B("FTestTypes");
 }
 
 #endif

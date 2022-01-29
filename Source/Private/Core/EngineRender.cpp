@@ -95,7 +95,7 @@ void FEngineRender::DestroyWindow(FWindow* InWindow)
 
 FWindow* FEngineRender::GetFocusedWindow() const
 {
-	for (size_t i = 0; i < ManagedWindows.Size(); i++)
+	for (auto i = 0; i < ManagedWindows.Size(); i++)
 	{
 		if (ManagedWindows[i]->IsWindowFocused())
 		{
@@ -121,7 +121,7 @@ void FEngineRender::OnWindowExposed(const Uint32 WindowId)
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		// @TODO OnWindowExposed...
+		OnWindowMadeVisible(Window);
 	}
 }
 
@@ -130,7 +130,7 @@ void FEngineRender::OnWindowHidden(const Uint32 WindowId)
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		// @TODO OnWindowHidden...
+		OnWindowMadeInVisible(Window);
 	}
 }
 
@@ -148,7 +148,7 @@ void FEngineRender::OnWindowResized(const Uint32 WindowId, const Sint32 X, const
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		Window->Renderer->SetWindowSize(X, Y, false);
+		Window->SetWindowSize(X, Y, false);
 	}
 }
 
@@ -157,7 +157,7 @@ void FEngineRender::OnWindowSizeChanged(const Uint32 WindowId, const Sint32 X, c
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		Window->Renderer->SetWindowSize(X, Y, false);
+		Window->SetWindowSize(X, Y, false);
 	}
 }
 
@@ -166,7 +166,7 @@ void FEngineRender::OnWindowMinimized(const Uint32 WindowId)
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		// @TODO OnWindowMinimized...
+		OnWindowMadeVisible(Window);
 	}
 }
 
@@ -175,6 +175,35 @@ void FEngineRender::OnWindowMaximized(const Uint32 WindowId)
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		// @TODO OnWindowMaximized...
+		OnWindowMadeInVisible(Window);
 	}
+}
+
+void FEngineRender::SetWindowFocus(const Uint32 WindowId, const bool bIsFocused)
+{
+	FWindow* Window = GetWindowById(WindowId);
+	if (Window != nullptr)
+	{
+		Window->SetWindowFocus(bIsFocused);
+	}
+}
+
+void FEngineRender::OnWindowMadeVisible(FWindow* Window)
+{
+	Window->OnWindowMadeVisible();
+}
+
+void FEngineRender::OnWindowMadeInVisible(FWindow* Window)
+{
+	Window->OnWindowMadeInVisible();
+}
+
+void FEngineRender::OnWindowSizeChanged(FWindow* Window, const Sint32 X, const Sint32 Y)
+{
+	Window->OnWindowSizeChanged(X, Y);
+}
+
+void FEngineRender::OnWindowLocationChanged(FWindow* Window, const Sint32 X, const Sint32 Y)
+{
+	Window->OnWindowSizeChanged(X, Y);
 }

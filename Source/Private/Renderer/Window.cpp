@@ -7,13 +7,15 @@
 #include "Renderer/Renderer.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
-	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags)), WindowTitle(InTitle)
+	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags))
+	, WindowTitle(InTitle)
 	, WindowPositionX(InPositionX)
 	, WindowPositionY(InPositionY)
 	, WindowWidth(InWidth)
 	, WindowHeight(InHeight)
 	, WindowFlags(InFlags)
 	, bIsWindowFocused(false)
+	, bIsWindowVisible(true)
 {
 	if (Window != nullptr)
 	{
@@ -60,49 +62,17 @@ void FWindow::SetWindowFocus(const bool bInNewFocus)
 	SDL_SetWindowInputFocus(Window);
 }
 
-void FWindow::OnWindowFocusReceive()
-{
-	LOG_DEBUG("FOCUS " << IsWindowFocused());
-}
-
-void FWindow::OnWindowFocusLost()
-{
-	LOG_DEBUG("FOCUS " << IsWindowFocused());
-}
-
 void FWindow::ReceiveTick()
 {
-	Tick();
+	if (bIsWindowVisible)
+	{
+		Tick();
+	}
 }
 
 void FWindow::Tick()
 {
 	WidgetManager->TickWidgets();
-
-	const Uint32 SdlWindowFlags = SDL_GetWindowFlags(Window);
-
-	WindowFlags = SdlWindowFlags;
-
-	// Has focus  SDL_WINDOW_INPUT_FOCUS SDL_WINDOW_INPUT_GRABBED SDL_WINDOW_MOUSE_FOCUS
-	if (BITMASK_IS_SET(SdlWindowFlags, SDL_WINDOW_MOUSE_FOCUS))
-	{
-		if (!IsWindowFocused())
-		{
-			bIsWindowFocused = true;
-
-			OnWindowFocusReceive();
-		}
-	}
-	// Do not have focus
-	else
-	{
-		if (IsWindowFocused())
-		{
-			bIsWindowFocused = false;
-
-			OnWindowFocusLost();
-		}
-	}
 }
 
 void FWindow::Render()
@@ -127,6 +97,12 @@ void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 
 	WindowWidth = X;
 	WindowHeight = Y;
+
+	CArray<FWidget*> Widgets = WidgetManager->GetManagedWidgets();
+	for (FWidget* Widget : Widgets)
+	{
+		Widget->OnWindowChanged();
+	}
 }
 
 void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)
@@ -168,6 +144,26 @@ FVector2D<int> FWindow::GetWindowLocation() const
 	SDL_GetWindowPosition(Window, &WindowLocation.X, &WindowLocation.Y);
 
 	return WindowLocation;
+}
+
+void FWindow::OnWindowMadeVisible()
+{
+	bIsWindowVisible = true;
+}
+
+void FWindow::OnWindowMadeInVisible()
+{
+	bIsWindowVisible = false;
+}
+
+void FWindow::OnWindowSizeChanged(const Sint32 X, const Sint32 Y)
+{
+	SetWindowSize(X, Y, false);
+}
+
+void FWindow::OnWindowLocationChanged(const Sint32 X, const Sint32 Y)
+{
+	SetWindowLocation(X, Y, false);
 }
 
 FWidgetManager* FWindow::CreateWidgetManager()

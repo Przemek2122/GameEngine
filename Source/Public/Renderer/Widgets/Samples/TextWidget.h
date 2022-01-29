@@ -16,17 +16,23 @@ class FTextWidget : public FWidget
 {
 public:
 	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
-	virtual ~FTextWidget() override;
+	~FTextWidget() override;
 
 	/** Begin FWidget */
-	virtual void Render() override;
-	virtual void SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation) override;
-	virtual void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation) override;
-	virtual void SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true) override;
-	virtual void OnClippingMethodChanged(EClipping NewClipping) override;
+	void Init() override;
+	void Render() override;
+	void ReCalculate() override;
+	void SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation) override;
+	void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation) override;
+	void SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true) override;
+	void OnClippingMethodChanged(EClipping NewClipping) override;
 	/** End FWidget */
-	
+
+	/** Use for simple string InText='"Some text ..."' */
 	void SetText(const std::string& InText);
+	/** Use for advanced text like InText='"Test button " << 1' */
+#define SetTextM(InText) SetText(TEXT_A(InText))
+
 	_NODISCARD std::string GetDesiredText() const;
 	_NODISCARD std::string GetRenderedText() const;
 

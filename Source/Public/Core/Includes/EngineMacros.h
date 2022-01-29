@@ -34,7 +34,20 @@ SDL_FORCE_INLINE bool Inline_ENSURE_VALID_Lambda(auto Condition)
 //#define ENSURE_VALID_MESSAGE(Condition, Message)
 #endif
 
-#define TEXT(Text) const_cast<char*>(Text)
+/**
+ * Advanced text, returns std::string, can be used anywhere
+ * Can be used like:
+ * TEXT_O("Test button " << "1" << 1)
+ */
+#define TEXT_A(Message) (dynamic_cast<std::ostringstream&>(TEXT_O(Message)).str())
+/**
+ * more advanced text, returns ostringstream
+ * Can be used like:
+ * TEXT_O("Test button " << "1" << 1)
+ */
+#define TEXT_O(Message) (std::ostringstream().flush() << Message)
+/** Most basic text implementation, just changes to char* */
+#define TEXT_B(Text) const_cast<char*>(Text)
 #define STRING(Text) std::string(Text)
 
 #define DLLEXPORT __declspec(dllexport)

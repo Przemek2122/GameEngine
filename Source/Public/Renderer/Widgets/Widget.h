@@ -10,7 +10,7 @@ class IWidgetManagementInterface;
 /** Visibility and hit control enum */
 enum class EWidgetVisibility : Uint8
 {
-	None,
+	None,					// Should never happen
 	Visible,				// Visible and interactive
 	VisibleNotInteractive,	// Visible but not interactive
 	Hidden,					// Not visible but interactive
@@ -20,7 +20,7 @@ enum class EWidgetVisibility : Uint8
 /** Alignment of parent widget control */
 enum class EAnchor : Uint8
 {
-	None,					// Should be internal use only.
+	None,					// Anchor system not used at all
 	Center,					// Center of parent widget
 	LeftTop,				// Left top corner
 	LeftBottom,				// left bottom corner
@@ -52,35 +52,44 @@ class FWidget : public IWidgetManagementInterface
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
 	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = 0);
-	virtual ~FWidget() override;
+	virtual ~FWidget() override = default;
 
 	virtual void ReceiveTick();
 	virtual void ReceiveRender();
-	
+
+	/**
+	 * Called right after construction
+	 * Usage: Set default size, bind delegates etc...
+	 */
+	virtual void Init();
+	/** Called right before destruction */
+	virtual void DeInit();
 	/** Called on all widgets before Tick(), should be used for input actions like click etc... */
 	virtual void HandleInput();
 	/** Called each frame. */
 	virtual void Tick();
 	/** Called each frame. Should be used To draw data only. */
 	virtual void Render();
+	/** Called when there is a need for recalculating cached data eg: Window size changed. */
+	virtual void ReCalculate();
 
+public:
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const override;
 	_NODISCARD virtual bool HasWidgetManagerOwner() const override;
 	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const override;
 	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
+	virtual void OnWindowChanged() override;
 	/** End IWidgetManagementInterface */
 	
 	/** Decides if Render() should be called, affects all children */
 	_NODISCARD virtual bool ShouldBeRendered() const;
-
-public:
+	
 	_NODISCARD FWindow* GetWindow() const;
 	_NODISCARD FRenderer* GetRenderer() const;
 	static _NODISCARD FEventHandler* GetEventHandler();
-
-public:
+	
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
 
@@ -109,12 +118,21 @@ public:
 	virtual void SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation);
 	_NODISCARD virtual FVector2D<int> GetWidgetLocationRelative() const;
 	virtual void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation);
+
+protected:
+	SDL_FORCE_INLINE void SetWidgetLocationAbsoluteInternal(const FVector2D<int> InWidgetLocation);
+	SDL_FORCE_INLINE void SetWidgetLocationRelativeInternal(const FVector2D<int> InWidgetLocation);
 	
+public:
 	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
 	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor = true);
-
+	
+protected:
+	SDL_FORCE_INLINE void SetWidgetSizeInternal(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor = true);
+	
+public:
 	/** Called when parent widget is changed or when widget itself is changed.  */
-	virtual void RefreshWidget();
+	virtual void RefreshWidget(const bool bRefreshChilds = true);
 	virtual void RefreshWidgetSize();
 
 private:

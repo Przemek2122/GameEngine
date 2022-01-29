@@ -9,18 +9,20 @@ class FButtonWidget : public FInteractionBaseWidget
 {
 public:
 	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
-	virtual ~FButtonWidget() override;
+	virtual ~FButtonWidget() override = default;
 
-	virtual void Tick() override;
-	virtual void Render() override;
+	/** Begin FWidget */
+	void Init() override;
+	void Render() override;
+	/** End FWidget */
 
 	/** Begin FInteractionBaseWidget */
-	virtual void NativeHover() override;
-	virtual void NativePress() override;
-	virtual void NativeRelease() override;
-	virtual void NativeReleaseOutsideWidget() override;
-	virtual void NativeMouseEnterWidget() override;
-	virtual void NativeMouseExitWidget() override;
+	void NativeHover() override;
+	void NativePress() override;
+	void NativeRelease() override;
+	void NativeReleaseOutsideWidget() override;
+	void NativeMouseEnterWidget() override;
+	void NativeMouseExitWidget() override;
 	/** End FInteractionBaseWidget */
 
 public:
@@ -30,7 +32,6 @@ public:
 
 protected:
 	FColorRGBA ButtonRenderColor;
-
 	FColorRGBA ButtonNormalColor;
 	FColorRGBA ButtonHoverColor;
 	FColorRGBA ButtonClickColor;

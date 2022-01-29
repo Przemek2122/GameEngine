@@ -6,36 +6,32 @@
 
 FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FInteractionBaseWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
+	, ButtonRenderColor(FColorRGBA::ColorGray())
 	, ButtonNormalColor(FColorRGBA::ColorGray())
 	, ButtonHoverColor(FColorRGBA::ColorLightGray())
 	, ButtonClickColor(FColorRGBA::ColorDarkGray())
 {
-	SetWidgetSize({ 200, 40 });
+}
 
-	ButtonRenderColor = ButtonNormalColor;
+void FButtonWidget::Init()
+{
+	Super::Init();
+
+	SetWidgetSize({ 200, 40 });
 
 #if _DEBUG
 	OnClickPress.BindLambda(
-	[]
+	[this]
 	{
-		LOG_WARN("Button pressed!");
+		LOG_WARN("Button '" << GetName() << "' pressed!");
 	});
 	
 	OnClickRelease.BindLambda(
-	[]
+	[this]
 	{
-		LOG_WARN("Button released!");
+		LOG_WARN("Button '" << GetName() << "' released!");
 	});
 #endif
-}
-
-FButtonWidget::~FButtonWidget()
-{
-}
-
-void FButtonWidget::Tick()
-{
-	Super::Tick();
 }
 
 void FButtonWidget::Render()

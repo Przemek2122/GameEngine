@@ -32,7 +32,7 @@ public:
 
 protected:
 	SDL_Window* Window;
-	FRenderer* Renderer;
+	FRenderer* Renderer{};
 	char* WindowTitle;
 	int WindowPositionX;
 	int WindowPositionY;
@@ -47,11 +47,9 @@ public:
 
 protected:
 	bool bIsWindowFocused;
-	/** Called when window gets focus. When user selects it or focues by code. */
-	virtual void OnWindowFocusReceive();
-	/** Not focused anymore. */
-	virtual void OnWindowFocusLost();
+	bool bIsWindowVisible;
 
+protected:
 	void ReceiveTick();
 
 public:
@@ -66,7 +64,8 @@ protected:
 public:
 	/** Call to change window size. */
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true);
-
+	
+	/** Call to change window location. */
 	void SetWindowLocation(const int X, const int Y, const bool bUpdateSDL);
 
 	_NODISCARD FRenderer* GetRenderer() const;
@@ -78,9 +77,15 @@ public:
 
 	_NODISCARD FVector2D<int> GetWindowLocation() const;
 
+	virtual void OnWindowMadeVisible();
+	virtual void OnWindowMadeInVisible();
+
+	virtual void OnWindowSizeChanged(Sint32 X, Sint32 Y);
+	virtual void OnWindowLocationChanged(Sint32 X, Sint32 Y);
+
 protected:
-	FWidgetManager* WidgetManager;
-	FEntityManager* EntityManager;
+	FWidgetManager* WidgetManager{};
+	FEntityManager* EntityManager{};
 	
 protected:
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
