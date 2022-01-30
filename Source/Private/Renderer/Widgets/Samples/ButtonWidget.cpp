@@ -11,14 +11,13 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 	, ButtonHoverColor(FColorRGBA::ColorLightGray())
 	, ButtonClickColor(FColorRGBA::ColorDarkGray())
 {
+	SetWidgetSizeInternal({ 200, 40 }, false);
 }
 
 void FButtonWidget::Init()
 {
 	Super::Init();
-
-	SetWidgetSize({ 200, 40 });
-
+	
 #if _DEBUG
 	OnClickPress.BindLambda(
 	[this]

@@ -18,7 +18,6 @@ class FMouseSparkWidget : public FWidget
 {
 public:
 	FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
-	virtual ~FMouseSparkWidget() override;
 
 	/** Begin FWidget interface */
 	virtual void Tick() override;
