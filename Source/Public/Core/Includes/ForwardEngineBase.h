@@ -1,8 +1,9 @@
-// Created by Przemys³aw Wiewióra 2020
+// Created by Przemys³aw Wiewióra 2020 - 2022
 
 #pragma once
 
 // Engine base classes forward declarations
+
 class FEngineMain;
 class FEngine;
 class FEngineRender;
@@ -30,6 +31,7 @@ template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
 #include "Types/Delegate.h"
 
+/** Begin of containers */
 template<typename TType, typename TSizeType>
 class CContainerBase;
 template<typename TType, typename TSizeType>
@@ -42,3 +44,9 @@ template<typename TType, typename TSizeType>
 class CDeque;
 template<typename TType, typename TSizeType>
 class CQueueSafe;
+/** End of containers */
+
+/** Begin of memory */
+template<typename TTypeToStore>
+class FAutoDeletePointer;
+/** End of memory */

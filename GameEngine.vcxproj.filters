@@ -27,89 +27,98 @@
     <Filter Include="Private\Core\Interfaces">
       <UniqueIdentifier>{laf7zbel-is0kz-1g2xm-sutpy-6fpa152xg2nz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Core\Test">
+    <Filter Include="Private\Core\Memory">
       <UniqueIdentifier>{n3w3sh5k-5zh9r-8zi6l-62fc9-gz5lh3466b5m}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Misc">
+    <Filter Include="Private\Core\Test">
       <UniqueIdentifier>{9iraf6i2-zu3rx-4ibkx-p8i8u-l4swg2kulgnc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Network">
+    <Filter Include="Private\Misc">
       <UniqueIdentifier>{x148t2a4-7bwhj-es1e5-rylio-hliu5hnwhtfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer">
+    <Filter Include="Private\Network">
       <UniqueIdentifier>{545unj2g-tgiml-6ha08-751y2-jjee2jadsyco}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer\Widgets">
+    <Filter Include="Private\Renderer">
       <UniqueIdentifier>{w72wsst8-gf8m9-tya7g-sybhm-0j4tuu70h1uc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Renderer\Widgets\Samples">
+    <Filter Include="Private\Renderer\Widgets">
       <UniqueIdentifier>{14acxo7b-5xg8o-084jb-unf8g-86dkj6149wab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types">
+    <Filter Include="Private\Renderer\Widgets\Samples">
       <UniqueIdentifier>{uukon1kl-msi95-nckyf-o1mbi-sywixbw44h25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types\SmartPointer">
+    <Filter Include="Private\Types">
       <UniqueIdentifier>{5pbukado-b61dl-zxj70-2ds6o-t0gdx0fzb3hd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public">
+    <Filter Include="Private\Types\SmartPointer">
       <UniqueIdentifier>{astniys5-nfj1w-4ih3r-0jzxt-fooxkb2id47p}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets">
+    <Filter Include="Public">
       <UniqueIdentifier>{9btedf0e-tpi1k-71ma8-7g43l-7oczrpfophcu}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Containers">
+    <Filter Include="Public\Assets">
       <UniqueIdentifier>{rme5xgzc-jlxje-tnfk3-hh5s4-bc71unuyt1as}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core">
+    <Filter Include="Public\Containers">
       <UniqueIdentifier>{tklelt4o-7n83f-u4sad-sr2id-djg4tcllj78t}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS">
+    <Filter Include="Public\Core">
       <UniqueIdentifier>{3tono71z-rcmb6-ulb8j-kzi60-nbt2w5knpbh1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Components">
+    <Filter Include="Public\Core\ECS">
       <UniqueIdentifier>{ghhz4xso-uzdls-z0w68-f0amc-k31ktadojp4x}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Entities">
+    <Filter Include="Public\Core\ECS\Components">
       <UniqueIdentifier>{a33eg931-oo54t-nnz3h-kw5mt-s52tto2w3sch}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Includes">
+    <Filter Include="Public\Core\ECS\Entities">
       <UniqueIdentifier>{y45dhyod-kk4ya-ao5dj-g1ff7-eettkns6yaw7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Input">
+    <Filter Include="Public\Core\Includes">
       <UniqueIdentifier>{osixkmgj-7l04a-a4mpn-8de5p-k1720ugk6xzz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Interfaces">
+    <Filter Include="Public\Core\Input">
       <UniqueIdentifier>{c5cjbppz-trlsa-ngy7t-lm69p-9uhpd0m7rx7h}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test">
+    <Filter Include="Public\Core\Interfaces">
       <UniqueIdentifier>{5enwo8rd-eeyr7-jn3ni-0xghk-c3bmxozl4022}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Misc">
+    <Filter Include="Public\Core\Memory">
       <UniqueIdentifier>{fpksluhp-eswzy-olb40-tjl8z-klhwrcresfgo}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Network">
+    <Filter Include="Public\Core\Test">
       <UniqueIdentifier>{ida9mbpt-xyfdg-91m4c-2p7x2-yiise4rjioap}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer">
+    <Filter Include="Public\Misc">
       <UniqueIdentifier>{wklk70sc-ey18h-9ofew-n44or-lww08ppfogdt}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets">
+    <Filter Include="Public\Network">
       <UniqueIdentifier>{ttoc12ok-63u0n-8dchy-n0y53-m1g2osczdkz8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\Samples">
+    <Filter Include="Public\Renderer">
       <UniqueIdentifier>{k2ktgucx-nb59j-2i0xm-h4s2d-3074uj6srlws}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types">
+    <Filter Include="Public\Renderer\Widgets">
       <UniqueIdentifier>{wmmf13zj-isfci-gcdng-n0ar2-g03wcs1fd1xz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\SmartPointer">
+    <Filter Include="Public\Renderer\Widgets\Samples">
       <UniqueIdentifier>{7d8as1ow-52lgj-usd4r-yxwmt-tehe0a31t0ek}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty">
+    <Filter Include="Public\Types">
       <UniqueIdentifier>{bg8c5knx-7ddw4-zg92k-n86es-65eu5rcibg5o}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\SDL">
+    <Filter Include="Public\Types\SmartPointer">
       <UniqueIdentifier>{galm3g0a-nz1iz-6zwh6-wwgbt-yisg21zpwd02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{3878jr3x-adltd-ylm51-53kcd-w7g21b3d9fcg}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Chromium">
+      <UniqueIdentifier>{4rntjf8y-rx8s3-9pdhp-g66ie-be0hofalcyit}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\SDL">
+      <UniqueIdentifier>{yg3mbjl0-ljewa-ajuo9-ohxhn-e2n6cewozgab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +233,15 @@
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h">
       <Filter>Public\Core\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointer.h">
+      <Filter>Public\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointerRef.h">
+      <Filter>Public\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointerRefCounter.h">
+      <Filter>Public\Core\Memory</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Object.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -278,6 +296,9 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
@@ -285,6 +306,9 @@
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsManagementInterface.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsPositionInterface.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Window.h">
@@ -664,6 +688,15 @@
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp">
       <Filter>Private\Core\Interfaces</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointer.cpp">
+      <Filter>Private\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointerRef.cpp">
+      <Filter>Private\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointerRefCounter.cpp">
+      <Filter>Private\Core\Memory</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Object.cpp">
       <Filter>Private\Core</Filter>
     </ClCompile>
@@ -725,6 +758,9 @@
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsManagementInterface.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsPositionInterface.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Window.cpp">

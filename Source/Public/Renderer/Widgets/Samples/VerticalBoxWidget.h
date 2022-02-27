@@ -19,8 +19,8 @@ public:
 	FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
 
 	/** Begin FWidget interface */
-	virtual void Init() override;
-	virtual void Render() override;
+	void Init() override;
+	void Render() override;
 	void ReCalculate() override;
 	/** End FWidget interface */
 

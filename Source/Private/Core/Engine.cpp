@@ -1,4 +1,4 @@
-// Created by Przemys³aw Wiewióra 2020
+// Created by Przemys³aw Wiewióra 2020-2022 https://github.com/Przemek2122/GameEngine
 
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"

@@ -10,12 +10,12 @@ FFont::FFont(FFontAsset* InFontAsset, const int InFontSize)
 	, FontAsset(InFontAsset)
 	, FontSize(InFontSize)
 {
-	InitializeFont();
+	FFont::InitializeFont();
 }
 
 FFont::~FFont()
 {
-	DeInitializeFont();
+	FFont::DeInitializeFont();
 }
 
 TTF_Font* FFont::GetFont() const

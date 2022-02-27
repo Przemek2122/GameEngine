@@ -54,7 +54,7 @@ void FTestCase::DestroyTest()
 
 char* FTestCase::GetTestName() const
 {
-	return TEXT_B("Unnamed test case.");
+	return TEXT_CHAR("Unnamed test case.");
 }
 
 void FTestCase::RegisterTest(FTestManager* InTestManager)

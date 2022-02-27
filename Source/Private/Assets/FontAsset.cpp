@@ -10,25 +10,25 @@ FFontAsset::FFontAsset(const std::string& InAssetName, const std::string& InAsse
 {
 }
 
-TTF_Font* FFontAsset::GetFont(const int Size)
+FFontAsset::~FFontAsset()
 {
-	if (Fonts.ContainsKey(Size))
+	for (const std::pair<const int, FFont*>& FontPair : Fonts)
 	{
-		return Fonts[Size]->GetFont();
-	}
-	else
-	{
-		const std::shared_ptr<FFont> NewFont = MakeFont(Size);
-
-		Fonts.Emplace(Size, NewFont);
-
-		return NewFont->GetFont();
+		delete FontPair.second;
 	}
 }
 
-std::shared_ptr<FFont> FFontAsset::MakeFont(const int Size)
+FFont* FFontAsset::GetFont(const int Size)
 {
-	std::shared_ptr<FFont> NewFontPtr = std::make_shared<FFont>(this, Size);
+	if (!Fonts.ContainsKey(Size))
+	{
+		MakeFont(Size);
+	}
 
-	return NewFontPtr;
+	return Fonts.At(Size);
+}
+
+void FFontAsset::MakeFont(const int Size)
+{
+	Fonts.Emplace(Size, new FFont(this, Size));
 }

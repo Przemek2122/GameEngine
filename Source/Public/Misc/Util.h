@@ -106,7 +106,7 @@ namespace FUtil
 	INLINE_DEBUGABLE std::string GetCurrentTimeNoSpecial();
 
 	/* Returns current time in format 12:01:2019 12:37:23. */
-	INLINE_DEBUGABLE std::string GetCurrTime();
+	INLINE_DEBUGABLE std::string GetCurrentTime();
 
 
 	/** Logs (Info): with white(default) color. */

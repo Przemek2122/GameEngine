@@ -24,7 +24,9 @@
 #include "Core/EngineRender.h"
 #include "Core/EngineMain.h"
 
-#include "ECS/EntityManager.h"
+#include "Core/Memory/AutoDeletePointer.h"
+
+#include "Core/ECS/EntityManager.h"
 
 #include "Renderer/Window.h"
 #include "Renderer/Renderer.h"

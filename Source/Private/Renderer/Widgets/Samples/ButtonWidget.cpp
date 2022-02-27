@@ -11,13 +11,10 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 	, ButtonHoverColor(FColorRGBA::ColorLightGray())
 	, ButtonClickColor(FColorRGBA::ColorDarkGray())
 {
-	SetWidgetSizeInternal({ 200, 40 }, false);
 }
 
 void FButtonWidget::Init()
 {
-	Super::Init();
-	
 #if _DEBUG
 	OnClickPress.BindLambda(
 	[this]
@@ -31,13 +28,17 @@ void FButtonWidget::Init()
 		LOG_WARN("Button '" << GetName() << "' released!");
 	});
 #endif
+
+	SetWidgetSize({ 200, 40 });
+
+	Super::Init();
 }
 
 void FButtonWidget::Render()
 {
 	Super::Render();
 
-	GetRenderer()->DrawRectangle(GetWidgetLocationAbsolute(), GetWidgetSize(), ButtonRenderColor);
+	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), ButtonRenderColor);
 }
 
 void FButtonWidget::NativeHover()

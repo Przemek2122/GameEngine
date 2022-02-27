@@ -5,8 +5,8 @@
 
 namespace fs = std::filesystem;
 
-static char* AssetsDir = TEXT_B("Assets");
-static char* PlatformSlash = TEXT_B("\\");
+static char* AssetsDir = TEXT_CHAR("Assets");
+static char* PlatformSlash = TEXT_CHAR("\\");
 
 bool FFilesystem::CreateFolder(const std::string& Path)
 {

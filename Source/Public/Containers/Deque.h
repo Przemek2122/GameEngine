@@ -15,7 +15,7 @@ public:
 	/** Begin CContainerBase interface */
 	SDL_FORCE_INLINE TSizeType Size() const override
 	{
-		return Deque.size();
+		return static_cast<int>(Deque.size());
 	};
 	SDL_FORCE_INLINE bool IsEmpty() const override
 	{

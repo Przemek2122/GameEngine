@@ -20,8 +20,9 @@ public:
 	FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
 
 	/** Begin FWidget interface */
-	virtual void Tick() override;
-	virtual void Render() override;
+	void Init() override;
+	void Tick() override;
+	void Render() override;
 	/** End FWidget interface */
 
 protected:

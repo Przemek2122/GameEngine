@@ -69,7 +69,7 @@ void FTestDelegate::DoTest()
 
 char* FTestDelegate::GetTestName() const
 {
-	return TEXT_B("FTestDelegate");
+	return TEXT_CHAR("FTestDelegate");
 }
 
 #endif

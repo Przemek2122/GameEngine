@@ -12,14 +12,15 @@ class FFontAsset : public FAssetBase
 {
 public:
 	FFontAsset(const std::string& InAssetName, const std::string& InAssetPath);
-	virtual ~FFontAsset() override = default;
+	virtual ~FFontAsset() override;
 	
-	_NODISCARD TTF_Font* GetFont(const int Size);
-
-	std::shared_ptr<FFont> MakeFont(const int Size);
+	_NODISCARD FFont* GetFont(const int Size);
+	
+protected:
+	void MakeFont(const int Size);
 
 protected:
 	/** Different font sizes */
-	CMap<int, std::shared_ptr<FFont>> Fonts;
+	CMap<int, FFont*> Fonts;
 
 };

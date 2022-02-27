@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AssetBase.h"
 
 /**
  * For loading storing and using font.
@@ -11,7 +10,7 @@
 class FFont
 {
 public:
-	explicit FFont(FFontAsset* InFontAsset, const int InFontSize);
+	FFont(FFontAsset* InFontAsset, const int InFontSize);
 	virtual ~FFont();
 
 	_NODISCARD TTF_Font* GetFont() const;

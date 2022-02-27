@@ -63,6 +63,9 @@
     <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
+    <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointer.h" />
+    <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointerRef.h" />
+    <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointerRefCounter.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
     <ClInclude Include="Source\Public\Core\Test\TestDelegate.h" />
@@ -81,9 +84,11 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsManagementInterface.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsPositionInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
@@ -224,6 +229,9 @@
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />
+    <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointer.cpp" />
+    <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointerRef.cpp" />
+    <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointerRefCounter.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp" />
@@ -245,6 +253,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsManagementInterface.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsPositionInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />

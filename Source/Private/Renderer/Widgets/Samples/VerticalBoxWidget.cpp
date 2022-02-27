@@ -11,9 +11,9 @@ FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManag
 
 void FVerticalBoxWidget::Init()
 {
-	FWidget::Init();
+	SetWidgetSize({ 200, 300 });
 
-	SetWidgetSize({200, 300});
+	FWidget::Init();
 }
 
 void FVerticalBoxWidget::Render()
@@ -21,7 +21,7 @@ void FVerticalBoxWidget::Render()
 	Super::Render();
 
 #if _DEBUG
-	GetRenderer()->DrawRectangle(GetWidgetLocationAbsolute(), GetWidgetSize(), FColorRGBA::ColorPink());
+	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorPink());
 #endif
 }
 
@@ -65,7 +65,7 @@ void FVerticalBoxWidget::AlignWidgets()
 
 void FVerticalBoxWidget::AlignDefault()
 {
-	const FVector2D<int> VerticalBoxLocation = GetWidgetLocationRelative();
+	const FVector2D<int> VerticalBoxLocation = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int> VerticalBoxSize = GetWidgetSize();
 
 	const FVector2D<int> VerticalBoxMaxBounds = VerticalBoxLocation + VerticalBoxSize;
@@ -101,10 +101,10 @@ void FVerticalBoxWidget::AlignDefault()
 		VerticalBoxLocationLast += VerticalBoxLocation;
 		VerticalBoxSizeLast += VerticalBoxSizeLast;
 		
-		ChildWidget->SetWidgetLocationRelative(NewChildLocation);
-		ChildWidget->SetWidgetSize(ChildWidgetSize, false);
+		ChildWidget->SetWidgetLocation(NewChildLocation, EWidgetOrientation::Absolute, true);
+		ChildWidget->SetWidgetSize(ChildWidgetSize);
 
-		ChildWidget->RefreshWidget();
+		//ChildWidget->RefreshWidget();
 	}
 }
 

@@ -44,12 +44,12 @@ public:
 	}
 
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType Index)
+	SDL_FORCE_INLINE TValue& operator[](TAutoType&& Index)
 	{
 		return Map[Index];
 	}
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType Index) const
+	SDL_FORCE_INLINE TValue& operator[](TAutoType&& Index) const
 	{
 		return Map[Index];
 	}
@@ -144,20 +144,27 @@ public:
 	template<typename TAutoType>
 	_NODISCARD SDL_FORCE_INLINE TValue FindValueByKey(TAutoType Key)
 	{
-		return Map.find(Key)->second;
+		typename std::map<TKey, TValue>::iterator Iterator = Map.find(Key);
+		return ((Iterator == Map.end()) ? Iterator->second : TValue());
 	}
 	template<typename TAutoType>
-	_NODISCARD SDL_FORCE_INLINE TValue FindKeyByValue(TAutoType Value)
+	_NODISCARD SDL_FORCE_INLINE TKey FindKeyByValue(TAutoType Value)
 	{
-		return Map.find(Value);
+		for (auto Iterator = Map.begin(); Iterator != Map.end(); ++Iterator)
+		{
+		    if (Iterator->second == Value)
+		    {
+				return Iterator->first;
+		    }
+		}
+
+		return TKey();
 	}
 	
 	template<typename TAutoType>
 	_NODISCARD SDL_FORCE_INLINE void SetAll(TAutoType Value)
 	{
-		typename std::map<TKey, TValue>::iterator Iterator;
-		
-		for (Iterator = Map.begin(); Iterator != Map.end(); ++Iterator)
+		for (auto Iterator = Map.begin(); Iterator != Map.end(); ++Iterator)
 		{
 			Iterator->second = Value;
 		}

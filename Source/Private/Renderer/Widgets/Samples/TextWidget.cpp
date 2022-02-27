@@ -7,13 +7,17 @@
 #include "Assets/Font.h"
 #include "Assets/FontAsset.h"
 
-static const char* DefaultText = "Default text."; 
+static const char* DefaultText = "Default text"; 
+static const char* DefaultFont = "OpenSans"; 
 
 FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
+	, DesiredText(DefaultText)
+	, RenderedText(DefaultText)
 	, TextSize(16)
 	, AssetsManager(Engine->GetAssetsManager())
-	, FontAsset(AssetsManager->GetAsset<FFontAsset>("OpenSans")), TextRenderColor(255)
+	, FontAsset(AssetsManager->GetAsset<FFontAsset>(DefaultFont))
+	, TextRenderColor(255)
 	, TextBackgroundRenderColor({ 255, 0, 0})
 	, SDLRect(new SDL_Rect)
 	, TextTexture(nullptr)
@@ -37,10 +41,14 @@ void FTextWidget::Init()
 {
 	FWidget::Init();
 
+	RecalculateSize();
+
 	if (FontAsset != nullptr)
 	{
 		SetText(DefaultText);
 	}
+
+	AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
 }
 
 void FTextWidget::Render()
@@ -48,44 +56,33 @@ void FTextWidget::Render()
 	SDL_RenderCopy(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
 }
 
-void FTextWidget::ReCalculate()
+void FTextWidget::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor)
 {
-	FWidget::ReCalculate();
+	FWidget::SetWidgetLocation(InWidgetLocation, WidgetOrientation, bSetNoneAnchor);
+
+	RefreshTextWidget();
 }
 
-void FTextWidget::SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation)
-{
-	Super::SetWidgetLocationAbsolute(InWidgetLocation);
-
-	RecalculateSize();
-}
-
-void FTextWidget::SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation)
-{
-	Super::SetWidgetLocationRelative(InWidgetLocation);
-
-	RecalculateSize();
-}
-
-void FTextWidget::SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor)
-{
-	Super::SetWidgetSize(InWidgetSize, true);
-
-	RecalculateSize();
-}
-
-void FTextWidget::OnClippingMethodChanged(EClipping NewClipping)
+void FTextWidget::OnClippingMethodChanged(const EClipping NewClipping)
 {
 	Super::OnClippingMethodChanged(NewClipping);
-	
-	RedrawText();
+
+	RefreshTextWidget();
+}
+
+void FTextWidget::RefreshWidget(const bool bRefreshChildren)
+{
+	Super::RefreshWidget(bRefreshChildren);
+
+	RefreshTextWidget();
 }
 
 void FTextWidget::SetText(const std::string& InText)
 {
 	DesiredText = InText;
 
-	RedrawText();
+	AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
+	RefreshTextWidget();
 }
 
 std::string FTextWidget::GetDesiredText() const
@@ -145,7 +142,9 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 {
 	int ErrorState = -1;
 
-	TTF_Font* Font = FontAsset->GetFont(TextSize);
+	static TTF_Font* Font;
+	if (!Font)
+	Font = FontAsset->GetFont(TextSize)->GetFont();
 	if (Font != nullptr)
 	{
 		ErrorState = TTF_SizeUTF8(Font, RenderedText.c_str(), &InOutSize.X, &InOutSize.Y);
@@ -153,7 +152,7 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 	
 	if (ErrorState) 
 	{
-		LOG_ERROR("Text could not be rendered. " << TTF_GetError());
+		LOG_ERROR("Text could not be rendered. TTF: '" << TTF_GetError() << "' SDL: '" << SDL_GetError() << "'");
 	}
 
 	return ErrorState;
@@ -161,10 +160,13 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 
 void FTextWidget::RecalculateSize() const
 {
-	SDLRect->x = GetWidgetLocationAbsolute().X;
-	SDLRect->y = GetWidgetLocationAbsolute().Y;
-	SDLRect->w = GetWidgetSize().X;
-	SDLRect->h = GetWidgetSize().Y;
+	const FVector2D<int>& LocationCache = GetWidgetLocation(EWidgetOrientation::Absolute);
+	const FVector2D<int>& SizeCache = GetWidgetSize();
+
+	SDLRect->x = LocationCache.X;
+	SDLRect->y = LocationCache.Y;
+	SDLRect->w = SizeCache.X;
+	SDLRect->h = SizeCache.Y;
 }
 
 void FTextWidget::RedrawText()
@@ -183,9 +185,7 @@ void FTextWidget::RedrawText()
 	}
 
 	SDL_Surface* SdlSurface = nullptr;
-
-	TTF_Font* Font = FontAsset->GetFont(TextSize);
-
+	TTF_Font* Font = FontAsset->GetFont(TextSize)->GetFont();
 	if (Font != nullptr)
 	{
 		switch (TextRenderMode)
@@ -205,10 +205,6 @@ void FTextWidget::RedrawText()
 				SdlSurface = TTF_RenderText_Shaded(Font, RenderedText.c_str(), TextRenderColor, TextBackgroundRenderColor);
 			}
 			break;
-		default:
-			// Text will not be rendered
-			// Due to default case
-			ENSURE_VALID(false);
 		}
 	}
 
@@ -245,7 +241,7 @@ void FTextWidget::RedrawText()
 	SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
 }
 
-void FTextWidget::SetTextRenderMode(ETextRenderMode NewTextRenderMode)
+void FTextWidget::SetTextRenderMode(const ETextRenderMode NewTextRenderMode)
 {
 	TextRenderMode = NewTextRenderMode;
 }
@@ -253,4 +249,11 @@ void FTextWidget::SetTextRenderMode(ETextRenderMode NewTextRenderMode)
 ETextRenderMode FTextWidget::GetTextRenderMode() const
 {
 	return TextRenderMode;
+}
+
+void FTextWidget::RefreshTextWidget()
+{
+	RecalculateSize();
+
+	RedrawText();
 }

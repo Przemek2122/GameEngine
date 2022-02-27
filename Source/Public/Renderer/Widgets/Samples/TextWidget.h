@@ -17,26 +17,34 @@ class FTextWidget : public FWidget
 public:
 	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
 	~FTextWidget() override;
-
+	
 	/** Begin FWidget */
 	void Init() override;
 	void Render() override;
-	void ReCalculate() override;
-	void SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation) override;
-	void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation) override;
-	void SetWidgetSize(FVector2D<int> InWidgetSize, const bool bUpdateAnchor = true) override;
+	void SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor) override;
 	void OnClippingMethodChanged(EClipping NewClipping) override;
+	void RefreshWidget(const bool bRefreshChildren) override;
 	/** End FWidget */
 
-	/** Use for simple string InText='"Some text ..."' */
+public:
+	/** Use for advanced text with parameters like InText='"Test button " << 1' */
+#define SET_TEXT_ADV(InText) SetText(TEXT_ADV(InText))
+	/**
+	 * Use for simple string InText='"Some text ..."'
+	 * You can use SetTextM("Test button " << 1 << SomeParameter)
+	 * or std::format("{1} to {0}", "a", "b") for parameterized versions.
+	 */
 	void SetText(const std::string& InText);
-	/** Use for advanced text like InText='"Test button " << 1' */
-#define SetTextM(InText) SetText(TEXT_A(InText))
 
 	_NODISCARD std::string GetDesiredText() const;
 	_NODISCARD std::string GetRenderedText() const;
 
+	void SetTextRenderMode(ETextRenderMode NewTextRenderMode);
+	_NODISCARD ETextRenderMode GetTextRenderMode() const;
+
 protected:
+	void RefreshTextWidget();
+
 	/** Auto adjusts size for @RenderedText */
 	void AutoAdjustSize(const bool bLimitToParentSize = false);
 	/** Helper for AutoAdjustSize */
@@ -51,6 +59,7 @@ protected:
 protected:
 	std::string DesiredText;
 	std::string RenderedText;
+
 	int TextSize;
 
 	FAssetsManager* AssetsManager;
@@ -64,11 +73,6 @@ protected:
 
 	FVector2D<int> LastTextTextureSize;
 
-public:
-	void SetTextRenderMode(ETextRenderMode NewTextRenderMode);
-	_NODISCARD ETextRenderMode GetTextRenderMode() const;
-
-private:
 	ETextRenderMode TextRenderMode;
 
 protected:

@@ -25,7 +25,13 @@ FMouseSparkWidget::FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagem
 	, MaxNumOfPoints(128)
 	, PointPerTick(2)
 {
-	DefaultAnchor = EAnchor::None;
+}
+
+void FMouseSparkWidget::Init()
+{
+	FWidget::Init();
+
+	SetDefaultAnchor(EAnchor::None);
 }
 
 void FMouseSparkWidget::Tick()

@@ -1,50 +1,20 @@
-// Created by Przemys³aw Wiewióra 2020
+// See https://github.com/Przemek2122/GameEngine
 
 #pragma once
 
 #include "CoreMinimal.h"
 
+#include "WidgetsPositionInterface.h"
+#include "WidgetsManagementInterface.h"
+#include "WidgetEnums.h"
+
 class FInteractionBaseWidget;
-class IWidgetManagementInterface;
-
-/** Visibility and hit control enum */
-enum class EWidgetVisibility : Uint8
-{
-	None,					// Should never happen
-	Visible,				// Visible and interactive
-	VisibleNotInteractive,	// Visible but not interactive
-	Hidden,					// Not visible but interactive
-	Collapsed,				// Not visible and non interactive
-};
-
-/** Alignment of parent widget control */
-enum class EAnchor : Uint8
-{
-	None,					// Anchor system not used at all
-	Center,					// Center of parent widget
-	LeftTop,				// Left top corner
-	LeftBottom,				// left bottom corner
-	RightTop,				// Right top corner
-	RightBottom,			// Right bottom corner
-	TopCenter,				// Center of top edge
-	LeftCenter,				// Center of left edge
-	BottomCenter,			// Center of bottom edge
-	RightCenter				// Center of right edge
-};
-
-/** What should happen if widget is too big? */
-enum class EClipping : Uint8
-{
-	None,					// Do not clip
-	Resize,					// Use SDL to resize if available
-	Cut,					// Just cut if too big
-};
 
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
  * It's mostly to ensure widget render in proper window. 
  */
-class FWidget : public IWidgetManagementInterface
+class FWidget : public IWidgetPositionInterface
 {
 	friend IWidgetManagementInterface;
 	friend FInteractionBaseWidget;
@@ -54,24 +24,26 @@ protected:
 	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = 0);
 	virtual ~FWidget() override = default;
 
+	/** Advanced, use Tick() if possible instead. */
 	virtual void ReceiveTick();
+	/** Advanced, use Render() if possible instead. */
 	virtual void ReceiveRender();
 
-	/**
-	 * Called right after construction
-	 * Usage: Set default size, bind delegates etc...
-	 */
+	/** Called right after construction\n Usage: Set default size, bind delegates etc...*/
 	virtual void Init();
 	/** Called right before destruction */
 	virtual void DeInit();
 	/** Called on all widgets before Tick(), should be used for input actions like click etc... */
 	virtual void HandleInput();
-	/** Called each frame. */
+	/** Called each frame.\n Should be used for code logic. */
 	virtual void Tick();
-	/** Called each frame. Should be used To draw data only. */
+	/** Called each frame.\n Should be used To draw data only. */
 	virtual void Render();
-	/** Called when there is a need for recalculating cached data eg: Window size changed. */
+	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
+	
+	/** Full widget refresh. Performance heavy. */
+	virtual void RefreshWidget(const bool bRefreshChilds = true);
 
 public:
 	/** Begin IWidgetManagementInterface */
@@ -98,6 +70,7 @@ private:
 	EWidgetVisibility WidgetVisibility;
 
 public:
+	/** Name of this widget. Can be displayed or widget can be get using this variable. */
 	_NODISCARD std::string GetName() const;
 
 private:
@@ -114,59 +87,10 @@ private:
 	int WidgetOrder;
 
 public:
-	_NODISCARD virtual FVector2D<int> GetWidgetLocationAbsolute() const;
-	virtual void SetWidgetLocationAbsolute(const FVector2D<int> InWidgetLocation);
-	_NODISCARD virtual FVector2D<int> GetWidgetLocationRelative() const;
-	virtual void SetWidgetLocationRelative(const FVector2D<int> InWidgetLocation);
-
-protected:
-	SDL_FORCE_INLINE void SetWidgetLocationAbsoluteInternal(const FVector2D<int> InWidgetLocation);
-	SDL_FORCE_INLINE void SetWidgetLocationRelativeInternal(const FVector2D<int> InWidgetLocation);
-	
-public:
-	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
-	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor = true);
-	
-protected:
-	SDL_FORCE_INLINE void SetWidgetSizeInternal(const FVector2D<int> InWidgetSize, const bool bRefreshAnchor = true);
-	
-public:
-	/** Called when parent widget is changed or when widget itself is changed.  */
-	virtual void RefreshWidget(const bool bRefreshChilds = true);
-	virtual void RefreshWidgetSize();
-
-private:
-	/** Current widget location top left corner location */
-	FVector2D<int> WidgetLocation;
-
-	/** Size of this widget */
-	FVector2D<int> WidgetSize;
-
-public:
-	void RefreshAnchor();
-	void SetAnchor(const EAnchor NewAnchor);
-	_NODISCARD EAnchor GetAnchor() const;
-
-	virtual void OnAnchorChanged(const EAnchor NewAnchor);
-
-private:
-	/** Anchor of this widget. Used to align to parent. */
-	EAnchor Anchor;
-	EAnchor DefaultAnchor;
-
-public:
 	/** @returns parent IWidgetManagementInterface pointer */
 	_NODISCARD IWidgetManagementInterface* GetParent() const;
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
-
-private:
-	EClipping ClippingMethod;
-
-public:
-	_NODISCARD EClipping GetClippingMethod() const;
-	void SetClippingMethod(const EClipping NewClippingMethod);
-	virtual void OnClippingMethodChanged(EClipping NewClipping);
 
 private:
 	/** Owner manager */

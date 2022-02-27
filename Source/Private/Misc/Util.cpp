@@ -19,6 +19,8 @@ namespace FUtil
 	SDL_Thread* LogThread;
 	CQueueSafe<FLogMessage> MessagesQueue;
 
+	static const std::string MonthTable[12] = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" };
+
 	void LogInit(bool EnableLogging)
 	{
 		if (EnableLogging)
@@ -194,37 +196,33 @@ namespace FUtil
 
 	std::string GetCurrentTimeNoSpecial()
 	{
-		std::string MonthTable[12] = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" };
+		time_t RawTime64;
+		time(&RawTime64);
+		tm TimeInfo;
+		localtime_s(&TimeInfo, &RawTime64);
 
-		time_t rawtime;
-		time(&rawtime);
-		struct tm timeinfo;
-		localtime_s(&timeinfo, &rawtime);
-
-		std::string ctm = std::to_string(timeinfo.tm_mday) + "_" + MonthTable[timeinfo.tm_mon] + "_" + std::to_string(timeinfo.tm_year + 1900) + "_"
-			+ std::to_string(timeinfo.tm_hour) + "_" + std::to_string(timeinfo.tm_min) + "_" + std::to_string(timeinfo.tm_sec);
+		std::string ctm = std::to_string(TimeInfo.tm_mday) + "_" + MonthTable[TimeInfo.tm_mon] + "_" + std::to_string(TimeInfo.tm_year + 1900) + "_"
+			+ std::to_string(TimeInfo.tm_hour) + "_" + std::to_string(TimeInfo.tm_min) + "_" + std::to_string(TimeInfo.tm_sec);
 
 		return ctm;
 	}
 
-	std::string GetCurrTime()
+	std::string GetCurrentTime()
 	{
-		std::string MonthTable[12] = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" };
+		time_t RawTime64;
+		time(&RawTime64);
+		tm TimeInfo;
+		localtime_s(&TimeInfo, &RawTime64);
 
-		time_t rawtime;
-		time(&rawtime);
-		struct tm timeinfo;
-		localtime_s(&timeinfo, &rawtime);
-
-		std::string ctm = std::to_string(timeinfo.tm_mday) + "-" + MonthTable[timeinfo.tm_mon] + "-" + std::to_string(timeinfo.tm_year + 1900) + " "
-			+ std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min) + ":" + std::to_string(timeinfo.tm_sec);
+		std::string ctm = std::to_string(TimeInfo.tm_mday) + "-" + MonthTable[TimeInfo.tm_mon] + "-" + std::to_string(TimeInfo.tm_year + 1900) + " "
+			+ std::to_string(TimeInfo.tm_hour) + ":" + std::to_string(TimeInfo.tm_min) + ":" + std::to_string(TimeInfo.tm_sec);
 
 		return ctm;
 	}
 
 	void Info(std::string Message)
 	{
-		Message = GetCurrTime() + " (Info): " + Message;
+		Message = GetCurrentTime() + " (Info): " + Message;
 
 		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Info, Message });
 	}
@@ -237,7 +235,7 @@ namespace FUtil
 	void Debug(std::string Message)
 	{
 #ifdef _DEBUG
-		Message = GetCurrTime() + " (Debug): " + Message;
+		Message = GetCurrentTime() + " (Debug): " + Message;
 
 		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Debug, Message });
 #endif
@@ -250,7 +248,7 @@ namespace FUtil
 
 	void Warn(std::string Message)
 	{
-		Message = GetCurrTime() + " (Warn): " + Message;
+		Message = GetCurrentTime() + " (Warn): " + Message;
 
 		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Warning, Message });
 	}
@@ -262,7 +260,7 @@ namespace FUtil
 
 	void Error(std::string Message)
 	{
-		Message = GetCurrTime() + " (Error): " + Message;
+		Message = GetCurrentTime() + " (Error): " + Message;
 
 		MessagesQueue.PushBackSafe({ ELogMessageType::Message_Error, Message });
 	}

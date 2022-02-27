@@ -1,4 +1,4 @@
-// Created by Przemys³aw Wiewióra 2020
+// See https://github.com/Przemek2122/GameEngine
 
 #include "CoreEngine.h"
 #include "Renderer/Renderer.h"

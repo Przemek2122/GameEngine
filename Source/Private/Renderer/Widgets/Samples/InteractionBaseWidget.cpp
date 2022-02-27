@@ -17,13 +17,15 @@ void FInteractionBaseWidget::HandleInput()
 	Super::HandleInput();
 
 	const FVector2D<int> MouseLocation = GetMouseLocation();
+	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
+	const FVector2D<int> Size = GetWidgetSize();
 
 	bool bIsInWidget = false;
 	
-	if ( MouseLocation.X	>	WidgetLocation.X	
-	&&	 MouseLocation.X	<	WidgetLocation.X + WidgetSize.X
-	&&	 MouseLocation.Y	>	WidgetLocation.Y	
-	&&	 MouseLocation.Y	<	WidgetLocation.Y + WidgetSize.Y )
+	if ( MouseLocation.X	>	Location.X	
+	&&	 MouseLocation.X	<	Location.X + Size.X
+	&&	 MouseLocation.Y	>	Location.Y	
+	&&	 MouseLocation.Y	<	Location.Y + Size.Y )
 	{
 		bIsInWidget = true;
 		

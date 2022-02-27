@@ -100,7 +100,7 @@ public:
 			if (*Iterator == Value)
 			{
 				Iterator = Vector.erase(Iterator);
-				RemovedElements++;
+				++RemovedElements;
 			}
 			else 
 			{
