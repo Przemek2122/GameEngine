@@ -13,6 +13,12 @@
 
 // Add headers that you want to pre-compile here 
 
+#ifdef LIBRARY_EXPORTS
+#    define LIBRARY_API __declspec(dllexport)
+#else
+#    define LIBRARY_API __declspec(dllimport)
+#endif
+
 #include "Includes/FullCppIncludes.h"
 #include "Includes/FullThirdParty.h"
 #include "Includes/FullEngineBase.h"

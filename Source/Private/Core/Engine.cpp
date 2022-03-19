@@ -24,22 +24,17 @@ FEngine::FEngine()
 	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 	, TicksThisSecond(0)
 	, Second(0)
-	, EngineRender(CreateEngineRenderer())
-	, EventHandler(CreateEventHandler())
-	, AssetsManager(CreateAssetsManager())
+	, EngineRender(nullptr)
+	, EventHandler(nullptr)
+	, AssetsManager(nullptr)
+	, TestManager(nullptr)
 {
-#if ENGINE_TESTS
-	TestManager = CreateTestManager();
-#endif
-	
 	FUtil::LogInit();
-	
-	SetFrameRate(60);
 }
 
 FEngine::~FEngine()
 {
-	LOG_INFO("Engine finish.");
+	LOG_INFO("Engine finish (is being destroyed now).");
 
 	TTF_Quit();
 	SDL_Quit();
@@ -52,6 +47,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 #else
 	LOG_INFO("Engine init start.");
 #endif
+
+	SetFrameRate(60);
 	
 	// Read command line flags.
 	while (Argc--)
@@ -70,7 +67,11 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 		}
 	}
 
-	LaunchRelativePath = LaunchFullPath.substr(0, LaunchFullPath.find_last_of('\\'));
+	// We always need correct directory.
+	if (ENSURE_VALID(!LaunchFullPath.empty()))
+	{
+		LaunchRelativePath = LaunchFullPath.substr(0, LaunchFullPath.find_last_of('\\'));
+	}
 
 	// Initialize SDL
 	const auto SdlInitialized = SDL_Init(SDL_INIT_EVERYTHING);
@@ -110,12 +111,19 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	 */
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
+	EngineRender = CreateEngineRenderer();
+	EventHandler = CreateEventHandler();
+	AssetsManager = CreateAssetsManager();
+#if ENGINE_TESTS
+	TestManager = CreateTestManager();
+#endif
+
 #if ENGINE_TESTS && ENGINE_RUN_ENGINE_TESTS
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
 
-	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Fonts\\OpensSans\\OpenSans-Regular.ttf");
+	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Fonts\\OpenSans\\OpenSans-Regular.ttf");
 
 	LOG_INFO("Engine init End");
 

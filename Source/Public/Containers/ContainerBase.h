@@ -11,7 +11,7 @@ class CContainerBase
 public:
 	virtual ~CContainerBase() = default;
 
-	SDL_FORCE_INLINE virtual TSizeType Size() const = 0;
-	SDL_FORCE_INLINE virtual bool IsEmpty() const = 0;
+	virtual TSizeType Size() const = 0;
+	virtual bool IsEmpty() const = 0;
 
 };

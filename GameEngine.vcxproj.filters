@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -120,6 +121,15 @@
     <Filter Include="ThirdParty\SDL">
       <UniqueIdentifier>{yg3mbjl0-ljewa-ajuo9-ohxhn-e2n6cewozgab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{c381f861-3b7f-41aa-82c2-24322e6e10cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\PostBuild">
+      <UniqueIdentifier>{534a9ecc-6b5d-4bf8-8986-dbd33131d86b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\PreBuild">
+      <UniqueIdentifier>{eba934ad-88a4-4d56-8c9a-cff07e767d7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\Assets\AssetBase.h">
@@ -154,9 +164,6 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Core\CoreEngine.h">
-      <Filter>Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
@@ -798,6 +805,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" /> 
-  </ItemGroup> 
-</Project> 
+    <None Include="cpp.hint" />
+    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat">
+      <Filter>Scripts\PreBuild</Filter>
+    </None>
+    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat">
+      <Filter>Scripts\PreBuild</Filter>
+    </None>
+    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat">
+      <Filter>Scripts\PostBuild</Filter>
+    </None>
+    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat">
+      <Filter>Scripts\PostBuild</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Scripts\BuildActions\README.txt">
+      <Filter>Scripts</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
