@@ -6,7 +6,7 @@
 
 #include "CoreMinimal.h"
 
-SDL_FORCE_INLINE inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
+SDL_FORCE_INLINE bool Inline_ENSURE_VALID_Lambda(auto Condition)
 {
 	if (Condition)
 	{
@@ -49,15 +49,5 @@ SDL_FORCE_INLINE inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 /** Most basic text implementation, just changes to char* */
 #define TEXT_CHAR(Text) const_cast<char*>(Text)
 #define STRING(Text) std::string(Text)
-
-#define DLLEXPORT __declspec(dllexport)
-#define DLLIMPORT __declspec(dllimport)
-
-// Unused for now as we make static .lib
-#if GAMEENGINELIB // Inside DLL
-#	define GAMEENGINE_API   __declspec(dllexport)
-#else // Outside DLL
-#	define GAMEENGINE_API   __declspec(dllimport)
-#endif // GAMEENGINELIB
 
 #define Super __super

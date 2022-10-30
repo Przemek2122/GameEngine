@@ -1,6 +1,8 @@
 echo on
 
 REM SAMPLE - In pre build:
-REM call $(GameEngineDir)\BuildActions\PreBuild\GenerateFilesProject.bat $(SolutionDir) 
+REM call $(GameEngineDir)\BuildActions\Scripts\PreBuild\GenerateFilesProject.bat $(SolutionDir) 
 
-call "..\..\SubPrograms\GenerateFiles\Release\GenerateFiles.exe" %1 %2
+REM 
+REM call "%~dp0..\..\..\SubPrograms\GenerateFiles\Release\GenerateFiles.exe" %1 %2
+call D:\Repos\GameEngine\SubPrograms\GenerateFiles.exe %1 %2

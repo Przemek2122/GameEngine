@@ -7,7 +7,7 @@
 class FEventHandler;
 class FEngineManager;
 
-LIBRARY_API class FEngine
+class FEngine
 {
 friend FEngineManager;
 	

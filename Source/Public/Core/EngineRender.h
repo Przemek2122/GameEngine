@@ -11,7 +11,7 @@ class FEngineRender
 
 protected:
 	FEngineRender();
-	~FEngineRender();
+	virtual ~FEngineRender();
 
 public:
 	void Tick();
@@ -35,7 +35,7 @@ protected:
 public:
 	/** Create window from template class */
 	template<class TWindow, typename... TInParams>
-	FWindow* CreateWindow(TInParams... InParams)
+	TWindow* CreateWindow(TInParams... InParams)
 	{
 		TWindow* NewWindow = new TWindow(InParams...);
 
@@ -66,7 +66,7 @@ public:
 	void OnWindowMaximized(Uint32 WindowId);
 
 	void SetWindowFocus(Uint32 WindowId, const bool bIsFocused);
-
+			
 protected:
 	virtual void OnWindowMadeVisible(FWindow* Window);
 	virtual void OnWindowMadeInVisible(FWindow* Window);
@@ -80,5 +80,3 @@ protected:
 	CMap<Uint32, FWindow*> WindowToIdMap;
 
 };
-
-#define FOR_EACH()

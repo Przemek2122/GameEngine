@@ -1,5 +1,7 @@
-﻿  GenerateFiles.cpp
-  GenerateFilters.cpp
-  Utilis.cpp
-  Generating Code...
-  GenerateFiles.vcxproj -> E:\Repos\2DGameEngine\SubPrograms\GenerateFiles\Debug\GenerateFiles.exe
+﻿  Generate.cpp
+D:\Repos\GameEngine\SubPrograms\GenerateFiles\Generate.cpp(40,44): warning C4267: 'argument': conversion from 'size_t' to 'const _Elem', possible loss of data
+          with
+          [
+              _Elem=char
+          ]
+  GenerateFiles.vcxproj -> D:\Repos\GameEngine\SubPrograms\GenerateFiles\Debug\GenerateFiles.exe

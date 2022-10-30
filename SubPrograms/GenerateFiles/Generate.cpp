@@ -14,9 +14,12 @@
 
 int main(int Argc, char* Argv[])
 {	
+	std::cout << "Waiting for a click\n";
+	std::cin.ignore();
+
 	while (Argc--)
 	{
-		if (Argc == 0)
+		if (Argc == 0 && LaunchPath.empty())
 		{
 			LaunchPath = Argv[Argc];
 		}
@@ -32,6 +35,11 @@ int main(int Argc, char* Argv[])
 	
 	{
 		const int FindIndex = LaunchPath.find("SubPrograms");
+		if (FindIndex == -1)
+		{
+			ProjectPath = LaunchPath.find("Scripts");
+		}
+
 		if (FindIndex != -1)
 		{
 			ProjectPath = LaunchPath.substr(0, FindIndex);

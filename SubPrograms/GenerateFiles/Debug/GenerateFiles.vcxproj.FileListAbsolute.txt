@@ -1,2 +1,3 @@
 E:\Repos\2DGameEngine\SubPrograms\GenerateFiles\Debug\GenerateFiles.exe
 E:\Repos\2DGameEngine\SubPrograms\GenerateFiles\Debug\GenerateFiles.pdb
+D:\Repos\GameEngine\SubPrograms\GenerateFiles\Debug\GenerateFiles.exe

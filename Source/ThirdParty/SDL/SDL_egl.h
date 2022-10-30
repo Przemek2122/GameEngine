@@ -143,7 +143,8 @@
      * header compatible with static linking. */
 #   define KHRONOS_APICALL
 #elif defined(_WIN32)
-#   define KHRONOS_APICALL __declspec(dllimport)
+#   define KHRONOS_APICALL 
+
 #elif defined (__SYMBIAN32__)
 #   define KHRONOS_APICALL IMPORT_C
 #elif defined(__ANDROID__)

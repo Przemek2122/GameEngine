@@ -10,7 +10,7 @@ FEngineRender::FEngineRender()
 
 FEngineRender::~FEngineRender()
 {
-	for (auto i = ManagedWindows.Size() - 1; i >= 0; i--)
+	for (int i = ManagedWindows.Size() - 1; i >= 0; i--)
 	{
 		DestroyWindow(ManagedWindows[i]);
 	}
