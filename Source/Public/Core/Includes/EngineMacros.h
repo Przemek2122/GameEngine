@@ -45,9 +45,9 @@ SDL_FORCE_INLINE bool Inline_ENSURE_VALID_Lambda(auto Condition)
  * Can be used like:
  * TEXT_O("Test button " << "1" << 1)
  */
-#define TEXT_OST(Text) (std::ostringstream().flush() << Text)
+#define TEXT_OST(Text) (std::ostringstream().flush() << (Text))
 /** Most basic text implementation, just changes to char* */
-#define TEXT_CHAR(Text) const_cast<char*>(Text)
+#define TEXT_CHAR(Text) (const_cast<char*>(Text))
 #define STRING(Text) std::string(Text)
 
 #define Super __super
