@@ -139,12 +139,14 @@ void FEventHandler::HandleEvents()
 			        case SDL_WINDOWEVENT_FOCUS_GAINED:
 					{
 			            SDL_Log("Window %d gained keyboard focus", Event.window.windowID);
+						Engine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_FOCUS_LOST:
 					{
 			        	LOG_DEBUG("Window " << Event.window.windowID << " lost keyboard focus");
+						Engine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
 			            break;
 					}
 					

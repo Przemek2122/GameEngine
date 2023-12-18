@@ -22,8 +22,8 @@ FMouseSparkWidget::FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagem
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, MinMaxSpeedRange(0.04f, 0.3f)
 	, MinMaxAngleRange(0, 359)
-	, MaxNumOfPoints(128)
-	, PointPerTick(2)
+	, MaxNumOfPoints(256)
+	, PointPerTick(4)
 {
 }
 
