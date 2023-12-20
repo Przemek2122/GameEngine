@@ -141,7 +141,15 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 	ENSURE_VALID(WidgetIndex == -1);
 #endif
 	
-	ManagedWidgets.Push(Widget);
+	ManagedWidgets.InsertByLambda(Widget, [&](FWidget* ArrayObject, FWidget* Localobject)
+	{
+		if (ArrayObject->GetWidgetOrder() >= Localobject->GetWidgetOrder())
+		{
+			return true;
+		}
+
+		return false;
+	});
 	ManagedWidgetsMap.InsertOrAssign(Widget->GetName(), Widget);
 
 	if (Widget->GetParent() != this)

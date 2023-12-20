@@ -8,6 +8,7 @@
 
 #include <vector>
 
+#include "FunctorLambda.h"
 #include "Includes/EngineMacros.h"
 
 /**
@@ -48,6 +49,37 @@ public:
 	SDL_FORCE_INLINE void Push(TType* Value) const
 	{
 		Vector.push_back(Value);
+	}
+
+	void InsertByLambda(TType* Object, FFunctorLambda<bool, TType*, TType*> Function)
+	{
+		for (auto i = 0; i < Vector.size(); i++)
+		{
+			if (Function(Vector[i], Object))
+			{
+				InsertAt(i, Object);
+
+				return;
+			}
+		}
+
+		// Add at the end if not found
+		Push(Object);
+	}
+	void InsertByLambda(TType& Object, FFunctorLambda<bool, TType&, TType&> Function)
+	{
+		for (auto i = 0; i < Vector.size(); i++)
+		{
+			if (Function(Vector[i], Object))
+			{
+				InsertAt(i, Object);
+
+				return;
+			}
+		}
+
+		// Add at the end if not found
+		Push(Object);
 	}
 	
 	template<typename TTypeAuto>
