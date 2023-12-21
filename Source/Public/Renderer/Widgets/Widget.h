@@ -49,8 +49,7 @@ public:
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const override;
-	_NODISCARD virtual bool HasWidgetManagerOwner() const override;
-	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const override;
+	_NODISCARD virtual bool HasParent() const override;
 	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
 	virtual void OnWindowChanged() override;
 	/** End IWidgetManagementInterface */
@@ -88,7 +87,7 @@ private:
 
 public:
 	/** @returns parent IWidgetManagementInterface pointer */
-	_NODISCARD IWidgetManagementInterface* GetParent() const;
+	_NODISCARD IWidgetManagementInterface* GetParent() const override;
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
 

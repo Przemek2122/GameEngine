@@ -24,12 +24,12 @@ FVector2D<int> FWidgetManager::GetWidgetManagerSize() const
 	return OwnerWindow->GetWindowSize();
 }
 
-bool FWidgetManager::HasWidgetManagerOwner() const
+bool FWidgetManager::HasParent() const
 {
 	return false;
 }
 
-IWidgetManagementInterface* FWidgetManager::GetWidgetManagerOwner() const
+IWidgetManagementInterface* FWidgetManager::GetParent() const
 {
 	return nullptr;
 }

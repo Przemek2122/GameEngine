@@ -103,14 +103,9 @@ FVector2D<int> FWidget::GetWidgetManagerSize() const
 	return GetWidgetSize();
 }
 
-bool FWidget::HasWidgetManagerOwner() const
+bool FWidget::HasParent() const
 {
 	return true;
-}
-
-IWidgetManagementInterface* FWidget::GetWidgetManagerOwner() const
-{
-	return GetParent();
 }
 
 FWindow* FWidget::GetOwnerWindow() const
@@ -189,9 +184,9 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 			return ParentWidget->GetParentRoot();
 		}
 		
-		if (WidgetManagementInterface->HasWidgetManagerOwner())
+		if (WidgetManagementInterface->HasParent())
 		{
-			return WidgetManagementInterface->GetWidgetManagerOwner();
+			return WidgetManagementInterface->GetParent();
 		}
 	}
 

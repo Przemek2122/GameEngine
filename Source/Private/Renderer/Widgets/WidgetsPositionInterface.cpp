@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/WidgetsPositionInterface.h"
 
+#include "SDL/SDL_egl.h"
+
 IWidgetPositionInterface::IWidgetPositionInterface(IWidgetManagementInterface* InWidgetManagementInterface)
 	: DefaultAnchorInterface(EAnchor::Center)
 	, AnchorInterface(EAnchor::None)
@@ -179,7 +181,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::RightTop:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;

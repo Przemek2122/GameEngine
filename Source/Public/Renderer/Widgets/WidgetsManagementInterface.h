@@ -23,10 +23,10 @@ public:
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const = 0;
 
 	/** Get owner or nullptr if there is none */
-	_NODISCARD virtual IWidgetManagementInterface* GetWidgetManagerOwner() const = 0;
+	_NODISCARD virtual IWidgetManagementInterface* GetParent() const = 0;
 
 	/** True if has owner */
-	_NODISCARD virtual bool HasWidgetManagerOwner() const = 0;
+	_NODISCARD virtual bool HasParent() const = 0;
 
 	/**
 	 * Ticking widgets works different than render. \n
