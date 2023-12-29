@@ -41,11 +41,11 @@ protected:
 	virtual void Render();
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
-	
+
+public:
 	/** Full widget refresh. Performance heavy. */
 	virtual void RefreshWidget(const bool bRefreshChilds = true);
 
-public:
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const override;

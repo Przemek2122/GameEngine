@@ -41,7 +41,7 @@ void FTextWidget::Init()
 {
 	FWidget::Init();
 
-	RecalculateSize();
+	UpdateSDLRectSize();
 
 	if (FontAsset != nullptr)
 	{
@@ -58,31 +58,32 @@ void FTextWidget::Render()
 
 void FTextWidget::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor)
 {
-	FWidget::SetWidgetLocation(InWidgetLocation, WidgetOrientation, bSetNoneAnchor);
+	Super::SetWidgetLocation(InWidgetLocation, WidgetOrientation, bSetNoneAnchor);
 
-	RefreshTextWidget();
+	UpdateSDLRectSize();
 }
 
 void FTextWidget::OnClippingMethodChanged(const EClipping NewClipping)
 {
 	Super::OnClippingMethodChanged(NewClipping);
 
-	RefreshTextWidget();
+	OnTextChanged();
 }
 
 void FTextWidget::RefreshWidget(const bool bRefreshChildren)
 {
 	Super::RefreshWidget(bRefreshChildren);
 
-	RefreshTextWidget();
+	OnTextChanged();
 }
 
 void FTextWidget::SetText(const std::string& InText)
 {
 	DesiredText = InText;
 
+	OnTextChanged();
+
 	AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
-	RefreshTextWidget();
 }
 
 std::string FTextWidget::GetDesiredText() const
@@ -103,10 +104,6 @@ void FTextWidget::AutoAdjustSize(const bool bLimitToParentSize)
 	{
 		AutoAdjustTextSize(GetParent()->GetWidgetManagerSize());
 	}
-	else
-	{
-		RenderedText = DesiredText;
-	}
 	
 	CalculateDefaultSizeForRenderText(NewWidgetSize);
 	
@@ -115,9 +112,9 @@ void FTextWidget::AutoAdjustSize(const bool bLimitToParentSize)
 
 void FTextWidget::AutoAdjustTextSize(const FVector2D<int>& InMaxSize)
 {
-	RenderedText = DesiredText;
+	std::string TextToCut = DesiredText;
 
-	auto StringSize = RenderedText.length();
+	auto StringSize = TextToCut.length();
 
 	FVector2D<int> OutSize(0);
 
@@ -129,11 +126,11 @@ void FTextWidget::AutoAdjustTextSize(const FVector2D<int>& InMaxSize)
 		
 		if (OutSize.X > InMaxSize.X)
 		{
-			RenderedText = RenderedText.substr(0, --StringSize);
+			TextToCut = TextToCut.substr(0, --StringSize);
 		}
 		else
 		{
-			return;
+			break;
 		}
 	}
 }
@@ -143,14 +140,16 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 	int ErrorState = -1;
 
 	static TTF_Font* Font;
-	if (!Font)
-	Font = FontAsset->GetFont(TextSize)->GetFont();
+	if (Font == nullptr)
+	{
+		Font = FontAsset->GetFont(TextSize)->GetFont();
+	}
 	if (Font != nullptr)
 	{
 		ErrorState = TTF_SizeUTF8(Font, RenderedText.c_str(), &InOutSize.X, &InOutSize.Y);
 	}
 	
-	if (ErrorState) 
+	if (ErrorState)
 	{
 		LOG_ERROR("Text could not be rendered. TTF: '" << TTF_GetError() << "' SDL: '" << SDL_GetError() << "'");
 	}
@@ -158,7 +157,7 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 	return ErrorState;
 }
 
-void FTextWidget::RecalculateSize() const
+void FTextWidget::UpdateSDLRectSize() const
 {
 	const FVector2D<int>& LocationCache = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int>& SizeCache = GetWidgetSize();
@@ -171,74 +170,82 @@ void FTextWidget::RecalculateSize() const
 
 void FTextWidget::RedrawText()
 {
-	if (FontAsset == nullptr)
+	if (RenderedText == DesiredText)
 	{
-		// Without FontAsset it has no chance of working, font is required.
-		ENSURE_VALID(false);
-
 		return;
 	}
 
-	if (bAutoScaleWidget)
+	if (ENSURE_VALID(FontAsset != nullptr) && ENSURE_VALID(!DesiredText.empty()))
 	{
-		AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
-	}
-
-	SDL_Surface* SdlSurface = nullptr;
-	TTF_Font* Font = FontAsset->GetFont(TextSize)->GetFont();
-	if (Font != nullptr)
-	{
-		switch (TextRenderMode)
+		if (bAutoScaleWidget)
 		{
-		case ETextRenderMode::Solid:
+			AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
+		}
+
+		SDL_Surface* SdlSurface = nullptr;
+		TTF_Font* Font = FontAsset->GetFont(TextSize)->GetFont();
+		if (ENSURE_VALID(Font != nullptr))
+		{
+			switch (TextRenderMode)
 			{
-				SdlSurface = TTF_RenderText_Solid(Font, RenderedText.c_str(), TextRenderColor);
+				case ETextRenderMode::Solid:
+				{
+					SdlSurface = TTF_RenderText_Solid(Font, DesiredText.c_str(), TextRenderColor);
+
+					break;
+				}
+				case ETextRenderMode::Blended:
+				{
+					SdlSurface = TTF_RenderText_Blended(Font, DesiredText.c_str(), TextRenderColor);
+
+					break;
+				}
+				case ETextRenderMode::Shaded:
+				{
+					SdlSurface = TTF_RenderText_Shaded(Font, DesiredText.c_str(), TextRenderColor, TextBackgroundRenderColor);
+
+					break;
+				}
 			}
-			break;
-		case ETextRenderMode::Blended:
+		}
+
+		if (ENSURE_VALID(SdlSurface != nullptr))
+		{
+			SDL_LockSurface(SdlSurface); // Lock surface for safe pixel access
+
+			FVector2D<int> WidgetSize = GetWidgetSize();
+
+			// If we have texture and X or Y size has changed and we need texture of different size
+			if (TextTexture == nullptr || (WidgetSize.X != LastTextTextureSize.X || WidgetSize.Y != LastTextTextureSize.Y))
 			{
-				SdlSurface = TTF_RenderText_Blended(Font, RenderedText.c_str(), TextRenderColor);
+				// Destroy old texture
+				SDL_free(TextTexture);
+
+				// Create new texture
+				TextTexture = SDL_CreateTextureFromSurface(GetRenderer()->GetSDLRenderer(), SdlSurface);
+
+				LastTextTextureSize = GetWidgetSize();
 			}
-			break;
-		case ETextRenderMode::Shaded:
+			else
 			{
-				SdlSurface = TTF_RenderText_Shaded(Font, RenderedText.c_str(), TextRenderColor, TextBackgroundRenderColor);
+				// If size not changed update old texture
+				SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
 			}
-			break;
+
+			RenderedText = DesiredText;
+
+			SDL_FreeSurface(SdlSurface);
+			SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
+
+			AutoAdjustSize();
+
+			UpdateSDLRectSize();
+		}
+		else
+		{
+			LOG_ERROR("SdlSurface is NULL");
 		}
 	}
-
-	if (SdlSurface == nullptr)
-	{
-		// Unable to render text
-		ENSURE_VALID(false);
-		
-		return;
-	}
-	
-	SDL_LockSurface(SdlSurface); // Lock surface for safe pixel access
-	
-	FVector2D<int> WidgetSize = GetWidgetSize();
-
-	// If we have texture and X or Y size has changed and we need texture of different size
-	if (TextTexture == nullptr || (WidgetSize.X != LastTextTextureSize.X || WidgetSize.Y != LastTextTextureSize.Y))
-	{
-		// Destroy old texture
-		SDL_free(TextTexture);
-
-		// Create new texture
-		TextTexture = SDL_CreateTextureFromSurface(GetRenderer()->GetSDLRenderer(), SdlSurface);
-		
-		LastTextTextureSize = GetWidgetSize();
-	}
-	else
-	{
-		// If size not changed update old texture
-		SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
-	}
-	
-	SDL_FreeSurface(SdlSurface);
-	SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
 }
 
 void FTextWidget::SetTextRenderMode(const ETextRenderMode NewTextRenderMode)
@@ -251,9 +258,7 @@ ETextRenderMode FTextWidget::GetTextRenderMode() const
 	return TextRenderMode;
 }
 
-void FTextWidget::RefreshTextWidget()
+void FTextWidget::OnTextChanged()
 {
-	RecalculateSize();
-
 	RedrawText();
 }

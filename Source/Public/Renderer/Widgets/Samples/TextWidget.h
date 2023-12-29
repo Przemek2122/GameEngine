@@ -43,7 +43,8 @@ public:
 	_NODISCARD ETextRenderMode GetTextRenderMode() const;
 
 protected:
-	void RefreshTextWidget();
+	/** Redraw text and auto calc size */
+	void OnTextChanged();
 
 	/** Auto adjusts size for @RenderedText */
 	void AutoAdjustSize(const bool bLimitToParentSize = false);
@@ -52,7 +53,7 @@ protected:
 	/** SDL Wrapper */
 	int CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) const;
 	/** Calculate size for SDL */
-	void RecalculateSize() const;
+	void UpdateSDLRectSize() const;
 	/** Makes new texture for text */
 	void RedrawText();
 

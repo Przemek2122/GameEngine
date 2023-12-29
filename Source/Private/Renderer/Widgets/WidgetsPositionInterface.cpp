@@ -56,7 +56,7 @@ void IWidgetPositionInterface::SetWidgetLocation(const FVector2D<int> InWidgetLo
 		}
 		case EWidgetOrientation::Relative:
 		{
-			WidgetLocationInterface = GetWidgetManagerOffset() + InWidgetLocation;
+			WidgetLocationInterface = GetParent()->GetWidgetManagerOffset() + InWidgetLocation;
 
 			break;
 		}
@@ -78,6 +78,8 @@ FVector2D<int> IWidgetPositionInterface::GetWidgetSize() const
 void IWidgetPositionInterface::SetWidgetSize(const FVector2D<int> InWidgetSize)
 {
 	WidgetSizeInterface = InWidgetSize;
+
+	RefreshAnchor();
 
 	RefreshWidgetSize();
 }
@@ -121,18 +123,16 @@ void IWidgetPositionInterface::RefreshWidgetSize()
 		break;
 	}
 
-	for (FWidget* Widget : ManagedWidgets)
-	{
-		Widget->RefreshWidgetSize();
-	}
+	OnRefreshWidgetSize();
+
+	RefreshWidgetSizeChild();
 }
 
 void IWidgetPositionInterface::RefreshWidgetLocation()
 {
-	for (FWidget* Widget : ManagedWidgets)
-	{
-		Widget->RefreshWidgetLocation();
-	}
+	OnRefreshWidgetLocation();
+
+	RefreshWidgetLocationChild();
 }
 
 void IWidgetPositionInterface::RefreshAnchor()
@@ -147,7 +147,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::Center:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 			
 			FVector2D<int> RelativeCenter;
@@ -303,4 +303,28 @@ void IWidgetPositionInterface::SetClippingMethod(const EClipping NewClippingMeth
 
 void IWidgetPositionInterface::OnClippingMethodChanged(EClipping NewClippingMethod)
 {
+}
+
+void IWidgetPositionInterface::OnRefreshWidgetSize()
+{
+}
+
+void IWidgetPositionInterface::OnRefreshWidgetLocation()
+{
+}
+
+void IWidgetPositionInterface::RefreshWidgetSizeChild()
+{
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->RefreshWidgetSize();
+	}
+}
+
+void IWidgetPositionInterface::RefreshWidgetLocationChild()
+{
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->RefreshWidgetLocation();
+	}
 }

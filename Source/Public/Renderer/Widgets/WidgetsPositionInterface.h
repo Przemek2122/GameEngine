@@ -31,11 +31,27 @@ public:
 	/** Set size of this widget. */
 	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize);
 	
-public:
 	/** Called when parent changed size */
-	virtual void RefreshWidgetSize();
+	void RefreshWidgetSize();
 	/** Called when parent changed location */
-	virtual void RefreshWidgetLocation();
+	void RefreshWidgetLocation();
+
+	void RefreshAnchor();
+	void SetDefaultAnchor(const EAnchor NewAnchor);
+	void SetAnchor(const EAnchor NewAnchor);
+	_NODISCARD EAnchor GetAnchor() const;
+
+	_NODISCARD EClipping GetClippingMethod() const;
+	void SetClippingMethod(const EClipping NewClippingMethod);
+	/** @Note: Called before setting ClippingMethod with NewClippingMethod */
+	virtual void OnClippingMethodChanged(EClipping NewClippingMethod);
+
+protected:
+	virtual void OnRefreshWidgetSize();
+	virtual void OnRefreshWidgetLocation();
+
+	virtual void RefreshWidgetSizeChild();
+	virtual void RefreshWidgetLocationChild();
 
 private:
 	/** Current widget location absolute */
@@ -44,19 +60,6 @@ private:
 	/** Size of this widget */
 	FVector2D<int> WidgetSizeInterface;
 
-public:
-	void RefreshAnchor();
-	void SetDefaultAnchor(const EAnchor NewAnchor);
-	void SetAnchor(const EAnchor NewAnchor);
-	_NODISCARD EAnchor GetAnchor() const;
-
-public:
-	_NODISCARD EClipping GetClippingMethod() const;
-	void SetClippingMethod(const EClipping NewClippingMethod);
-	/** @Note: Called before setting ClippingMethod with NewClippingMethod */
-	virtual void OnClippingMethodChanged(EClipping NewClippingMethod);
-
-private:
 	/** Default anchor when this widget is created.\n @See Init() */
 	EAnchor DefaultAnchorInterface;
 	/** Anchor of this widget. Used to align to parent. */

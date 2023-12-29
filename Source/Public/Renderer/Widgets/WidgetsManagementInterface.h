@@ -55,8 +55,13 @@ public:
 
 	/** Create new widget from template, auto-managed. */
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName, const int InWidgetOrder = 0)
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName = "", const int InWidgetOrder = 0)
 	{
+		if (InWidgetName == "")
+		{
+			InWidgetName = GetUniqueNameFor<TWidgetTemplate>();
+		}
+
 #ifdef _DEBUG
 		if (!ENSURE_VALID(!ManagedWidgetsMap.ContainsKey(InWidgetName)))
 		{
@@ -100,6 +105,17 @@ public:
 
 	_NODISCARD const CArray<FWidget*>& GetManagedWidgets() const { return ManagedWidgets; }
 
+	template<class TWidgetTemplate>
+	std::string GetUniqueNameFor()
+	{
+		++LastWidgetNumber;
+
+		const std::string ClassName = typeid(TWidgetTemplate).name();
+		const std::string Id = std::to_string(LastWidgetNumber);
+
+		return ClassName + ("_" + Id);
+	}
+
 	virtual void OnWidgetCreated(FWidget* NewWidget);
 	virtual void OnWidgetDestroyed(FWidget* NewWidget);
 
@@ -117,5 +133,7 @@ protected:
 public:
 	virtual void RegisterWidget(FWidget* Widget);
 	virtual void UnRegisterWidget(FWidget* Widget);
+
+	int LastWidgetNumber;
 	
 };

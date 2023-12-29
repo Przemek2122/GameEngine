@@ -1,4 +1,4 @@
-// Created by Przemys≥aw WiewiÛra 2020
+// Created by Przemys≈Çaw Wiewi√≥ra 2020
 
 #pragma once
 
@@ -28,16 +28,20 @@ public:
 	void RegisterWidget(FWidget* Widget) override;
 	void UnRegisterWidget(FWidget* Widget) override;
 	/** End IWidgetManagementInterface interface */
+
+	void SetScaleToContent(const bool bNewScaleToContent);
+	bool ShouldScaleToContent() const { return bScaleToContent; }
 	
 	void AlignWidgets();
 
 	void AlignDefault();
 	void AlignEven();
 
-	void SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod);
+	void SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod, const bool bUpdateAfterSet = true);
 	_NODISCARD EVerticalBoxAlignMethod GetVerticalBoxAlignMethod() const;
 		 
 protected:
 	EVerticalBoxAlignMethod VerticalBoxAlignMethod;
+	bool bScaleToContent;
 	
 };

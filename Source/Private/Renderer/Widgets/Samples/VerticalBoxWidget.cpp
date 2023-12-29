@@ -1,4 +1,4 @@
-// Created by Przemys≥aw WiewiÛra 2020
+// Created by Przemys≈Çaw Wiewi√≥ra 2020
 
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/VerticalBoxWidget.h"
@@ -6,6 +6,7 @@
 FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::Default)
+	, bScaleToContent(false)
 {
 }
 
@@ -46,6 +47,11 @@ void FVerticalBoxWidget::UnRegisterWidget(FWidget* Widget)
 	AlignWidgets();
 }
 
+void FVerticalBoxWidget::SetScaleToContent(const bool bNewScaleToContent)
+{
+	bScaleToContent = bNewScaleToContent;
+}
+
 void FVerticalBoxWidget::AlignWidgets()
 {
 	switch (VerticalBoxAlignMethod)
@@ -53,11 +59,13 @@ void FVerticalBoxWidget::AlignWidgets()
 		case EVerticalBoxAlignMethod::Default:
 		{
 			AlignDefault();
+
 			break;
 		}
 		case EVerticalBoxAlignMethod::Even:
 		{
 			AlignEven();
+
 			break;
 		}
 	}
@@ -65,46 +73,57 @@ void FVerticalBoxWidget::AlignWidgets()
 
 void FVerticalBoxWidget::AlignDefault()
 {
-	const FVector2D<int> VerticalBoxLocation = GetWidgetLocation(EWidgetOrientation::Absolute);
+	const FVector2D<int> VerticalBoxLocation = GetWidgetLocation(EWidgetOrientation::Relative);
 	const FVector2D<int> VerticalBoxSize = GetWidgetSize();
 
 	const FVector2D<int> VerticalBoxMaxBounds = VerticalBoxLocation + VerticalBoxSize;
 
 	FVector2D<int> VerticalBoxLocationLast = {0, 0};
 	FVector2D<int> VerticalBoxSizeLast = {0, 0};
-
-	//float TotalHeight = 0.f;
 	
 	for (auto i = 0; i < ManagedWidgets.Size(); i++)
 	{
 		FWidget* ChildWidget = ManagedWidgets[i];
 
-		const FVector2D<int> NewChildLocation = VerticalBoxLocation + VerticalBoxLocationLast;
+		FVector2D<int> NewChildLocation = VerticalBoxLocation;
+		NewChildLocation.Y += VerticalBoxSizeLast.Y;
 		
 		FVector2D<int> ChildWidgetSize = ChildWidget->GetWidgetSize();
 		
 		const FVector2D<int> ChildBounds = NewChildLocation + ChildWidgetSize;
 		
 		// Make sure it fits inside box
+		if (ChildBounds.X > VerticalBoxMaxBounds.X)
 		{
-			if (ChildBounds.X > VerticalBoxMaxBounds.X)
-			{
-				ChildWidgetSize.X = VerticalBoxMaxBounds.X;
-			}
-			
-			if (ChildBounds.Y > VerticalBoxMaxBounds.Y)
-			{
-				ChildWidgetSize.Y = VerticalBoxMaxBounds.Y;
-			}
+			ChildWidgetSize.X = VerticalBoxMaxBounds.X;
+		}
+		if (ChildBounds.Y > VerticalBoxMaxBounds.Y)
+		{
+			ChildWidgetSize.Y = VerticalBoxMaxBounds.Y;
 		}
 
-		VerticalBoxLocationLast += VerticalBoxLocation;
-		VerticalBoxSizeLast += VerticalBoxSizeLast;
-		
-		ChildWidget->SetWidgetLocation(NewChildLocation, EWidgetOrientation::Absolute, true);
 		ChildWidget->SetWidgetSize(ChildWidgetSize);
+		ChildWidget->SetWidgetLocation(NewChildLocation, EWidgetOrientation::Relative, true);
 
-		//ChildWidget->RefreshWidget();
+		if (VerticalBoxSizeLast.X < ChildWidgetSize.X)
+		{
+			VerticalBoxSizeLast.X = ChildWidgetSize.X;
+		}
+		VerticalBoxSizeLast.Y += ChildWidgetSize.Y;
+
+		ChildWidget->RefreshWidget();
+	}
+
+	if (bScaleToContent)
+	{
+		//SetWidgetSize(VerticalBoxSizeLast);
+
+		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		{
+			FWidget* ChildWidget = ManagedWidgets[i];
+
+			ChildWidget->RefreshWidget();
+		}
 	}
 }
 
@@ -112,9 +131,14 @@ void FVerticalBoxWidget::AlignEven()
 {
 }
 
-void FVerticalBoxWidget::SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod)
+void FVerticalBoxWidget::SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod, const bool bUpdateAfterSet)
 {
 	VerticalBoxAlignMethod = InVerticalBoxAlignMethod;
+
+	if (bUpdateAfterSet)
+	{
+		AlignWidgets();
+	}
 }
 
 EVerticalBoxAlignMethod FVerticalBoxWidget::GetVerticalBoxAlignMethod() const

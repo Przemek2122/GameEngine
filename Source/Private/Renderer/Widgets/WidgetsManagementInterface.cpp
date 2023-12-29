@@ -4,6 +4,7 @@
 #include "Renderer/Widgets/WidgetsManagementInterface.h"
 
 IWidgetManagementInterface::IWidgetManagementInterface()
+	: LastWidgetNumber(0)
 {
 }
 
