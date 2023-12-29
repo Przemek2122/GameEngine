@@ -16,5 +16,6 @@
 
 #Ignore build results
 x64/Debug
+x64/Release
 Win32/
 ARM/
