@@ -64,36 +64,39 @@ public:
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
 
+private:
+	/** Visibility state of widget */
+	EWidgetVisibility WidgetVisibility;
+
+public:
 	/** Name of this widget. Can be displayed or widget can be get using this variable. */
 	_NODISCARD std::string GetName() const;
 
+private:
+	/** Name of this widget. Can be displayed or widget can be get using this variable. */
+	std::string WidgetName;
+
+public:
 	_NODISCARD int GetWidgetOrder() const;
 	void SetWidgetOrder(const int InWidgetOrder);
 	virtual void OnWidgetOrderChanged();
 
+private:
+	/** Order - Higher = render first, interact first */
+	int WidgetOrder;
+
+public:
 	/** @returns parent IWidgetManagementInterface pointer */
 	_NODISCARD IWidgetManagementInterface* GetParent() const override;
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
 
+private:
+	/** Owner manager */
+	IWidgetManagementInterface* WidgetManagementInterface;
+
 protected:
 	/** True if WidgetManagementInterface decided to render this widget. */
 	bool bWasRenderedThisFrame;
-
-private:
-	/** True if widget is initialized */
-	bool bWasInitCalled;
-
-	/** Name of this widget. Can be displayed or widget can be get using this variable. */
-	std::string WidgetName;
-
-	/** Order - Higher = render first, interact first */
-	int WidgetOrder;
-
-	/** Visibility state of widget */
-	EWidgetVisibility WidgetVisibility;
-
-	/** Owner manager */
-	IWidgetManagementInterface* WidgetManagementInterface;
 	
 };

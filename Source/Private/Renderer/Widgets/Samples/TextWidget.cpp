@@ -63,18 +63,10 @@ void FTextWidget::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidg
 	UpdateSDLRectSize();
 }
 
-void FTextWidget::SetWidgetSize(const FVector2D<int> InWidgetSize)
-{
-	FWidget::SetWidgetSize(InWidgetSize);
-
-	// @TODO Can not use OnTextChanged due to infinite call loop
-}
-
 void FTextWidget::OnClippingMethodChanged(const EClipping NewClipping)
 {
 	Super::OnClippingMethodChanged(NewClipping);
 
-	// We need to redraw because it might need to cut part of text
 	OnTextChanged();
 }
 
@@ -90,6 +82,8 @@ void FTextWidget::SetText(const std::string& InText)
 	DesiredText = InText;
 
 	OnTextChanged();
+
+	AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
 }
 
 std::string FTextWidget::GetDesiredText() const
@@ -118,7 +112,9 @@ void FTextWidget::AutoAdjustSize(const bool bLimitToParentSize)
 
 void FTextWidget::AutoAdjustTextSize(const FVector2D<int>& InMaxSize)
 {
-	auto StringSize = RenderedText.length();
+	std::string TextToCut = DesiredText;
+
+	auto StringSize = TextToCut.length();
 
 	FVector2D<int> OutSize(0);
 
@@ -130,7 +126,7 @@ void FTextWidget::AutoAdjustTextSize(const FVector2D<int>& InMaxSize)
 		
 		if (OutSize.X > InMaxSize.X)
 		{
-			RenderedText = RenderedText.substr(0, --StringSize);
+			TextToCut = TextToCut.substr(0, --StringSize);
 		}
 		else
 		{
@@ -174,19 +170,16 @@ void FTextWidget::UpdateSDLRectSize() const
 
 void FTextWidget::RedrawText()
 {
+	if (RenderedText == DesiredText)
+	{
+		return;
+	}
+
 	if (ENSURE_VALID(FontAsset != nullptr) && ENSURE_VALID(!DesiredText.empty()))
 	{
-		RenderedText = DesiredText;
-
 		if (bAutoScaleWidget)
 		{
 			AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
-
-			// @HACK
-			if (RenderedText.empty())
-			{
-				RenderedText = DesiredText;
-			}
 		}
 
 		SDL_Surface* SdlSurface = nullptr;
@@ -197,19 +190,19 @@ void FTextWidget::RedrawText()
 			{
 				case ETextRenderMode::Solid:
 				{
-					SdlSurface = TTF_RenderText_Solid(Font, RenderedText.c_str(), TextRenderColor);
+					SdlSurface = TTF_RenderText_Solid(Font, DesiredText.c_str(), TextRenderColor);
 
 					break;
 				}
 				case ETextRenderMode::Blended:
 				{
-					SdlSurface = TTF_RenderText_Blended(Font, RenderedText.c_str(), TextRenderColor);
+					SdlSurface = TTF_RenderText_Blended(Font, DesiredText.c_str(), TextRenderColor);
 
 					break;
 				}
 				case ETextRenderMode::Shaded:
 				{
-					SdlSurface = TTF_RenderText_Shaded(Font, RenderedText.c_str(), TextRenderColor, TextBackgroundRenderColor);
+					SdlSurface = TTF_RenderText_Shaded(Font, DesiredText.c_str(), TextRenderColor, TextBackgroundRenderColor);
 
 					break;
 				}
@@ -238,6 +231,8 @@ void FTextWidget::RedrawText()
 				// If size not changed update old texture
 				SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
 			}
+
+			RenderedText = DesiredText;
 
 			SDL_FreeSurface(SdlSurface);
 			SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);

@@ -25,7 +25,7 @@ public:
 	/** End FWidget interface */
 
 	/** Begin IWidgetManagementInterface interface */
-	void RegisterWidgetPostInit(FWidget* Widget) override;
+	void RegisterWidget(FWidget* Widget) override;
 	void UnRegisterWidget(FWidget* Widget) override;
 	/** End IWidgetManagementInterface interface */
 

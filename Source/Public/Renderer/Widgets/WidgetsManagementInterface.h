@@ -131,10 +131,7 @@ protected:
 	CMap<std::string, FWidget*> ManagedWidgetsMap;
 
 public:
-	/** Called before any initialization */
 	virtual void RegisterWidget(FWidget* Widget);
-	/** Called after widget initialization */
-	virtual void RegisterWidgetPostInit(FWidget* Widget);
 	virtual void UnRegisterWidget(FWidget* Widget);
 
 	int LastWidgetNumber;

@@ -7,12 +7,11 @@
 
 FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder)
 	: IWidgetPositionInterface(InWidgetManagementInterface)
-	, bWasRenderedThisFrame(false)
-	, bWasInitCalled(false)
+	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetName(std::move(InWidgetName))
 	, WidgetOrder(InWidgetOrder)
-	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetManagementInterface(InWidgetManagementInterface)
+	, bWasRenderedThisFrame(false)
 {
 #if _DEBUG
 	// Critical to be valid.
@@ -43,10 +42,6 @@ void FWidget::Init()
 	SetAnchor(DefaultAnchorInterface);
 
 	RefreshWidget();
-
-	RegisterWidgetPostInit(this);
-
-	bWasInitCalled = true;
 }
 
 void FWidget::DeInit()

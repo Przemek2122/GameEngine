@@ -6,7 +6,7 @@
 FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::Default)
-	, bScaleToContent(true)
+	, bScaleToContent(false)
 {
 }
 
@@ -33,9 +33,9 @@ void FVerticalBoxWidget::ReCalculate()
 	AlignWidgets();
 }
 
-void FVerticalBoxWidget::RegisterWidgetPostInit(FWidget* Widget)
+void FVerticalBoxWidget::RegisterWidget(FWidget* Widget)
 {
-	Super::RegisterWidgetPostInit(Widget);
+	Super::RegisterWidget(Widget);
 
 	AlignWidgets();
 }
@@ -78,34 +78,15 @@ void FVerticalBoxWidget::AlignDefault()
 
 	const FVector2D<int> VerticalBoxMaxBounds = VerticalBoxLocation + VerticalBoxSize;
 
-	FVector2D<int> VerticalBoxSizeCalculated = {0, 0};
-
-	// Calculate size for parent widget
-	for (auto i = 0; i < ManagedWidgets.Size(); i++)
-	{
-		const FWidget* ChildWidget = ManagedWidgets[i];
-		const FVector2D<int> ChildWidgetSize = ChildWidget->GetWidgetSize();
-
-		if (VerticalBoxSizeCalculated.X < ChildWidgetSize.X)
-		{
-			VerticalBoxSizeCalculated.X = ChildWidgetSize.X;
-		}
-		VerticalBoxSizeCalculated.Y += ChildWidgetSize.Y;
-	}
-
-	if (bScaleToContent)
-	{
-		SetWidgetSize(VerticalBoxSizeCalculated);
-	}
-
-	FVector2D<int> AggregatedChildSizeLast = { 0, 0 };
+	FVector2D<int> VerticalBoxLocationLast = {0, 0};
+	FVector2D<int> VerticalBoxSizeLast = {0, 0};
 	
 	for (auto i = 0; i < ManagedWidgets.Size(); i++)
 	{
 		FWidget* ChildWidget = ManagedWidgets[i];
 
 		FVector2D<int> NewChildLocation = VerticalBoxLocation;
-		NewChildLocation.Y += AggregatedChildSizeLast.Y;
+		NewChildLocation.Y += VerticalBoxSizeLast.Y;
 		
 		FVector2D<int> ChildWidgetSize = ChildWidget->GetWidgetSize();
 		
@@ -121,12 +102,28 @@ void FVerticalBoxWidget::AlignDefault()
 			ChildWidgetSize.Y = VerticalBoxMaxBounds.Y;
 		}
 
-		//ChildWidget->SetWidgetSize(ChildWidgetSize);
+		ChildWidget->SetWidgetSize(ChildWidgetSize);
 		ChildWidget->SetWidgetLocation(NewChildLocation, EWidgetOrientation::Relative, true);
 
-		AggregatedChildSizeLast.Y += ChildWidgetSize.Y;
+		if (VerticalBoxSizeLast.X < ChildWidgetSize.X)
+		{
+			VerticalBoxSizeLast.X = ChildWidgetSize.X;
+		}
+		VerticalBoxSizeLast.Y += ChildWidgetSize.Y;
 
 		ChildWidget->RefreshWidget();
+	}
+
+	if (bScaleToContent)
+	{
+		//SetWidgetSize(VerticalBoxSizeLast);
+
+		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		{
+			FWidget* ChildWidget = ManagedWidgets[i];
+
+			ChildWidget->RefreshWidget();
+		}
 	}
 }
 

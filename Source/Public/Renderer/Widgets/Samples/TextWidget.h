@@ -22,7 +22,6 @@ public:
 	void Init() override;
 	void Render() override;
 	void SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor) override;
-	void SetWidgetSize(const FVector2D<int> InWidgetSize) override;
 	void OnClippingMethodChanged(EClipping NewClipping) override;
 	void RefreshWidget(const bool bRefreshChildren) override;
 	/** End FWidget */
