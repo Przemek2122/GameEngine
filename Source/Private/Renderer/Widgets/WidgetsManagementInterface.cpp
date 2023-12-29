@@ -55,6 +55,8 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 
 			RegisterWidget(InWidget);
 
+			RegisterWidgetPostInit(InWidget);
+
 			return true;
 		}
 	}
@@ -144,7 +146,7 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 	
 	ManagedWidgets.InsertByLambda(Widget, [&](FWidget* ArrayObject, FWidget* Localobject)
 	{
-		if (ArrayObject->GetWidgetOrder() >= Localobject->GetWidgetOrder())
+		if (ArrayObject->GetWidgetOrder() > Localobject->GetWidgetOrder())
 		{
 			return true;
 		}
@@ -158,6 +160,10 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 		// This means re-register to same parent and it's not supported
 		ENSURE_VALID(false);
 	}
+}
+
+void IWidgetManagementInterface::RegisterWidgetPostInit(FWidget* Widget)
+{
 }
 
 void IWidgetManagementInterface::UnRegisterWidget(FWidget* Widget)

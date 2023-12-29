@@ -357,6 +357,7 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -365,30 +366,35 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)Source\Private\Render;$(ProjectDir)Source\Public\Render;$(ProjectDir)Source\Private\Types;$(ProjectDir)Source\Public\Types;$(ProjectDir)Source\Public\Containers;$(ProjectDir)Source\Private\Containers;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source;$(ProjectDir)Source\Public;$(ProjectDir)Source\Private;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PublicIncludeDirectories>$(ProjectDir)\Source\Private\Misc;$(ProjectDir)\Source\Public\Misc;$(ProjectDir)Source\Private\Core;$(ProjectDir)Source\Public\Core;$(ProjectDir)Source\Private\Core\Includes;$(ProjectDir)Source\Private\Assets;$(ProjectDir)Source\Public\Assets;$(ProjectDir)Source\Private;$(ProjectDir)Source\Public;$(ProjectDir)Source\ThirdParty;$(ProjectDir)Source;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -404,6 +410,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <IntrinsicFunctions>false</IntrinsicFunctions>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -442,6 +449,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -482,6 +490,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -523,6 +532,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -566,6 +576,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -607,6 +618,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <OmitFramePointers>false</OmitFramePointers>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
