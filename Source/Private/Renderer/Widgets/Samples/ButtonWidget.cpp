@@ -4,6 +4,8 @@
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
 #include "FunctorLambda.h"
 
+#define BUTTON_WIDGET_TEST_ENABLED 0
+
 FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FInteractionBaseWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, ButtonRenderColor(FColorRGBA::ColorGray())
@@ -15,17 +17,17 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 
 void FButtonWidget::Init()
 {
-#if _DEBUG
+#if _DEBUG && BUTTON_WIDGET_TEST_ENABLED
 	OnClickPress.BindLambda(
 	[this]
 	{
-		LOG_WARN("Button '" << GetName() << "' pressed!");
+		LOG_DEBUG("Button '" << GetName() << "' pressed!");
 	});
 	
 	OnClickRelease.BindLambda(
 	[this]
 	{
-		LOG_WARN("Button '" << GetName() << "' released!");
+		LOG_DEBUG("Button '" << GetName() << "' released!");
 	});
 #endif
 

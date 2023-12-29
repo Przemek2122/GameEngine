@@ -167,7 +167,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::LeftBottom:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -195,7 +195,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::RightBottom:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -209,7 +209,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::TopCenter:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -223,7 +223,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::LeftCenter:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -237,7 +237,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::BottomCenter:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
@@ -251,7 +251,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 		
 	case EAnchor::RightCenter:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
 		
 			FVector2D<int> RelativeCenter;
