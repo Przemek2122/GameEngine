@@ -132,22 +132,14 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 void FEngine::EngineTick()
 {
-	// Tick counter
-	{
-		const auto SystemTime = FUtil::GetSeconds();
+	UpdateFramerateCounter();
 
-		if (Second == SystemTime)
-		{
-			TicksThisSecond++;
-		}
-		else
-		{
-			EnginePostSecondTick();
-
-			TicksThisSecond = 0;
-			Second = SystemTime;
-		}
-	}
+	// Wait for Render thread.
+	// We need to do this to avoid changing data when render is not finished
+	//while (!EngineRender->IsRenderTickFinished())
+	//{
+	//	SDL_Delay(1);
+	//}
 
 	EventHandler->HandleEvents();
 
@@ -217,6 +209,23 @@ void FEngine::Clean()
 bool FEngine::IsEngineInitialized() const
 {
 	return bIsEngineInitialized;
+}
+
+void FEngine::UpdateFramerateCounter()
+{
+	const auto SystemTime = FUtil::GetSeconds();
+
+	if (Second == SystemTime)
+	{
+		TicksThisSecond++;
+	}
+	else
+	{
+		EnginePostSecondTick();
+
+		TicksThisSecond = 0;
+		Second = SystemTime;
+	}
 }
 
 void FEngine::UpdateFrameTimeStart()

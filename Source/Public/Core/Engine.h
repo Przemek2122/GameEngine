@@ -18,12 +18,13 @@ protected:
 private:
 	/** Called before tick. Once. */
 	void EngineInit(int Argc, char* Argv[]);
-	
+
 	/** Is inside of loop. Runs until Exit() is called. */
 	void EngineTick();
 
 	/** Called once a second. */
 	void EnginePostSecondTick();
+
 public:
 	/** First init ever called. */
 	virtual void PreInit();
@@ -58,14 +59,11 @@ public:
 	/** @returns true if Init() has finished */
 	_NODISCARD bool IsEngineInitialized() const;
 
-private:
-	bool bContinueMainLoop;
-
 protected:
-	bool bFrameRateLimited;
-	bool bIsEngineInitialized;
+	void UpdateFramerateCounter();
 
 public:
+
 	virtual void UpdateFrameTimeStart();
 	virtual void UpdateFrameTimeEnd();
 
@@ -83,6 +81,9 @@ public:
 	_NODISCARD double GetDeltaTimeDouble() const;
 
 protected:
+	bool bFrameRateLimited;
+	bool bIsEngineInitialized;
+
 	// Framerate per second / ticks per second
 	uint32_t FrameRate;
 	// Cached per frame delay for example 60 FPS will be 60 / 1000 = 16
@@ -100,6 +101,7 @@ protected:
 	double DeltaTimeDouble{};
 
 private:
+	bool bContinueMainLoop;
 	int TicksThisSecond;
 	size_t Second;
 
