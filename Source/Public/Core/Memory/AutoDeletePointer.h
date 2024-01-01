@@ -19,7 +19,7 @@ public:
 	}
 
 	/** Copy constructor - Makes previous FAutoDeletePointer not usable anymore. */
-	FAutoDeletePointer(FAutoDeletePointer& OtherAutoDeletePointer) noexcept 
+	explicit FAutoDeletePointer(FAutoDeletePointer& OtherAutoDeletePointer) noexcept 
 		: StoredObject(OtherAutoDeletePointer.StoredObject)
 		, bHasClass(true)
 	{
@@ -87,7 +87,7 @@ public:
 		return Get();
 	}
 
-private:
+protected:
 	/** Used by 'Move constructor' */
 	void MarkAsMoved()
 	{
@@ -97,10 +97,11 @@ private:
 		bHasClass = false;
 		StoredObject = nullptr;
 	}
+
 protected:
 	/** Our managed class. */
 	TTypeToStore* StoredObject;
-private:
+
 	/** This property indicates if this @Store pointer was moved and should not be destroyed. */
 	bool bHasClass;
 };
