@@ -24,7 +24,11 @@ void IWidgetManagementInterface::TickWidgets()
 	
 	for (auto i = 0; i < Size; i++)
 	{
-		ManagedWidgets[i]->ReceiveTick();
+		// @TODO FIX Widget can be empty if removed recently
+		if (ManagedWidgets.IsValidIndex(i))
+		{
+			ManagedWidgets[i]->ReceiveTick();
+		}
 	}
 }
 
