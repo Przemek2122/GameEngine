@@ -2,14 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-
 #include "ContainerBase.h"
-
-#include <vector>
-
 #include "FunctorLambda.h"
 #include "Includes/EngineMacros.h"
+
+#include <vector>
 
 /**
  * Dynamic array template for any type.
@@ -96,11 +93,6 @@ public:
 			
 			return true;
 		}
-		
-#if _DEBUG
-		// @TODO Fix
-		//ENSURE_VALID_MESSAGE(false, std::string("CArray::RemoveAt(") + std::to_string(Index) + "): Given index is out of range.");
-#endif
 
 		return false;
 	}
@@ -152,7 +144,7 @@ public:
 		else
 		{
 			// Request out of range.
-			Inline_ENSURE_VALID_Lambda(false);
+			ENSURE_VALID(false);
 
 			TType DefaultType = TType();
 
