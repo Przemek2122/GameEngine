@@ -2,9 +2,9 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Window.h"
-
 #include "ECS/EntityManager.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/Map/MapManager.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
 	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags))
@@ -52,14 +52,8 @@ void FWindow::Init()
 {
 	Renderer = CreateRenderer();
 	WidgetManager = CreateWidgetManager();
-	EntityManager = GetEntityManager();
-}
-
-void FWindow::SetWindowFocus(const bool bInNewFocus)
-{
-	bIsWindowFocused = bInNewFocus;
-	
-	SDL_SetWindowInputFocus(Window);
+	EntityManager = CreateEntityManager();
+	MapManager = CreateMapManager();
 }
 
 void FWindow::ReceiveTick()
@@ -68,6 +62,26 @@ void FWindow::ReceiveTick()
 	{
 		Tick();
 	}
+}
+
+FWidgetManager* FWindow::CreateWidgetManager()
+{
+	return new FWidgetManager(this);
+}
+
+FEntityManager* FWindow::CreateEntityManager() const
+{
+	return new FEntityManager();
+}
+
+FMapManager* FWindow::CreateMapManager()
+{
+	return new FMapManager(this);
+}
+
+FRenderer* FWindow::CreateRenderer()
+{
+	return new FRenderer(this);
 }
 
 void FWindow::Tick()
@@ -79,13 +93,9 @@ void FWindow::Render()
 {
 	Renderer->PreRender();
 	Renderer->Render();
+	MapManager->DrawMap();
 	WidgetManager->RenderWidgets();
 	Renderer->PostRender();
-}
-
-FRenderer* FWindow::CreateRenderer()
-{
-	return new FRenderer(this);
 }
 
 void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
@@ -166,14 +176,16 @@ void FWindow::OnWindowLocationChanged(const Sint32 X, const Sint32 Y)
 	SetWindowLocation(X, Y, false);
 }
 
-FWidgetManager* FWindow::CreateWidgetManager()
+void FWindow::SetWindowFocus(const bool bInNewFocus)
 {
-	return new FWidgetManager(this);
+	bIsWindowFocused = bInNewFocus;
+
+	SDL_SetWindowInputFocus(Window);
 }
 
-FEntityManager* FWindow::CreateEntityManager() const
+FMapManager* FWindow::GetMapManager() const
 {
-	return new FEntityManager();
+	return MapManager;
 }
 
 FWidgetManager* FWindow::GetWidgetManager() const

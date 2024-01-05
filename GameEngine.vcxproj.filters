@@ -146,6 +146,9 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Parser.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h">
       <Filter>Public\Assets\TypesForAssets</Filter>
     </ClInclude>
@@ -647,6 +650,9 @@
       <Filter>Private\Assets\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Parser.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Font.cpp">

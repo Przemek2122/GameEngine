@@ -26,31 +26,13 @@ protected:
 
 	virtual void Init();
 
-public:
-	_NODISCARD SDL_Window* GetSdlWindow() const { return Window; }
-	_NODISCARD Uint32 GetWindowId() const { return WindowId; }
-
-protected:
-	SDL_Window* Window;
-	FRenderer* Renderer{};
-	char* WindowTitle;
-	int WindowPositionX;
-	int WindowPositionY;
-	int WindowWidth;
-	int WindowHeight;
-	Uint32 WindowFlags;
-	Uint32 WindowId;
-
-public:
-	_NODISCARD bool IsWindowFocused() const { return bIsWindowFocused; }
-	void SetWindowFocus(const bool bInNewFocus);
-
-protected:
-	bool bIsWindowFocused;
-	bool bIsWindowVisible;
-
-protected:
 	void ReceiveTick();
+
+	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
+	_NODISCARD virtual FEntityManager* CreateEntityManager() const;
+	_NODISCARD virtual FMapManager* CreateMapManager();
+
+	_NODISCARD virtual FRenderer* CreateRenderer();
 
 public:
 	/** Render this window using renderer. */
@@ -58,13 +40,9 @@ public:
 	/** Render this window using renderer. */
 	virtual void Render();
 
-protected:
-	_NODISCARD virtual FRenderer* CreateRenderer();
-
-public:
 	/** Call to change window size. */
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true);
-	
+
 	/** Call to change window location. */
 	void SetWindowLocation(const int X, const int Y, const bool bUpdateSDL);
 
@@ -83,18 +61,25 @@ public:
 	virtual void OnWindowSizeChanged(Sint32 X, Sint32 Y);
 	virtual void OnWindowLocationChanged(Sint32 X, Sint32 Y);
 
-protected:
-	FWidgetManager* WidgetManager{};
-	FEntityManager* EntityManager{};
-	
-protected:
-	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
-	_NODISCARD virtual FEntityManager* CreateEntityManager() const;
+	_NODISCARD SDL_Window* GetSdlWindow() const { return Window; }
 
-public:
+	_NODISCARD Uint32 GetWindowId() const { return WindowId; }
+
+	_NODISCARD bool IsWindowFocused() const { return bIsWindowFocused; }
+	void SetWindowFocus(const bool bInNewFocus);
+
+	_NODISCARD FMapManager* GetMapManager() const;
+
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TMapManagerClass>
+	TMapManagerClass* GetMapManager() const
+	{
+		return static_cast<TMapManagerClass>(GetMapManager());
+	}
+
 	_NODISCARD FWidgetManager* GetWidgetManager() const;
 	_NODISCARD FEntityManager* GetEntityManager() const;
-	
+
 	template<class TWidgetTemplate>
 	_NODISCARD FWidget& CreateWidget() const
 	{
@@ -104,5 +89,24 @@ public:
 	{
 		return GetWidgetManager()->DestroyWidget(Widget);
 	}
+
+protected:
+	SDL_Window* Window;
+	FRenderer* Renderer{};
+	char* WindowTitle;
+	int WindowPositionX;
+	int WindowPositionY;
+	int WindowWidth;
+	int WindowHeight;
+	Uint32 WindowFlags;
+	Uint32 WindowId;
+
+	bool bIsWindowFocused;
+	bool bIsWindowVisible;
+
+	FWidgetManager* WidgetManager{};
+	FEntityManager* EntityManager{};
+
+	FMapManager* MapManager;
 
 };

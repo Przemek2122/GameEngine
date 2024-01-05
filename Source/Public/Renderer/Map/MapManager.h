@@ -13,17 +13,24 @@ class FMapAsset;
 class FMapManager
 {
 public:
-	FMapManager();
+	FMapManager(FWindow* InWindow);
 	~FMapManager();
 
-	void LoadMap(const std::string& Name);
-	void UnLoadMap(const std::string& Name);
+	virtual void DrawMap();
 
-	void CacheAvailableMaps();
-	CArray<std::string> GetAvailableMaps() const;
+	virtual void LoadMap(const std::string& Name);
+	virtual void UnLoadMap(const std::string& Name);
+
+	virtual void CacheAvailableMaps();
+	virtual CArray<std::string> GetAvailableMaps() const;
+
+	FWindow* GetWindow() const { return Window; };
 
 protected:
+	FMapAsset* CurrentMapAsset;
 	CArray<std::string> AvailableMaps;
 	CArray<FMapAsset*> MapAssets;
+
+	FWindow* Window;
 
 };

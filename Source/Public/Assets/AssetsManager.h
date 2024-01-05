@@ -25,13 +25,43 @@ protected:
 public:
 	/** Create asset by template type. */
 	template<class TAssetType>
+	std::shared_ptr<TAssetType> CreateAssetFromAbsolutePath(const std::string& InAssetName, const std::string& InAssetPath)
+	{
+		if (FFilesystem::FileExists(InAssetPath) || FFilesystem::DirectoryExists(InAssetPath))
+		{
+			std::shared_ptr<TAssetType> Asset = std::make_shared<TAssetType>(InAssetName, InAssetPath);
+
+			return Asset;
+		}
+
+		return std::shared_ptr<TAssetType>(nullptr);
+	}
+
+	/** Create asset by template type. */
+	template<class TAssetType>
+	std::shared_ptr<TAssetType> CreateAssetFromRelativePath(const std::string& InAssetName, const std::string& InAssetPath)
+	{
+		const std::string FullFilePath = GetFullFilePath(InAssetPath);
+
+		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
+		{
+			std::shared_ptr<TAssetType> Asset = std::make_shared<TAssetType>(InAssetName, FullFilePath);
+
+			return Asset;
+		}
+
+		return std::shared_ptr<TAssetType>(nullptr);
+	}
+
+	/** Create and ADD asset by template type. */
+	template<class TAssetType>
 	void AddAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	{
 		const std::string FullFilePath = GetFullFilePath(InAssetPath);
 		
 		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
 		{
-			AllAssetsMap.Emplace(InAssetName, std::make_shared<TAssetType>(InAssetName, FullFilePath));
+			AllAssetsMap.Emplace(InAssetName, CreateAssetFromRelativePath<TAssetType>(InAssetName, InAssetPath));
 		}
 		else
 		{

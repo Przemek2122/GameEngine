@@ -154,25 +154,14 @@ public:
 		return static_cast<TAssetsManager>(GetAssetsManager());
 	}
 
-	_NODISCARD FMapManager* GetMapManager() const;
-
-	/** Use this if you changed to your own. Will return casted. */
-	template<typename TAssetsManager>
-	TAssetsManager* GetMapManager() const
-	{
-		return static_cast<TAssetsManager>(GetMapManager());
-	}
-
 protected:
 	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
 	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
-	_NODISCARD virtual FMapManager* CreateMapManager() const;
 
 protected:
 	SDL_Event SdlEvent{};
 	FEventHandler* EventHandler;
 	FAssetsManager* AssetsManager;
-	FMapManager* MapManager;
 
 #if ENGINE_TESTS
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;

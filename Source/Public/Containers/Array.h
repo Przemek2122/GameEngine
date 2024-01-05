@@ -31,6 +31,11 @@ public:
 		return (Index >= 0 && Index < Size());
 	}
 
+	void Resize(const TSizeType Number)
+	{
+		Vector.reserve(Number);
+	}
+
 	CArray()
 	{
 	}
@@ -38,7 +43,7 @@ public:
 	/** Bracket list constructor */
 	CArray(std::initializer_list<TType> List)
 	{
-		Vector.reserve(List.size());
+		Resize(List.size());
 
 		for (auto ListItem : List)
 		{

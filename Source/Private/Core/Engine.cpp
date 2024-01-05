@@ -115,7 +115,6 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineRender = CreateEngineRenderer();
 	EventHandler = CreateEventHandler();
 	AssetsManager = CreateAssetsManager();
-	MapManager = CreateMapManager();
 #if ENGINE_TESTS
 	TestManager = CreateTestManager();
 #endif
@@ -315,11 +314,6 @@ FAssetsManager* FEngine::GetAssetsManager() const
 	return AssetsManager;
 }
 
-FMapManager* FEngine::GetMapManager() const
-{
-	return MapManager;
-}
-
 FEventHandler* FEngine::CreateEventHandler() const
 {
 	return new FEventHandler(SdlEvent);
@@ -328,11 +322,6 @@ FEventHandler* FEngine::CreateEventHandler() const
 FAssetsManager* FEngine::CreateAssetsManager() const
 {
 	return new FAssetsManager;
-}
-
-FMapManager* FEngine::CreateMapManager() const
-{
-	return new FMapManager;
 }
 
 #if ENGINE_TESTS

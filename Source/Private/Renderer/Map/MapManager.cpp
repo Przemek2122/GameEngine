@@ -4,7 +4,8 @@
 #include "Assets/Assets/MapAsset.h"
 #include "Renderer/Map/Mapmanager.h"
 
-FMapManager::FMapManager()
+FMapManager::FMapManager(FWindow* InWindow)
+	: Window(InWindow)
 {
 }
 
@@ -12,15 +13,30 @@ FMapManager::~FMapManager()
 {
 }
 
+void FMapManager::DrawMap()
+{
+	if (CurrentMapAsset != nullptr)
+	{
+		CurrentMapAsset->Draw();
+	}
+}
+
 void FMapManager::LoadMap(const std::string& Name)
 {
-	FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+	const FAssetsManager* AssetsManager = Engine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		FMapAsset* Asset = AssetsManager->GetAsset<FMapAsset>(Name);
 		if (Asset != nullptr)
 		{
-			Asset->LoadMap();
+			if (!Asset->IsLoaded())
+			{
+				Asset->SetMapManager(this);
+
+				Asset->LoadMap();
+
+				CurrentMapAsset = Asset;
+			}
 		}
 		else
 		{
@@ -32,6 +48,23 @@ void FMapManager::LoadMap(const std::string& Name)
 
 void FMapManager::UnLoadMap(const std::string& Name)
 {
+	const FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+	if (AssetsManager != nullptr)
+	{
+		FMapAsset* Asset = AssetsManager->GetAsset<FMapAsset>(Name);
+		if (Asset != nullptr)
+		{
+			if (Asset->IsLoaded())
+			{
+				Asset->UnLoadMap();
+			}
+		}
+		else
+		{
+			// Missing asset
+			ENSURE_VALID(false);
+		}
+	}
 }
 
 void FMapManager::CacheAvailableMaps()

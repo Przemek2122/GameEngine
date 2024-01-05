@@ -10,6 +10,12 @@ template<typename TTypeToStore>
 class FAutoDeletePointer
 {
 public:
+	FAutoDeletePointer()
+		: StoredObject(nullptr)
+		, bHasAnyObject(false)
+	{
+	}
+
 	/** Normal constructor - Create object to store */
 	template<typename ...TInParams>
 	explicit FAutoDeletePointer(TInParams... Params)
@@ -53,11 +59,13 @@ public:
 
 		OtherAutoDeletePointer.MarkAsMoved();
 
+		bHasAnyObject = (this->StoredObject != nullptr);
+
         return *this;
     }
 
 	/** Copy assignment operator. */
-	FAutoDeletePointer& operator=(FAutoDeletePointer OtherAutoDeletePointer) = delete;
+	//FAutoDeletePointer& operator=(FAutoDeletePointer OtherAutoDeletePointer) = delete;
 
 	TTypeToStore* Get() const
 	{
