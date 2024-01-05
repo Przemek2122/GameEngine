@@ -30,6 +30,21 @@ public:
 	{
 		return (Index >= 0 && Index < Size());
 	}
+
+	CArray()
+	{
+	}
+
+	/** Bracket list constructor */
+	CArray(std::initializer_list<TType> List)
+	{
+		Vector.reserve(List.size());
+
+		for (auto ListItem : List)
+		{
+			Vector.push_back(ListItem);
+		}
+	}
 	
 	SDL_FORCE_INLINE void Push(TType Value)
 	{

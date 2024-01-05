@@ -1,9 +1,9 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "Assets/Font.h"
+#include "Assets/TypesForAssets/Font.h"
 
-#include "Assets/FontAsset.h"
+#include "Assets/Assets/FontAsset.h"
 
 FFont::FFont(FFontAsset* InFontAsset, const int InFontSize)
 	: Font(nullptr)

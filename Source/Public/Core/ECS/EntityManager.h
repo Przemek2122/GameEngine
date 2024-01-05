@@ -1,4 +1,4 @@
-// Created by Przemys³aw Wiewióra 2020-2022
+// Created by Przemys³aw Wiewióra 2020-2023
 
 #pragma once
 
@@ -16,21 +16,23 @@ public:
 	template<typename TEntityClass, typename... TInParams>
 	TEntityClass* CreateEntity(std::string EntityName, TInParams... InParams)
 	{
-		auto NewEntity = std::make_shared<TEntityClass>(this, InParams);
+		EEntity* NewEntity = new TEntityClass(this, InParams);
 
-		EntitiesMap.Emplace(EntityName, NewEntity);
+		Entities.Push(NewEntity);
 
-		OnEntityCreated(EntityName, NewEntity);
+		NewEntity->BeginPlay();
 
-		return NewEntity.get();
+		OnEntityCreated(NewEntity);
+
+		return NewEntity;
 	}
 
-	bool DestroyEntityByName(const std::string& EntityName);
-	bool DestroyEntityByInstance(EEntity* Entity);
-
-	virtual void OnEntityCreated(const std::string& EntityName, EEntity* Entity);
-	virtual void OnEntityDestroyed(const std::string& EntityName, EEntity* Entity);
+	bool DestroyEntity(const EEntity* Entity);
 
 protected:
-	CUnorderedMap<std::string, std::shared_ptr<EEntity>> EntitiesMap;
+	virtual void OnEntityCreated(EEntity* Entity);
+	virtual void OnEntityPreDestroyed(EEntity* Entity);
+
+private:
+	CArray<EEntity*> Entities;
 };

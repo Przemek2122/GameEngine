@@ -9,43 +9,46 @@ FEntityManager::FEntityManager()
 
 FEntityManager::~FEntityManager()
 {
-}
-
-bool FEntityManager::DestroyEntityByName(const std::string& EntityName)
-{
-	for (std::pair<const std::string, std::shared_ptr<EEntity>>& EntityPair : EntitiesMap)
+	for (EEntity* Entity : Entities)
 	{
-		OnEntityDestroyed(EntityPair.first, EntityPair.second.get());
+		Entity->EndPlay();
 
-		EntitiesMap[EntityName].reset();
-
-		EntitiesMap.Remove(EntityPair.first);
+		delete Entity;
 	}
 
-	return false;
+	Entities.Clear();
 }
 
-bool FEntityManager::DestroyEntityByInstance(EEntity* Entity)
+bool FEntityManager::DestroyEntity(const EEntity* Entity)
 {
-	for (std::pair<const std::string, std::shared_ptr<EEntity>>& EntityPair : EntitiesMap)
+	bool bWasFound = false;
+
+	for (int i = 0; i < Entities.Size(); i++)
 	{
-		if (EntityPair.second.get() == Entity)
+		EEntity* CurrentEntity = Entities[i];
+		if (CurrentEntity == Entity)
 		{
-			OnEntityDestroyed(EntityPair.first, EntityPair.second.get());
+			OnEntityPreDestroyed(CurrentEntity);
 
-			EntityPair.second.reset();
+			CurrentEntity->EndPlay();
 
-			EntitiesMap.Remove(EntityPair.first);
+			Entities.RemoveAt(i);
+
+			delete CurrentEntity;
+
+			bWasFound = true;
+
+			break;
 		}
 	}
 
-	return false;
+	return bWasFound;
 }
 
-void FEntityManager::OnEntityCreated(const std::string& EntityName, EEntity* Entity)
+void FEntityManager::OnEntityCreated(EEntity* Entity)
 {
 }
 
-void FEntityManager::OnEntityDestroyed(const std::string& EntityName, EEntity* Entity)
+void FEntityManager::OnEntityPreDestroyed(EEntity* Entity)
 {
 }

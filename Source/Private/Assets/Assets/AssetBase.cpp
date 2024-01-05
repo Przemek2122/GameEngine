@@ -1,7 +1,7 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "Assets/AssetBase.h"
+#include "Assets/Assets/AssetBase.h"
 
 FAssetBase::FAssetBase(std::string InAssetName, std::basic_string<char> InAssetPath)
 	: AssetName(std::move(InAssetName))

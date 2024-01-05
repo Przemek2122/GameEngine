@@ -1,9 +1,8 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "Assets/FontAsset.h"
-
-#include "Assets/Font.h"
+#include "Assets/Assets/FontAsset.h"
+#include "Assets/TypesForAssets/Font.h"
 
 FFontAsset::FFontAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)

@@ -10,11 +10,11 @@
 #include "Test/TestTypes.h"
 #endif
 
-#include "Assets/FontAsset.h"
+#include "Assets/Assets/FontAsset.h"
+#include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()
-	: bContinueMainLoop(true)
-	, bFrameRateLimited(true)
+	: bFrameRateLimited(true)
 	, bIsEngineInitialized(false)
 	, FrameRate(0)
 	, FrameDelay(0)
@@ -22,6 +22,7 @@ FEngine::FEngine()
 	, FrameTime(0)
 	, CounterLastFrame(0)
 	, CounterCurrentFrame(SDL_GetPerformanceCounter())
+	, bContinueMainLoop(true)
 	, TicksThisSecond(0)
 	, Second(0)
 	, EngineRender(nullptr)
@@ -114,6 +115,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineRender = CreateEngineRenderer();
 	EventHandler = CreateEventHandler();
 	AssetsManager = CreateAssetsManager();
+	MapManager = CreateMapManager();
 #if ENGINE_TESTS
 	TestManager = CreateTestManager();
 #endif
@@ -123,7 +125,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
 
-	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Fonts\\OpenSans\\OpenSans-Regular.ttf");
+	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Assets\\Fonts\\OpenSans\\OpenSans-Regular.ttf");
 
 	LOG_INFO("Engine init End");
 
@@ -313,6 +315,11 @@ FAssetsManager* FEngine::GetAssetsManager() const
 	return AssetsManager;
 }
 
+FMapManager* FEngine::GetMapManager() const
+{
+	return MapManager;
+}
+
 FEventHandler* FEngine::CreateEventHandler() const
 {
 	return new FEventHandler(SdlEvent);
@@ -321,6 +328,11 @@ FEventHandler* FEngine::CreateEventHandler() const
 FAssetsManager* FEngine::CreateAssetsManager() const
 {
 	return new FAssetsManager;
+}
+
+FMapManager* FEngine::CreateMapManager() const
+{
+	return new FMapManager;
 }
 
 #if ENGINE_TESTS

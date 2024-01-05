@@ -14,14 +14,14 @@ public:
 	template<typename ...TInParams>
 	explicit FAutoDeletePointer(TInParams... Params)
 		: StoredObject(new TTypeToStore(Params...))
-		, bHasClass(true)
+		, bHasAnyObject(true)
 	{
 	}
 
 	/** Copy constructor - Makes previous FAutoDeletePointer not usable anymore. */
 	explicit FAutoDeletePointer(FAutoDeletePointer& OtherAutoDeletePointer) noexcept 
 		: StoredObject(OtherAutoDeletePointer.StoredObject)
-		, bHasClass(true)
+		, bHasAnyObject(true)
 	{
 		OtherAutoDeletePointer.MarkAsMoved();
 	}
@@ -29,7 +29,7 @@ public:
 	/** Move constructor - Makes previous FAutoDeletePointer not usable anymore. */
 	FAutoDeletePointer(FAutoDeletePointer&& OtherAutoDeletePointer) noexcept 
 		: StoredObject(OtherAutoDeletePointer.StoredObject)
-		, bHasClass(true)
+		, bHasAnyObject(true)
 	{
 		OtherAutoDeletePointer.MarkAsMoved();
 	}
@@ -37,7 +37,7 @@ public:
 	/** Destructor - Destroy stored class. */
 	virtual ~FAutoDeletePointer()
 	{
-		if (bHasClass)
+		if (bHasAnyObject)
 		{
 			delete StoredObject;
 		}
@@ -63,7 +63,7 @@ public:
 	{
 #if _DEBUG
 		// This pointer was moved to other and should not be used!
-		if (ENSURE_VALID(bHasClass))
+		if (ENSURE_VALID(bHasAnyObject))
 		{
 			if (ENSURE_VALID(StoredObject != nullptr))
 			{
@@ -82,9 +82,19 @@ public:
 	/**
 	 * Get stored element.
 	 */
-	virtual TTypeToStore* operator->() const
+	inline virtual TTypeToStore* operator->() const
 	{
 		return Get();
+	}
+
+	bool HasAnyObject() const
+	{
+		return bHasAnyObject;
+	}
+
+	friend bool operator==(const FAutoDeletePointer& A, const FAutoDeletePointer& B)
+	{
+		return (A.StoredObject == B.StoredObject);
 	}
 
 protected:
@@ -92,16 +102,16 @@ protected:
 	void MarkAsMoved()
 	{
 		// Moving already moved pointer or moving pointer without class.
-		ENSURE_VALID(bHasClass);
+		ENSURE_VALID(bHasAnyObject);
 
-		bHasClass = false;
+		bHasAnyObject = false;
 		StoredObject = nullptr;
 	}
 
 protected:
-	/** Our managed class. */
+	/** Our managed object. */
 	TTypeToStore* StoredObject;
 
-	/** This property indicates if this @Store pointer was moved and should not be destroyed. */
-	bool bHasClass;
+	/** This property tells us if this class has any object. Can be false if moved or never initialized. */
+	bool bHasAnyObject;
 };

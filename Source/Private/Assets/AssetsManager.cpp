@@ -2,10 +2,13 @@
 
 #include "CoreEngine.h"
 #include "Assets/AssetsManager.h"
+#include "Assets/Assets/AssetBase.h"
 #include <memory>
-#include "Assets/AssetBase.h"
 
 FAssetsManager::FAssetsManager()
+	: AssetDirName("Assets")
+	, MapsDirName("Maps")
+	, FontsDirName("Fonts")
 {
 }
 
@@ -30,9 +33,48 @@ std::shared_ptr<FAssetBase> FAssetsManager::GetAsset(const std::string& InAssetN
 	return nullptr;
 }
 
-std::string FAssetsManager::GetFullFilePath(const std::string& InPathRelative)
+CArray<std::string> FAssetsManager::GetFilesFromDirectory(const std::string& Directory) const
 {
-	char* Slash = FFilesystem::GetPlatformSlash();
+	return FFilesystem::GetDirectories(GetFullFilePath(Directory), true);
+}
+
+std::string FAssetsManager::GetProjectLocation() const
+{
+	return Engine->GetLaunchRelativePath();
+}
+
+std::string FAssetsManager::GetAssetDirName() const
+{
+	return AssetDirName;
+}
+
+char* FAssetsManager::GetPlatformSlash() const
+{
+	return FFilesystem::GetPlatformSlash();
+}
+
+std::string FAssetsManager::GetAssetsPathRelative() const
+{
+	return GetAssetDirName();
+}
+
+std::string FAssetsManager::GetMapsPathRelative() const
+{
+	const char* Slash = FFilesystem::GetPlatformSlash();
+
+	return GetAssetsPathRelative() + Slash + MapsDirName;
+}
+
+std::string FAssetsManager::GetFontsPathRelative() const
+{
+	const char* Slash = FFilesystem::GetPlatformSlash();
+
+	return GetAssetsPathRelative() + Slash + FontsDirName;
+}
+
+std::string FAssetsManager::GetFullFilePath(const std::string& InPathRelative) const
+{
+	const char* Slash = FFilesystem::GetPlatformSlash();
 	
-	return Engine->GetLaunchRelativePath() + Slash + FFilesystem::GetAssetDirName() + Slash + InPathRelative;
+	return Engine->GetLaunchRelativePath() + Slash + InPathRelative;
 }

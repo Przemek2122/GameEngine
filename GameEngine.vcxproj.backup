@@ -27,13 +27,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Public\Assets\Assets\AssetBase.h" />
-    <ClInclude Include="Source\Public\Assets\Assets\FontAsset.h" />
-    <ClInclude Include="Source\Public\Assets\Assets\MapAsset.h" />
-    <ClInclude Include="Source\Public\Assets\Assets\TextureAsset.h" />
+    <ClInclude Include="Source\Public\Assets\AssetBase.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
-    <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h" />
-    <ClInclude Include="Source\Public\Assets\TypesForAssets\Texture.h" />
+    <ClInclude Include="Source\Public\Assets\Font.h" />
+    <ClInclude Include="Source\Public\Assets\FontAsset.h" />
+    <ClInclude Include="Source\Public\Assets\Texture.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
     <ClInclude Include="Source\Public\Containers\ContainerBase.h" />
     <ClInclude Include="Source\Public\Containers\Deque.h" />
@@ -209,13 +207,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">CoreEngine.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Source\Private\Assets\Assets\AssetBase.cpp" />
-    <ClCompile Include="Source\Private\Assets\Assets\FontAsset.cpp" />
-    <ClCompile Include="Source\Private\Assets\Assets\MapAsset.cpp" />
-    <ClCompile Include="Source\Private\Assets\Assets\TextureAsset.cpp" />
+    <ClCompile Include="Source\Private\Assets\AssetBase.cpp" />
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp" />
-    <ClCompile Include="Source\Private\Assets\TypesForAssets\Font.cpp" />
-    <ClCompile Include="Source\Private\Assets\TypesForAssets\Texture.cpp" />
+    <ClCompile Include="Source\Private\Assets\Font.cpp" />
+    <ClCompile Include="Source\Private\Assets\FontAsset.cpp" />
+    <ClCompile Include="Source\Private\Assets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />

@@ -10,6 +10,10 @@ class FAssetBase;
 class FFontAsset;
 class FFont;
 
+/**
+ * Storage class. Registers assets which can be accesed anywhere.
+ * Can also help with search for assets.
+ */
 class FAssetsManager
 {
 	friend FEngine;
@@ -25,7 +29,7 @@ public:
 	{
 		const std::string FullFilePath = GetFullFilePath(InAssetPath);
 		
-		if (FFilesystem::FileExists(FullFilePath))
+		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
 		{
 			AllAssetsMap.Emplace(InAssetName, std::make_shared<TAssetType>(InAssetName, FullFilePath));
 		}
@@ -49,13 +53,31 @@ public:
 		return dynamic_cast<TAssetSubClass*>(GetAsset(InAssetName).get());
 	}
 
-	const FFontAsset& GetFont(const std::string& InFontAssetName, const int InFontSize);
+	CArray<std::string> GetFilesFromDirectory(const std::string& Directory) const;
+
+	std::string GetProjectLocation() const;
+
+	/** @returns 'Assets' directory name */
+	std::string GetAssetDirName() const;
+
+	char* GetPlatformSlash() const;
+
+	std::string GetAssetsPathRelative() const;
+	std::string GetMapsPathRelative() const;
+	std::string GetFontsPathRelative() const;
 
 protected:
-	static std::string GetFullFilePath(const std::string& InPathRelative);
+	std::string GetFullFilePath(const std::string& InPathRelative) const;
 
 protected:
 	/** All types of assets */
 	CMap<std::string, std::shared_ptr<FAssetBase>> AllAssetsMap;
-	
+
+	/** Assets generic directory */
+	std::string AssetDirName;
+	/** Maps directory */
+	std::string MapsDirName;
+	/** Fonts directory */
+	std::string FontsDirName;
+
 };

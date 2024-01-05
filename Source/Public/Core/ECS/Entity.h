@@ -8,10 +8,12 @@ class FEntityManager;
 
 class EEntity : public UObject, public IComponentManagerInterface
 {
-	friend FEntityManager;
-protected:
+public:
 	EEntity(FEntityManager* InEntityManager);
 	virtual ~EEntity() override;
+
+	virtual void BeginPlay();
+	virtual void EndPlay();
 
 protected:
 	FEntityManager* EntityManagerOwner;

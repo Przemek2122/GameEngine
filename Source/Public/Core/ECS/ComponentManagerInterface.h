@@ -25,7 +25,8 @@ public:
 
 	bool DestroyComponent(const std::string& ComponentName);
 	bool DestroyComponentByInstance(UComponent* Component);
-	
+
+	/** Try to avoid getting by name, eg cache in property */
 	template<typename TComponentClass = UComponent>
 	TComponentClass* GetComponent(std::string ComponentName)
 	{
@@ -36,6 +37,8 @@ public:
 
 		return nullptr;
 	}
+
+	/** Try to avoid getting by name, eg cache in property */
 	template<typename TComponentClass = UComponent>
 	TComponentClass* GetComponent(const std::string& ComponentName)
 	{
@@ -46,6 +49,8 @@ public:
 
 		return nullptr;
 	}
+
+	/** Another way of getting component, still try to avoid calling it often. */
 	template<typename TComponentClass>
 	TComponentClass* GetComponentByClass()
 	{
@@ -73,7 +78,7 @@ public:
 	_NODISCARD IComponentManagerInterface* GetOwnerTop() const;
 
 protected:
-	/** Parent, could be other component or  */
+	/** Parent */
 	IComponentManagerInterface* ComponentManagerInterfaceParent;
 	/** Components accessible by strings passed when creating components which are component names. */
 	CUnorderedMap<std::string, std::shared_ptr<UComponent>> ComponentsMap;

@@ -4,8 +4,8 @@
 #include "Renderer/Widgets/Samples/TextWidget.h"
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
-#include "Assets/Font.h"
-#include "Assets/FontAsset.h"
+#include "Assets/TypesForAssets/Font.h"
+#include "Assets/Assets/FontAsset.h"
 
 static const char* DefaultText = "Default text"; 
 static const char* DefaultFont = "OpenSans"; 
