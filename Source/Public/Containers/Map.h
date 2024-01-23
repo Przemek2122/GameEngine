@@ -17,7 +17,7 @@ public:
 	/** Begin CContainerBase interface */
 	_NODISCARD SDL_FORCE_INLINE TSizeType Size() const override
 	{
-		return Map.size();
+		return static_cast<TSizeType>(Map.size());
 	}
 	_NODISCARD SDL_FORCE_INLINE bool IsEmpty() const override
 	{

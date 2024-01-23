@@ -41,7 +41,7 @@ public:
 	/** Bracket list constructor */
 	CArray(std::initializer_list<TType> List)
 	{
-		Resize(List.size());
+		Resize(static_cast<TSizeType>(List.size()));
 
 		for (auto ListItem : List)
 		{
@@ -196,7 +196,7 @@ public:
 	template<typename TTypeAuto>
 	_NODISCARD SDL_FORCE_INLINE TSizeType FindIndexOf(TTypeAuto Value)
 	{
-		const TSizeType VectorSize = Vector.size();
+		const TSizeType VectorSize = static_cast<TSizeType>(Vector.size());
 		
 		for (TSizeType i = 0; i < VectorSize; ++i)
 		{
