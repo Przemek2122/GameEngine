@@ -14,8 +14,6 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 
 void FInteractionBaseWidget::HandleInput()
 {
-	Super::HandleInput();
-
 	const FVector2D<int> MouseLocation = GetMouseLocation();
 	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int> Size = GetWidgetSize();
@@ -28,8 +26,6 @@ void FInteractionBaseWidget::HandleInput()
 	&&	 MouseLocation.Y	<	Location.Y + Size.Y )
 	{
 		bIsInWidget = true;
-		
-		NativeHover();
 	}
 
 	if (bIsInWidget)
@@ -40,6 +36,8 @@ void FInteractionBaseWidget::HandleInput()
 			
 			bMouseEnteredWidget = true;
 		}
+
+		NativeHover();
 	}
 	else
 	{
@@ -50,6 +48,8 @@ void FInteractionBaseWidget::HandleInput()
 			bMouseEnteredWidget = false;
 		}
 	}
+
+	Super::HandleInput();
 }
 
 FVector2D<int> FInteractionBaseWidget::GetMouseLocation()
@@ -88,18 +88,18 @@ void FInteractionBaseWidget::NativeHover()
 	{
 		if (ClickState == EClickState::NotClicked)
 		{
-			NativePress();
-			
 			ClickState = EClickState::Pressed;
+
+			NativePress();
 		}
 	}
 	else if (bWasInputReleaseDetected)
 	{
 		if (ClickState == EClickState::Pressed)
 		{
-			NativeRelease();
-			
 			ClickState = EClickState::Released;
+
+			NativeRelease();
 		}
 	}
 	else if (ClickState == EClickState::Released)

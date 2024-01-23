@@ -18,7 +18,7 @@ public:
 	/** Begin CContainerBase interface */
 	_NODISCARD SDL_FORCE_INLINE TSizeType Size() const override
 	{
-		return Vector.size();
+		return static_cast<TSizeType>(Vector.size());
 	}
 	_NODISCARD SDL_FORCE_INLINE bool IsEmpty() const override
 	{
@@ -36,9 +36,7 @@ public:
 		Vector.reserve(Number);
 	}
 
-	CArray()
-	{
-	}
+	CArray() = default;
 
 	/** Bracket list constructor */
 	CArray(std::initializer_list<TType> List)
@@ -231,7 +229,7 @@ public:
 	/** Removes all elements from the container (which are destroyed), leaving the container with a size of 0. */
 	SDL_FORCE_INLINE void Clear()
 	{
-		Vector.clear();		
+		Vector.clear();
 	}
 
 	/** Begin of bucket functions */

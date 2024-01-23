@@ -13,42 +13,42 @@ FEngineManager::~FEngineManager()
 
 FEngine* FEngineManager::Get()
 {
-	return Engine;
+	return GEngine;
 }
 
 void FEngineManager::Init(const int Argc, char* Argv[])
 {
-	Engine->PreInit();
+	GEngine->PreInit();
 
-	Engine->EngineInit(Argc, Argv);
+	GEngine->EngineInit(Argc, Argv);
 
-	Engine->Init();
+	GEngine->Init();
 
-	Engine->PostInit();
+	GEngine->PostInit();
 }
 
 void FEngineManager::MainLoop()
 {
-	while (Engine->CanContinueMainLoop())
+	while (GEngine->CanContinueMainLoop())
 	{
-		Engine->UpdateFrameTimeStart();
+		GEngine->UpdateFrameTimeStart();
 
 		// Calculate DeltaTime
 		{
-			Engine->CounterCurrentFrame = SDL_GetPerformanceCounter();
-			auto DeltaTime = static_cast<double>(Engine->CounterCurrentFrame - Engine->CounterLastFrame) / static_cast<double>(SDL_GetPerformanceFrequency());
-			Engine->SetDeltaTime(DeltaTime);
+			GEngine->CounterCurrentFrame = SDL_GetPerformanceCounter();
+			auto DeltaTime = static_cast<double>(GEngine->CounterCurrentFrame - GEngine->CounterLastFrame) / static_cast<double>(SDL_GetPerformanceFrequency());
+			GEngine->SetDeltaTime(DeltaTime);
 		}
 		
-		Engine->EngineTick();
+		GEngine->EngineTick();
 
-		Engine->UpdateFrameTimeEnd();
+		GEngine->UpdateFrameTimeEnd();
 
 		// Delay if required.
-		if (Engine->IsFrameRateLimited())
+		if (GEngine->IsFrameRateLimited())
 		{
-			const auto EngineFrameTime = Engine->GetFrameTime();
-			const auto EngineFrameDelay = Engine->GetFrameDelay();
+			const auto EngineFrameTime = GEngine->GetFrameTime();
+			const auto EngineFrameDelay = GEngine->GetFrameDelay();
 
 			if (EngineFrameDelay > EngineFrameTime)
 			{
@@ -56,17 +56,17 @@ void FEngineManager::MainLoop()
 			}
 		}
 
-		Engine->CounterLastFrame = Engine->CounterCurrentFrame;
+		GEngine->CounterLastFrame = GEngine->CounterCurrentFrame;
 	}
 }
 
 void FEngineManager::Exit()
 {
-	Engine->PreExit();
+	GEngine->PreExit();
 
-	Engine->Clean();
+	GEngine->Clean();
 
-	delete Engine;
+	delete GEngine;
 
 	std::cout << "Game engine end." << std::endl;
 }

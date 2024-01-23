@@ -10,25 +10,16 @@ IWidgetManagementInterface::IWidgetManagementInterface()
 
 IWidgetManagementInterface::~IWidgetManagementInterface()
 {
-	for (auto i = ManagedWidgets.Size() - 1; i >= 0; i--)
-	{
-		delete ManagedWidgets[i];
-	}
-
-	ManagedWidgets.Clear();
+	ClearChildren();
 }
 
 void IWidgetManagementInterface::TickWidgets()
 {
-	const auto Size = ManagedWidgets.Size();
+	auto Size = ManagedWidgets.Size();
 	
 	for (auto i = 0; i < Size; i++)
 	{
-		// @TODO FIX Widget can be empty if removed recently
-		if (ManagedWidgets.IsValidIndex(i))
-		{
-			ManagedWidgets[i]->ReceiveTick();
-		}
+		ManagedWidgets[i]->ReceiveTick();
 	}
 }
 
@@ -98,6 +89,17 @@ bool IWidgetManagementInterface::DestroyWidget(const std::string& InWidgetName)
 	}
 
 	return false;
+}
+
+void IWidgetManagementInterface::ClearChildren()
+{
+	for (auto i = ManagedWidgets.Size() - 1; i >= 0; i--)
+	{
+		ManagedWidgets[i]->DestroyWidget();
+	}
+
+	//ManagedWidgets.Clear();
+	//ManagedWidgetsMap.Clear();
 }
 
 FWidget* IWidgetManagementInterface::GetWidgetByName(const std::string& InWidgetName)

@@ -5,7 +5,8 @@
 #include "Renderer/Map/Mapmanager.h"
 
 FMapManager::FMapManager(FWindow* InWindow)
-	: Window(InWindow)
+	: CurrentMapAsset(nullptr)
+	, Window(InWindow)
 {
 }
 
@@ -23,7 +24,7 @@ void FMapManager::DrawMap()
 
 void FMapManager::LoadMap(const std::string& Name)
 {
-	const FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		FMapAsset* Asset = AssetsManager->GetAsset<FMapAsset>(Name);
@@ -48,7 +49,7 @@ void FMapManager::LoadMap(const std::string& Name)
 
 void FMapManager::UnLoadMap(const std::string& Name)
 {
-	const FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		FMapAsset* Asset = AssetsManager->GetAsset<FMapAsset>(Name);
@@ -69,7 +70,7 @@ void FMapManager::UnLoadMap(const std::string& Name)
 
 void FMapManager::CacheAvailableMaps()
 {
-	FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		CArray<std::string> DirectoriesFound = AssetsManager->GetFilesFromDirectory(AssetsManager->GetMapsPathRelative());

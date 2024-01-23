@@ -30,7 +30,7 @@ public:
 	/** First init ever called. */
 	virtual void PreInit();
 
-	/** Init (SDL, Engine stuff). */
+	/** Init (SDL, GEngine stuff). */
 	virtual void Init();
 
 	/** Third init function. */
@@ -136,6 +136,15 @@ protected:
 	CArray<std::string> LaunchParameters;
 
 public:
+	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
+	void AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function);
+	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
+	template<typename TAutoClass>
+	void AddObjectToCallOnStartOfNextTick(FFunctorObject<TAutoClass, void>& Function)
+	{
+		FunctionsToCallOnStartOfNextTick.BindObject(Function);
+	}
+
 	_NODISCARD FEventHandler* GetEventHandler() const;
 
 	/** Use this if you changed to your own. Will return casted. */
@@ -162,6 +171,8 @@ protected:
 	SDL_Event SdlEvent{};
 	FEventHandler* EventHandler;
 	FAssetsManager* AssetsManager;
+
+	FDelegate<> FunctionsToCallOnStartOfNextTick;
 
 #if ENGINE_TESTS
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;

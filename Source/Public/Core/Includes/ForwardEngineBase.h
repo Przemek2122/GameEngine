@@ -2,7 +2,7 @@
 
 #pragma once
 
-// Engine base classes forward declarations
+// GEngine base classes forward declarations
 
 class FEngineMain;
 class FEngine;

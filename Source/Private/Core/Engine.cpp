@@ -35,7 +35,7 @@ FEngine::FEngine()
 
 FEngine::~FEngine()
 {
-	LOG_INFO("Engine finish (is being destroyed now).");
+	LOG_INFO("GEngine finish (is being destroyed now).");
 
 	TTF_Quit();
 	SDL_Quit();
@@ -44,9 +44,9 @@ FEngine::~FEngine()
 void FEngine::EngineInit(int Argc, char* Argv[])
 {
 #if defined(__DATE__) && defined(__TIME__)
-	LOG_INFO("Engine init start compiled: " << __DATE__ << " " <<__TIME__);
+	LOG_INFO("GEngine init start compiled: " << __DATE__ << " " <<__TIME__);
 #else
-	LOG_INFO("Engine init start.");
+	LOG_INFO("GEngine init start.");
 #endif
 
 	SetFrameRate(60);
@@ -126,7 +126,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Assets\\Fonts\\OpenSans\\OpenSans-Regular.ttf");
 
-	LOG_INFO("Engine init End");
+	LOG_INFO("GEngine init End");
 
 	bIsEngineInitialized = true;
 }
@@ -134,6 +134,14 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 void FEngine::EngineTick()
 {
 	UpdateFramerateCounter();
+
+	// Tick functions for next tick
+	if (FunctionsToCallOnStartOfNextTick.IsBound())
+	{
+		FunctionsToCallOnStartOfNextTick.Execute();
+
+		FunctionsToCallOnStartOfNextTick.UnBindAll();
+	}
 
 	// Wait for Render thread.
 	// We need to do this to avoid changing data when render is not finished
@@ -146,7 +154,7 @@ void FEngine::EngineTick()
 
 	if (EventHandler->QuitInputDetected())
 	{
-		Engine->RequestExit();
+		GEngine->RequestExit();
 	}
 
 	Tick();
@@ -298,6 +306,11 @@ const std::string& FEngine::GetLaunchFullPath() const
 const std::string& FEngine::GetLaunchRelativePath() const
 {
 	return LaunchRelativePath;
+}
+
+void FEngine::AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function)
+{
+	FunctionsToCallOnStartOfNextTick.BindLambda(Function);
 }
 
 FEventHandler* FEngine::GetEventHandler() const

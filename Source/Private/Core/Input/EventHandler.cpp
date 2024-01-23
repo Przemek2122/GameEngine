@@ -72,49 +72,49 @@ void FEventHandler::HandleEvents()
 			        case SDL_WINDOWEVENT_HIDDEN:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " hidden");
-						Engine->GetEngineRender()->OnWindowHidden(Event.window.windowID);
+						GEngine->GetEngineRender()->OnWindowHidden(Event.window.windowID);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_EXPOSED:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " exposed");
-						Engine->GetEngineRender()->OnWindowExposed(Event.window.windowID);
+						GEngine->GetEngineRender()->OnWindowExposed(Event.window.windowID);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_MOVED:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " moved to: " << Event.window.data1 << " " << Event.window.data2);
-						Engine->GetEngineRender()->OnWindowMoved(Event.window.windowID, Event.window.data1, Event.window.data2);
+						GEngine->GetEngineRender()->OnWindowMoved(Event.window.windowID, Event.window.data1, Event.window.data2);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_RESIZED:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " resized to: " << Event.window.data1 << " " << Event.window.data2);
-						Engine->GetEngineRender()->OnWindowResized(Event.window.windowID, Event.window.data1, Event.window.data2);
+						GEngine->GetEngineRender()->OnWindowResized(Event.window.windowID, Event.window.data1, Event.window.data2);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_SIZE_CHANGED:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " size changed to: " << Event.window.data1 << " " << Event.window.data2);
-						Engine->GetEngineRender()->OnWindowSizeChanged(Event.window.windowID, Event.window.data1, Event.window.data2);
+						GEngine->GetEngineRender()->OnWindowSizeChanged(Event.window.windowID, Event.window.data1, Event.window.data2);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_MINIMIZED:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " minimized.");
-						Engine->GetEngineRender()->OnWindowMinimized(Event.window.windowID);
+						GEngine->GetEngineRender()->OnWindowMinimized(Event.window.windowID);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_MAXIMIZED:
 					{
 						LOG_DEBUG("Window " << Event.window.windowID << " maximized.");
-						Engine->GetEngineRender()->OnWindowMaximized(Event.window.windowID);
+						GEngine->GetEngineRender()->OnWindowMaximized(Event.window.windowID);
 			            break;
 					}
 					
@@ -139,14 +139,14 @@ void FEventHandler::HandleEvents()
 			        case SDL_WINDOWEVENT_FOCUS_GAINED:
 					{
 			            SDL_Log("Window %d gained keyboard focus", Event.window.windowID);
-						Engine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
+						GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
 			            break;
 					}
 					
 			        case SDL_WINDOWEVENT_FOCUS_LOST:
 					{
 			        	LOG_DEBUG("Window " << Event.window.windowID << " lost keyboard focus");
-						Engine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
+						GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
 			            break;
 					}
 					

@@ -10,6 +10,7 @@ FMapAsset::FMapAsset(const std::string& InAssetName, const std::string& InAssetP
 	: FAssetBase(InAssetName, InAssetPath)
 	, bIsLoaded(false)
 	, AssetsTileSize(32, 32)
+	, MapManager(nullptr)
 {
 }
 
@@ -27,7 +28,7 @@ void FMapAsset::LoadMap()
 {
 	if (FFilesystem::DirectoryExists(AssetPath))
 	{
-		const std::string SharedBeginning = AssetPath + Engine->GetAssetsManager()->GetPlatformSlash();
+		const std::string SharedBeginning = AssetPath + GEngine->GetAssetsManager()->GetPlatformSlash();
 		const std::string SharedBeginningFiles = SharedBeginning + AssetName;
 
 		MapNameFilePath = SharedBeginningFiles + '.' + FMapFilesExtensions::PrimaryMapFileExtension;
@@ -56,7 +57,7 @@ void FMapAsset::LoadMap()
 
 			FParser Parser({ ',' });
 
-			FAssetsManager* AssetsManager = Engine->GetAssetsManager();
+			FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 
 			SDL_Renderer* WindowRenderer = MapManager->GetWindow()->GetRenderer()->GetSDLRenderer();
 
@@ -88,6 +89,8 @@ void FMapAsset::LoadMap()
 			}
 			MapDataFilePathStream.close();
 
+			const int MaxAssetIndex = MapSubAssetSettingsArray.Size();
+
 			// Map, where should be which tile
 			std::ifstream MapNameFilePathStream(MapNameFilePath);
 			for (std::string Line; getline(MapNameFilePathStream, Line); )
@@ -99,9 +102,18 @@ void FMapAsset::LoadMap()
 				for (std::string& Element : ParsedArray)
 				{
 					// @TODO Could switch to strtol to make sure conversion does not fail
-					int Index = atoi(Element.c_str());
+					const int Index = atoi(Element.c_str());
 
-					MapRow.Array.Push(Index);
+					if (Index >= MaxAssetIndex)
+					{
+						LOG_ERROR("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+
+						MapRow.Array.Push(INDEX_INCORRECT);
+					}
+					else
+					{
+						MapRow.Array.Push(Index);
+					}
 				}
 
 				MapArray.Push(MapRow);
@@ -164,12 +176,21 @@ void FMapAsset::Draw()
 			for (int HorizontalIndex = 0; HorizontalIndex < HorizontalSize; HorizontalIndex++)
 			{
 				const int AssetIndex = MapRow.Array[HorizontalIndex];
-				const FMapSubAssetSettings CurrentAssetSettings = MapSubAssetSettingsArray[AssetIndex];
+				if (AssetIndex >= 0)
+				{
+					const FMapSubAssetSettings CurrentAssetSettings = MapSubAssetSettingsArray[AssetIndex];
 
-				Destination.x = VerticalIndex * AssetsTileSize.X;
-				Destination.y = HorizontalIndex * AssetsTileSize.Y;
+					Destination.x = HorizontalIndex * AssetsTileSize.X;
+					Destination.y = VerticalIndex * AssetsTileSize.Y;
 
-				CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
+					CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
+				}
+				else
+				{
+					// Do sth when index is not found
+
+					// @TODO ...
+				}
 			}
 		}
 	}

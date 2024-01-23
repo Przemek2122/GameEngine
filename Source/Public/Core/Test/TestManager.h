@@ -8,7 +8,7 @@
 #if ENGINE_TESTS
 
 /**
- * Engine class used to check if things work properly.
+ * GEngine class used to check if things work properly.
  * Also can be used to see sample code.
  */
 class FTestManager

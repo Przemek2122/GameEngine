@@ -17,11 +17,11 @@ class FInteractionBaseWidget;
 class FWidget : public IWidgetPositionInterface
 {
 	friend IWidgetManagementInterface;
-	friend FInteractionBaseWidget;
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
 	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = 0);
+	/** Destroy using DestroyWidget function */
 	virtual ~FWidget() override = default;
 
 	/** Advanced, use Tick() if possible instead. */
@@ -42,7 +42,15 @@ protected:
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
 
+	/** Called before DestroyWidget */
+	virtual void OnWidgetDestroyed();
+
 public:
+	void DestroyWidget();
+
+	/** True if DestroyWidget() has been called already */
+	bool IsPendingDelete() const { return bIsPendingDelete; }
+
 	/** Full widget refresh. Performance heavy. */
 	virtual void RefreshWidget(const bool bRefreshChilds = true);
 
@@ -95,5 +103,7 @@ private:
 
 	/** Owner manager */
 	IWidgetManagementInterface* WidgetManagementInterface;
+
+	bool bIsPendingDelete;
 	
 };

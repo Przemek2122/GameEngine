@@ -15,7 +15,7 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	, DesiredText(DefaultText)
 	, RenderedText(DefaultText)
 	, TextSize(16)
-	, AssetsManager(Engine->GetAssetsManager())
+	, AssetsManager(GEngine->GetAssetsManager())
 	, FontAsset(AssetsManager->GetAsset<FFontAsset>(DefaultFont))
 	, TextRenderColor(255)
 	, TextBackgroundRenderColor({ 255, 0, 0})

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Map editor</title>
+	<meta name="description" content="Map editor.">
+	<link rel="icon" href="ICON"> 
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="stylesheet" href="editor.css" type="text/css" />
+	<script src="jquery_3.2.1.min.js"></script>
+	<script src="filesaver.js"></script>
+	<script src="dragelement.js"></script>
+	<script src="editor.js"></script>
+	
+</head>
+<body>
+
+	<!-- Navigation bar to help user. -->
+	<div class="navbar">
+		<div class="nav_dropdown">
+			<a href="/"> Home </a>
+		</div>
+		
+		<div class="nav_dropdown">
+			<a href="/">Map settings</a>
+			<div class="nav_dropdown_content">
+				<p> Change size </p>
+				<p onclick="close()"> Change map </p>
+			</div>
+		</div>
+		
+		<div class="nav_dropdown">
+			<a onclick="save()">Save</a>
+		</div>
+		
+		<!--<div class="nav_dropdown_right">
+			<span><a href="account.php">To z prawej</a></span>
+		</div>-->
+	</div>
+	
+	<!-- User must chose file in order to use it. -->
+	<div id="hidden_parent">
+		<div id="hidden">
+			<div id="user_help">
+				<h4> 1. Click on select file. </h4>
+				<h4> 2. Navigate to directory with map. </h4>
+				<h4> 3. Chose file you wish to edit. </h4> 		
+				<h4> 4. Do the same with map assets file. </h4> 					
+			</div>
+		
+			<h2>Select map file: 
+				<input type="file" class="fileDefaultHidden" accept=".amap" id="map-input" /> </h2>
+				<label for="map-input" class="file">Choose a file</label> <div class="chosed" id="map_info"> No file </div>
+				<pre id="map-content"></pre>
+			
+			<h2>Select map assets file: 
+				<input type="file" class="fileDefaultHidden" accept=".amapdata" id="masset-input" /> </h2>
+				<label for="masset-input" class="file">Choose a file</label> <div class="chosed" id="masset_info"> No file </div>
+				
+				<br /><br /><br />
+				<div class="btn" onclick="start();"> Begin map editing. </div>
+	
+		</div>
+	</div>
+	
+	<div id="mydiv" class="dragable" style="max-width: 128;">
+		<div id="mydivheader" class="dragableheader">Toolbox</div>
+		<div id="tiles">
+			Chose map to use.
+		</div>
+	</div>
+	<script> dragElement(document.getElementById("mydiv")); </script>
+	
+	<!-- There will be map. -->
+	<div id="centermap">
+		<div id="mapdiv">
+		
+		</div>
+	</div>
+	
+	<!-- Must be called after creating inputs. -->
+	<script>
+		document.getElementById('map-input').addEventListener('change', readMap, false);
+		document.getElementById('masset-input').addEventListener('change', readMapAssets, false);
+	</script>
+		
+</body>
+</html>

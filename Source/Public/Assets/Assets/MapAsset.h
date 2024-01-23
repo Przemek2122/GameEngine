@@ -7,13 +7,17 @@
 
 class FTextureAsset;
 
+enum FMapIndex : int8_t
+{
+	INDEX_INCORRECT = -1
+};
+
 namespace FMapFilesExtensions
 {
 	inline static const std::string PrimaryMapFileExtension = "amap";
 	inline static const std::string MapDataFileExtension = "amapdata";
 	inline static const CArray<std::string> AssetDirectoryNames = { "Assets", "assets" };
 };
-
 struct FMapSubAssetSettings
 {
 	/** Index to match texture to map */

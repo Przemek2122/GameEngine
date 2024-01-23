@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-inline FEngine* Engine;
+inline FEngine* GEngine;
 
 /**
  * Singleton manager for engine class.
@@ -23,7 +23,7 @@ public:
 	{
 		std::cout << "Game engine initializing ..." << std::endl;
 
-		Engine = new TEngineClass();
+		GEngine = new TEngineClass();
 		
 		Init(InArgc, InArgv);
 
@@ -37,7 +37,7 @@ public:
 	template<typename TEngineClass>
 	static TEngineClass* Get()
 	{
-		return static_cast<TEngineClass>(Engine);
+		return static_cast<TEngineClass>(GEngine);
 	}
 	
 protected:

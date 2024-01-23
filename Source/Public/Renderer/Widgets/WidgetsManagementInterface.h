@@ -83,6 +83,8 @@ public:
 	/** Slower overload which destroys by name. @returns true on success. */
 	INLINE_DEBUGABLE bool DestroyWidget(const std::string& InWidgetName);
 
+	void ClearChildren();
+
 	/** @returns widget by name SLOW */
 	_NODISCARD FWidget* GetWidgetByName(const std::string& InWidgetName);
 	/** @returns widget by name SLOW - This implementation does auto deduction of type. */

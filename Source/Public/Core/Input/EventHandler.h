@@ -24,7 +24,7 @@ public:
 	_NODISCARD bool GetPrimaryInput(std::string InputName);
 
 protected:
-	/** Add primary input (Engine uses) Name from  */
+	/** Add primary input (GEngine uses) Name from  */
 	void AddPrimaryInput(const std::string& InPrimaryName);
 	/** Remove primary input */
 	void RemovePrimaryInput(const std::string& InPrimaryName);

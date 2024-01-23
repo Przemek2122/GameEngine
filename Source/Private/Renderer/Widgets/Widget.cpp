@@ -22,9 +22,9 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 
 void FWidget::ReceiveTick()
 {
-	TickWidgets();
-	
 	HandleInput();
+
+	TickWidgets();
 
 	Tick();
 }
@@ -80,6 +80,32 @@ void FWidget::ReCalculate()
 	for (FWidget* Widget : ManagedWidgets)
 	{
 		Widget->OnWindowChanged();
+	}
+}
+
+void FWidget::OnWidgetDestroyed()
+{
+}
+
+void FWidget::DestroyWidget()
+{
+	if (!bIsPendingDelete)
+	{
+		OnWidgetDestroyed();
+
+		if (HasParent())
+		{
+			GetParent()->UnRegisterWidget(this);
+		}
+
+		FFunctorLambda<void> DeleteFunctor = [&]()
+		{
+			delete this;
+		};
+
+		GEngine->AddLambdaToCallOnStartOfNextTick(DeleteFunctor);
+
+		bIsPendingDelete = true;
 	}
 }
 
@@ -140,7 +166,7 @@ FRenderer* FWidget::GetRenderer() const
 
 FEventHandler* FWidget::GetEventHandler()
 {
-	return Engine->GetEventHandler();
+	return GEngine->GetEventHandler();
 }
 
 void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)

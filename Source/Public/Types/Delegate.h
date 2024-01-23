@@ -4,6 +4,7 @@
 
 #include "DelegateBase.h"
 #include "FunctorLambda.h"
+#include "FunctorObject.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
@@ -52,14 +53,6 @@ public:
 	{
 		DelegateBase::Functors.Push(new FFunctorLambda<void, TInParams...>(Lambda));
 	}
-	/*
-	void BindLambda(FFunctorLambda<TReturnType, TInParams...> Lambda)
-	{
-		FFunctorLambda<TReturnType, TInParams...>* Ptr = *(std::move(Lambda));
-		
-		DelegateBase::Functors.Push(Ptr);
-	}
-	*/
 	
 	void UnBindLambda(FFunctorLambda<void, TInParams...>& Lambda)
 	{
@@ -69,6 +62,24 @@ public:
 	{
 		DelegateBase::Functors.Remove(Lambda);
 	}
+
+	/*
+	void BindObject(FFunctorObject<void, TInParams...>&& FunctorObject)
+	{
+		DelegateBase::Functors.Push(FunctorObject);
+	}
+	*/
+	template<typename TClass>
+	void BindObject(TClass* InClassObject, void(TClass::* InFunctionPointer)(TInParams...))
+	{
+		DelegateBase::Functors.Push(new FFunctorObject<TClass, void, TInParams...>(InClassObject, InFunctionPointer));
+	}
+	/*
+	void UnBindObject(FFunctorObject<void, TInParams...>&& FunctorObject)
+	{
+		DelegateBase::Functors.Remove(FunctorObject);
+	}
+	*/
 	
 	/** Remove function by functor reference. Use with caution. */
 	void UnBindAll()

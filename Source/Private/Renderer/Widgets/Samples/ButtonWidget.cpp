@@ -45,9 +45,9 @@ void FButtonWidget::Render()
 
 void FButtonWidget::NativeHover()
 {
-	Super::NativeHover();
-
 	OnHover.Execute();
+
+	Super::NativeHover();
 }
 
 void FButtonWidget::NativePress()

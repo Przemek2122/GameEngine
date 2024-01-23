@@ -41,7 +41,7 @@ public:
 	template<class TAssetType>
 	std::shared_ptr<TAssetType> CreateAssetFromRelativePath(const std::string& InAssetName, const std::string& InAssetPath)
 	{
-		const std::string FullFilePath = GetFullFilePath(InAssetPath);
+		const std::string FullFilePath = ConvertRelativeToFullPath(InAssetPath);
 
 		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
 		{
@@ -57,7 +57,7 @@ public:
 	template<class TAssetType>
 	void AddAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	{
-		const std::string FullFilePath = GetFullFilePath(InAssetPath);
+		const std::string FullFilePath = ConvertRelativeToFullPath(InAssetPath);
 		
 		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
 		{
@@ -97,7 +97,7 @@ public:
 	std::string GetFontsPathRelative() const;
 
 protected:
-	std::string GetFullFilePath(const std::string& InPathRelative) const;
+	std::string ConvertRelativeToFullPath(const std::string& InPathRelative) const;
 
 protected:
 	/** All types of assets */
