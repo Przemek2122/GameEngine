@@ -93,13 +93,10 @@ void FWidget::DestroyWidget()
 	{
 		OnWidgetDestroyed();
 
-		if (HasParent())
-		{
-			GetParent()->UnRegisterWidget(this);
-		}
-
 		FFunctorLambda<void> DeleteFunctor = [&]()
 		{
+			DeInit();
+
 			delete this;
 		};
 

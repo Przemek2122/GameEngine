@@ -84,6 +84,7 @@ public:
 	INLINE_DEBUGABLE bool DestroyWidget(const std::string& InWidgetName);
 
 	void ClearChildren();
+	int GetChildrenCount() const;
 
 	/** @returns widget by name SLOW */
 	_NODISCARD FWidget* GetWidgetByName(const std::string& InWidgetName);

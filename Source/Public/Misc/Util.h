@@ -43,7 +43,7 @@ namespace FUtil
 	template <class TTypeOut = double>
 	INLINE_DEBUGABLE TTypeOut NanoSecondToSecond(const size_t InNanosecond)
 	{
-		const static size_t FullNanoSecond = 1e9;
+		static constexpr double FullNanoSecond = 1e9;
 		
 		return (static_cast<double>(InNanosecond) / static_cast<double>(FullNanoSecond));
 	}
@@ -51,7 +51,7 @@ namespace FUtil
 	template <typename TTypeOut = double>
 	INLINE_DEBUGABLE TTypeOut MicroSecondToSecond(const size_t InNanosecond)
 	{
-		const static size_t FullMicroSecond = 1e6;
+		static constexpr double FullMicroSecond = 1e6;
 		
 		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMicroSecond));
 	}
@@ -59,7 +59,7 @@ namespace FUtil
 	template <typename TTypeOut = double>
 	INLINE_DEBUGABLE TTypeOut MiliSecondToSecond(const size_t InNanosecond)
 	{
-		const static size_t FullMiliSecond = 1e3;
+		static constexpr double FullMiliSecond = 1e3;
 		
 		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMiliSecond));
 	}

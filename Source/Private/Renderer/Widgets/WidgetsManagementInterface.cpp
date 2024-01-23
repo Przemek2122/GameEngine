@@ -63,7 +63,7 @@ bool IWidgetManagementInterface::DestroyWidget(FWidget* Widget)
 {
 	if (ENSURE_VALID(Widget != nullptr))
 	{
-		Widget->DeInit();
+		Widget->DestroyWidget();
 
 		OnWidgetDestroyed(Widget);
 
@@ -80,7 +80,7 @@ bool IWidgetManagementInterface::DestroyWidget(const std::string& InWidgetName)
 		FWidget* Widget = GetWidgetByName(InWidgetName);
 		if (ENSURE_VALID(Widget != nullptr))
 		{
-			Widget->DeInit();
+			Widget->DestroyWidget();
 
 			OnWidgetDestroyed(Widget);
 
@@ -100,6 +100,11 @@ void IWidgetManagementInterface::ClearChildren()
 
 	//ManagedWidgets.Clear();
 	//ManagedWidgetsMap.Clear();
+}
+
+int IWidgetManagementInterface::GetChildrenCount() const
+{
+	return ManagedWidgets.Size();
 }
 
 FWidget* IWidgetManagementInterface::GetWidgetByName(const std::string& InWidgetName)
