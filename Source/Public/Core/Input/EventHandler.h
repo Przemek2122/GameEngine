@@ -4,10 +4,27 @@
 
 #include "CoreMinimal.h"
 
+class FMouseClickDelegateWrapper
+{
+public:
+	FMouseClickDelegateWrapper()
+		: bWasSentAlready(false)
+	{
+	}
+
+	void Execute(const FVector2D<int>& Location);
+	void Reset();
+
+	/** Called when LEFT button is pressed (single) */
+	FDelegate<void, FVector2D<int>> OnMouseClicked;
+private:
+	bool bWasSentAlready;
+};
+
 class FEventHandler
 {
 public:
-	FEventHandler(SDL_Event InEvent);
+	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
 	virtual void HandleEvents();
@@ -19,9 +36,14 @@ public:
 	_NODISCARD FVector2D<int> GetMouseLocationLast() const;
 	
 	/** Use to check if primary input exists. */
-	_NODISCARD bool HasPrimaryInput(std::string InputName);
+	_NODISCARD bool HasPrimaryInput(const std::string& InputName);
 	/** Use to check primary input. */
-	_NODISCARD bool GetPrimaryInput(std::string InputName);
+	_NODISCARD bool GetPrimaryInput(const std::string& InputName);
+
+	/** Called when mouse left click is detected */
+	FMouseClickDelegateWrapper MouseLeftClickDelegate;
+	/** Called when mouse right click is detected */
+	FMouseClickDelegateWrapper MouseRightClickDelegate;
 
 protected:
 	/** Add primary input (GEngine uses) Name from  */
@@ -41,6 +63,9 @@ public:
 	_NODISCARD bool GetSecondaryInput(const std::string& InputName);
 
 	_NODISCARD bool QuitInputDetected() const;
+
+	/** Called when location of mouse changes */
+	FDelegate<void, FVector2D<int>> OnMouseMoved;
 
 protected:
 	SDL_Event Event;

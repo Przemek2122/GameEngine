@@ -3,6 +3,7 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/InteractionBaseWidget.h"
 #include "Input/EventHandler.h"
+#include "Renderer/Widgets/WidgetInputManager.h"
 
 FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
@@ -10,9 +11,15 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	, HoverState(EHoverState::None)
 	, bMouseEnteredWidget(false)
 {
+	GetWindow()->GetWidgetInputManager()->Register(this);
 }
 
-void FInteractionBaseWidget::HandleInput()
+FInteractionBaseWidget::~FInteractionBaseWidget()
+{
+	GetWindow()->GetWidgetInputManager()->UnRegister(this);
+}
+
+void FInteractionBaseWidget::HandleMouseInput()
 {
 	const FVector2D<int> MouseLocation = GetMouseLocation();
 	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
@@ -48,23 +55,11 @@ void FInteractionBaseWidget::HandleInput()
 			bMouseEnteredWidget = false;
 		}
 	}
-
-	Super::HandleInput();
 }
 
 FVector2D<int> FInteractionBaseWidget::GetMouseLocation()
 {
 	return GetEventHandler()->GetMouseLocationCurrent();
-}
-
-bool FInteractionBaseWidget::GetClickPressInput()
-{
-	return GetEventHandler()->GetPrimaryInput("M_LMB_P");
-}
-
-bool FInteractionBaseWidget::GetClickReleaseInput()
-{
-	return GetEventHandler()->GetPrimaryInput("M_LMB_R");
 }
 
 void FInteractionBaseWidget::NativePress()
@@ -81,6 +76,7 @@ void FInteractionBaseWidget::NativeReleaseOutsideWidget()
 
 void FInteractionBaseWidget::NativeHover()
 {
+	/*
 	const bool bWasInputPressDetected = GetClickPressInput();
 	const bool bWasInputReleaseDetected = GetClickReleaseInput();
 	
@@ -106,6 +102,7 @@ void FInteractionBaseWidget::NativeHover()
 	{
 		ClickState = EClickState::NotClicked;
 	}
+	*/
 }
 
 void FInteractionBaseWidget::NativeMouseEnterWidget()
@@ -152,4 +149,12 @@ void FInteractionBaseWidget::OnHoverStateChanged()
 		NativeMouseExitWidget();
 		break;
 	}
+}
+
+void FInteractionBaseWidget::OnLeftMouseButtonReleased(FVector2D<int> Location)
+{
+}
+
+void FInteractionBaseWidget::OnRightMouseButtonReleased(FVector2D<int> Location)
+{
 }

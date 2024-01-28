@@ -17,8 +17,8 @@ public:
 
 protected:
 	FDelegate<> OnTestDelegateOne;
-	FDelegate<int> OnTestDelegateTwo;
-	FDelegate<int, float> OnTestDelegateThree;
+	FDelegate<void, int> OnTestDelegateTwo;
+	FDelegate<void, int, float> OnTestDelegateThree;
 	
 };
 

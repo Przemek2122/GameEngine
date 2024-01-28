@@ -12,10 +12,10 @@
  * Note:
  * All functions passed in are deleted at end of this object life.
  */
-template<typename... TInParams>
-class FDelegate : public FDelegateBase<void, TInParams...>
+template<typename TReturnType = void, typename... TInParams>
+class FDelegate : public FDelegateBase<TReturnType, TInParams...>
 {
-using DelegateBase = FDelegateBase<void, TInParams...>;
+using DelegateBase = FDelegateBase<TReturnType, TInParams...>;
 	
 public:
 	FDelegate() = default;
@@ -41,45 +41,57 @@ public:
 			DelegateBase::Functors[i]->operator()(InParams ...);
 		}
 	}
+	/** Executes all bound functions using Lambda to define how it executes. */
+	using ExecuteByLambdaDefinitionFunctor = FFunctorBase<TReturnType, TInParams...>;
+	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
+	virtual void ExecuteByLambda(ExecuteByLambdaDefinition Lambda, TInParams... InParams)
+	{
+		const auto FunctorsNum = DelegateBase::Functors.Size();
+
+		for (int i = 0; i < FunctorsNum; i++)
+		{
+			Lambda(DelegateBase::Functors[i], InParams ...);
+		}
+	}
 	/** End FDelegateBase interface */
 
 	/** You can make new FFunctorLambda<TReturnType, TInParams...>, Lambdas will be auto destroyed with this delegate. */
-	void BindLambda(FFunctorLambda<void, TInParams...>* Lambda)
+	void BindLambda(FFunctorLambda<TReturnType, TInParams...>* Lambda)
 	{
 		DelegateBase::Functors.Push(Lambda);
 	}
 	template <typename TTypeAuto>
 	void BindLambda(TTypeAuto Lambda)
 	{
-		DelegateBase::Functors.Push(new FFunctorLambda<void, TInParams...>(Lambda));
+		DelegateBase::Functors.Push(new FFunctorLambda<TReturnType, TInParams...>(Lambda));
 	}
 	
-	void UnBindLambda(FFunctorLambda<void, TInParams...>& Lambda)
+	void UnBindLambda(FFunctorLambda<TReturnType, TInParams...>& Lambda)
 	{
 		DelegateBase::Functors.Remove(Lambda);
 	}
-	void UnBindLambda(FFunctorLambda<void, TInParams...>&& Lambda)
+	void UnBindLambda(FFunctorLambda<TReturnType, TInParams...>&& Lambda)
 	{
 		DelegateBase::Functors.Remove(Lambda);
 	}
 
 	/*
-	void BindObject(FFunctorObject<void, TInParams...>&& FunctorObject)
-	{
-		DelegateBase::Functors.Push(FunctorObject);
-	}
+	 * Example on how to bind your object
+	 * OnYourDelegateChanged.BindObject(this, &FYourClass::YourFunctionName);
+	 * Real example from code:
+	 * OnWidgetOrderChanged.BindObject(this, &FWidgetInputManager::ChangeOrder);
 	*/
 	template<typename TClass>
-	void BindObject(TClass* InClassObject, void(TClass::* InFunctionPointer)(TInParams...))
+	void BindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
-		DelegateBase::Functors.Push(new FFunctorObject<TClass, void, TInParams...>(InClassObject, InFunctionPointer));
+		DelegateBase::Functors.Push(new FFunctorObject<TClass, TReturnType, TInParams...>(InClassObject, InFunctionPointer));
 	}
-	/*
-	void UnBindObject(FFunctorObject<void, TInParams...>&& FunctorObject)
+
+	template<typename TClass>
+	void RemoveObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
-		DelegateBase::Functors.Remove(FunctorObject);
+		DelegateBase::Functors.Remove(new FFunctorObject<TClass, TReturnType, TInParams...>(InClassObject, InFunctionPointer));
 	}
-	*/
 	
 	/** Remove function by functor reference. Use with caution. */
 	void UnBindAll()

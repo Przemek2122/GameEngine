@@ -7,7 +7,7 @@
 
 /**
  * Base Delegate storing functors.
- * Call Execute to execute all bound functions.
+ * Call ExecuteByLambda to execute all bound functions.
  */
 template<typename TReturnType, typename... TInParams>
 class FDelegateBase

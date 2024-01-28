@@ -73,7 +73,7 @@ public:
 
 		CreatedWidget->Init();
 
-		OnWidgetCreated(CreatedWidget);
+		OnChildWidgetCreated(CreatedWidget);
 
 		return CreatedWidget;
 	}
@@ -119,8 +119,8 @@ public:
 		return ClassName + ("_" + Id);
 	}
 
-	virtual void OnWidgetCreated(FWidget* NewWidget);
-	virtual void OnWidgetDestroyed(FWidget* NewWidget);
+	virtual void OnChildWidgetCreated(FWidget* NewWidget);
+	virtual void OnChildWidgetDestroyed(FWidget* NewWidget);
 
 protected:
 	/** Called by wiget when order is changed. */
@@ -139,6 +139,8 @@ public:
 	/** Called after widget initialization */
 	virtual void RegisterWidgetPostInit(FWidget* Widget);
 	virtual void UnRegisterWidget(FWidget* Widget);
+
+	FDelegate<void, FWidget*> OnWidgetOrderChanged;
 
 	int LastWidgetNumber;
 	

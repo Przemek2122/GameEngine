@@ -3,8 +3,6 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Widget.h"
 
-#include <Windows.h>
-
 FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder)
 	: IWidgetPositionInterface(InWidgetManagementInterface)
 	, bWasRenderedThisFrame(false)
@@ -13,6 +11,7 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetOrder(InWidgetOrder)
 	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetManagementInterface(InWidgetManagementInterface)
+	, bIsPendingDelete(false)
 {
 #if _DEBUG
 	// Critical to be valid.
@@ -22,8 +21,6 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 
 void FWidget::ReceiveTick()
 {
-	HandleInput();
-
 	TickWidgets();
 
 	Tick();
@@ -38,6 +35,8 @@ void FWidget::ReceiveRender()
 
 void FWidget::Init()
 {
+	Super::Init();
+
 	WidgetManagementInterface->RegisterWidget(this);
 
 	SetAnchor(DefaultAnchorInterface);
@@ -55,14 +54,12 @@ void FWidget::DeInit()
 	if (ENSURE_VALID(WidgetManagementInterface != nullptr))
 	{
 		WidgetManagementInterface->UnRegisterWidget(this);
+
+		WidgetManagementInterface = nullptr;
 	}
 #else
 	WidgetManagementInterface->UnRegisterWidget(this);
 #endif
-}
-
-void FWidget::HandleInput()
-{
 }
 
 void FWidget::Tick()
@@ -93,7 +90,7 @@ void FWidget::DestroyWidget()
 	{
 		OnWidgetDestroyed();
 
-		FFunctorLambda<void> DeleteFunctor = [&]()
+		FFunctorLambda<void> DeleteFunctor = [&]
 		{
 			DeInit();
 

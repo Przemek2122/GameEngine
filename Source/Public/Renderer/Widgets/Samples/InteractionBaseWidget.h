@@ -23,14 +23,11 @@ class FInteractionBaseWidget : public FWidget
 {
 public:
 	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
+	~FInteractionBaseWidget() override;
 	
-	/** Begin FWidget interface */
-	virtual void HandleInput() override;
-	/** End FWidget interface */
+	virtual void HandleMouseInput();
 
 	static _NODISCARD FVector2D<int> GetMouseLocation();
-	static _NODISCARD bool GetClickPressInput();
-	static _NODISCARD bool GetClickReleaseInput();
 
 	/** Called once when pressed in widget area. */
 	virtual void NativePress();
@@ -49,6 +46,9 @@ public:
 	void SetHoverState(EHoverState NewHoverState);
 	_NODISCARD EHoverState GetHoverState() const;
 	virtual void OnHoverStateChanged();
+
+	void OnLeftMouseButtonReleased(FVector2D<int> Location);
+	void OnRightMouseButtonReleased(FVector2D<int> Location);
 
 protected:
 	EClickState ClickState;

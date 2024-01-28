@@ -3,7 +3,22 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
-FEventHandler::FEventHandler(SDL_Event InEvent)
+void FMouseClickDelegateWrapper::Execute(const FVector2D<int>& Location)
+{
+	if (!bWasSentAlready)
+	{
+		bWasSentAlready = true;
+
+		OnMouseClicked.Execute(Location);
+	}
+}
+
+void FMouseClickDelegateWrapper::Reset()
+{
+	bWasSentAlready = false;
+}
+
+FEventHandler::FEventHandler(const SDL_Event& InEvent)
 	: Event(InEvent)
 	, bQuitInputDetected(false)
 {
@@ -264,8 +279,13 @@ void FEventHandler::HandleEvents()
 			/** Mouse movement X & Y */
 			case SDL_MOUSEMOTION:
 			{
-				MouseLocationLast = MouseLocationCurrent;
-					
+				if (MouseLocationLast != MouseLocationCurrent)
+				{
+					MouseLocationLast = MouseLocationCurrent;
+
+					OnMouseMoved.Execute(MouseLocationCurrent);
+				}
+
 				MouseLocationCurrent.X = Event.motion.x;
 				MouseLocationCurrent.Y = Event.motion.y;
 						
@@ -280,6 +300,7 @@ void FEventHandler::HandleEvents()
 					case SDL_BUTTON_LEFT:
 					{
 						PrimaryInputMap["M_LMB_P"] = true;
+
 							
 						break;
 					}
@@ -314,6 +335,8 @@ void FEventHandler::HandleEvents()
 					case SDL_BUTTON_LEFT:
 					{
 						PrimaryInputMap["M_LMB_R"] = true;
+
+						MouseLeftClickDelegate.Execute(MouseLocationCurrent);
 							
 						break;
 					}
@@ -321,6 +344,8 @@ void FEventHandler::HandleEvents()
 					case SDL_BUTTON_RIGHT:
 					{
 						PrimaryInputMap["M_RMB_R"] = true;
+
+						MouseRightClickDelegate.Execute(MouseLocationCurrent);
 							
 						break;
 					}
@@ -369,12 +394,12 @@ FVector2D<int> FEventHandler::GetMouseLocationLast() const
 	return MouseLocationLast;
 }
 
-bool FEventHandler::HasPrimaryInput(std::string InputName)
+bool FEventHandler::HasPrimaryInput(const std::string& InputName)
 {
 	return PrimaryInputMap.HasKey(InputName);
 }
 
-bool FEventHandler::GetPrimaryInput(std::string InputName)
+auto FEventHandler::GetPrimaryInput(const std::string& InputName) -> bool
 {
 	return PrimaryInputMap[InputName];
 }

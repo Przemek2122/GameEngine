@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -146,6 +147,9 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Parser.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h">
       <Filter>Public\Assets\TypesForAssets</Filter>
     </ClInclude>
@@ -169,9 +173,6 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Core\CoreEngine.h">
-      <Filter>Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
@@ -632,6 +633,7 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_vulkan.h">
       <Filter>ThirdParty\SDL</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Private\Renderer\Widgets\WidgetInputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Assets\Assets\AssetBase.cpp">
@@ -647,6 +649,9 @@
       <Filter>Private\Assets\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Parser.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Font.cpp">
@@ -823,8 +828,16 @@
     <ClCompile Include="Source\Private\Types\Vector2D.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" /> 
-  </ItemGroup> 
-</Project> 
+    <None Include="cpp.hint" />
+    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat" />
+    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat" />
+    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat" />
+    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Scripts\BuildActions\README.txt" />
+  </ItemGroup>
+</Project>

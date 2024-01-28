@@ -65,7 +65,7 @@ bool IWidgetManagementInterface::DestroyWidget(FWidget* Widget)
 	{
 		Widget->DestroyWidget();
 
-		OnWidgetDestroyed(Widget);
+		OnChildWidgetDestroyed(Widget);
 
 		return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName()));
 	}
@@ -82,7 +82,7 @@ bool IWidgetManagementInterface::DestroyWidget(const std::string& InWidgetName)
 		{
 			Widget->DestroyWidget();
 
-			OnWidgetDestroyed(Widget);
+			OnChildWidgetDestroyed(Widget);
 
 			return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(InWidgetName));		
 		}
@@ -122,12 +122,12 @@ bool IWidgetManagementInterface::HasWidget(FWidget* InWidget)
 	return ManagedWidgetsMap.ContainsValue(InWidget);
 }
 
-void IWidgetManagementInterface::OnWidgetCreated(FWidget* NewWidget)
+void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 {
 	AddChild(NewWidget);
 }
 
-void IWidgetManagementInterface::OnWidgetDestroyed(FWidget* NewWidget)
+void IWidgetManagementInterface::OnChildWidgetDestroyed(FWidget* NewWidget)
 {
 }
 
@@ -144,6 +144,8 @@ void IWidgetManagementInterface::ChangeWidgetOrder(FWidget* InWidget)
 		{
 			ManagedWidgets.Remove(InWidget);
 			ManagedWidgets.InsertAt(i, CurrentWidget);
+
+			OnWidgetOrderChanged.Execute(InWidget);
 		}
 	}	
 }

@@ -80,6 +80,7 @@
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\FPSTextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\HorizontalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputTextWidget.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputManager.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsManagementInterface.h" />
@@ -250,6 +252,7 @@
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\FPSTextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\HorizontalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputTextWidget.cpp" />
@@ -258,6 +261,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsManagementInterface.cpp" />
