@@ -5,16 +5,60 @@
 /**
  * Class responsible for receiving and pushing input for any widget which was registered
  */
-template<typename TDelegateType>
+template<typename TReturnType, typename... TInParams>
 class FWidgetInputWrapper
 {
 public:
-	virtual void Exectute();
+	FWidgetInputWrapper(const bool bInCanConsumeInput)
+		: bCanConsumeInput(bInCanConsumeInput)
+	{
+	}
 
+	virtual void Exectute(TInParams... Params)
+	{
+		bool bInputConsumed = false;
 
+		const FFunctorLambda<void, FFunctorBase<TReturnType, TInParams...>*, TInParams...> Lambda(
+			[&](FFunctorBase<TReturnType, TInParams...>* Function, TInParams... InParams)
+			{
+				if (!bInputConsumed)
+				{
+					if (bool FunctionResult = Function->operator()(InParams...))
+					{
+						if (bCanConsumeInput)
+						{
+							bInputConsumed = true;
+						}
+					}
+				}
+			});
+
+		OnMouseMovedDelegate.ExecuteByLambda(Lambda, Params...);
+	}
+
+	void BindLambda(const FFunctorLambda<TReturnType, TInParams...>& Lambda)
+	{
+		OnMouseMovedDelegate.BindLambda(Lambda);
+	}
+
+	void UnbindLambda(const FFunctorLambda<TReturnType, TInParams...>& Lambda)
+	{
+		OnMouseMovedDelegate.UnbindLambda(Lambda);
+	}
+
+	void BindObject(FFunctorObject<TReturnType, TInParams...>* Object)
+	{
+		OnMouseMovedDelegate.BindObject(Object);
+	}
+
+	void UnbindObject(FFunctorObject<TReturnType, TInParams...>* Object)
+	{
+		OnMouseMovedDelegate.UnbindObject(Object);
+	}
 
 protected:
-	TDelegateType OnMouseMovedDelegate;
+	FDelegate<TReturnType, TInParams...> OnMouseMovedDelegate;
+	bool bCanConsumeInput;
 	
 };
 
@@ -35,11 +79,7 @@ public:
 	/** Function triggered when widget changes order to make sure it's always handle input in correct way, first visible, first takes input */
 	void ChangeOrder(FWidget* Widget);
 
-	void OnMouseMoved(const FVector2D<int> Location);
-
-	FDelegate<bool, FVector2D<int>> OnMouseMovedDelegate;
-
-	FWidgetInputWrapper<FDelegate<bool, FVector2D<int>>> MouseMoveInput;
+	FAutoDeletePointer<FWidgetInputWrapper<bool, FVector2D<int>>> MouseMoveInput;
 
 protected:
 	/** Widgets which should be asked about input */

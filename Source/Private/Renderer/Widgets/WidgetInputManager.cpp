@@ -3,12 +3,19 @@
 
 #include "Input/EventHandler.h"
 
+enum
+{
+	WIDGET_CONSUME_INPUT_ALLOW = 1,
+	WIDGET_CONSUME_INPUT_DENY = 0
+};
+
 FWidgetInputManager::FWidgetInputManager()
 {
 	FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		EventHandler->OnMouseMoved.BindObject(this, &FWidgetInputManager::OnMouseMoved);
+		MouseMoveInput = FAutoDeletePointer<FWidgetInputWrapper<bool, FVector2D<int>>>(WIDGET_CONSUME_INPUT_DENY);
+		EventHandler->OnMouseMoved.BindObject(MouseMoveInput.Get(), &FWidgetInputWrapper<bool, FVector2D<int>>::Exectute);
 	}
 }
 
@@ -17,7 +24,7 @@ FWidgetInputManager::~FWidgetInputManager()
 	FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		EventHandler->OnMouseMoved.RemoveObject(this, &FWidgetInputManager::OnMouseMoved);
+		EventHandler->OnMouseMoved.RemoveObject(MouseMoveInput.Get(), &FWidgetInputWrapper<bool, FVector2D<int>>::Exectute);
 	}
 }
 
@@ -68,23 +75,4 @@ void FWidgetInputManager::ChangeOrder(FWidget* Widget)
 			}
 		}
 	}
-}
-
-void FWidgetInputManager::OnMouseMoved(const FVector2D<int> Location)
-{
-	bool bInputConsumed = false;
-
-	const FFunctorLambda<void, FFunctorBase<bool, FVector2D<int>>*, FVector2D<int>> Lambda(
-	[&] (FFunctorBase<bool, FVector2D<int>>* Function, const FVector2D<int> InLocation)
-	{
-		if (!bInputConsumed)
-		{
-			if (bool FunctionResult = Function->operator()(InLocation))
-			{
-				bInputConsumed = true;
-			}
-		}
-	});
-
-	OnMouseMovedDelegate.ExecuteByLambda(Lambda, Location);
 }
