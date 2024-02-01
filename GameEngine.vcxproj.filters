@@ -323,6 +323,9 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputInterface.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputManager.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
@@ -791,6 +794,9 @@
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp">

@@ -7,6 +7,7 @@
 #include "WidgetsPositionInterface.h"
 #include "WidgetsManagementInterface.h"
 #include "WidgetEnums.h"
+#include "WidgetInputInterface.h"
 #include "WidgetInputManager.h"
 
 class FWidgetInputManager;
@@ -21,7 +22,7 @@ class FInteractionBaseWidget;
 class FWidget : public UObject, public IWidgetPositionInterface
 {
 	friend IWidgetManagementInterface;
-	friend FWidgetInputManager;
+	friend FWidgetInputManager; // ?
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */

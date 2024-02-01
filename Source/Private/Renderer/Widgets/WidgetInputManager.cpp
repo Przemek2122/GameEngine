@@ -2,6 +2,7 @@
 #include "Renderer/Widgets/WidgetInputManager.h"
 
 #include "Input/EventHandler.h"
+#include "Renderer/Widgets/WidgetInputInterface.h"
 
 enum
 {
@@ -9,30 +10,88 @@ enum
 	WIDGET_CONSUME_INPUT_DENY = 0
 };
 
+// Create FAutoDeletePointer with FWidgetInputWrapper with templated type
+// Make sure to use FAutoDeletePointer to avoid memory leaks and to use RemoveMouseWidgetInputConsumableWrapper to remove it from delegate
+template<typename ...TParams>
+auto CreateMouseWidgetInputWrapper(FMouseInputDelegateWrapper* DelegateWrapper)
+{
+	FWidgetInputWrapper<void, TParams...>* Ptr = new FWidgetInputWrapper<void, TParams...>();
+
+	DelegateWrapper->Delegate.BindObject(Ptr, &FWidgetInputWrapper<void, TParams...>::Execute);
+
+	return FAutoDeletePointer<FWidgetInputWrapper<void, TParams...>>(Ptr);
+}
+// Create FAutoDeletePointer with FWidgetInputWrapper with templated type
+// Make sure to use FAutoDeletePointer to avoid memory leaks and to use RemoveMouseWidgetInputConsumableWrapper to remove it from delegate
+template<typename ...TParams>
+auto CreateMouseWidgetInputConsumableWrapper(FMouseInputDelegateWrapper* DelegateWrapper, int bConsumeInput)
+{
+	FWidgetInputConsumableWrapper<bool, TParams...>* Ptr = new FWidgetInputConsumableWrapper<bool, TParams...>(bConsumeInput);
+
+	DelegateWrapper->Delegate.BindObject(Ptr, &FWidgetInputConsumableWrapper<bool, TParams...>::ExecuteByLambda);
+
+	return FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, TParams...>>(Ptr);
+}
+
+// Remove FWidgetInputWrapper from FMouseInputDelegateWrapper
+template<typename ...TParams>
+void RemoveMouseWidgetInputWrapper(FMouseInputDelegateWrapper* DelegateWrapper, FWidgetInputWrapper<void, TParams...>* Ptr)
+{
+	DelegateWrapper->Delegate.UnBindObject(Ptr, &FWidgetInputWrapper<void, TParams...>::Execute);
+}
+
+// Remove FWidgetInputWrapper from FMouseInputDelegateWrapper
+template<typename ...TParams>
+void RemoveMouseWidgetInputConsumableWrapper(FMouseInputDelegateWrapper* DelegateWrapper, FWidgetInputConsumableWrapper<bool, TParams...>* Ptr)
+{
+	DelegateWrapper->Delegate.UnBindObject(Ptr, &FWidgetInputConsumableWrapper<bool, TParams...>::ExecuteByLambda);
+}
+
 FWidgetInputManager::FWidgetInputManager()
 {
-	FEventHandler* EventHandler = GEngine->GetEventHandler();
+	const FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		MouseMoveInput = FAutoDeletePointer<FWidgetInputWrapper<bool, FVector2D<int>>>(WIDGET_CONSUME_INPUT_DENY);
-		EventHandler->OnMouseMoved.BindObject(MouseMoveInput.Get(), &FWidgetInputWrapper<bool, FVector2D<int>>::Exectute);
+		//auto Ptr = FAutoDeletePointer<FWidgetInputWrapper<void, FVector2D<int>>>();
+
+		//EventHandler->MouseMoveDelegate->Delegate.BindObject(Ptr.Get(), &FWidgetInputWrapper<void, FVector2D<int>>::Execute);
+
+		OnMouseMove = std::move(CreateMouseWidgetInputWrapper<FVector2D<int>>(
+			EventHandler->MouseMoveDelegate.Get()
+		));
+
+		OnMouseLeftButtonPress = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>>(
+			EventHandler->MouseLeftButtonPressDelegate.Get(),
+			WIDGET_CONSUME_INPUT_ALLOW
+		);
+
+		OnMouseLeftButtonRelease = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>>(
+			EventHandler->MouseLeftButtonReleaseDelegate.Get(),
+			WIDGET_CONSUME_INPUT_ALLOW
+		);
+		/*
+		*/
 	}
 }
 
 FWidgetInputManager::~FWidgetInputManager()
 {
-	FEventHandler* EventHandler = GEngine->GetEventHandler();
+	const FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		EventHandler->OnMouseMoved.RemoveObject(MouseMoveInput.Get(), &FWidgetInputWrapper<bool, FVector2D<int>>::Exectute);
+		RemoveMouseWidgetInputWrapper<FVector2D<int>>(EventHandler->MouseMoveDelegate.Get(), OnMouseMove.Get());
+		RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>>(EventHandler->MouseLeftButtonPressDelegate.Get(), OnMouseLeftButtonPress.Get());
+		RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>>(EventHandler->MouseLeftButtonReleaseDelegate.Get(), OnMouseLeftButtonRelease.Get());
 	}
 }
 
-void FWidgetInputManager::Register(FWidget* NewWidget)
+void FWidgetInputManager::Register(FWidget* NewWidget, FDelegate<void, FWidgetInputManager*>& SetupDelegate)
 {
 	if (NewWidget->GetWidgetOrder() == WIDGET_DEFINES_DEFAULT_ORDER)
 	{
 		WidgetsArray.Push(NewWidget);
+
+		SetupDelegate.Execute(this);
 	}
 	else
 	{
@@ -49,7 +108,7 @@ void FWidgetInputManager::UnRegister(FWidget* NewWidget)
 {
 	if (IWidgetManagementInterface* Parent = NewWidget->GetParent())
 	{
-		Parent->OnWidgetOrderChanged.RemoveObject(this, &FWidgetInputManager::ChangeOrder);
+		Parent->OnWidgetOrderChanged.UnBindObject(this, &FWidgetInputManager::ChangeOrder);
 	}
 
 	WidgetsArray.Remove(NewWidget);

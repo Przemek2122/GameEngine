@@ -16,7 +16,15 @@ using Functor = FFunctorBase<TReturnType, TInParams...>;
 	
 public:
 	FDelegateBase() = default;
-	virtual ~FDelegateBase() = default;
+	virtual ~FDelegateBase()
+	{
+		for (int i = 0; i < Functors.Size(); i++)
+		{
+			delete Functors[i];
+		}
+
+		Functors.Clear();
+	}
 
 	/** @returns true if there is at least one function bound. */
 	_NODISCARD virtual bool IsBound() const

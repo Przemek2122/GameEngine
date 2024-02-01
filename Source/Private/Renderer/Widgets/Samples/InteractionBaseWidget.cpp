@@ -11,17 +11,34 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	, HoverState(EHoverState::None)
 	, bMouseEnteredWidget(false)
 {
-	GetWindow()->GetWidgetInputManager()->Register(this);
+	FDelegate<void, FWidgetInputManager*> SetupDelegate;
+	SetupDelegate.BindObject(this, &FInteractionBaseWidget::SetupInput);
+
+	GetWindow()->GetWidgetInputManager()->Register(this, SetupDelegate);
+
+	SetupDelegate.UnBindObject(this, &FInteractionBaseWidget::SetupInput);
 }
 
-FInteractionBaseWidget::~FInteractionBaseWidget()
+void FInteractionBaseWidget::Init()
 {
-	GetWindow()->GetWidgetInputManager()->UnRegister(this);
+	FWidget::Init();
 }
 
-void FInteractionBaseWidget::HandleMouseInput()
+void FInteractionBaseWidget::SetupInput(FWidgetInputManager* WidgetInputManager)
 {
-	const FVector2D<int> MouseLocation = GetMouseLocation();
+	WidgetInputManager->OnMouseLeftButtonRelease.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonRelease);
+	WidgetInputManager->OnMouseMove.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseMove);
+}
+
+bool FInteractionBaseWidget::OnMouseLeftButtonRelease(FVector2D<int> Location)
+{
+	LOG_INFO("OnMouseLeftButtonRelease");
+
+	return true;
+}
+
+void FInteractionBaseWidget::OnMouseMove(FVector2D<int> MouseLocation)
+{
 	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int> Size = GetWidgetSize();
 

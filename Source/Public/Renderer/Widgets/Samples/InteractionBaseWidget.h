@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../Widget.h"
+#include "Renderer/Widgets/WidgetInputInterface.h"
 
 enum class EHoverState : Uint8
 {
@@ -23,9 +24,16 @@ class FInteractionBaseWidget : public FWidget
 {
 public:
 	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
-	~FInteractionBaseWidget() override;
-	
-	virtual void HandleMouseInput();
+	virtual ~FInteractionBaseWidget() override = default;
+
+	/** Begin FWidget */
+	void Init() override;
+	/** End FWidget */
+
+	void SetupInput(FWidgetInputManager* WidgetInputManager);
+
+	bool OnMouseLeftButtonRelease(FVector2D<int> Location);
+	void OnMouseMove(FVector2D<int> Location);
 
 	static _NODISCARD FVector2D<int> GetMouseLocation();
 

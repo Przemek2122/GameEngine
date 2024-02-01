@@ -4,21 +4,24 @@
 
 #include "CoreMinimal.h"
 
-class FMouseClickDelegateWrapper
+class FMouseInputDelegateWrapper
 {
 public:
-	FMouseClickDelegateWrapper()
+	FMouseInputDelegateWrapper(FEventHandler* InEventHandler)
 		: bWasSentAlready(false)
+		, EventHandler(InEventHandler)
 	{
 	}
 
 	void Execute(const FVector2D<int>& Location);
+	void AddToResetQueue();
 	void Reset();
 
-	/** Called when LEFT button is pressed (single) */
-	FDelegate<void, FVector2D<int>> OnMouseClicked;
+	FDelegate<void, FVector2D<int>> Delegate;
+
 private:
 	bool bWasSentAlready;
+	FEventHandler* EventHandler;
 };
 
 class FEventHandler
@@ -27,9 +30,14 @@ public:
 	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
+protected:
+	SDL_Event Event;
+
+public:
+
 	virtual void HandleEvents();
 
-	void ResetAllButtons();
+	void ResetAll();
 
 	_NODISCARD bool HasMouseMoved() const;
 	_NODISCARD FVector2D<int> GetMouseLocationCurrent() const;
@@ -40,10 +48,21 @@ public:
 	/** Use to check primary input. */
 	_NODISCARD bool GetPrimaryInput(const std::string& InputName);
 
+
+	void AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* MouseInputDelegateWrapper);
+
+	/* Mouse move delegate. Called when mouse moves. */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseMoveDelegate;
+
 	/** Called when mouse left click is detected */
-	FMouseClickDelegateWrapper MouseLeftClickDelegate;
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseLeftButtonPressDelegate;
+	/** Called when mouse left click is released */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseLeftButtonReleaseDelegate;
+
 	/** Called when mouse right click is detected */
-	FMouseClickDelegateWrapper MouseRightClickDelegate;
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonPressDelegate;
+	/** Called when mouse right click is released */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonReleaseDelegate;
 
 protected:
 	/** Add primary input (GEngine uses) Name from  */
@@ -64,16 +83,14 @@ public:
 
 	_NODISCARD bool QuitInputDetected() const;
 
-	/** Called when location of mouse changes */
-	FDelegate<void, FVector2D<int>> OnMouseMoved;
-
 protected:
-	SDL_Event Event;
-
 	/** Direct input map. */
 	CMap<std::string, bool> PrimaryInputMap;
 	/** Use this map to make aliases for primary map. */
 	CMap<std::string, std::string> SecondaryInputMap;
+
+	/** This map is used to reset mouse delegates. */
+	CArray<FMouseInputDelegateWrapper*> MouseInputDelegateResetQueue;
 
 	FVector2D<int> MouseLocationCurrent;
 	FVector2D<int> MouseLocationLast;

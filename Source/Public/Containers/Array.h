@@ -208,7 +208,41 @@ public:
 		
 		return -1;
 	}
-	
+
+	/** @returns true if found @note do not use index if function returns false as it might be unitialised */
+	bool FindByLambdaByComparingObjects(TType& Object, FFunctorLambda<bool, TType&, TType&> Function, TSizeType& Index)
+	{
+		for (auto i = 0; i < Vector.size(); i++)
+		{
+			if (Function(Vector[i], Object))
+			{
+				Index = i;
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	/** @returns true if found @note do not use index if function returns false as it might be uninitialised */
+	template<typename TAutoType>
+	bool FindByLambda(TAutoType Function, TSizeType& Index)
+	{
+		for (auto i = 0; i < Vector.size(); i++)
+		{
+			if (Function(Vector[i]))
+			{
+				Index = i;
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	template<typename TTypeAuto>
 	SDL_FORCE_INLINE void Fill(TTypeAuto Value)
 	{
