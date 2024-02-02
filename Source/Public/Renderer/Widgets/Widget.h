@@ -35,7 +35,9 @@ protected:
 
 	/** Called right after construction\n Usage: Set default size, bind delegates etc...*/
 	virtual void Init() override;
-	/** Called right before destruction */
+	/** Called before DestroyWidget */
+	virtual void PreDeInit();
+	/** Called right before destruction, @NOTE PreDeInit is called earlier. */
 	virtual void DeInit();
 	/** Called each frame.\n Should be used for code logic. */
 	virtual void Tick();
@@ -43,9 +45,6 @@ protected:
 	virtual void Render();
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
-
-	/** Called before DestroyWidget */
-	virtual void OnWidgetDestroyed();
 
 public:
 	void DestroyWidget();

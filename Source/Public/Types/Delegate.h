@@ -9,8 +9,8 @@
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
  *
- * Note:
- * All functions passed in are deleted at end of this object life.
+ * @Note: When passing by parameter use reference or pointer, otherwise it will not compile.
+ * @Note: All functions passed in are deleted at end of this object life.
  */
 template<typename TReturnType = void, typename... TInParams>
 class FDelegate : public FDelegateBase<TReturnType, TInParams...>
@@ -18,6 +18,31 @@ class FDelegate : public FDelegateBase<TReturnType, TInParams...>
 using DelegateBase = FDelegateBase<TReturnType, TInParams...>;
 	
 public:
+	// Default constructor
+	FDelegate() = default;
+
+	// Copy constructor - Forbidden, not efficient + causes double deletion of Functors
+	// Could be fixed by creating flag telling destructor if Functors are moved or not
+	FDelegate(const FDelegate& InDelegate) = delete;
+
+	// Move constructor
+	FDelegate(FDelegate&& InDelegate) noexcept
+	{
+		DelegateBase::Functors = std::move(InDelegate.DelegateBase::Functors);
+	}
+
+	// Copy operator - Forbidden, not efficient + causes double deletion of Functors
+	// Could be fixed by creating flag telling destructor if Functors are moved or not
+	FDelegate& operator=(const FDelegate& InDelegate) = delete;
+
+	// Copy assignment operator
+	FDelegate& operator=(FDelegate&& InDelegate) noexcept
+	{
+		DelegateBase::Functors = std::move(InDelegate.DelegateBase::Functors);
+
+		return *this;
+	}
+
 	/** Begin FDelegateBase interface */
 	/** Executes all bound functions. */
 	virtual void Execute(TInParams... InParams) override
@@ -34,9 +59,7 @@ public:
 	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
 	virtual void ExecuteByLambda(ExecuteByLambdaDefinition Lambda, TInParams... InParams)
 	{
-		const auto FunctorsNum = DelegateBase::Functors.Size();
-
-		for (int i = 0; i < FunctorsNum; i++)
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			Lambda(DelegateBase::Functors[i], InParams ...);
 		}
@@ -105,9 +128,9 @@ public:
 	void UnBindAll()
 	{
 		// Clean DelegateBase::Functors
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		for (auto* FunctorObject : DelegateBase::Functors)
 		{
-			delete DelegateBase::Functors[i];
+			delete FunctorObject;
 		}
 
 		DelegateBase::Functors.Clear();

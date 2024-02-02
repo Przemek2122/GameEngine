@@ -84,9 +84,9 @@ public:
 	_NODISCARD FEntityManager* GetEntityManager() const;
 
 	template<class TWidgetTemplate>
-	_NODISCARD FWidget& CreateWidget() const
+	_NODISCARD TWidgetTemplate* CreateWidget() const
 	{
-		return GetWidgetManager().CreateWidget<TWidgetTemplate>();
+		return GetWidgetManager()->CreateWidget<TWidgetTemplate>();
 	}
 	bool DestroyWidget(FWidget* Widget) const
 	{

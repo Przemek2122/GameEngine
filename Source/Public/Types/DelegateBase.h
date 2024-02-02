@@ -18,9 +18,9 @@ public:
 	FDelegateBase() = default;
 	virtual ~FDelegateBase()
 	{
-		for (int i = 0; i < Functors.Size(); i++)
+		for (Functor* FunctorObject : Functors)
 		{
-			delete Functors[i];
+			delete FunctorObject;
 		}
 
 		Functors.Clear();

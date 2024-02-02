@@ -80,7 +80,7 @@ void FWidget::ReCalculate()
 	}
 }
 
-void FWidget::OnWidgetDestroyed()
+void FWidget::PreDeInit()
 {
 }
 
@@ -88,7 +88,7 @@ void FWidget::DestroyWidget()
 {
 	if (!bIsPendingDelete)
 	{
-		OnWidgetDestroyed();
+		PreDeInit();
 
 		FFunctorLambda<void> DeleteFunctor = [&]
 		{

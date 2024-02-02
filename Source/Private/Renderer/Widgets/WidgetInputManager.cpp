@@ -52,13 +52,9 @@ FWidgetInputManager::FWidgetInputManager()
 	const FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		//auto Ptr = FAutoDeletePointer<FWidgetInputWrapper<void, FVector2D<int>>>();
-
-		//EventHandler->MouseMoveDelegate->Delegate.BindObject(Ptr.Get(), &FWidgetInputWrapper<void, FVector2D<int>>::Execute);
-
-		OnMouseMove = std::move(CreateMouseWidgetInputWrapper<FVector2D<int>>(
+		OnMouseMove = CreateMouseWidgetInputWrapper<FVector2D<int>>(
 			EventHandler->MouseMoveDelegate.Get()
-		));
+		);
 
 		OnMouseLeftButtonPress = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>>(
 			EventHandler->MouseLeftButtonPressDelegate.Get(),
@@ -69,8 +65,6 @@ FWidgetInputManager::FWidgetInputManager()
 			EventHandler->MouseLeftButtonReleaseDelegate.Get(),
 			WIDGET_CONSUME_INPUT_ALLOW
 		);
-		/*
-		*/
 	}
 }
 
@@ -104,7 +98,7 @@ void FWidgetInputManager::Register(FWidget* NewWidget, FDelegate<void, FWidgetIn
 	}
 }
 
-void FWidgetInputManager::UnRegister(FWidget* NewWidget, FDelegate<void, FWidgetInputManager*> ClearDelegate)
+void FWidgetInputManager::UnRegister(FWidget* NewWidget, FDelegate<void, FWidgetInputManager*>& ClearDelegate)
 {
 	if (IWidgetManagementInterface* Parent = NewWidget->GetParent())
 	{

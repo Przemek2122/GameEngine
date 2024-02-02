@@ -9,7 +9,9 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, ClickState(EClickState::NotClicked)
 	, HoverState(EHoverState::None)
+	, bIsInWidget(false)
 	, bMouseEnteredWidget(false)
+	, WidgetInputManager(nullptr)
 {
 }
 
@@ -28,20 +30,14 @@ void FInteractionBaseWidget::Init()
 	WidgetInputManager->Register(this, SetupDelegate);
 }
 
-void FInteractionBaseWidget::DeInit()
+void FInteractionBaseWidget::PreDeInit()
 {
-	FWidget::DeInit();
+	FWidget::PreDeInit();
 
-	// @TODO Fix hack, instead of register we use direct call what works fine but does not look good.
-	/*
 	FDelegate<void, FWidgetInputManager*> ClearDelegate;
 	ClearDelegate.BindObject(this, &FInteractionBaseWidget::ClearInput);
 
 	WidgetInputManager->UnRegister(this, ClearDelegate);
-	*/
-	WidgetInputManager->OnMouseLeftButtonPress.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonPress);
-	WidgetInputManager->OnMouseLeftButtonRelease.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonRelease);
-	WidgetInputManager->OnMouseMove.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseMove);
 }
 
 void FInteractionBaseWidget::SetupInput(FWidgetInputManager* WidgetInputManager)
@@ -58,28 +54,32 @@ void FInteractionBaseWidget::ClearInput(FWidgetInputManager* WidgetInputManager)
 	WidgetInputManager->OnMouseMove.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseMove);
 }
 
-bool FInteractionBaseWidget::OnMouseLeftButtonPress(FVector2D<int> Vector2D)
+bool FInteractionBaseWidget::OnMouseLeftButtonPress(FVector2D<int> Location)
 {
-	if (ClickState == EClickState::NotClicked)
+	if (bIsInWidget && ClickState == EClickState::NotClicked)
 	{
 		ClickState = EClickState::Pressed;
 
 		NativePress();
+
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool FInteractionBaseWidget::OnMouseLeftButtonRelease(FVector2D<int> Location)
 {
-	if (ClickState == EClickState::Pressed)
+	if (bIsInWidget && ClickState == EClickState::Pressed)
 	{
 		ClickState = EClickState::Released;
 
 		NativeRelease();
+
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 void FInteractionBaseWidget::OnMouseMove(FVector2D<int> MouseLocation)
@@ -87,7 +87,7 @@ void FInteractionBaseWidget::OnMouseMove(FVector2D<int> MouseLocation)
 	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int> Size = GetWidgetSize();
 
-	bool bIsInWidget = false;
+	bIsInWidget = false;
 	
 	if ( MouseLocation.X	>	Location.X	
 	&&	 MouseLocation.X	<	Location.X + Size.X

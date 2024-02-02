@@ -28,13 +28,13 @@ public:
 
 	/** Begin FWidget */
 	void Init() override;
-	void DeInit() override;
+	void PreDeInit() override;
 	/** End FWidget */
 
 	void SetupInput(FWidgetInputManager* WidgetInputManager);
 	void ClearInput(FWidgetInputManager* WidgetInputManager);
 
-	bool OnMouseLeftButtonPress(FVector2D<int> Vector2D);
+	bool OnMouseLeftButtonPress(FVector2D<int> Location);
 	bool OnMouseLeftButtonRelease(FVector2D<int> Location);
 	void OnMouseMove(FVector2D<int> Location);
 
@@ -65,6 +65,7 @@ protected:
 	EClickState ClickState;
 	EHoverState HoverState;
 
+	bool bIsInWidget;
 	bool bMouseEnteredWidget;
 	FWidgetInputManager* WidgetInputManager;
 	

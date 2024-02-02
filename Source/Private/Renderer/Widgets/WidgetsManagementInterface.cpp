@@ -97,9 +97,6 @@ void IWidgetManagementInterface::ClearChildren()
 	{
 		ManagedWidgets[i]->DestroyWidget();
 	}
-
-	//ManagedWidgets.Clear();
-	//ManagedWidgetsMap.Clear();
 }
 
 int IWidgetManagementInterface::GetChildrenCount() const
