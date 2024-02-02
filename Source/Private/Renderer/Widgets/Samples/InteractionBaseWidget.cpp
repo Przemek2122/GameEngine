@@ -11,6 +11,16 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	, HoverState(EHoverState::None)
 	, bMouseEnteredWidget(false)
 {
+}
+
+FInteractionBaseWidget::~FInteractionBaseWidget()
+{
+}
+
+void FInteractionBaseWidget::Init()
+{
+	FWidget::Init();
+
 	FDelegate<void, FWidgetInputManager*> SetupDelegate;
 	SetupDelegate.BindObject(this, &FInteractionBaseWidget::SetupInput);
 
@@ -18,17 +28,17 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	WidgetInputManager->Register(this, SetupDelegate);
 }
 
-FInteractionBaseWidget::~FInteractionBaseWidget()
+void FInteractionBaseWidget::DeInit()
 {
+	FWidget::DeInit();
+
 	// @TODO Fix hack, instead of register we use direct call what works fine but does not look good.
 	/*
 	FDelegate<void, FWidgetInputManager*> ClearDelegate;
 	ClearDelegate.BindObject(this, &FInteractionBaseWidget::ClearInput);
 
 	WidgetInputManager->UnRegister(this, ClearDelegate);
-	ClearDelegate.UnBindAll();
 	*/
-	
 	WidgetInputManager->OnMouseLeftButtonPress.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonPress);
 	WidgetInputManager->OnMouseLeftButtonRelease.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonRelease);
 	WidgetInputManager->OnMouseMove.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseMove);

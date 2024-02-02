@@ -26,6 +26,11 @@ public:
 	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
 	virtual ~FInteractionBaseWidget() override;
 
+	/** Begin FWidget */
+	void Init() override;
+	void DeInit() override;
+	/** End FWidget */
+
 	void SetupInput(FWidgetInputManager* WidgetInputManager);
 	void ClearInput(FWidgetInputManager* WidgetInputManager);
 
