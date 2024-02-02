@@ -24,14 +24,12 @@ class FInteractionBaseWidget : public FWidget
 {
 public:
 	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
-	virtual ~FInteractionBaseWidget() override = default;
-
-	/** Begin FWidget */
-	void Init() override;
-	/** End FWidget */
+	virtual ~FInteractionBaseWidget() override;
 
 	void SetupInput(FWidgetInputManager* WidgetInputManager);
+	void ClearInput(FWidgetInputManager* WidgetInputManager);
 
+	bool OnMouseLeftButtonPress(FVector2D<int> Vector2D);
 	bool OnMouseLeftButtonRelease(FVector2D<int> Location);
 	void OnMouseMove(FVector2D<int> Location);
 
@@ -63,5 +61,6 @@ protected:
 	EHoverState HoverState;
 
 	bool bMouseEnteredWidget;
+	FWidgetInputManager* WidgetInputManager;
 	
 };

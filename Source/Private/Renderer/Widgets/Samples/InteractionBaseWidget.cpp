@@ -14,25 +14,60 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	FDelegate<void, FWidgetInputManager*> SetupDelegate;
 	SetupDelegate.BindObject(this, &FInteractionBaseWidget::SetupInput);
 
-	GetWindow()->GetWidgetInputManager()->Register(this, SetupDelegate);
-
-	SetupDelegate.UnBindObject(this, &FInteractionBaseWidget::SetupInput);
+	WidgetInputManager = GetWindow()->GetWidgetInputManager();
+	WidgetInputManager->Register(this, SetupDelegate);
 }
 
-void FInteractionBaseWidget::Init()
+FInteractionBaseWidget::~FInteractionBaseWidget()
 {
-	FWidget::Init();
+	// @TODO Fix hack, instead of register we use direct call what works fine but does not look good.
+	/*
+	FDelegate<void, FWidgetInputManager*> ClearDelegate;
+	ClearDelegate.BindObject(this, &FInteractionBaseWidget::ClearInput);
+
+	WidgetInputManager->UnRegister(this, ClearDelegate);
+	ClearDelegate.UnBindAll();
+	*/
+	
+	WidgetInputManager->OnMouseLeftButtonPress.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonPress);
+	WidgetInputManager->OnMouseLeftButtonRelease.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonRelease);
+	WidgetInputManager->OnMouseMove.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseMove);
 }
 
 void FInteractionBaseWidget::SetupInput(FWidgetInputManager* WidgetInputManager)
 {
+	WidgetInputManager->OnMouseLeftButtonPress.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonPress);
 	WidgetInputManager->OnMouseLeftButtonRelease.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonRelease);
 	WidgetInputManager->OnMouseMove.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseMove);
 }
 
+void FInteractionBaseWidget::ClearInput(FWidgetInputManager* WidgetInputManager)
+{
+	WidgetInputManager->OnMouseLeftButtonPress.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonPress);
+	WidgetInputManager->OnMouseLeftButtonRelease.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonRelease);
+	WidgetInputManager->OnMouseMove.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseMove);
+}
+
+bool FInteractionBaseWidget::OnMouseLeftButtonPress(FVector2D<int> Vector2D)
+{
+	if (ClickState == EClickState::NotClicked)
+	{
+		ClickState = EClickState::Pressed;
+
+		NativePress();
+	}
+
+	return true;
+}
+
 bool FInteractionBaseWidget::OnMouseLeftButtonRelease(FVector2D<int> Location)
 {
-	LOG_INFO("OnMouseLeftButtonRelease");
+	if (ClickState == EClickState::Pressed)
+	{
+		ClickState = EClickState::Released;
+
+		NativeRelease();
+	}
 
 	return true;
 }
@@ -93,33 +128,10 @@ void FInteractionBaseWidget::NativeReleaseOutsideWidget()
 
 void FInteractionBaseWidget::NativeHover()
 {
-	/*
-	const bool bWasInputPressDetected = GetClickPressInput();
-	const bool bWasInputReleaseDetected = GetClickReleaseInput();
-	
-	if (bWasInputPressDetected)
-	{
-		if (ClickState == EClickState::NotClicked)
-		{
-			ClickState = EClickState::Pressed;
-
-			NativePress();
-		}
-	}
-	else if (bWasInputReleaseDetected)
-	{
-		if (ClickState == EClickState::Pressed)
-		{
-			ClickState = EClickState::Released;
-
-			NativeRelease();
-		}
-	}
-	else if (ClickState == EClickState::Released)
+	if (ClickState == EClickState::Released)
 	{
 		ClickState = EClickState::NotClicked;
 	}
-	*/
 }
 
 void FInteractionBaseWidget::NativeMouseEnterWidget()

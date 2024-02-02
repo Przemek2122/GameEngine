@@ -104,12 +104,14 @@ void FWidgetInputManager::Register(FWidget* NewWidget, FDelegate<void, FWidgetIn
 	}
 }
 
-void FWidgetInputManager::UnRegister(FWidget* NewWidget)
+void FWidgetInputManager::UnRegister(FWidget* NewWidget, FDelegate<void, FWidgetInputManager*> ClearDelegate)
 {
 	if (IWidgetManagementInterface* Parent = NewWidget->GetParent())
 	{
 		Parent->OnWidgetOrderChanged.UnBindObject(this, &FWidgetInputManager::ChangeOrder);
 	}
+
+	ClearDelegate.Execute(this);
 
 	WidgetsArray.Remove(NewWidget);
 }

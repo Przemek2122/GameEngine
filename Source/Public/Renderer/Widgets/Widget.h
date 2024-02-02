@@ -27,8 +27,6 @@ class FWidget : public UObject, public IWidgetPositionInterface
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
 	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
-	/** Destroy using DestroyWidget function */
-	virtual ~FWidget() override = default;
 
 	/** Advanced, use Tick() if possible instead. */
 	virtual void ReceiveTick();

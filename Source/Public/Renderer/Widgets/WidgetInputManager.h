@@ -35,9 +35,9 @@ public:
 
 	/** Unbind object to delegate - Best solution */
 	template<typename TClass>
-	void UnbindObject(TClass* Object, TReturnType(TClass::* InFunctionPointer)(TInParams...))
+	void UnBindObject(TClass* Object, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
-		Delegate.UnbindObject(Object, InFunctionPointer);
+		Delegate.UnBindObject(Object, InFunctionPointer);
 	}
 
 	virtual void Execute(TInParams... Params)
@@ -98,7 +98,7 @@ public:
 	/** Should be called when widget wants to receive input */
 	void Register(FWidget* NewWidget, FDelegate<void, FWidgetInputManager*>& SetupDelegate);
 	/** If it was registered it must be later unregistered */
-	void UnRegister(FWidget* NewWidget);
+	void UnRegister(FWidget* NewWidget, FDelegate<void, FWidgetInputManager*> ClearDelegate);
 
 	/** Function triggered when widget changes order to make sure it's always handle input in correct way, first visible, first takes input */
 	void ChangeOrder(FWidget* Widget);
