@@ -105,7 +105,15 @@ public:
 
 	/** Function triggered when mouse is moved */
 	FAutoDeletePointer<FWidgetInputWrapper<void, FVector2D<int>>> OnMouseMove;
+	/**
+	 * Function triggered when left mouse button is pressed,
+	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
+	 */
 	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>>> OnMouseLeftButtonPress;
+	/**
+	 * Function triggered when left mouse button is released,
+	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
+	 */
 	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>>> OnMouseLeftButtonRelease;
 
 protected:
