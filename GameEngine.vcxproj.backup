@@ -32,6 +32,7 @@
     <ClInclude Include="Source\Public\Assets\Assets\MapAsset.h" />
     <ClInclude Include="Source\Public\Assets\Assets\TextureAsset.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
+    <ClInclude Include="Source\Public\Assets\Parser.h" />
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h" />
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Texture.h" />
     <ClInclude Include="Source\Public\Containers\Array.h" />
@@ -79,6 +80,7 @@
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\FPSTextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\HorizontalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputTextWidget.h" />
@@ -86,8 +88,10 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\WidgetInputInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputManager.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsManagementInterface.h" />
@@ -214,6 +218,7 @@
     <ClCompile Include="Source\Private\Assets\Assets\MapAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\TextureAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp" />
+    <ClCompile Include="Source\Private\Assets\Parser.cpp" />
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Font.cpp" />
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
@@ -248,6 +253,7 @@
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\FPSTextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\HorizontalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputTextWidget.cpp" />
@@ -255,7 +261,9 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\WidgetInputInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsManagementInterface.cpp" />

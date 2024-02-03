@@ -106,7 +106,7 @@ void FMapAsset::LoadMap()
 
 					if (Index >= MaxAssetIndex)
 					{
-						LOG_ERROR("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+						LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
 
 						MapRow.Array.Push(INDEX_INCORRECT);
 					}

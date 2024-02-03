@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../Widget.h"
+#include "Renderer/Widgets/WidgetInputInterface.h"
 
 enum class EHoverState : Uint8
 {
@@ -23,14 +24,21 @@ class FInteractionBaseWidget : public FWidget
 {
 public:
 	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
-	
-	/** Begin FWidget interface */
-	virtual void HandleInput() override;
-	/** End FWidget interface */
+	virtual ~FInteractionBaseWidget() override;
+
+	/** Begin FWidget */
+	void Init() override;
+	void PreDeInit() override;
+	/** End FWidget */
+
+	void SetupInput(FWidgetInputManager* WidgetInputManager);
+	void ClearInput(FWidgetInputManager* WidgetInputManager);
+
+	bool OnMouseLeftButtonPress(FVector2D<int> Location);
+	bool OnMouseLeftButtonRelease(FVector2D<int> Location);
+	void OnMouseMove(FVector2D<int> Location);
 
 	static _NODISCARD FVector2D<int> GetMouseLocation();
-	static _NODISCARD bool GetClickPressInput();
-	static _NODISCARD bool GetClickReleaseInput();
 
 	/** Called once when pressed in widget area. */
 	virtual void NativePress();
@@ -50,10 +58,15 @@ public:
 	_NODISCARD EHoverState GetHoverState() const;
 	virtual void OnHoverStateChanged();
 
+	void OnLeftMouseButtonReleased(FVector2D<int> Location);
+	void OnRightMouseButtonReleased(FVector2D<int> Location);
+
 protected:
 	EClickState ClickState;
 	EHoverState HoverState;
 
+	bool bIsInWidget;
 	bool bMouseEnteredWidget;
+	FWidgetInputManager* WidgetInputManager;
 	
 };

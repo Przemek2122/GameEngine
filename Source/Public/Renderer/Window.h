@@ -6,6 +6,7 @@
 #include "Widgets/WidgetManager.h"
 
 class FEntityManager;
+class FWidgetInputManager;
 class FWidgetManager;
 class FWidget;
 
@@ -29,6 +30,7 @@ protected:
 	void ReceiveTick();
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
+	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
 	_NODISCARD virtual FEntityManager* CreateEntityManager() const;
 	_NODISCARD virtual FMapManager* CreateMapManager();
 
@@ -78,12 +80,13 @@ public:
 	}
 
 	_NODISCARD FWidgetManager* GetWidgetManager() const;
+	_NODISCARD FWidgetInputManager* GetWidgetInputManager() const;
 	_NODISCARD FEntityManager* GetEntityManager() const;
 
 	template<class TWidgetTemplate>
-	_NODISCARD FWidget& CreateWidget() const
+	_NODISCARD TWidgetTemplate* CreateWidget() const
 	{
-		return GetWidgetManager().CreateWidget<TWidgetTemplate>();
+		return GetWidgetManager()->CreateWidget<TWidgetTemplate>();
 	}
 	bool DestroyWidget(FWidget* Widget) const
 	{
@@ -104,8 +107,9 @@ protected:
 	bool bIsWindowFocused;
 	bool bIsWindowVisible;
 
-	FWidgetManager* WidgetManager{};
-	FEntityManager* EntityManager{};
+	FWidgetManager* WidgetManager;
+	FWidgetInputManager* WidgetInputManager;
+	FEntityManager* EntityManager;
 
 	FMapManager* MapManager;
 

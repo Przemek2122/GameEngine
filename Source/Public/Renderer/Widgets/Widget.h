@@ -7,22 +7,26 @@
 #include "WidgetsPositionInterface.h"
 #include "WidgetsManagementInterface.h"
 #include "WidgetEnums.h"
+#include "WidgetInputInterface.h"
+#include "WidgetInputManager.h"
 
+class FWidgetInputManager;
 class FInteractionBaseWidget;
+
+#define WIDGET_DEFINES_DEFAULT_ORDER 0
 
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
  * It's mostly to ensure widget render in proper window. 
  */
-class FWidget : public IWidgetPositionInterface
+class FWidget : public UObject, public IWidgetPositionInterface
 {
 	friend IWidgetManagementInterface;
+	friend FWidgetInputManager; // ?
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
-	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = 0);
-	/** Destroy using DestroyWidget function */
-	virtual ~FWidget() override = default;
+	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
 	/** Advanced, use Tick() if possible instead. */
 	virtual void ReceiveTick();
@@ -30,20 +34,17 @@ protected:
 	virtual void ReceiveRender();
 
 	/** Called right after construction\n Usage: Set default size, bind delegates etc...*/
-	virtual void Init();
-	/** Called right before destruction */
+	virtual void Init() override;
+	/** Called before DestroyWidget */
+	virtual void PreDeInit();
+	/** Called right before destruction, @NOTE PreDeInit is called earlier. */
 	virtual void DeInit();
-	/** Called on all widgets before Tick(), should be used for input actions like click etc... */
-	virtual void HandleInput();
 	/** Called each frame.\n Should be used for code logic. */
 	virtual void Tick();
 	/** Called each frame.\n Should be used To draw data only. */
 	virtual void Render();
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
-
-	/** Called before DestroyWidget */
-	virtual void OnWidgetDestroyed();
 
 public:
 	void DestroyWidget();

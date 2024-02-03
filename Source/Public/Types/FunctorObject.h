@@ -37,6 +37,22 @@ public:
 		return this;
     }
 
+	bool operator==(FFunctorObject const& OtherFunctor)
+	{
+		return (ClassObject == OtherFunctor.ClassObject && FunctionPointer == OtherFunctor.FunctionPointer);
+	}
+
+	bool IsFunctionPointerSame(TReturnType(TClass::* InFunctionPointer)(TInParams...)) const
+	{
+		return (FunctionPointer == InFunctionPointer);
+	}
+
+	/** Stored object which has above function. */
+	TClass* GetClassObject() const
+	{
+		return ClassObject;
+	}
+
 protected:
 	/** Stored function. */
 	TReturnType (TClass::*FunctionPointer)(TInParams ...);

@@ -24,6 +24,13 @@ public:
 	{
 	}
 
+	/** Normal constructor - Pass in object to store */
+	explicit FAutoDeletePointer(TTypeToStore* Params)
+		: StoredObject(Params)
+		, bHasAnyObject(true)
+	{
+	}
+
 	/** Copy constructor - Makes previous FAutoDeletePointer not usable anymore. */
 	explicit FAutoDeletePointer(FAutoDeletePointer& OtherAutoDeletePointer) noexcept 
 		: StoredObject(OtherAutoDeletePointer.StoredObject)

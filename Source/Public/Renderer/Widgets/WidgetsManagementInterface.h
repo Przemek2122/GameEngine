@@ -73,15 +73,15 @@ public:
 
 		CreatedWidget->Init();
 
-		OnWidgetCreated(CreatedWidget);
+		OnChildWidgetCreated(CreatedWidget);
 
 		return CreatedWidget;
 	}
 
 	/** Best to call Destroy widget. @returns true on success. */
-	INLINE_DEBUGABLE bool DestroyWidget(FWidget* Widget);
+	bool DestroyWidget(FWidget* Widget);
 	/** Slower overload which destroys by name. @returns true on success. */
-	INLINE_DEBUGABLE bool DestroyWidget(const std::string& InWidgetName);
+	bool DestroyWidget(const std::string& InWidgetName);
 
 	void ClearChildren();
 	int GetChildrenCount() const;
@@ -119,8 +119,8 @@ public:
 		return ClassName + ("_" + Id);
 	}
 
-	virtual void OnWidgetCreated(FWidget* NewWidget);
-	virtual void OnWidgetDestroyed(FWidget* NewWidget);
+	virtual void OnChildWidgetCreated(FWidget* NewWidget);
+	virtual void OnChildWidgetDestroyed(FWidget* NewWidget);
 
 protected:
 	/** Called by wiget when order is changed. */
@@ -139,6 +139,8 @@ public:
 	/** Called after widget initialization */
 	virtual void RegisterWidgetPostInit(FWidget* Widget);
 	virtual void UnRegisterWidget(FWidget* Widget);
+
+	FDelegate<void, FWidget*> OnWidgetOrderChanged;
 
 	int LastWidgetNumber;
 	

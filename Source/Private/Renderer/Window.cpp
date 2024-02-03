@@ -5,6 +5,7 @@
 #include "ECS/EntityManager.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Map/MapManager.h"
+#include "Renderer/Widgets/WidgetInputManager.h"
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
 	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags))
@@ -16,6 +17,10 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 	, WindowFlags(InFlags)
 	, bIsWindowFocused(false)
 	, bIsWindowVisible(true)
+	, WidgetManager(nullptr)
+	, WidgetInputManager(nullptr)
+	, EntityManager(nullptr)
+	, MapManager(nullptr)
 {
 	if (Window != nullptr)
 	{
@@ -26,7 +31,7 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 	else
 	{
 		LOG_ERROR("Can not create window: " << STRING(SDL_GetError()) << " ! (" << WindowTitle << ")");
-		
+
 		exit(-16);
 	}
 }
@@ -35,6 +40,9 @@ FWindow::~FWindow()
 {
 	delete Renderer;	
 	delete WidgetManager;
+	delete WidgetInputManager;
+	delete EntityManager;
+	delete MapManager;
 
 	if (Window != nullptr)
 	{
@@ -52,6 +60,7 @@ void FWindow::Init()
 {
 	Renderer = CreateRenderer();
 	WidgetManager = CreateWidgetManager();
+	WidgetInputManager = CreateWidgetInputManager();
 	EntityManager = CreateEntityManager();
 	MapManager = CreateMapManager();
 }
@@ -67,6 +76,11 @@ void FWindow::ReceiveTick()
 FWidgetManager* FWindow::CreateWidgetManager()
 {
 	return new FWidgetManager(this);
+}
+
+FWidgetInputManager* FWindow::CreateWidgetInputManager()
+{
+	return new FWidgetInputManager();
 }
 
 FEntityManager* FWindow::CreateEntityManager() const
@@ -191,6 +205,11 @@ FMapManager* FWindow::GetMapManager() const
 FWidgetManager* FWindow::GetWidgetManager() const
 {
 	return WidgetManager;
+}
+
+FWidgetInputManager* FWindow::GetWidgetInputManager() const
+{
+	return WidgetInputManager;
 }
 
 FEntityManager* FWindow::GetEntityManager() const

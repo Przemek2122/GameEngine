@@ -146,6 +146,9 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\Parser.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h">
       <Filter>Public\Assets\TypesForAssets</Filter>
     </ClInclude>
@@ -290,6 +293,9 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\FPSTextWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\HorizontalBoxWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
@@ -311,10 +317,16 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\WidgetInputInterface.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputManager.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInteraction.h">
@@ -649,6 +661,9 @@
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp">
       <Filter>Private\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Assets\Parser.cpp">
+      <Filter>Private\Assets</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Font.cpp">
       <Filter>Private\Assets\TypesForAssets</Filter>
     </ClCompile>
@@ -754,6 +769,9 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\FPSTextWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\HorizontalBoxWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
@@ -775,7 +793,13 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\WidgetInputInterface.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp">

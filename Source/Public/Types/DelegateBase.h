@@ -7,7 +7,7 @@
 
 /**
  * Base Delegate storing functors.
- * Call Execute to execute all bound functions.
+ * Call ExecuteByLambda to execute all bound functions.
  */
 template<typename TReturnType, typename... TInParams>
 class FDelegateBase
@@ -16,7 +16,15 @@ using Functor = FFunctorBase<TReturnType, TInParams...>;
 	
 public:
 	FDelegateBase() = default;
-	virtual ~FDelegateBase() = default;
+	virtual ~FDelegateBase()
+	{
+		for (Functor* FunctorObject : Functors)
+		{
+			delete FunctorObject;
+		}
+
+		Functors.Clear();
+	}
 
 	/** @returns true if there is at least one function bound. */
 	_NODISCARD virtual bool IsBound() const

@@ -3,8 +3,35 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
-FEventHandler::FEventHandler(SDL_Event InEvent)
+void FMouseInputDelegateWrapper::Execute(const FVector2D<int>& Location)
+{
+	if (!bWasSentAlready)
+	{
+		bWasSentAlready = true;
+
+		AddToResetQueue();
+
+		Delegate.Execute(Location);
+	}
+}
+
+void FMouseInputDelegateWrapper::AddToResetQueue()
+{
+	EventHandler->AddMouseInputDelegateToReset(this);
+}
+
+void FMouseInputDelegateWrapper::Reset()
+{
+	bWasSentAlready = false;
+}
+
+FEventHandler::FEventHandler(const SDL_Event& InEvent)
 	: Event(InEvent)
+	, MouseMoveDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
+	, MouseLeftButtonPressDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
+	, MouseLeftButtonReleaseDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
+	, MouseRightButtonPressDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
+	, MouseRightButtonReleaseDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
 	, bQuitInputDetected(false)
 {
 	AddPrimaryInput("M_LMB_P");	// MOUSE- Left mouse button pressed
@@ -38,7 +65,7 @@ FEventHandler::~FEventHandler()
 
 void FEventHandler::HandleEvents()
 {
-	ResetAllButtons();
+	ResetAll();
 
 	// @TODO SDLK_1 to '1' - Performance Improvement
 	
@@ -184,8 +211,6 @@ void FEventHandler::HandleEvents()
 				{
 					case SDLK_ESCAPE:
 					{
-						bQuitInputDetected = false;
-							
 						LOG_DEBUG("Quit input.");
 						
 						break;
@@ -264,8 +289,13 @@ void FEventHandler::HandleEvents()
 			/** Mouse movement X & Y */
 			case SDL_MOUSEMOTION:
 			{
-				MouseLocationLast = MouseLocationCurrent;
-					
+				if (MouseLocationLast != MouseLocationCurrent)
+				{
+					MouseLocationLast = MouseLocationCurrent;
+
+					MouseMoveDelegate->Execute(MouseLocationCurrent);
+				}
+
 				MouseLocationCurrent.X = Event.motion.x;
 				MouseLocationCurrent.Y = Event.motion.y;
 						
@@ -280,14 +310,18 @@ void FEventHandler::HandleEvents()
 					case SDL_BUTTON_LEFT:
 					{
 						PrimaryInputMap["M_LMB_P"] = true;
-							
+
+						MouseLeftButtonPressDelegate->Execute(MouseLocationCurrent);
+
 						break;
 					}
 
 					case SDL_BUTTON_RIGHT:
 					{
 						PrimaryInputMap["M_RMB_P"] = true;
-							
+
+						MouseRightButtonPressDelegate->Execute(MouseLocationCurrent);
+						
 						break;
 					}
 
@@ -314,6 +348,8 @@ void FEventHandler::HandleEvents()
 					case SDL_BUTTON_LEFT:
 					{
 						PrimaryInputMap["M_LMB_R"] = true;
+
+						MouseLeftButtonReleaseDelegate->Execute(MouseLocationCurrent);
 							
 						break;
 					}
@@ -321,6 +357,8 @@ void FEventHandler::HandleEvents()
 					case SDL_BUTTON_RIGHT:
 					{
 						PrimaryInputMap["M_RMB_R"] = true;
+
+						MouseRightButtonReleaseDelegate->Execute(MouseLocationCurrent);
 							
 						break;
 					}
@@ -349,9 +387,16 @@ void FEventHandler::HandleEvents()
 	}
 }
 
-void FEventHandler::ResetAllButtons()
+void FEventHandler::ResetAll()
 {
 	PrimaryInputMap.SetAll(false);
+
+	for (FMouseInputDelegateWrapper* InputDelegate : MouseInputDelegateResetQueue)
+	{
+		InputDelegate->Reset();
+	}
+
+	MouseInputDelegateResetQueue.Clear();
 }
 
 bool FEventHandler::HasMouseMoved() const
@@ -369,14 +414,19 @@ FVector2D<int> FEventHandler::GetMouseLocationLast() const
 	return MouseLocationLast;
 }
 
-bool FEventHandler::HasPrimaryInput(std::string InputName)
+bool FEventHandler::HasPrimaryInput(const std::string& InputName)
 {
 	return PrimaryInputMap.HasKey(InputName);
 }
 
-bool FEventHandler::GetPrimaryInput(std::string InputName)
+auto FEventHandler::GetPrimaryInput(const std::string& InputName) -> bool
 {
 	return PrimaryInputMap[InputName];
+}
+
+void FEventHandler::AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* MouseInputDelegateWrapper)
+{
+	MouseInputDelegateResetQueue.Push(MouseInputDelegateWrapper);
 }
 
 void FEventHandler::AddPrimaryInput(const std::string& InPrimaryName)
