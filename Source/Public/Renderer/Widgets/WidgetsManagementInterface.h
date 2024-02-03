@@ -79,9 +79,9 @@ public:
 	}
 
 	/** Best to call Destroy widget. @returns true on success. */
-	INLINE_DEBUGABLE bool DestroyWidget(FWidget* Widget);
+	bool DestroyWidget(FWidget* Widget);
 	/** Slower overload which destroys by name. @returns true on success. */
-	INLINE_DEBUGABLE bool DestroyWidget(const std::string& InWidgetName);
+	bool DestroyWidget(const std::string& InWidgetName);
 
 	void ClearChildren();
 	int GetChildrenCount() const;

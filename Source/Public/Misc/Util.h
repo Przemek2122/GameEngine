@@ -23,7 +23,7 @@ namespace FUtil
 {
 	/* Use this function as one of first functions.
 	 * Creates thread for logs
-	 * @param enableLogging specify wheater to log to file or not
+	 * @param enableLogging specify if it should log to file or not
 	 * @param logLevel changes level of log. */
 	void LogInit(bool EnableLogging = true);
 
@@ -31,17 +31,17 @@ namespace FUtil
 	static int MessagesPrinter(void* ptr);
 
 	/* @returns current nano-second since epoch(1 January 1970) - signed integer type of at least 64 bits */
-	INLINE_DEBUGABLE size_t GetNanoSeconds();
+	size_t GetNanoSeconds();
 	/* @returns current micro-second since epoch(1 January 1970) - signed integer type of at least 55 bits */
-	INLINE_DEBUGABLE size_t GetMircoSeconds();
+	size_t GetMircoSeconds();
 	/* @returns current mili-second since epoch(1 January 1970) - signed integer type of at least 45 bits */
-	INLINE_DEBUGABLE size_t GetMiliSeconds();
+	size_t GetMiliSeconds();
 	/* @returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
 	size_t GetSeconds();
 	
 	/* Convert nanoseconds to seconds */
 	template <class TTypeOut = double>
-	INLINE_DEBUGABLE TTypeOut NanoSecondToSecond(const size_t InNanosecond)
+	TTypeOut NanoSecondToSecond(const size_t InNanosecond)
 	{
 		static constexpr double FullNanoSecond = 1e9;
 		
@@ -49,7 +49,7 @@ namespace FUtil
 	}
 	/* Convert MicroSeconds to seconds */
 	template <typename TTypeOut = double>
-	INLINE_DEBUGABLE TTypeOut MicroSecondToSecond(const size_t InNanosecond)
+	TTypeOut MicroSecondToSecond(const size_t InNanosecond)
 	{
 		static constexpr double FullMicroSecond = 1e6;
 		
@@ -57,7 +57,7 @@ namespace FUtil
 	}
 	/* Convert MiliSeconds to seconds */
 	template <typename TTypeOut = double>
-	INLINE_DEBUGABLE TTypeOut MiliSecondToSecond(const size_t InNanosecond)
+	TTypeOut MiliSecondToSecond(const size_t InNanosecond)
 	{
 		static constexpr double FullMiliSecond = 1e3;
 		

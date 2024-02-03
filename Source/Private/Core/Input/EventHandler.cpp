@@ -211,8 +211,6 @@ void FEventHandler::HandleEvents()
 				{
 					case SDLK_ESCAPE:
 					{
-						bQuitInputDetected = false;
-							
 						LOG_DEBUG("Quit input.");
 						
 						break;

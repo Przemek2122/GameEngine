@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+/** This class is used to handle mouse events. */
 class FMouseInputDelegateWrapper
 {
 public:
@@ -24,6 +25,15 @@ private:
 	FEventHandler* EventHandler;
 };
 
+/** This class is used to handle keyboard events. It exists to allow rebinding. */
+class FInputDelegateWrapper
+{
+public:
+
+	/** Called when input is detected. */
+	FDelegate<> Delegate;
+};
+
 class FEventHandler
 {
 public:
@@ -34,7 +44,6 @@ protected:
 	SDL_Event Event;
 
 public:
-
 	virtual void HandleEvents();
 
 	void ResetAll();
@@ -47,7 +56,6 @@ public:
 	_NODISCARD bool HasPrimaryInput(const std::string& InputName);
 	/** Use to check primary input. */
 	_NODISCARD bool GetPrimaryInput(const std::string& InputName);
-
 
 	void AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* MouseInputDelegateWrapper);
 
@@ -63,6 +71,9 @@ public:
 	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonPressDelegate;
 	/** Called when mouse right click is released */
 	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonReleaseDelegate;
+
+	/** Called when escape is used */
+	FAutoDeletePointer<FInputDelegateWrapper> EscapeDelegate;
 
 protected:
 	/** Add primary input (GEngine uses) Name from  */
