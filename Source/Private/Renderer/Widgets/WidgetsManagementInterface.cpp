@@ -29,11 +29,13 @@ void IWidgetManagementInterface::RenderWidgets()
 	
 	for (auto i = 0; i < Size; i++)
 	{
-		ManagedWidgets[i]->bWasRenderedThisFrame = ManagedWidgets[i]->ShouldBeRendered();
+		auto CurrentWidget = ManagedWidgets[i];
+
+		CurrentWidget->bWasRenderedThisFrame = ManagedWidgets[i]->ShouldBeRendered();
 		
-		if (ManagedWidgets[i]->bWasRenderedThisFrame)
+		if (CurrentWidget->bWasRenderedThisFrame)
 		{
-			ManagedWidgets[i]->ReceiveRender();
+			CurrentWidget->ReceiveRender();
 		}
 	}
 }

@@ -90,16 +90,7 @@ void FWidget::DestroyWidget()
 	{
 		PreDeInit();
 
-		FFunctorLambda<void> DeleteFunctor = [&]
-		{
-			DeInit();
-
-			delete this;
-		};
-
-		GEngine->AddLambdaToCallOnStartOfNextTick(DeleteFunctor);
-
-		bIsPendingDelete = true;
+		DeInit();
 	}
 }
 
