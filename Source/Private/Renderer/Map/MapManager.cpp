@@ -73,6 +73,8 @@ void FMapManager::CacheAvailableMaps()
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
+		AvailableMaps.Clear();
+
 		CArray<std::string> DirectoriesFound = AssetsManager->GetFilesFromDirectory(AssetsManager->GetMapsPathRelative());
 
 		const char* Slash = AssetsManager->GetPlatformSlash();
