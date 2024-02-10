@@ -1,5 +1,5 @@
 #include "CoreEngine.h"
-#include "Core/Interfaces/TickInterface.h"
+#include "Core/Interfaces/CoreLoop/TickInterface.h"
 
 FTickInterface::FTickInterface()
 {
