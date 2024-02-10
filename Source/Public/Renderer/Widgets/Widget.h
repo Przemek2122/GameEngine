@@ -73,6 +73,8 @@ public:
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
 
+	virtual void OnWidgetVisibilityChanged();
+
 	/** Name of this widget. Can be displayed or widget can be get using this variable. */
 	_NODISCARD std::string GetName() const;
 

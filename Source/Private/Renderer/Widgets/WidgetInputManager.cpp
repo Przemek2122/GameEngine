@@ -2,7 +2,6 @@
 #include "Renderer/Widgets/WidgetInputManager.h"
 
 #include "Input/EventHandler.h"
-#include "Renderer/Widgets/WidgetInputInterface.h"
 
 enum
 {
@@ -21,6 +20,7 @@ auto CreateMouseWidgetInputWrapper(FMouseInputDelegateWrapper* DelegateWrapper)
 
 	return FAutoDeletePointer<FWidgetInputWrapper<void, TParams...>>(Ptr);
 }
+
 // Create FAutoDeletePointer with FWidgetInputWrapper with templated type
 // Make sure to use FAutoDeletePointer to avoid memory leaks and to use RemoveMouseWidgetInputConsumableWrapper to remove it from delegate
 template<typename ...TParams>
@@ -52,19 +52,8 @@ FWidgetInputManager::FWidgetInputManager()
 	const FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		OnMouseMove = CreateMouseWidgetInputWrapper<FVector2D<int>>(
-			EventHandler->MouseMoveDelegate.Get()
-		);
-
-		OnMouseLeftButtonPress = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>>(
-			EventHandler->MouseLeftButtonPressDelegate.Get(),
-			WIDGET_CONSUME_INPUT_ALLOW
-		);
-
-		OnMouseLeftButtonRelease = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>>(
-			EventHandler->MouseLeftButtonReleaseDelegate.Get(),
-			WIDGET_CONSUME_INPUT_ALLOW
-		);
+		SetupMouseDelegates(EventHandler);
+		SetupKeyboardDelegates(EventHandler);
 	}
 }
 
@@ -73,9 +62,8 @@ FWidgetInputManager::~FWidgetInputManager()
 	const FEventHandler* EventHandler = GEngine->GetEventHandler();
 	if (EventHandler != nullptr)
 	{
-		RemoveMouseWidgetInputWrapper<FVector2D<int>>(EventHandler->MouseMoveDelegate.Get(), OnMouseMove.Get());
-		RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>>(EventHandler->MouseLeftButtonPressDelegate.Get(), OnMouseLeftButtonPress.Get());
-		RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>>(EventHandler->MouseLeftButtonReleaseDelegate.Get(), OnMouseLeftButtonRelease.Get());
+		ClearMouseDelegates(EventHandler);
+		ClearKeyboardDelegates(EventHandler);
 	}
 }
 
@@ -130,4 +118,43 @@ void FWidgetInputManager::ChangeOrder(FWidget* Widget)
 			}
 		}
 	}
+}
+
+void FWidgetInputManager::SetupMouseDelegates(const FEventHandler* EventHandler)
+{
+	MouseInputCollection.OnMouseMove = CreateMouseWidgetInputWrapper<FVector2D<int>, EInputState>(
+		EventHandler->MouseDelegates.MouseMoveDelegate.Get()
+	);
+
+	MouseInputCollection.OnMouseLeftButtonUsed = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
+		EventHandler->MouseDelegates.MouseLeftButtonDelegate.Get(),
+		WIDGET_CONSUME_INPUT_ALLOW
+	);
+}
+
+void FWidgetInputManager::SetupKeyboardDelegates(const FEventHandler* EventHandler)
+{
+	KeyboardInputCollection.OnEscapeUsed = FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, EInputState>>(WIDGET_CONSUME_INPUT_ALLOW);
+
+	EventHandler->KeyBoardDelegates.EscapeDelegate.Get()->Delegate.BindObject(
+		KeyboardInputCollection.OnEscapeUsed.Get(), &FWidgetInputConsumableWrapper<bool, EInputState>::ExecuteByLambda
+	);
+}
+
+void FWidgetInputManager::ClearMouseDelegates(const FEventHandler* EventHandler)
+{
+	RemoveMouseWidgetInputWrapper<FVector2D<int>, EInputState>(
+		EventHandler->MouseDelegates.MouseMoveDelegate.Get(), MouseInputCollection.OnMouseMove.Get()
+	);
+
+	RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
+		EventHandler->MouseDelegates.MouseLeftButtonDelegate.Get(), MouseInputCollection.OnMouseLeftButtonUsed.Get()
+	);
+}
+
+void FWidgetInputManager::ClearKeyboardDelegates(const FEventHandler* EventHandler)
+{
+	EventHandler->KeyBoardDelegates.EscapeDelegate.Get()->Delegate.UnBindObject(
+		KeyboardInputCollection.OnEscapeUsed.Get(), &FWidgetInputConsumableWrapper<bool, EInputState>::ExecuteByLambda
+	);
 }

@@ -157,11 +157,20 @@ FEventHandler* FWidget::GetEventHandler()
 void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 {
 	WidgetVisibility = InWidgetVisibility;
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
+	}
 }
 
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
+}
+
+void FWidget::OnWidgetVisibilityChanged()
+{
 }
 
 std::string FWidget::GetName() const

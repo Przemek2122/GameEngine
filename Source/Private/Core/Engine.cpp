@@ -11,6 +11,7 @@
 #endif
 
 #include "Assets/Assets/FontAsset.h"
+#include "Interfaces/TickInterface.h"
 #include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()
@@ -156,6 +157,9 @@ void FEngine::EngineTick()
 	{
 		GEngine->RequestExit();
 	}
+
+	// Tick objects registered with TickInterface
+	TickingObjectsDelegate.Execute(DeltaTimeFloat);
 
 	Tick();
 
@@ -325,6 +329,16 @@ FEventHandler* FEngine::GetEventHandler() const
 FAssetsManager* FEngine::GetAssetsManager() const
 {
 	return AssetsManager;
+}
+
+void FEngine::RegisterTickingObject(FTickInterface* TickInterface)
+{
+	TickingObjectsDelegate.BindObject(TickInterface, &FTickInterface::Tick);
+}
+
+void FEngine::UnRegisterTickingObject(FTickInterface* TickInterface)
+{
+	TickingObjectsDelegate.UnBindObject(TickInterface, &FTickInterface::Tick);
 }
 
 FEventHandler* FEngine::CreateEventHandler() const

@@ -31,12 +31,11 @@ public:
 	void PreDeInit() override;
 	/** End FWidget */
 
-	void SetupInput(FWidgetInputManager* WidgetInputManager);
-	void ClearInput(FWidgetInputManager* WidgetInputManager);
+	void SetupInput(FWidgetInputManager* InWidgetInputManager);
+	void ClearInput(FWidgetInputManager* InWidgetInputManager);
 
-	bool OnMouseLeftButtonPress(FVector2D<int> Location);
-	bool OnMouseLeftButtonRelease(FVector2D<int> Location);
-	void OnMouseMove(FVector2D<int> Location);
+	bool OnMouseLeftButtonUsed(FVector2D<int> Location, EInputState InputState);
+	void OnMouseMove(FVector2D<int> Location, EInputState InputState);
 
 	static _NODISCARD FVector2D<int> GetMouseLocation();
 

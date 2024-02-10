@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+enum class EInputState;
+
 /**
  * Class responsible for receiving and pushing input for any widget which was registered
  */
@@ -49,6 +51,11 @@ protected:
 	FDelegate<TReturnType, TInParams...> Delegate;
 
 };
+
+/**
+ * Class responsible for receiving and pushing input for any widget which was registered
+ * Difference between this and FWidgetInputWrapper is that this one can consume input
+ */
 template<typename TReturnType, typename... TInParams>
 class FWidgetInputConsumableWrapper : public FWidgetInputWrapper<TReturnType, TInParams...>
 {
@@ -86,6 +93,27 @@ protected:
 
 };
 
+class FMouseInputCollection
+{
+public:
+	/** Function triggered when mouse is moved */
+	FAutoDeletePointer<FWidgetInputWrapper<void, FVector2D<int>, EInputState>> OnMouseMove;
+
+	/**
+	 * Function triggered when left mouse button is pressed or released @see EInputState,
+	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
+	 */
+	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>, EInputState>> OnMouseLeftButtonUsed;
+};
+
+class FKeyboardInputCollection
+{
+public:
+	/** Function triggered when key is pressed or released @see EInputState */
+	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, EInputState>> OnEscapeUsed;
+
+};
+
 /**
  * Class responsible for giving input to the FWidget class
  */
@@ -103,18 +131,15 @@ public:
 	/** Function triggered when widget changes order to make sure it's always handle input in correct way, first visible, first takes input */
 	void ChangeOrder(FWidget* Widget);
 
-	/** Function triggered when mouse is moved */
-	FAutoDeletePointer<FWidgetInputWrapper<void, FVector2D<int>>> OnMouseMove;
-	/**
-	 * Function triggered when left mouse button is pressed,
-	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
-	 */
-	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>>> OnMouseLeftButtonPress;
-	/**
-	 * Function triggered when left mouse button is released,
-	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
-	 */
-	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>>> OnMouseLeftButtonRelease;
+	FMouseInputCollection MouseInputCollection;
+	FKeyboardInputCollection KeyboardInputCollection;
+
+protected:
+	void SetupMouseDelegates(const FEventHandler* EventHandler);
+	void SetupKeyboardDelegates(const FEventHandler* EventHandler);
+
+	void ClearMouseDelegates(const FEventHandler* EventHandler);
+	void ClearKeyboardDelegates(const FEventHandler* EventHandler);
 
 protected:
 	/** Widgets which should be asked about input */

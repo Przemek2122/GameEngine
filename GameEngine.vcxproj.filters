@@ -251,6 +251,9 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Interfaces\TickInterface.h">
+      <Filter>Public\Core\Interfaces</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h">
       <Filter>Public\Core\Interfaces</Filter>
     </ClInclude>
@@ -284,6 +287,9 @@
     <ClInclude Include="Source\Public\Renderer\Map\Map.h">
       <Filter>Public\Renderer\Map</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Map\MapEditor.h">
+      <Filter>Public\Renderer\Map</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h">
       <Filter>Public\Renderer\Map</Filter>
     </ClInclude>
@@ -309,6 +315,9 @@
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\SpacerWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h">
@@ -727,6 +736,9 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Interfaces\TickInterface.cpp">
+      <Filter>Private\Core\Interfaces</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp">
       <Filter>Private\Core\Interfaces</Filter>
     </ClCompile>
@@ -760,6 +772,9 @@
     <ClCompile Include="Source\Private\Renderer\Map\Map.cpp">
       <Filter>Private\Renderer\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Map\MapEditor.cpp">
+      <Filter>Private\Renderer\Map</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp">
       <Filter>Private\Renderer\Map</Filter>
     </ClCompile>
@@ -785,6 +800,9 @@
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\SpacerWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp">

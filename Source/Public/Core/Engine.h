@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+class FTickInterface;
 class FMapManager;
 class FEventHandler;
 class FEngineManager;
@@ -163,6 +164,9 @@ public:
 		return static_cast<TAssetsManager>(GetAssetsManager());
 	}
 
+	void RegisterTickingObject(FTickInterface* TickInterface);
+	void UnRegisterTickingObject(FTickInterface* TickInterface);
+
 protected:
 	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
 	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
@@ -173,6 +177,7 @@ protected:
 	FAssetsManager* AssetsManager;
 
 	FDelegate<> FunctionsToCallOnStartOfNextTick;
+	FDelegate<void, float> TickingObjectsDelegate;
 
 #if ENGINE_TESTS
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;

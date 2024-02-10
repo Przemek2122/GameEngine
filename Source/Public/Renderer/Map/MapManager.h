@@ -20,6 +20,7 @@ public:
 
 	virtual void LoadMap(const std::string& Name);
 	virtual void UnLoadMap(const std::string& Name);
+	virtual void UnLoadCurrentMap();
 
 	virtual void CacheAvailableMaps();
 	virtual CArray<std::string> GetAvailableMaps() const;

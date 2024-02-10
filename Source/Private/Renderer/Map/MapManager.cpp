@@ -68,6 +68,15 @@ void FMapManager::UnLoadMap(const std::string& Name)
 	}
 }
 
+void FMapManager::UnLoadCurrentMap()
+{
+	if (CurrentMapAsset != nullptr)
+	{
+		CurrentMapAsset->UnLoadMap();
+		CurrentMapAsset = nullptr;
+	}
+}
+
 void FMapManager::CacheAvailableMaps()
 {
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();

@@ -4,6 +4,15 @@
 
 #include "CoreMinimal.h"
 
+/** This class is used to tell type of input, if it is pressed or released. */
+enum class EInputState
+{
+	NOT_PRESSED = 0,
+	PRESS = 1,
+	RELEASE = 2,
+	ENUM_MAX
+};
+
 /** This class is used to handle mouse events. */
 class FMouseInputDelegateWrapper
 {
@@ -11,27 +20,82 @@ public:
 	FMouseInputDelegateWrapper(FEventHandler* InEventHandler)
 		: bWasSentAlready(false)
 		, EventHandler(InEventHandler)
+		, CurrentInputState(EInputState::NOT_PRESSED)
 	{
 	}
 
-	void Execute(const FVector2D<int>& Location);
-	void AddToResetQueue();
+	void Execute(const FVector2D<int>& Location, const EInputState InputState);
+
 	void Reset();
 
-	FDelegate<void, FVector2D<int>> Delegate;
+	FDelegate<void, FVector2D<int>, EInputState> Delegate;
 
 private:
+	void AddToResetQueue();
+
+private:
+	/** True if input was sent already. */
 	bool bWasSentAlready;
+
 	FEventHandler* EventHandler;
+
+	/** Current state of input. It is incremented in execute and then reset in reset */
+	EInputState CurrentInputState;
 };
 
 /** This class is used to handle keyboard events. It exists to allow rebinding. */
 class FInputDelegateWrapper
 {
 public:
+	FInputDelegateWrapper(FEventHandler* InEventHandler)
+		: bWasSentAlready(false)
+		, EventHandler(InEventHandler)
+		, CurrentInputState(EInputState::NOT_PRESSED)
+	{
+	}
+
+	void Execute(EInputState InputState);
+
+	void Reset();
 
 	/** Called when input is detected. */
-	FDelegate<> Delegate;
+	FDelegate<void, EInputState> Delegate;
+
+private:
+	void AddToResetQueue();
+
+private:
+	/** True if input was sent already. */
+	bool bWasSentAlready;
+
+	FEventHandler* EventHandler;
+
+	/** Current state of input. It is incremented in execute and then reset in reset */
+	EInputState CurrentInputState;
+};
+
+class FMouseDelegates
+{
+public:
+	/* Mouse move delegate. Called when mouse moves. */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseMoveDelegate;
+
+	/** Called when mouse left click is detected */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseLeftButtonDelegate;
+
+	/** Called when mouse middle click is detected */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseMiddleButtonDelegate;
+
+	/** Called when mouse right click is detected */
+	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonDelegate;
+};
+
+class FKeyBoardDelegates
+{
+public:
+	/** Called when escape is used */
+	FAutoDeletePointer<FInputDelegateWrapper> EscapeDelegate;
+
 };
 
 class FEventHandler
@@ -44,64 +108,43 @@ protected:
 	SDL_Event Event;
 
 public:
-	virtual void HandleEvents();
+	void HandleEvents();
 
 	void ResetAll();
 
 	_NODISCARD bool HasMouseMoved() const;
 	_NODISCARD FVector2D<int> GetMouseLocationCurrent() const;
 	_NODISCARD FVector2D<int> GetMouseLocationLast() const;
-	
-	/** Use to check if primary input exists. */
-	_NODISCARD bool HasPrimaryInput(const std::string& InputName);
-	/** Use to check primary input. */
-	_NODISCARD bool GetPrimaryInput(const std::string& InputName);
 
 	void AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* MouseInputDelegateWrapper);
+	void AddKeyboardInputDelegateToReset(FInputDelegateWrapper* KeyboardInputDelegateWrapper);
 
-	/* Mouse move delegate. Called when mouse moves. */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseMoveDelegate;
-
-	/** Called when mouse left click is detected */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseLeftButtonPressDelegate;
-	/** Called when mouse left click is released */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseLeftButtonReleaseDelegate;
-
-	/** Called when mouse right click is detected */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonPressDelegate;
-	/** Called when mouse right click is released */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonReleaseDelegate;
-
-	/** Called when escape is used */
-	FAutoDeletePointer<FInputDelegateWrapper> EscapeDelegate;
+	FMouseDelegates MouseDelegates;
+	FKeyBoardDelegates KeyBoardDelegates;
 
 protected:
-	/** Add primary input (GEngine uses) Name from  */
-	void AddPrimaryInput(const std::string& InPrimaryName);
-	/** Remove primary input */
-	void RemovePrimaryInput(const std::string& InPrimaryName);
+	/** Initializer, helper for constructor - Set mouse delegates. */
+	void SetMouseDelegates();
+	/** Initializer, helper for constructor - Set keyboard delegates. */
+	void SetKeyBoardDelegates();
+
+	virtual void SwitchOnInput(Uint32 EventType);
+
+	virtual void InputKeyUp();
+	virtual void MouseMotion();
+	virtual void InputWindowEvent();
+	virtual void InputKeyDown();
+	virtual void InputMouseDown();
+	virtual void InputMouseUp();
 
 public:
-	/** Remove primary input */
-	void RemoveSecondaryInput(const std::string& InSecondaryName);
-	/** Create or replace secondary input. */
-	void SetSecondaryInput(const std::string& InSecondaryName, const std::string& InPrimaryName);
-	
-	/** Use to check if primary input exists. Check if secondary and bound primary input exists. */
-	_NODISCARD bool HasSecondaryInput(const std::string& InputName);
-	/** Use to check primary input. Will use map to get primary input. */
-	_NODISCARD bool GetSecondaryInput(const std::string& InputName);
-
 	_NODISCARD bool QuitInputDetected() const;
 
 protected:
-	/** Direct input map. */
-	CMap<std::string, bool> PrimaryInputMap;
-	/** Use this map to make aliases for primary map. */
-	CMap<std::string, std::string> SecondaryInputMap;
-
 	/** This map is used to reset mouse delegates. */
 	CArray<FMouseInputDelegateWrapper*> MouseInputDelegateResetQueue;
+	/** This map is used to reset keyboard delegates. */
+	CArray<FInputDelegateWrapper*> KeyboardInputDelegateResetQueue;
 
 	FVector2D<int> MouseLocationCurrent;
 	FVector2D<int> MouseLocationLast;

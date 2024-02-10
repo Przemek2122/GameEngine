@@ -66,6 +66,7 @@
     <ClInclude Include="Source\Public\Core\Includes\GlobalDefines.h" />
     <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
+    <ClInclude Include="Source\Public\Core\Interfaces\TickInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
     <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointer.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
     <ClInclude Include="Source\Public\Renderer\Map\Map.h" />
+    <ClInclude Include="Source\Public\Renderer\Map\MapEditor.h" />
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
@@ -86,6 +88,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputTextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InteractionBaseWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\SpacerWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
@@ -239,6 +242,7 @@
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
+    <ClCompile Include="Source\Private\Core\Interfaces\TickInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />
     <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointer.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
@@ -250,6 +254,7 @@
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\Map.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Map\MapEditor.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
@@ -259,6 +264,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputTextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InteractionBaseWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\SpacerWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
