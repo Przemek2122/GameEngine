@@ -28,6 +28,8 @@ enum EParserTextType : Uint8
 /** Text which is inside of the line, parsed by dividing one chars of InSeparatorCharArray of FParser */
 struct FParserText
 {
+	FParserText() = default;
+
 	FParserText(std::string InText, const EParserTextType InLineType)
 		: Text(std::move(InText))
 		, Type(InLineType)
@@ -44,6 +46,13 @@ struct FParserText
 /** Struct for holding parsed line from file or lines to parse into file. */
 struct FParserLine
 {
+	FParserLine() = default;
+
+	FParserLine(CArray<FParserText> InTexts)
+		: Texts(std::move(InTexts))
+	{
+	}
+
 	CArray<FParserText> Texts;
 };
 
@@ -67,14 +76,13 @@ public:
 	);
 
 	/**
-	 * It's very simple and it does not return comments and ignored characters
+	 * God for line by line work. Bad for anything el
 	 * Takes given string and splits it into words by Separators set in constructor
-	 * @Note: quite ok for reading simple files, but if you want to write it back then this is bad choice
 	 */
 	CArray<std::string> SimpleParseLineIntoStrings(const std::string& Line);
 
 	/**
-	 * It's very simple and it does not return comments and ignored characters
+	 * God for line by line work. Bad for anything else
 	 * Reverse of SimpleParseLineIntoStrings, for saving purposes
 	 */
 	std::string SimpleParseStringsIntoLine(const CArray<std::string>& Strings);

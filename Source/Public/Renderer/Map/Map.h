@@ -11,8 +11,10 @@
 class FMap
 {
 public:
-	FMap(FMapAsset* InMapAsset);
+	FMap(FMapAsset* InMapAsset, FMapManager* InMapManager);
 	virtual ~FMap() = default;
+
+	void Initialize();
 
 	/** Function used for drawing a map */
 	virtual void Draw();
@@ -24,10 +26,23 @@ public:
 	/** Function used for saving a map */
 	virtual void Save();
 
+	/** Reads data from asset into this class from MapAsset memory */
+	virtual void ReadAsset();
+	/** Write data from this class into asset into MapAsset memory */
+	virtual void WriteAsset();
+
+	FMapAsset* GetMapAsset() const { return MapAsset.Get(); }
+
 protected:
 	/** Map asset */
 	FAutoDeletePointer<FMapAsset> MapAsset;
 
-	bool bIsLoaded;
+	/** Pointer to owner */
+	FMapManager* MapManager;
+
+	bool bIsActive;
+
+	/** Map data: tiles size, tiles location and assets for map */
+	FMapData MapData;
 
 };

@@ -21,7 +21,12 @@ public:
 	{
 	public:
 		static bool Exists(const std::string& InPath);
+		static bool Create(const std::string& InPath);
+		static bool Delete(const std::string& InPath);
 	};
+
+	/** Determine if file is directory */
+	static bool IsDirectory(const std::string& InPath);
 
 	/** @returns files from given directory, optionally recursive */
 	static CArray<std::string> GetFilesFromDirectory(const std::string& Path, const bool bRecursive = false);

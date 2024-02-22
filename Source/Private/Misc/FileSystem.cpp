@@ -34,6 +34,23 @@ bool FFileSystem::File::Exists(const std::string& InPath)
     return FileCheck.good();
 }
 
+bool FFileSystem::File::Create(const std::string& InPath)
+{
+	const std::ofstream File(InPath.c_str());
+
+	return File.good();
+}
+
+bool FFileSystem::File::Delete(const std::string& InPath)
+{
+	return fs::remove(InPath);
+}
+
+bool FFileSystem::IsDirectory(const std::string& InPath)
+{
+	return fs::is_directory(InPath);
+}
+
 CArray<std::string> FFileSystem::GetFilesFromDirectory(const std::string& Path, const bool bRecursive)
 {
     CArray<std::string> Files;
