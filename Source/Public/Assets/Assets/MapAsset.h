@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AssetBase.h"
+#include "Assets/Parser.h"
 
 class FTextureAsset;
 
@@ -12,12 +13,23 @@ enum FMapIndex : int8_t
 	INDEX_INCORRECT = -1
 };
 
+/** Namespace for map files extensions and possible asset directory names */
 namespace FMapFilesExtensions
 {
 	inline static const std::string PrimaryMapFileExtension = "amap";
 	inline static const std::string MapDataFileExtension = "amapdata";
 	inline static const CArray<std::string> AssetDirectoryNames = { "Assets", "assets" };
-};
+}
+
+/** Namespace with comments added when saving a map */
+namespace FMapFileComments
+{
+	inline static const std::string MapAssetsFileCommentLine1 = "Comments";
+	inline static const std::string MapAssetsFileCommentLine2 = "Map file";
+	inline static const std::string MapAssetsFileCommentLine3 = "First number is asset number,";
+	inline static const std::string MapAssetsFileCommentLine4 = "Second one is collision, where 0 is no collision and 1 means collision";
+}
+
 struct FMapSubAssetSettings
 {
 	/** Index to match texture to map */
@@ -46,12 +58,19 @@ public:
 
 	void SetMapManager(FMapManager* InMapManager);
 
+	/** Load assets from disk */
 	void LoadMap();
-	void UnLoadMap();
+	/** Clear all arrays from loaded files from FMapAsset::LoadMap */
+	void ClearMapData();
+	/** OVERRIDE File this map source. This will removed old map. Be carefull when calling */
+	void SaveMapData();
 
 	bool IsLoaded() const;
 
 	void Draw();
+
+protected:
+	static FParser CreateMapFilesParser();
 
 protected:
 	bool bIsLoaded;

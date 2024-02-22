@@ -35,7 +35,7 @@ std::shared_ptr<FAssetBase> FAssetsManager::GetAsset(const std::string& InAssetN
 
 CArray<std::string> FAssetsManager::GetFilesFromDirectory(const std::string& Directory) const
 {
-	return FFilesystem::GetDirectories(ConvertRelativeToFullPath(Directory), true);
+	return FFileSystem::GetDirectories(ConvertRelativeToFullPath(Directory), true);
 }
 
 std::string FAssetsManager::GetProjectLocation() const
@@ -48,9 +48,9 @@ std::string FAssetsManager::GetAssetDirName() const
 	return AssetDirName;
 }
 
-char* FAssetsManager::GetPlatformSlash() const
+char FAssetsManager::GetPlatformSlash() const
 {
-	return FFilesystem::GetPlatformSlash();
+	return FFileSystem::GetPlatformSlash();
 }
 
 std::string FAssetsManager::GetAssetsPathRelative() const
@@ -60,21 +60,21 @@ std::string FAssetsManager::GetAssetsPathRelative() const
 
 std::string FAssetsManager::GetMapsPathRelative() const
 {
-	const char* Slash = FFilesystem::GetPlatformSlash();
+	const char Slash = FFileSystem::GetPlatformSlash();
 
 	return GetAssetsPathRelative() + Slash + MapsDirName;
 }
 
 std::string FAssetsManager::GetFontsPathRelative() const
 {
-	const char* Slash = FFilesystem::GetPlatformSlash();
+	const char Slash = FFileSystem::GetPlatformSlash();
 
 	return GetAssetsPathRelative() + Slash + FontsDirName;
 }
 
 std::string FAssetsManager::ConvertRelativeToFullPath(const std::string& InPathRelative) const
 {
-	const char* Slash = FFilesystem::GetPlatformSlash();
+	const char Slash = FFileSystem::GetPlatformSlash();
 	
 	return GEngine->GetLaunchRelativePath() + Slash + InPathRelative;
 }

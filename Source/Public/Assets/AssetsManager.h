@@ -27,7 +27,7 @@ public:
 	template<class TAssetType>
 	std::shared_ptr<TAssetType> CreateAssetFromAbsolutePath(const std::string& InAssetName, const std::string& InAssetPath)
 	{
-		if (FFilesystem::FileExists(InAssetPath) || FFilesystem::DirectoryExists(InAssetPath))
+		if (FFileSystem::File::Exists(InAssetPath) || FFileSystem::Directory::Exists(InAssetPath))
 		{
 			std::shared_ptr<TAssetType> Asset = std::make_shared<TAssetType>(InAssetName, InAssetPath);
 
@@ -43,7 +43,7 @@ public:
 	{
 		const std::string FullFilePath = ConvertRelativeToFullPath(InAssetPath);
 
-		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
+		if (FFileSystem::File::Exists(FullFilePath) || FFileSystem::Directory::Exists(FullFilePath))
 		{
 			std::shared_ptr<TAssetType> Asset = std::make_shared<TAssetType>(InAssetName, FullFilePath);
 
@@ -59,7 +59,7 @@ public:
 	{
 		const std::string FullFilePath = ConvertRelativeToFullPath(InAssetPath);
 		
-		if (FFilesystem::FileExists(FullFilePath) || FFilesystem::DirectoryExists(FullFilePath))
+		if (FFileSystem::File::Exists(FullFilePath) || FFileSystem::Directory::Exists(FullFilePath))
 		{
 			AllAssetsMap.Emplace(InAssetName, CreateAssetFromRelativePath<TAssetType>(InAssetName, InAssetPath));
 		}
@@ -90,7 +90,7 @@ public:
 	/** @returns 'Assets' directory name */
 	std::string GetAssetDirName() const;
 
-	char* GetPlatformSlash() const;
+	char GetPlatformSlash() const;
 
 	std::string GetAssetsPathRelative() const;
 	std::string GetMapsPathRelative() const;

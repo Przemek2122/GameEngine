@@ -54,6 +54,8 @@
     <ClInclude Include="Source\Public\Core\ECS\Entities\PlayerCharacter.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entity.h" />
     <ClInclude Include="Source\Public\Core\ECS\EntityManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\RendererManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\TickManager.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
@@ -66,7 +68,8 @@
     <ClInclude Include="Source\Public\Core\Includes\GlobalDefines.h" />
     <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
-    <ClInclude Include="Source\Public\Core\Interfaces\TickInterface.h" />
+    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\RenderInterface.h" />
+    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\TickInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
     <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointer.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
@@ -238,11 +241,14 @@
     <ClCompile Include="Source\Private\Core\ECS\Entities\PlayerCharacter.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entity.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\RendererManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\TickManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
-    <ClCompile Include="Source\Private\Core\Interfaces\TickInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\RenderInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\TickInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />
     <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointer.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />

@@ -9,6 +9,9 @@ class FMapManager;
 class FEventHandler;
 class FEngineManager;
 
+enum class ETickPhase : Uint8;
+enum class ERenderPhase : Uint8;
+
 class FEngine
 {
 friend FEngineManager;

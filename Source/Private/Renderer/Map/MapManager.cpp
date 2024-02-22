@@ -57,7 +57,7 @@ void FMapManager::UnLoadMap(const std::string& Name)
 		{
 			if (Asset->IsLoaded())
 			{
-				Asset->UnLoadMap();
+				Asset->ClearMapData();
 			}
 		}
 		else
@@ -72,7 +72,7 @@ void FMapManager::UnLoadCurrentMap()
 {
 	if (CurrentMapAsset != nullptr)
 	{
-		CurrentMapAsset->UnLoadMap();
+		CurrentMapAsset->ClearMapData();
 		CurrentMapAsset = nullptr;
 	}
 }
@@ -86,7 +86,7 @@ void FMapManager::CacheAvailableMaps()
 
 		CArray<std::string> DirectoriesFound = AssetsManager->GetFilesFromDirectory(AssetsManager->GetMapsPathRelative());
 
-		const char* Slash = AssetsManager->GetPlatformSlash();
+		const char Slash = AssetsManager->GetPlatformSlash();
 
 		const std::string PathPrefix = AssetsManager->GetMapsPathRelative() + Slash;
 

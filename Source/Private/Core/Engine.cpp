@@ -11,7 +11,8 @@
 #endif
 
 #include "Assets/Assets/FontAsset.h"
-#include "Interfaces/TickInterface.h"
+#include "Interfaces/CoreLoop/TickInterface.h"
+#include "Interfaces/CoreLoop/RenderInterface.h"
 #include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()

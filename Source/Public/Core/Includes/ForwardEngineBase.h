@@ -7,7 +7,7 @@
 class FEngineMain;
 class FEngine;
 class FEngineRender;
-class FFilesystem;
+class FFileSystem;
 
 class FAssetsManager;
 class FAssetBase;

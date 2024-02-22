@@ -16,7 +16,7 @@ FMapAsset::FMapAsset(const std::string& InAssetName, const std::string& InAssetP
 
 FMapAsset::~FMapAsset()
 {
-	UnLoadMap();
+	ClearMapData();
 }
 
 void FMapAsset::SetMapManager(FMapManager* InMapManager)
@@ -26,7 +26,7 @@ void FMapAsset::SetMapManager(FMapManager* InMapManager)
 
 void FMapAsset::LoadMap()
 {
-	if (FFilesystem::DirectoryExists(AssetPath))
+	if (FFileSystem::Directory::Exists(AssetPath))
 	{
 		const std::string SharedBeginning = AssetPath + GEngine->GetAssetsManager()->GetPlatformSlash();
 		const std::string SharedBeginningFiles = SharedBeginning + AssetName;
@@ -38,7 +38,7 @@ void FMapAsset::LoadMap()
 		{
 			const std::string Path = SharedBeginning + AssetDirectoryName;
 
-			if (FFilesystem::DirectoryExists(Path))
+			if (FFileSystem::Directory::Exists(Path))
 			{
 				MapAssetsDirPath = Path;
 
@@ -47,15 +47,15 @@ void FMapAsset::LoadMap()
 		}
 
 		// Ensure all required files exists
-		if (	FFilesystem::FileExists(MapNameFilePath) 
-			&&	FFilesystem::FileExists(MapDataFilePath) 
-			&&	FFilesystem::DirectoryExists(MapAssetsDirPath))
+		if (	FFileSystem::File::Exists(MapNameFilePath) 
+			&&	FFileSystem::File::Exists(MapDataFilePath) 
+			&&	FFileSystem::Directory::Exists(MapAssetsDirPath))
 		{
 			LOG_INFO("Loading map: " << AssetName);
 
-			CArray<std::string> MapAssetFiles = FFilesystem::GetFilesFromDirectory(MapAssetsDirPath);
+			CArray<std::string> MapAssetFiles = FFileSystem::GetFilesFromDirectory(MapAssetsDirPath);
 
-			FParser Parser({ ',' });
+			FParser Parser = CreateMapFilesParser();
 
 			FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 
@@ -65,7 +65,7 @@ void FMapAsset::LoadMap()
 			std::ifstream MapDataFilePathStream(MapDataFilePath);
 			for (std::string Line; getline(MapDataFilePathStream, Line); )
 			{
-				CArray<std::string> StringArray = Parser.ParseLineIntoStrings(Line);
+				CArray<std::string> StringArray = Parser.SimpleParseLineIntoStrings(Line);
 				if (StringArray.Size() == 3)
 				{
 					FMapSubAssetSettings MapSubAssetSettings;
@@ -76,7 +76,7 @@ void FMapAsset::LoadMap()
 
 					std::string SubAssetName = AssetName + SubAsset;
 
-					char* Slash = AssetsManager->GetPlatformSlash();
+					char Slash = AssetsManager->GetPlatformSlash();
 					std::string SubAssetAbsolutePath = MapAssetsDirPath + Slash + SubAsset;
 
 					std::shared_ptr<FTextureAsset> Asset = AssetsManager->CreateAssetFromAbsolutePath<FTextureAsset>(SubAssetName, SubAssetAbsolutePath);
@@ -95,7 +95,7 @@ void FMapAsset::LoadMap()
 			std::ifstream MapNameFilePathStream(MapNameFilePath);
 			for (std::string Line; getline(MapNameFilePathStream, Line); )
 			{
-				CArray<std::string> ParsedArray = Parser.ParseLineIntoStrings(Line);
+				CArray<std::string> ParsedArray = Parser.SimpleParseLineIntoStrings(Line);
 
 				FMapRow MapRow;
 
@@ -135,7 +135,7 @@ void FMapAsset::LoadMap()
 	}
 }
 
-void FMapAsset::UnLoadMap()
+void FMapAsset::ClearMapData()
 {
 	MapNameFilePath.clear();
 	MapDataFilePath.clear();
@@ -144,6 +144,17 @@ void FMapAsset::UnLoadMap()
 	MapSubAssetSettingsArray.Clear();
 
 	bIsLoaded = false;
+}
+
+void FMapAsset::SaveMapData()
+{
+	// Create directory for map assets if it does not exist
+	if (!FFileSystem::Directory::Exists(AssetPath))
+	{
+		FFileSystem::Directory::Create(AssetPath);
+	}
+
+
 }
 
 bool FMapAsset::IsLoaded() const
@@ -194,4 +205,9 @@ void FMapAsset::Draw()
 			}
 		}
 	}
+}
+
+FParser FMapAsset::CreateMapFilesParser()
+{
+	return FParser({ ',' });
 }
