@@ -241,7 +241,12 @@ void FTextWidget::RedrawText()
 			else
 			{
 				// If size not changed update old texture
-				SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
+				int bWasUpdateTextureSuccess = SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
+
+				if (bWasUpdateTextureSuccess != 0)
+				{
+					LOG_ERROR("SDL_UpdateTexture error: " << SDL_GetError());
+				}
 			}
 
 			SDL_UnlockSurface(SdlSurface);
