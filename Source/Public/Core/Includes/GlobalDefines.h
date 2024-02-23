@@ -10,7 +10,7 @@
 
 
 /** Should show memory allocation debug? */
-#define ENGINE_MEMORY_ALLOCATION_DEBUG			1
+#define ENGINE_MEMORY_ALLOCATION_DEBUG			0
 
 /** Should show widgets allocation debug? */
 #define ENGINE_MEMORY_ALLOCATION_DEBUG_WIDGETS	1 && ENGINE_MEMORY_ALLOCATION_DEBUG
