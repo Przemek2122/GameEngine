@@ -11,6 +11,16 @@ IWidgetManagementInterface::IWidgetManagementInterface()
 IWidgetManagementInterface::~IWidgetManagementInterface()
 {
 	ClearChildren();
+
+	if (!ManagedWidgets.IsEmpty() || !ManagedWidgetsMap.IsEmpty())
+	{
+		LOG_ERROR("Not all child widgets were destroyed");
+	}
+
+	if (OnWidgetOrderChanged.IsBound())
+	{
+		LOG_ERROR("Found bound widgets when they should be not bound");
+	}
 }
 
 void IWidgetManagementInterface::TickWidgets()
@@ -61,32 +71,35 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 	return false;
 }
 
-bool IWidgetManagementInterface::DestroyWidget(FWidget* Widget)
+bool IWidgetManagementInterface::DestroyChildWidget(FWidget* Widget)
 {
 	if (ENSURE_VALID(Widget != nullptr))
 	{
-		Widget->DestroyWidget();
-
-		OnChildWidgetDestroyed(Widget);
-
-		return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName()));
-	}
-	
-	return false;
-}
-
-bool IWidgetManagementInterface::DestroyWidget(const std::string& InWidgetName)
-{
-	if (ManagedWidgetsMap.ContainsKey(InWidgetName))
-	{
-		FWidget* Widget = GetWidgetByName(InWidgetName);
-		if (ENSURE_VALID(Widget != nullptr))
+		if (Widget->GetParent() == this)
 		{
 			Widget->DestroyWidget();
 
 			OnChildWidgetDestroyed(Widget);
 
-			return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(InWidgetName));		
+			return (ManagedWidgets.Remove(Widget) && ManagedWidgetsMap.Remove(Widget->GetName()));
+		}
+		else
+		{
+			LOG_ERROR("Tried destroy child when calling on wrong parent");
+		}
+	}
+	
+	return false;
+}
+
+bool IWidgetManagementInterface::DestroyChildWidgetByName(const std::string& InWidgetName)
+{
+	if (ManagedWidgetsMap.ContainsKey(InWidgetName))
+	{
+		FWidget* Widget = GetWidgetByName(InWidgetName);
+		if (Widget != nullptr)
+		{
+			return DestroyChildWidget(Widget);
 		}
 	}
 

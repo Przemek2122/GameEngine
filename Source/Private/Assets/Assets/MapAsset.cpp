@@ -6,6 +6,12 @@
 #include "Assets/Parser.h"
 #include "Renderer/Map/MapManager.h"
 
+void FMapData::Clear()
+{
+	MapArray.Clear();
+	MapSubAssetSettingsArray.Clear();
+}
+
 FMapAsset::FMapAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
 	, bIsLoaded(false)
@@ -63,8 +69,7 @@ void FMapAsset::ClearMapData()
 	MapAssetsDirPath.clear();
 	MapLines.Clear();
 
-	MapData.MapArray.Clear();
-	MapData.MapSubAssetSettingsArray.Clear();
+	MapData.Clear();
 
 	bIsLoaded = false;
 }

@@ -18,6 +18,11 @@ void FMap::Initialize()
 	ReadAsset();
 }
 
+void FMap::DeInitialize()
+{
+	ClearData();
+}
+
 void FMap::Draw()
 {
 	if (bIsActive)
@@ -72,6 +77,8 @@ void FMap::Load()
 
 void FMap::ClearData()
 {
+	MapData.Clear();
+
 	MapAsset->ClearMapData();
 
 	bIsActive = true;

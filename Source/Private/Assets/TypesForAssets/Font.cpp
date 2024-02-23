@@ -11,11 +11,19 @@ FFont::FFont(FFontAsset* InFontAsset, const int InFontSize)
 	, FontSize(InFontSize)
 {
 	FFont::InitializeFont();
+
+#if ENGINE_MEMORY_ALLOCATION_DEBUG_FONTS
+	LOG_INFO("Created font: " << FontAsset << "@" << FontSize);
+#endif
 }
 
 FFont::~FFont()
 {
 	FFont::DeInitializeFont();
+
+#if ENGINE_MEMORY_ALLOCATION_DEBUG_FONTS
+	LOG_INFO("Destroyed font: " << FontAsset << "@" << FontSize);
+#endif
 }
 
 TTF_Font* FFont::GetFont() const
@@ -32,7 +40,6 @@ void FFont::Reinitialize()
 {
 	Font = nullptr;
 }
-
 std::string FFont::GetFontAssetName() const
 {
 	return FontAsset->GetAssetName();
@@ -40,11 +47,18 @@ std::string FFont::GetFontAssetName() const
 
 void FFont::InitializeFont()
 {
-	Font = TTF_OpenFont(FontAsset->GetAssetPath().c_str(), FontSize);
-
-	if(Font == nullptr) 
+	if (FFileSystem::File::Exists(FontAsset->GetAssetPath()))
 	{
-	    LOG_ERROR("TTF_OpenFont: %s\n" << TTF_GetError());
+		Font = TTF_OpenFont(FontAsset->GetAssetPath().c_str(), FontSize);
+
+		if (Font == nullptr)
+		{
+			LOG_ERROR("TTF_OpenFont: %s\n" << TTF_GetError());
+		}
+	}
+	else
+	{
+		LOG_ERROR("Font file does not exist: " << FontAsset->GetAssetPath());
 	}
 }
 

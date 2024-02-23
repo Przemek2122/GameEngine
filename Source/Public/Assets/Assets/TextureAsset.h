@@ -13,7 +13,7 @@ class FTextureAsset : public FAssetBase
 {
 public:
 	FTextureAsset(const std::string& InAssetName, const std::string& InAssetPath);
-	~FTextureAsset();
+	~FTextureAsset() override;
 
 	void PrepareTexture(SDL_Renderer* InRenderer);
 	FTexture* GetTexture() const;

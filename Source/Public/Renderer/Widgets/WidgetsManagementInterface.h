@@ -79,15 +79,16 @@ public:
 	}
 
 	/** Best to call Destroy widget. @returns true on success. */
-	bool DestroyWidget(FWidget* Widget);
+	bool DestroyChildWidget(FWidget* Widget);
 	/** Slower overload which destroys by name. @returns true on success. */
-	bool DestroyWidget(const std::string& InWidgetName);
+	bool DestroyChildWidgetByName(const std::string& InWidgetName);
 
 	/**
 	 * Deletes all children immediate, call last if this is in some binding.
 	 * Using widget after this call is forbidden and may result in a crash
 	 */
 	void ClearChildren();
+
 	/** @returns number of children managed by this object */
 	int GetChildrenCount() const;
 

@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 #include "Test/TestManager.h"
 
 #include "Test/TestDelegate.h"
@@ -30,7 +30,9 @@ FEngine::FEngine()
 	, EngineRender(nullptr)
 	, EventHandler(nullptr)
 	, AssetsManager(nullptr)
+#if ENGINE_TESTS_ALLOW_ANY
 	, TestManager(nullptr)
+#endif
 {
 	FUtil::LogInit();
 }
@@ -117,11 +119,11 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineRender = CreateEngineRenderer();
 	EventHandler = CreateEventHandler();
 	AssetsManager = CreateAssetsManager();
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
 #endif
 
-#if ENGINE_TESTS && ENGINE_RUN_ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY && ENGINE_TESTS_RUN
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
@@ -217,7 +219,10 @@ void FEngine::Clean()
 	delete EngineRender;
 	delete EventHandler;
 	delete AssetsManager;
+
+#if ENGINE_TESTS_ALLOW_ANY
 	delete TestManager;
+#endif
 }
 
 bool FEngine::IsEngineInitialized() const
@@ -318,6 +323,11 @@ void FEngine::AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function)
 	FunctionsToCallOnStartOfNextTick.BindLambda(Function);
 }
 
+FDelegate<void>& FEngine::GetFunctionsToCallOnStartOfNextTick()
+{
+	return FunctionsToCallOnStartOfNextTick;
+}
+
 FEventHandler* FEngine::GetEventHandler() const
 {
 #if _DEBUG
@@ -352,7 +362,7 @@ FAssetsManager* FEngine::CreateAssetsManager() const
 	return new FAssetsManager;
 }
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 FTestManager* FEngine::CreateTestManager() const
 {
 	return new FTestManager;

@@ -142,12 +142,8 @@ protected:
 public:
 	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
 	void AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function);
-	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
-	template<typename TAutoClass>
-	void AddObjectToCallOnStartOfNextTick(FFunctorObject<TAutoClass, void>& Function)
-	{
-		FunctionsToCallOnStartOfNextTick.BindObject(Function);
-	}
+
+	FDelegate<>& GetFunctionsToCallOnStartOfNextTick();
 
 	_NODISCARD FEventHandler* GetEventHandler() const;
 
@@ -182,7 +178,7 @@ protected:
 	FDelegate<> FunctionsToCallOnStartOfNextTick;
 	FDelegate<void, float> TickingObjectsDelegate;
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;
 	
 	class FTestManager* TestManager;

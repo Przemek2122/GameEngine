@@ -18,7 +18,6 @@ public:
 
 	void Reinitialize();
 
-	_NODISCARD std::string GetFontName() const;
 	_NODISCARD std::string GetFontAssetName() const;
 	
 protected:

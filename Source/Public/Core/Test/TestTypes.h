@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "TestCase.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 class FTestTypes : public FTestCase
 {

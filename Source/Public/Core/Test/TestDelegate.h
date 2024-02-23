@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 #include "Test/TestCase.h"
 

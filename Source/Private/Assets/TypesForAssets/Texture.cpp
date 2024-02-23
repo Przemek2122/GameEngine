@@ -17,11 +17,22 @@ FTexture::FTexture(const std::string& InTexturePath, SDL_Renderer* Renderer)
 
 		SDL_FreeSurface(TemporarySurface);
 	}
+	else
+	{
+		LOG_ERROR("Can not load texture: " << InTexturePath << " ! (" << SDL_GetError() << ")");
+	}
 }
 
 FTexture::~FTexture()
 {
-	SDL_DestroyTexture(SDLTexture);
+	if (SDLTexture != nullptr)
+	{
+		SDL_DestroyTexture(SDLTexture);
+	}
+	else
+	{
+		LOG_WARN("Texture not destroyed (pointer invalid)!");
+	}
 }
 
 void FTexture::Draw(SDL_Renderer* Renderer, const SDL_Rect SourceRect, const SDL_Rect DestinationRect) const

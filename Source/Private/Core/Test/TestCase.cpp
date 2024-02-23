@@ -4,7 +4,7 @@
 #include "Test/TestCase.h"
 #include "Test/TestManager.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 FTestCase::FTestCase()
 	: bIsTestDone(false)

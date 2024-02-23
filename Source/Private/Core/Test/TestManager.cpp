@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Test/TestManager.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 FTestManager::FTestManager()
 {

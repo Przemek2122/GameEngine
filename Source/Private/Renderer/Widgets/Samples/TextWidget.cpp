@@ -33,7 +33,8 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 
 FTextWidget::~FTextWidget()
 {
-	SDL_free(TextTexture);
+	SDL_DestroyTexture(TextTexture);
+
 	delete SDLRect;
 }
 
@@ -191,7 +192,7 @@ void FTextWidget::RedrawText()
 
 		SDL_Surface* SdlSurface = nullptr;
 		TTF_Font* Font = FontAsset->GetFont(TextSize)->GetFont();
-		if (ENSURE_VALID(Font != nullptr))
+		if (Font != nullptr)
 		{
 			switch (TextRenderMode)
 			{
@@ -215,8 +216,12 @@ void FTextWidget::RedrawText()
 				}
 			}
 		}
+		else
+		{
+			LOG_ERROR("Font is NULL");
+		}
 
-		if (ENSURE_VALID(SdlSurface != nullptr))
+		if (SdlSurface != nullptr)
 		{
 			SDL_LockSurface(SdlSurface); // Lock surface for safe pixel access
 
@@ -226,7 +231,7 @@ void FTextWidget::RedrawText()
 			if (TextTexture == nullptr || (WidgetSize.X != LastTextTextureSize.X || WidgetSize.Y != LastTextTextureSize.Y))
 			{
 				// Destroy old texture
-				SDL_free(TextTexture);
+				SDL_DestroyTexture(TextTexture);
 
 				// Create new texture
 				TextTexture = SDL_CreateTextureFromSurface(GetRenderer()->GetSDLRenderer(), SdlSurface);
@@ -239,7 +244,9 @@ void FTextWidget::RedrawText()
 				SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
 			}
 
+			SDL_UnlockSurface(SdlSurface);
 			SDL_FreeSurface(SdlSurface);
+
 			SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
 
 			AutoAdjustSize();

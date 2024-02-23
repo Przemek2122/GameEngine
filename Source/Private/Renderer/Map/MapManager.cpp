@@ -13,6 +13,10 @@ FMapManager::FMapManager(FWindow* InWindow)
 
 FMapManager::~FMapManager()
 {
+	if (CurrentMap != nullptr)
+	{
+		delete CurrentMap;
+	}
 }
 
 void FMapManager::DrawMap()
@@ -36,14 +40,13 @@ FMapAsset* FMapManager::LoadMap(const std::string& Name)
 				MapAsset->SetMapManager(this);
 
 				MapAsset->LoadMap();
-
-				return MapAsset;
 			}
+
+			return MapAsset;
 		}
 		else
 		{
-			// Missing asset
-			ENSURE_VALID(false);
+			LOG_ERROR("Map not found: " + Name);
 		}
 	}
 
@@ -82,6 +85,14 @@ void FMapManager::UnLoadMap(FMapAsset* MapAsset)
 		{
 			MapAsset->ClearMapData();
 		}
+	}
+}
+
+void FMapManager::UnloadAllMaps()
+{
+	for (FMapAsset* MapAsset : MapAssets)
+	{
+		UnLoadMap(MapAsset);
 	}
 }
 
@@ -136,6 +147,8 @@ void FMapManager::DeactivateCurrentMap()
 {
 	if (CurrentMap != nullptr)
 	{
+		CurrentMap->DeInitialize();
+
 		delete CurrentMap;
 
 		CurrentMap = nullptr;

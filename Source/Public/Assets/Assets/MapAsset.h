@@ -59,6 +59,8 @@ struct FMapData
 	{
 	}
 
+	void Clear();
+
 	/** Array with tile locations as ints */
 	CArray<FMapRow> MapArray;
 

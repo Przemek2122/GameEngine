@@ -15,6 +15,7 @@ public:
 	virtual ~FMap() = default;
 
 	void Initialize();
+	void DeInitialize();
 
 	/** Function used for drawing a map */
 	virtual void Draw();
@@ -31,11 +32,11 @@ public:
 	/** Write data from this class into asset into MapAsset memory */
 	virtual void WriteAsset();
 
-	FMapAsset* GetMapAsset() const { return MapAsset.Get(); }
+	FMapAsset* GetMapAsset() const { return MapAsset; }
 
 protected:
 	/** Map asset */
-	FAutoDeletePointer<FMapAsset> MapAsset;
+	FMapAsset* MapAsset;
 
 	/** Pointer to owner */
 	FMapManager* MapManager;

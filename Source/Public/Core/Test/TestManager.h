@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "TestCase.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 /**
  * GEngine class used to check if things work properly.

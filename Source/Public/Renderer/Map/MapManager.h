@@ -27,6 +27,8 @@ public:
 	/** UnLoad map asset (destroy asset data) */
 	virtual void UnLoadMap(FMapAsset* MapAsset);
 
+	virtual void UnloadAllMaps();
+
 	/** Iterate over all maps to find this with given name. Inefficient. */
 	FMapAsset* GetMapByName(const std::string& Name);
 

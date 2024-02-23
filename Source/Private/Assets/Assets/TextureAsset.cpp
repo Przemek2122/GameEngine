@@ -8,11 +8,14 @@ FTextureAsset::FTextureAsset(const std::string& InAssetName, const std::string& 
 	: FAssetBase(InAssetName, InAssetPath)
 	, Texture(nullptr)
 {
+	LOG_INFO("Texture created " << AssetName);
 }
 
 FTextureAsset::~FTextureAsset()
 {
 	delete Texture;
+
+	LOG_INFO("Texture destroyed " << AssetName);
 }
 
 void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
