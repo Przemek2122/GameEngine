@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+class FMap;
 class FMapAsset;
 
 /**
@@ -18,16 +19,33 @@ public:
 
 	virtual void DrawMap();
 
-	virtual void LoadMap(const std::string& Name);
+	/** Load map asset */
+	virtual FMapAsset* LoadMap(const std::string& Name);
+
+	/** UnLoad map asset (destroy asset data) */
 	virtual void UnLoadMap(const std::string& Name);
+	/** UnLoad map asset (destroy asset data) */
+	virtual void UnLoadMap(FMapAsset* MapAsset);
+
+	virtual void UnloadAllMaps();
+
+	/** Iterate over all maps to find this with given name. Inefficient. */
+	FMapAsset* GetMapByName(const std::string& Name);
+
+	/** Sets map active in game. */
+	void SetActiveMap(FMapAsset* MapAsset);
+	/** Deactivates map */
+	void DeactivateCurrentMap();
 
 	virtual void CacheAvailableMaps();
 	virtual CArray<std::string> GetAvailableMaps() const;
 
 	FWindow* GetWindow() const { return Window; };
 
+	bool IsMapAssetCurrentlyUsed(const FMapAsset* MapAsset);
+
 protected:
-	FMapAsset* CurrentMapAsset;
+	FMap* CurrentMap;
 	CArray<std::string> AvailableMaps;
 	CArray<FMapAsset*> MapAssets;
 

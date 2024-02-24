@@ -3,15 +3,25 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
-void FMouseInputDelegateWrapper::Execute(const FVector2D<int>& Location)
+void FMouseInputDelegateWrapper::Execute(const FVector2D<int>& Location, const EInputState InputState)
 {
 	if (!bWasSentAlready)
 	{
-		bWasSentAlready = true;
-
 		AddToResetQueue();
 
-		Delegate.Execute(Location);
+		if (InputState == EInputState::PRESS && CurrentInputState == EInputState::NOT_PRESSED)
+		{
+			Delegate.Execute(Location, InputState);
+
+			CurrentInputState = EInputState::PRESS;
+		}
+		else if (InputState == EInputState::RELEASE
+			&& (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
+		{
+			Delegate.Execute(Location, InputState);
+
+			bWasSentAlready = true;
+		}
 	}
 }
 
@@ -23,44 +33,56 @@ void FMouseInputDelegateWrapper::AddToResetQueue()
 void FMouseInputDelegateWrapper::Reset()
 {
 	bWasSentAlready = false;
+
+	CurrentInputState = EInputState::NOT_PRESSED;
+}
+
+void FInputDelegateWrapper::Execute(const EInputState InputState)
+{
+	if (!bWasSentAlready)
+	{
+		AddToResetQueue();
+
+		if (EInputState::PRESS == InputState && CurrentInputState == EInputState::NOT_PRESSED)
+		{
+			Delegate.Execute(InputState);
+
+			CurrentInputState = EInputState::PRESS;
+		}
+		else if (EInputState::RELEASE == InputState 
+			&& (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
+		{
+			Delegate.Execute(InputState);
+
+			bWasSentAlready = true;
+		}
+	}
+}
+
+void FInputDelegateWrapper::Reset()
+{
+	bWasSentAlready = false;
+
+	CurrentInputState = EInputState::NOT_PRESSED;
+}
+
+void FInputDelegateWrapper::AddToResetQueue()
+{
+	EventHandler->AddKeyboardInputDelegateToReset(this);
 }
 
 FEventHandler::FEventHandler(const SDL_Event& InEvent)
 	: Event(InEvent)
-	, MouseMoveDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
-	, MouseLeftButtonPressDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
-	, MouseLeftButtonReleaseDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
-	, MouseRightButtonPressDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
-	, MouseRightButtonReleaseDelegate(FAutoDeletePointer<FMouseInputDelegateWrapper>(this))
 	, bQuitInputDetected(false)
 {
-	AddPrimaryInput("M_LMB_P");	// MOUSE- Left mouse button pressed
-	AddPrimaryInput("M_RMB_P");	// MOUSE- Right mouse button pressed
-	AddPrimaryInput("M_MID_P");	// MOUSE- Middle mouse button pressed
-	
-	AddPrimaryInput("M_LMB_R");	// MOUSE- Left mouse button released
-	AddPrimaryInput("M_RMB_R");	// MOUSE- Right mouse button released
-	AddPrimaryInput("M_MID_R");	// MOUSE- Middle mouse button released
-	
-	AddPrimaryInput("K_A");		// KEYBOARD - A
-	AddPrimaryInput("K_B");		// KEYBOARD - B
-	AddPrimaryInput("K_C");		// KEYBOARD - C
-	AddPrimaryInput("K_D");		// KEYBOARD - D
-	
-	AddPrimaryInput("K_1");		// KEYBOARD - Number - 1
-	AddPrimaryInput("K_2");		// KEYBOARD - Number - 2
-	AddPrimaryInput("K_3");		// KEYBOARD - Number - 3
-	AddPrimaryInput("K_4");		// KEYBOARD - Number - 4
-	AddPrimaryInput("K_5");		// KEYBOARD - Number - 5
-	AddPrimaryInput("K_6");		// KEYBOARD - Number - 6
-	AddPrimaryInput("K_7");		// KEYBOARD - Number - 7
-	AddPrimaryInput("K_8");		// KEYBOARD - Number - 8
-	AddPrimaryInput("K_9");		// KEYBOARD - Number - 9
-	AddPrimaryInput("K_0");		// KEYBOARD - Number - 0
+	SetMouseDelegates();
+	SetKeyBoardDelegates();
 }
 
 FEventHandler::~FEventHandler()
 {
+	MouseInputDelegateResetQueue.Clear();
+	KeyboardInputDelegateResetQueue.Clear();
 }
 
 void FEventHandler::HandleEvents()
@@ -71,332 +93,27 @@ void FEventHandler::HandleEvents()
 	
 	while (SDL_PollEvent(&Event)) 
 	{
-		const auto EventType = Event.type;
+		const Uint32 EventType = Event.type;
 		
-		switch (EventType)
-		{
-			/** User requested quit */
-			case SDL_QUIT:
-			{
-				bQuitInputDetected = true;
-							
-				LOG_DEBUG("Quit input.");
-
-				break;
-			}
-
-			/** Window events */
-			case SDL_WINDOWEVENT:
-			{
-				switch (Event.window.event)
-				{
-			        case SDL_WINDOWEVENT_SHOWN:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " shown");
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_HIDDEN:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " hidden");
-						GEngine->GetEngineRender()->OnWindowHidden(Event.window.windowID);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_EXPOSED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " exposed");
-						GEngine->GetEngineRender()->OnWindowExposed(Event.window.windowID);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_MOVED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " moved to: " << Event.window.data1 << " " << Event.window.data2);
-						GEngine->GetEngineRender()->OnWindowMoved(Event.window.windowID, Event.window.data1, Event.window.data2);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_RESIZED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " resized to: " << Event.window.data1 << " " << Event.window.data2);
-						GEngine->GetEngineRender()->OnWindowResized(Event.window.windowID, Event.window.data1, Event.window.data2);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_SIZE_CHANGED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " size changed to: " << Event.window.data1 << " " << Event.window.data2);
-						GEngine->GetEngineRender()->OnWindowSizeChanged(Event.window.windowID, Event.window.data1, Event.window.data2);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_MINIMIZED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " minimized.");
-						GEngine->GetEngineRender()->OnWindowMinimized(Event.window.windowID);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_MAXIMIZED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " maximized.");
-						GEngine->GetEngineRender()->OnWindowMaximized(Event.window.windowID);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_RESTORED:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " restored.");
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_ENTER:
-					{
-						LOG_DEBUG("Window " << Event.window.windowID << " mouse entered.");
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_LEAVE:
-					{
-			            SDL_Log("Mouse left window %d", Event.window.windowID);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_FOCUS_GAINED:
-					{
-			            SDL_Log("Window %d gained keyboard focus", Event.window.windowID);
-						GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_FOCUS_LOST:
-					{
-			        	LOG_DEBUG("Window " << Event.window.windowID << " lost keyboard focus");
-						GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_CLOSE:
-					{
-			        	LOG_DEBUG("Window " << Event.window.windowID << " closed");
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_TAKE_FOCUS:
-					{
-			        	LOG_DEBUG("Window " << Event.window.windowID << " is offered a focus");
-			            break;
-					}
-					
-			        case SDL_WINDOWEVENT_HIT_TEST:
-					{
-			        	LOG_DEBUG("Window " << Event.window.windowID << " has a special hit test " );
-			            break;
-					}
-					
-			        default:
-					{
-			        	LOG_DEBUG("Window " << Event.window.windowID << " got unknown event" << Event.window.event);
-					}
-				}
-
-				break;
-			}
-			
-			/** Keyboard */
-			case SDL_KEYDOWN:
-			{
-				switch (Event.key.keysym.sym)
-				{
-					case SDLK_ESCAPE:
-					{
-						LOG_DEBUG("Quit input.");
-						
-						break;
-					}
-					
-					case SDLK_1:
-					{
-						PrimaryInputMap["K_1"] = true;
-
-						break;
-					}
-					case SDLK_2:
-					{
-						PrimaryInputMap["K_2"] = true;
-
-						break;
-					}
-					case SDLK_3:
-					{
-						PrimaryInputMap["K_3"] = true;
-
-						break;
-					}
-					case SDLK_4:
-					{
-						PrimaryInputMap["K_4"] = true;
-
-						break;
-					}
-					case SDLK_5:
-					{
-						PrimaryInputMap["K_5"] = true;
-
-						break;
-					}
-					case SDLK_6:
-					{
-						PrimaryInputMap["K_6"] = true;
-
-						break;
-					}
-					case SDLK_7:
-					{
-						PrimaryInputMap["K_7"] = true;
-
-						break;
-					}
-					case SDLK_8:
-					{
-						PrimaryInputMap["K_8"] = true;
-
-						break;
-					}
-					case SDLK_9:
-					{
-						PrimaryInputMap["K_9"] = true;
-
-						break;
-					}
-					case SDLK_0:
-					{
-						PrimaryInputMap["K_0"] = true;
-
-						break;
-					}
-					
-					default:
-					{
-						LOG_DEBUG("Unknown keyboard input found.");
-					}
-				}
-
-				break;
-			}
-			
-			/** Mouse movement X & Y */
-			case SDL_MOUSEMOTION:
-			{
-				if (MouseLocationLast != MouseLocationCurrent)
-				{
-					MouseLocationLast = MouseLocationCurrent;
-
-					MouseMoveDelegate->Execute(MouseLocationCurrent);
-				}
-
-				MouseLocationCurrent.X = Event.motion.x;
-				MouseLocationCurrent.Y = Event.motion.y;
-						
-				break;
-			}
-
-			/** Mouse buttons */
-			case SDL_MOUSEBUTTONDOWN:
-			{
-				switch (Event.button.button)
-				{
-					case SDL_BUTTON_LEFT:
-					{
-						PrimaryInputMap["M_LMB_P"] = true;
-
-						MouseLeftButtonPressDelegate->Execute(MouseLocationCurrent);
-
-						break;
-					}
-
-					case SDL_BUTTON_RIGHT:
-					{
-						PrimaryInputMap["M_RMB_P"] = true;
-
-						MouseRightButtonPressDelegate->Execute(MouseLocationCurrent);
-						
-						break;
-					}
-
-					case SDL_BUTTON_MIDDLE:
-					{
-						PrimaryInputMap["M_MID_P"] = true;
-							
-						break;
-					}
-						
-					default:
-					{
-						LOG_DEBUG("Unknown mouse input found.");
-					}
-				}
-
-				break;
-			}
-			
-			case SDL_MOUSEBUTTONUP:
-			{
-				switch (Event.button.button)
-				{
-					case SDL_BUTTON_LEFT:
-					{
-						PrimaryInputMap["M_LMB_R"] = true;
-
-						MouseLeftButtonReleaseDelegate->Execute(MouseLocationCurrent);
-							
-						break;
-					}
-
-					case SDL_BUTTON_RIGHT:
-					{
-						PrimaryInputMap["M_RMB_R"] = true;
-
-						MouseRightButtonReleaseDelegate->Execute(MouseLocationCurrent);
-							
-						break;
-					}
-
-					case SDL_BUTTON_MIDDLE:
-					{
-						PrimaryInputMap["M_MID_R"] = true;
-							
-						break;
-					}
-						
-					default:
-					{
-						LOG_DEBUG("Unknown mouse input found.");
-					}
-				}
-
-				break;
-			}
-
-			default:
-			{
-				LOG_DEBUG("Unknown input found. Input: " << Event.type);
-			}
-		}
+		SwitchOnInput(EventType);
 	}
 }
 
 void FEventHandler::ResetAll()
 {
-	PrimaryInputMap.SetAll(false);
-
 	for (FMouseInputDelegateWrapper* InputDelegate : MouseInputDelegateResetQueue)
 	{
 		InputDelegate->Reset();
 	}
 
 	MouseInputDelegateResetQueue.Clear();
+
+	for (FInputDelegateWrapper* InputDelegate : KeyboardInputDelegateResetQueue)
+	{
+		InputDelegate->Reset();
+	}
+
+	KeyboardInputDelegateResetQueue.Clear();
 }
 
 bool FEventHandler::HasMouseMoved() const
@@ -414,92 +131,382 @@ FVector2D<int> FEventHandler::GetMouseLocationLast() const
 	return MouseLocationLast;
 }
 
-bool FEventHandler::HasPrimaryInput(const std::string& InputName)
-{
-	return PrimaryInputMap.HasKey(InputName);
-}
-
-auto FEventHandler::GetPrimaryInput(const std::string& InputName) -> bool
-{
-	return PrimaryInputMap[InputName];
-}
-
 void FEventHandler::AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* MouseInputDelegateWrapper)
 {
 	MouseInputDelegateResetQueue.Push(MouseInputDelegateWrapper);
 }
 
-void FEventHandler::AddPrimaryInput(const std::string& InPrimaryName)
+void FEventHandler::AddKeyboardInputDelegateToReset(FInputDelegateWrapper* KeyboardInputDelegateWrapper)
 {
-	PrimaryInputMap.Emplace(InPrimaryName, false);
+	KeyboardInputDelegateResetQueue.Push(KeyboardInputDelegateWrapper);
 }
 
-void FEventHandler::RemovePrimaryInput(const std::string& InPrimaryName)
+void FEventHandler::SetMouseDelegates()
 {
-	if (PrimaryInputMap.Remove(InPrimaryName))
+	MouseDelegates.MouseMoveDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+
+	MouseDelegates.MouseLeftButtonDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+
+	MouseDelegates.MouseRightButtonDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+
+	MouseDelegates.MouseMiddleButtonDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+}
+
+void FEventHandler::SetKeyBoardDelegates()
+{
+	KeyBoardDelegates.EscapeDelegate = FAutoDeletePointer<FInputDelegateWrapper>(this);
+}
+
+void FEventHandler::SwitchOnInput(const Uint32 EventType)
+{
+	switch (EventType)
 	{
-#ifdef _DEBUG
-		ENSURE_VALID(false);
-#endif
-	}
-}
-
-void FEventHandler::RemoveSecondaryInput(const std::string& InSecondaryName)
-{
-	const bool bIsRemoved = SecondaryInputMap.Remove(InSecondaryName);
-
-#ifdef _DEBUG
-	ENSURE_VALID(bIsRemoved);
-#endif
-}
-
-void FEventHandler::SetSecondaryInput(const std::string& InSecondaryName, const std::string& InPrimaryName)
-{
-	if (PrimaryInputMap.ContainsKey(InPrimaryName))
-	{
-		if (SecondaryInputMap.ContainsValue(InSecondaryName))
+		/** User requested quit */
+		case SDL_QUIT:
 		{
-			SecondaryInputMap.Remove(InSecondaryName);
+			bQuitInputDetected = true;
+
+			LOG_DEBUG("Quit input.");
+
+			break;
 		}
-		
-		SecondaryInputMap.InsertOrAssign(InSecondaryName, InPrimaryName);
+
+		/** Window events */
+		case SDL_WINDOWEVENT:
+		{
+			InputWindowEvent();
+
+			break;
+		}
+
+		/** Keyboard */
+		case SDL_KEYDOWN:
+		{
+			InputKeyDown();
+
+			break;
+		}
+
+		case SDL_KEYUP:
+		{
+			InputKeyUp();
+
+			break;
+		}
+
+		/** Mouse movement X & Y */
+		case SDL_MOUSEMOTION:
+		{
+			MouseMotion();
+
+			break;
+		}
+
+		/** Mouse buttons down */
+		case SDL_MOUSEBUTTONDOWN:
+		{
+			InputMouseDown();
+
+			break;
+		}
+
+		/** Mouse buttons release */
+		case SDL_MOUSEBUTTONUP:
+		{
+			InputMouseUp();
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown input found. Input: " << Event.type);
+		}
 	}
-#ifdef _DEBUG
+}
+
+void FEventHandler::InputKeyUp()
+{
+	if (Event.key.keysym.sym == SDLK_ESCAPE)
+	{
+		KeyBoardDelegates.EscapeDelegate->Execute(EInputState::RELEASE);
+	}
 	else
 	{
-		ENSURE_VALID(false);
+		LOG_DEBUG("Unknown keyboard input found.");
 	}
-#endif
 }
 
-bool FEventHandler::HasSecondaryInput(const std::string& InputName)
+void FEventHandler::MouseMotion()
 {
-	if (SecondaryInputMap.ContainsKey(InputName))
+	if (MouseLocationLast != MouseLocationCurrent)
 	{
-		if (PrimaryInputMap.ContainsKey(SecondaryInputMap.FindValueByKey(InputName)))
-		{
-			return true;
-		}
+		MouseLocationLast = MouseLocationCurrent;
+
+		MouseDelegates.MouseMoveDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
 	}
 
-	return false;
+	MouseLocationCurrent.X = Event.motion.x;
+	MouseLocationCurrent.Y = Event.motion.y;
 }
 
-bool FEventHandler::GetSecondaryInput(const std::string& InputName)
+void FEventHandler::InputWindowEvent()
 {
-	if (SecondaryInputMap.ContainsKey(InputName))
+	switch (Event.window.event)
 	{
-		const std::string SecondaryValue = SecondaryInputMap.FindValueByKey(InputName);
-		
-		if (PrimaryInputMap.ContainsKey(SecondaryValue))
+		case SDL_WINDOWEVENT_SHOWN:
 		{
-			return PrimaryInputMap.FindValueByKey(SecondaryValue);
+			LOG_DEBUG("Window " << Event.window.windowID << " shown");
+			break;
+		}
+
+		case SDL_WINDOWEVENT_HIDDEN:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " hidden");
+			GEngine->GetEngineRender()->OnWindowHidden(Event.window.windowID);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_EXPOSED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " exposed");
+			GEngine->GetEngineRender()->OnWindowExposed(Event.window.windowID);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_MOVED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " moved to: " << Event.window.data1 << " " << Event.window.data2);
+			GEngine->GetEngineRender()->OnWindowMoved(Event.window.windowID, Event.window.data1, Event.window.data2);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_RESIZED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " resized to: " << Event.window.data1 << " " << Event.window.data2);
+			GEngine->GetEngineRender()->OnWindowResized(Event.window.windowID, Event.window.data1, Event.window.data2);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " size changed to: " << Event.window.data1 << " " << Event.window.data2);
+			GEngine->GetEngineRender()->OnWindowSizeChanged(Event.window.windowID, Event.window.data1, Event.window.data2);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_MINIMIZED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " minimized.");
+			GEngine->GetEngineRender()->OnWindowMinimized(Event.window.windowID);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_MAXIMIZED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " maximized.");
+			GEngine->GetEngineRender()->OnWindowMaximized(Event.window.windowID);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_RESTORED:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " restored.");
+			break;
+		}
+
+		case SDL_WINDOWEVENT_ENTER:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " mouse entered.");
+			break;
+		}
+
+		case SDL_WINDOWEVENT_LEAVE:
+		{
+			LOG_DEBUG("Mouse left window: " << Event.window.windowID);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_FOCUS_GAINED:
+		{
+			LOG_DEBUG("Window %d gained keyboard focus << " << Event.window.windowID);
+			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_FOCUS_LOST:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " lost keyboard focus");
+			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
+			break;
+		}
+
+		case SDL_WINDOWEVENT_CLOSE:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " closed");
+			break;
+		}
+
+		case SDL_WINDOWEVENT_TAKE_FOCUS:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " is offered a focus");
+			break;
+		}
+
+		case SDL_WINDOWEVENT_HIT_TEST:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " has a special hit test ");
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Window " << Event.window.windowID << " got unknown event" << Event.window.event);
 		}
 	}
+}
 
-	ENSURE_VALID(false);
+void FEventHandler::InputKeyDown()
+{
+	switch (Event.key.keysym.sym)
+	{
+		case SDLK_ESCAPE:
+		{
+			KeyBoardDelegates.EscapeDelegate->Execute(EInputState::PRESS);
 
-	return false;
+			break;
+		}
+
+		case SDLK_1:
+		{
+
+
+			break;
+		}
+		case SDLK_2:
+		{
+
+
+			break;
+		}
+		case SDLK_3:
+		{
+
+
+			break;
+		}
+		case SDLK_4:
+		{
+
+
+			break;
+		}
+		case SDLK_5:
+		{
+
+
+			break;
+		}
+		case SDLK_6:
+		{
+
+
+			break;
+		}
+		case SDLK_7:
+		{
+
+
+			break;
+		}
+		case SDLK_8:
+		{
+
+
+			break;
+		}
+		case SDLK_9:
+		{
+
+
+			break;
+		}
+		case SDLK_0:
+		{
+
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown keyboard input found.");
+		}
+	}
+}
+
+void FEventHandler::InputMouseDown()
+{
+	switch (Event.button.button)
+	{
+		case SDL_BUTTON_LEFT:
+		{
+			MouseDelegates.MouseLeftButtonDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
+
+			break;
+		}
+
+		case SDL_BUTTON_MIDDLE:
+		{
+			MouseDelegates.MouseMiddleButtonDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
+
+			break;
+		}
+
+		case SDL_BUTTON_RIGHT:
+		{
+			MouseDelegates.MouseRightButtonDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown mouse input found.");
+		}
+	}
+}
+
+void FEventHandler::InputMouseUp()
+{
+	switch (Event.button.button)
+	{
+		case SDL_BUTTON_LEFT:
+		{
+			MouseDelegates.MouseLeftButtonDelegate->Execute(MouseLocationCurrent, EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDL_BUTTON_MIDDLE:
+		{
+			MouseDelegates.MouseMiddleButtonDelegate->Execute(MouseLocationCurrent, EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDL_BUTTON_RIGHT:
+		{
+			MouseDelegates.MouseRightButtonDelegate->Execute(MouseLocationCurrent, EInputState::RELEASE);
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown mouse input found.");
+		}
+	}
 }
 
 bool FEventHandler::QuitInputDetected() const

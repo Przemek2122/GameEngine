@@ -4,7 +4,8 @@
 #include "CoreMinimal.h"
 
 /**
- * class managing other class pointer lifecycle
+ * Class managing other class pointer lifecycle
+ * @Note if you declare this class twice with the same pointer, it will crash.
  */
 template<typename TTypeToStore>
 class FAutoDeletePointer
@@ -77,7 +78,11 @@ public:
 	TTypeToStore* Get() const
 	{
 #if _DEBUG
-		// This pointer was moved to other and should not be used!
+		// This pointer was
+		// not initialized
+		// OR
+		// moved to other
+		// It is missing an object!
 		if (ENSURE_VALID(bHasAnyObject))
 		{
 			if (ENSURE_VALID(StoredObject != nullptr))

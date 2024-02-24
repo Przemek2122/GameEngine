@@ -3,14 +3,33 @@
 #include "CoreEngine.h"
 #include "Assets/Parser.h"
 
-FParser::FParser(const CArray<char>& InSeparatorCharArray, const CArray<char>& InIgnoredCharArray, const CArray<char>& InCommentCharArray)
+FParser::FParser(const CArray<char>& InSeparatorCharArray, const CArray<char>& InCommentCharArray, const CArray<char>& InIgnoredCharArray)
 	: SeparatorCharArray(InSeparatorCharArray)
-	, IgnoredCharArray(InIgnoredCharArray)
 	, CommentCharArray(InCommentCharArray)
+	, IgnoredCharArray(InIgnoredCharArray)
 {
+	if (SeparatorCharArray.Size() == 0)
+	{
+		// This is crucial
+		LOG_ERROR("FParser has no separator characters.");
+	}
+
+	if (CommentCharArray.Size() == 0)
+	{
+		// This is nice to have
+		LOG_INFO("FParser has no comment characters.");
+	}
+
+	if (IgnoredCharArray.Size() == 0)
+	{
+		// This is not crucial
+		LOG_INFO("FParser has no ignored characters.");
+	}
+
+	NewLineChar = FFileSystem::GetPlatformEndLine();
 }
 
-CArray<std::string> FParser::ParseLineIntoStrings(const std::string& Line)
+CArray<std::string> FParser::SimpleParseLineIntoStrings(const std::string& Line)
 {
 	CArray<std::string> ParsedStrings;
 
@@ -42,6 +61,202 @@ CArray<std::string> FParser::ParseLineIntoStrings(const std::string& Line)
 	}
 
 	return ParsedStrings;
+}
+
+std::string FParser::SimpleParseStringsIntoLine(const CArray<std::string>& Strings)
+{
+	std::string ParsedLine;
+
+	for (const std::string& String : Strings)
+	{
+		ParsedLine += String;
+	}
+
+	return ParsedLine;
+}
+
+CArray<FParserLine> FParser::ParseStringIntoLines(const std::string& Line)
+{
+	CArray<std::string> AllLines = SplitString(Line, { NewLineChar });
+
+	CArray<FParserLine> OutParsedLines;
+
+	for (std::string& SingleLine : AllLines)
+	{
+		FParserLine ParserLine;
+
+		std::string CurrentWord;
+
+		bool bIsComment = false;
+
+		for (const char& Char : SingleLine)
+		{
+			if (IsComment(Char))
+			{
+				bIsComment = true;
+			}
+
+			if (bIsComment)
+			{
+				CurrentWord += Char;
+			}
+			else
+			{
+				if (IsSeparator(Char))
+				{
+					ParserLine.Texts.Push(FParserText(CurrentWord, EParserTextType::Word));
+
+					CurrentWord.clear();
+				}
+
+				if (IsIgnored(Char))
+				{
+					ParserLine.Texts.Push(FParserText(std::to_string(Char), EParserTextType::Word));
+				}
+				else
+				{
+					CurrentWord += Char;
+				}
+			}
+		}
+
+		if (CurrentWord.length() > 0)
+		{
+			const EParserTextType Type = bIsComment ? EParserTextType::Comment : EParserTextType::Word;
+
+			ParserLine.Texts.Push(FParserText(CurrentWord, Type));
+		}
+
+		OutParsedLines.Push(ParserLine);
+	}
+
+	return OutParsedLines;
+}
+
+std::string FParser::ParseLinesIntoString(const CArray<FParserLine>& Lines)
+{
+	std::string Comment, Separator, Ignored;
+
+	SetDefaultParseProperties(Comment, Separator, Ignored);
+
+	std::string OutParsedString;
+
+	for (const FParserLine& ParserLine : Lines)
+	{
+		std::string CurrentLine;
+
+		for (const FParserText& FParserText : ParserLine.Texts)
+		{
+			std::string CurrentWord;
+
+			switch (FParserText.Type)
+			{
+				case EParserTextType::Word:
+				{
+					CurrentWord += CommentCharArray[0] + FParserText.Text;
+
+					break;
+				}
+
+				case EParserTextType::Comment:
+				{
+					CurrentWord += SeparatorCharArray[0] + FParserText.Text;
+
+					break;
+				}
+
+				case EParserTextType::Ignored:
+				{
+					CurrentWord += IgnoredCharArray[0] + FParserText.Text;
+
+					break;
+				}
+
+				case Unknown:
+				{
+					LOG_ERROR("FParser found unkown type of line.");
+
+					break;
+				}
+
+				default:
+				{
+					LOG_ERROR("FParser found default type of line.");
+				}
+			}
+
+			CurrentLine += CurrentWord;
+		}
+
+		OutParsedString += CurrentLine + NewLineChar;
+	}
+
+	return std::move(OutParsedString);
+}
+
+CArray<std::string> FParser::SplitString(const std::string& InString, const CArray<char>& InSeparatorCharArray)
+{
+	CArray<std::string> SubStrings;
+
+	std::string CurrentSubString = "";
+
+	for (char Char : InString)
+	{
+		if (InSeparatorCharArray.Contains(Char))
+		{
+			SubStrings.Push(CurrentSubString);
+
+			CurrentSubString = "";
+		}
+		else
+		{
+			CurrentSubString += Char;
+		}
+	}
+
+	return SubStrings;
+}
+
+void FParser::SetDefaultParseProperties(std::string& Comment, std::string& Separator, std::string& Ignored)
+{
+	if (SeparatorCharArray.Size() > 0)
+	{
+		Separator = SeparatorCharArray[0];
+	}
+	else if (FParserDefaults::DefaultSeparatorCharArray.Size() > 0)
+	{
+		Separator = FParserDefaults::DefaultSeparatorCharArray[0];
+	}
+	else
+	{
+		LOG_ERROR("FParser has no separator characters.");
+	}
+
+	if (CommentCharArray.Size() > 0)
+	{
+		Comment = CommentCharArray[0];
+	}
+	else if (FParserDefaults::DefaultCommentCharArray.Size() > 0)
+	{
+		Comment = FParserDefaults::DefaultCommentCharArray[0];
+	}
+	else
+	{
+		LOG_ERROR("FParser has no comment characters.");
+	}
+
+	if (IgnoredCharArray.Size() > 0)
+	{
+		Ignored = IgnoredCharArray[0];
+	}
+	else if (FParserDefaults::DefaultIgnoredCharArray.Size() > 0)
+	{
+		Ignored = FParserDefaults::DefaultIgnoredCharArray[0];
+	}
+	else
+	{
+		LOG_ERROR("FParser has no ignored characters.");
+	}
 }
 
 bool FParser::AreCharsEqual(const char A, const char B)

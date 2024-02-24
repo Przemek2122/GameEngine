@@ -6,123 +6,50 @@
 #include "Assets/Parser.h"
 #include "Renderer/Map/MapManager.h"
 
+void FMapData::Clear()
+{
+	MapArray.Clear();
+	MapSubAssetSettingsArray.Clear();
+}
+
 FMapAsset::FMapAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
 	, bIsLoaded(false)
-	, AssetsTileSize(32, 32)
-	, MapManager(nullptr)
 {
 }
 
 FMapAsset::~FMapAsset()
 {
-	UnLoadMap();
-}
-
-void FMapAsset::SetMapManager(FMapManager* InMapManager)
-{
-	MapManager = InMapManager;
+	ClearMapData();
 }
 
 void FMapAsset::LoadMap()
 {
-	if (FFilesystem::DirectoryExists(AssetPath))
+	if (FFileSystem::Directory::Exists(AssetPath))
 	{
-		const std::string SharedBeginning = AssetPath + GEngine->GetAssetsManager()->GetPlatformSlash();
-		const std::string SharedBeginningFiles = SharedBeginning + AssetName;
-
-		MapNameFilePath = SharedBeginningFiles + '.' + FMapFilesExtensions::PrimaryMapFileExtension;
-		MapDataFilePath = SharedBeginningFiles + '.' + FMapFilesExtensions::MapDataFileExtension;
-
-		for (const std::string& AssetDirectoryName : FMapFilesExtensions::AssetDirectoryNames)
-		{
-			const std::string Path = SharedBeginning + AssetDirectoryName;
-
-			if (FFilesystem::DirectoryExists(Path))
-			{
-				MapAssetsDirPath = Path;
-
-				break;
-			}
-		}
+		GenerateNamesForMapAssets();
 
 		// Ensure all required files exists
-		if (	FFilesystem::FileExists(MapNameFilePath) 
-			&&	FFilesystem::FileExists(MapDataFilePath) 
-			&&	FFilesystem::DirectoryExists(MapAssetsDirPath))
+		if (	FFileSystem::File::Exists(MapNameFilePath) 
+			&&	FFileSystem::File::Exists(MapDataFilePath) 
+			&&	FFileSystem::Directory::Exists(MapAssetsDirPath))
 		{
 			LOG_INFO("Loading map: " << AssetName);
 
-			CArray<std::string> MapAssetFiles = FFilesystem::GetFilesFromDirectory(MapAssetsDirPath);
+			const FParser Parser = CreateMapFilesParser();
 
-			FParser Parser({ ',' });
+			CArray<std::string> MapAssetFiles = FFileSystem::GetFilesFromDirectory(MapAssetsDirPath);
 
 			FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-
 			SDL_Renderer* WindowRenderer = MapManager->GetWindow()->GetRenderer()->GetSDLRenderer();
 
-			// Map assets
-			std::ifstream MapDataFilePathStream(MapDataFilePath);
-			for (std::string Line; getline(MapDataFilePathStream, Line); )
-			{
-				CArray<std::string> StringArray = Parser.ParseLineIntoStrings(Line);
-				if (StringArray.Size() == 3)
-				{
-					FMapSubAssetSettings MapSubAssetSettings;
-					MapSubAssetSettings.AssetIndex = atoi(StringArray[0].c_str());
-					MapSubAssetSettings.Collision = atoi(StringArray[1].c_str());
+			LoadMapAssets(Parser, AssetsManager, WindowRenderer);
 
-					std::string SubAsset = StringArray[2];
-
-					std::string SubAssetName = AssetName + SubAsset;
-
-					char* Slash = AssetsManager->GetPlatformSlash();
-					std::string SubAssetAbsolutePath = MapAssetsDirPath + Slash + SubAsset;
-
-					std::shared_ptr<FTextureAsset> Asset = AssetsManager->CreateAssetFromAbsolutePath<FTextureAsset>(SubAssetName, SubAssetAbsolutePath);
-					Asset->PrepareTexture(WindowRenderer);
-
-					MapSubAssetSettings.TextureAssetPtr = Asset;
-
-					MapSubAssetSettingsArray.Push(MapSubAssetSettings);
-				}
-			}
-			MapDataFilePathStream.close();
-
-			const int MaxAssetIndex = MapSubAssetSettingsArray.Size();
-
-			// Map, where should be which tile
-			std::ifstream MapNameFilePathStream(MapNameFilePath);
-			for (std::string Line; getline(MapNameFilePathStream, Line); )
-			{
-				CArray<std::string> ParsedArray = Parser.ParseLineIntoStrings(Line);
-
-				FMapRow MapRow;
-
-				for (std::string& Element : ParsedArray)
-				{
-					// @TODO Could switch to strtol to make sure conversion does not fail
-					const int Index = atoi(Element.c_str());
-
-					if (Index >= MaxAssetIndex)
-					{
-						LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
-
-						MapRow.Array.Push(INDEX_INCORRECT);
-					}
-					else
-					{
-						MapRow.Array.Push(Index);
-					}
-				}
-
-				MapArray.Push(MapRow);
-			}
-			MapNameFilePathStream.close();
+			LoadMapTilesLocationInformation(Parser);
 
 			bIsLoaded = true;
 
-			LOG_INFO("Map assets: " << MapSubAssetSettingsArray.Size() << " loaded, map name: " << AssetName);
+			LOG_INFO("Map assets: " << MapData.MapSubAssetSettingsArray.Size() << " loaded, map name: " << AssetName);
 		}
 		else
 		{
@@ -135,15 +62,59 @@ void FMapAsset::LoadMap()
 	}
 }
 
-void FMapAsset::UnLoadMap()
+void FMapAsset::ClearMapData()
 {
 	MapNameFilePath.clear();
 	MapDataFilePath.clear();
 	MapAssetsDirPath.clear();
 	MapLines.Clear();
-	MapSubAssetSettingsArray.Clear();
+
+	MapData.Clear();
 
 	bIsLoaded = false;
+}
+
+void FMapAsset::SaveMapData()
+{
+	// Create directory for map assets if it does not exist
+	if (!FFileSystem::Directory::Exists(AssetPath))
+	{
+		FFileSystem::Directory::Create(AssetPath);
+
+		LOG_INFO("Creating directory for assets: " << AssetPath);
+	}
+
+	if (FFileSystem::Directory::Exists(AssetPath))
+	{
+		FParser Parser = CreateMapFilesParser();
+
+		SaveMapFile(Parser);
+		SaveMapDataFile(Parser);
+	}
+	else
+	{
+		LOG_ERROR("Failed to create directory for assets: " << AssetPath);
+	}
+}
+
+bool FMapAsset::IsMapDataValid() const
+{
+	return (MapData.MapArray.Size() > 0 && MapData.MapSubAssetSettingsArray.Size() > 0);
+}
+
+const FMapData& FMapAsset::GetMapData() const
+{
+	return MapData;
+}
+
+void FMapAsset::WriteMapData(const FMapData& InMapData)
+{
+	MapData = InMapData;
+}
+
+void FMapAsset::SetMapManager(FMapManager* InMapManager)
+{
+	MapManager = InMapManager;
 }
 
 bool FMapAsset::IsLoaded() const
@@ -151,47 +122,158 @@ bool FMapAsset::IsLoaded() const
 	return bIsLoaded;
 }
 
-void FMapAsset::Draw()
+FParser FMapAsset::CreateMapFilesParser()
 {
-	if (bIsLoaded)
+	return FParser({ ',' });
+}
+
+void FMapAsset::GenerateNamesForMapAssets()
+{
+	const std::string SharedBeginning = AssetPath + GEngine->GetAssetsManager()->GetPlatformSlash();
+	const std::string SharedBeginningFiles = SharedBeginning + AssetName;
+
+	MapNameFilePath = SharedBeginningFiles + '.' + FMapGlobalSettings::Extensions::PrimaryMapFileExtension;
+	MapDataFilePath = SharedBeginningFiles + '.' + FMapGlobalSettings::Extensions::MapDataFileExtension;
+
+	for (const std::string& AssetDirectoryName : FMapGlobalSettings::Extensions::AssetDirectoryNames)
 	{
-		SDL_Renderer* WindowRenderer = MapManager->GetWindow()->GetRenderer()->GetSDLRenderer();
+		const std::string Path = SharedBeginning + AssetDirectoryName;
 
-		SDL_Rect Source, Destination;
-		Source.x = 0;
-		Source.y = 0;
-		Source.h = AssetsTileSize.Y;
-		Source.w = AssetsTileSize.X;
-		Destination.h = AssetsTileSize.Y;
-		Destination.w = AssetsTileSize.X;
-
-		const int VerticalSize = MapArray.Size();
-
-		for (int VerticalIndex = 0; VerticalIndex < VerticalSize; VerticalIndex++)
+		if (FFileSystem::Directory::Exists(Path))
 		{
-			const FMapRow& MapRow = MapArray[VerticalIndex];
+			MapAssetsDirPath = Path;
 
-			const int HorizontalSize = MapRow.Array.Size();
-
-			for (int HorizontalIndex = 0; HorizontalIndex < HorizontalSize; HorizontalIndex++)
-			{
-				const int AssetIndex = MapRow.Array[HorizontalIndex];
-				if (AssetIndex >= 0)
-				{
-					const FMapSubAssetSettings CurrentAssetSettings = MapSubAssetSettingsArray[AssetIndex];
-
-					Destination.x = HorizontalIndex * AssetsTileSize.X;
-					Destination.y = VerticalIndex * AssetsTileSize.Y;
-
-					CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
-				}
-				else
-				{
-					// Do sth when index is not found
-
-					// @TODO ...
-				}
-			}
+			break;
 		}
 	}
+}
+
+void FMapAsset::LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer)
+{
+	std::ifstream MapDataFilePathStream(MapDataFilePath);
+	for (std::string Line; getline(MapDataFilePathStream, Line); )
+	{
+		CArray<std::string> StringArray = Parser.SimpleParseLineIntoStrings(Line);
+		if (StringArray.Size() == 3)
+		{
+			FMapSubAssetSettings MapSubAssetSettings;
+			MapSubAssetSettings.AssetIndex = atoi(StringArray[0].c_str());
+			MapSubAssetSettings.Collision = atoi(StringArray[1].c_str());
+
+			std::string SubAsset = StringArray[2];
+
+			std::string SubAssetName = AssetName + SubAsset;
+
+			char Slash = AssetsManager->GetPlatformSlash();
+			std::string SubAssetAbsolutePath = MapAssetsDirPath + Slash + SubAsset;
+
+			std::shared_ptr<FTextureAsset> Asset = AssetsManager->CreateAssetFromAbsolutePath<FTextureAsset>(SubAssetName, SubAssetAbsolutePath);
+			Asset->PrepareTexture(WindowRenderer);
+
+			MapSubAssetSettings.TextureAssetPtr = Asset;
+
+			MapData.MapSubAssetSettingsArray.Push(MapSubAssetSettings);
+		}
+	}
+	MapDataFilePathStream.close();
+}
+
+void FMapAsset::LoadMapTilesLocationInformation(FParser Parser)
+{
+	const int MaxAssetIndex = MapData.MapSubAssetSettingsArray.Size();
+
+	// Map, where should be which tile
+	std::ifstream MapNameFilePathStream(MapNameFilePath);
+	for (std::string Line; getline(MapNameFilePathStream, Line); )
+	{
+		CArray<std::string> ParsedArray = Parser.SimpleParseLineIntoStrings(Line);
+
+		FMapRow MapRow;
+
+		for (std::string& Element : ParsedArray)
+		{
+			// @TODO Could switch to strtol to make sure conversion does not fail
+			const int Index = atoi(Element.c_str());
+
+			if (Index >= MaxAssetIndex)
+			{
+				LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+
+				MapRow.Array.Push(INDEX_INCORRECT);
+			}
+			else
+			{
+				MapRow.Array.Push(Index);
+			}
+		}
+
+		MapData.MapArray.Push(MapRow);
+	}
+	MapNameFilePathStream.close();
+}
+
+void FMapAsset::SaveMapFile(FParser& Parser)
+{
+	// Create if not exists
+	if (!FFileSystem::File::Exists(MapNameFilePath))
+	{
+		FFileSystem::File::Create(MapNameFilePath);
+	}
+
+	std::ofstream MapNameFileOfStream;
+
+	// Open and clear content
+	MapNameFileOfStream.open(MapNameFilePath, std::ofstream::out | std::ofstream::trunc);
+
+	if (MapNameFileOfStream.is_open())
+	{
+		// Add comments at top of the file
+		CArray<FParserLine> CommentParserLines;
+		CommentParserLines.Push(FParserLine({ FParserText(FMapGlobalSettings::FileComments::MapTilesFileCommentLine1, Comment) }));
+
+		const std::string CommentsString = Parser.ParseLinesIntoString(CommentParserLines);
+		MapNameFileOfStream.write(CommentsString.c_str(), CommentsString.size());
+
+		for (FMapRow& MapRow : MapData.MapArray)
+		{
+			CArray<std::string> ParserLines;
+
+			for (const int MapElement : MapRow.Array)
+			{
+				ParserLines.Push(std::to_string(MapElement));
+			}
+
+			std::string StringToSave = Parser.SimpleParseStringsIntoLine(ParserLines);
+
+			MapNameFileOfStream.write(StringToSave.c_str(), StringToSave.size());
+		}
+	}
+
+	MapNameFileOfStream.close();
+}
+
+void FMapAsset::SaveMapDataFile(FParser& Parser)
+{
+	if (!FFileSystem::File::Exists(MapDataFilePath))
+	{
+		FFileSystem::File::Create(MapDataFilePath);
+	}
+
+	std::ofstream MapDataFileOfStream;
+
+	// Open and clear content
+	MapDataFileOfStream.open(MapDataFilePath, std::ofstream::out | std::ofstream::trunc);
+
+	if (MapDataFileOfStream.is_open())
+	{
+		CArray<FParserLine> ParserLines;
+
+
+
+		const std::string StringToSave = Parser.ParseLinesIntoString(ParserLines);
+
+		MapDataFileOfStream.write(StringToSave.c_str(), StringToSave.size());
+	}
+
+	MapDataFileOfStream.close();
 }

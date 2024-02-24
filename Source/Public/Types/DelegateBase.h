@@ -18,7 +18,7 @@ public:
 	FDelegateBase() = default;
 	virtual ~FDelegateBase()
 	{
-		for (Functor* FunctorObject : Functors)
+		for (const Functor* FunctorObject : Functors)
 		{
 			delete FunctorObject;
 		}

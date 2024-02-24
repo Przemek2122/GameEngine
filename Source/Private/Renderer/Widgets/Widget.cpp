@@ -17,6 +17,17 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	// Critical to be valid.
 	ENSURE_VALID(WidgetManagementInterface != nullptr);
 #endif
+
+#if ENGINE_MEMORY_ALLOCATION_DEBUG_WIDGETS
+	LOG_INFO("Widget created: '" << WidgetName << "', Widget order: " << InWidgetOrder);
+#endif
+}
+
+FWidget::~FWidget()
+{
+#if ENGINE_MEMORY_ALLOCATION_DEBUG_WIDGETS
+	LOG_INFO("Widget destroyed: '" << WidgetName);
+#endif
 }
 
 void FWidget::ReceiveTick()
@@ -90,16 +101,25 @@ void FWidget::DestroyWidget()
 	{
 		PreDeInit();
 
-		FFunctorLambda<void> DeleteFunctor = [&]
-		{
-			DeInit();
+		ClearChildren();
 
-			delete this;
-		};
-
-		GEngine->AddLambdaToCallOnStartOfNextTick(DeleteFunctor);
+		GEngine->GetFunctionsToCallOnStartOfNextTick().BindObject(this, &FWidget::FinalizeDestroyWidget);
 
 		bIsPendingDelete = true;
+	}
+}
+
+void FWidget::FinalizeDestroyWidget()
+{
+	if (bIsPendingDelete)
+	{
+		DeInit();
+
+		delete this;
+	}
+	else
+	{
+		LOG_ERROR("FinalizeDestroyWidget called but bIsPendingDelete is " << bIsPendingDelete << ". Make sure to call DestroyWidget instead.");
 	}
 }
 
@@ -166,11 +186,20 @@ FEventHandler* FWidget::GetEventHandler()
 void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 {
 	WidgetVisibility = InWidgetVisibility;
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
+	}
 }
 
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
+}
+
+void FWidget::OnWidgetVisibilityChanged()
+{
 }
 
 std::string FWidget::GetName() const

@@ -90,7 +90,7 @@ public:
 	}
 	bool DestroyWidget(FWidget* Widget) const
 	{
-		return GetWidgetManager()->DestroyWidget(Widget);
+		return GetWidgetManager()->DestroyChildWidget(Widget);
 	}
 
 protected:

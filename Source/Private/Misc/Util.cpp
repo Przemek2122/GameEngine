@@ -25,7 +25,7 @@ namespace FUtil
 	{
 		if (EnableLogging)
 		{
-			FFilesystem::CreateFolder(LogDir);
+			FFileSystem::Directory::Create(LogDir);
 
 			isLoggingEnabled = true;
 

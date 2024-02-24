@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Test/TestTypes.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 #include "FunctorLambda.h"
 #include "FunctorObject.h"

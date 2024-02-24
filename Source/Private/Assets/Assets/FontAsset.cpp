@@ -7,6 +7,9 @@
 FFontAsset::FFontAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
 {
+#if ENGINE_MEMORY_ALLOCATION_DEBUG_ASSETS
+	LOG_INFO("Created font: t" << AssetName);
+#endif
 }
 
 FFontAsset::~FFontAsset()
@@ -15,6 +18,10 @@ FFontAsset::~FFontAsset()
 	{
 		delete FontPair.second;
 	}
+
+#if ENGINE_MEMORY_ALLOCATION_DEBUG_ASSETS
+	LOG_INFO("Destroyed font: t" << AssetName);
+#endif
 }
 
 FFont* FFontAsset::GetFont(const int Size)

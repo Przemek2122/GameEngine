@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Test/TestDelegate.h"
 
-#if ENGINE_TESTS
+#if ENGINE_TESTS_ALLOW_ANY
 
 void FTestDelegate::DoTest()
 {

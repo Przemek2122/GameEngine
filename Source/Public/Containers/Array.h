@@ -192,6 +192,11 @@ public:
 		return Vector.at(Index);
 	}
 
+	bool Contains(const TType& Value) const
+	{
+		return (std::find(Vector.begin(), Vector.end(), Value) != Vector.end());
+	}
+
 	/** @return Index or -1 if not found */
 	template<typename TTypeAuto>
 	_NODISCARD SDL_FORCE_INLINE TSizeType FindIndexOf(TTypeAuto Value)

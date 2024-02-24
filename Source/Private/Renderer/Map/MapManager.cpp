@@ -2,69 +2,156 @@
 
 #include "CoreEngine.h"
 #include "Assets/Assets/MapAsset.h"
+#include "Renderer/Map/Map.h"
 #include "Renderer/Map/Mapmanager.h"
 
 FMapManager::FMapManager(FWindow* InWindow)
-	: CurrentMapAsset(nullptr)
+	: CurrentMap(nullptr)
 	, Window(InWindow)
 {
 }
 
 FMapManager::~FMapManager()
 {
+	if (CurrentMap != nullptr)
+	{
+		delete CurrentMap;
+	}
 }
 
 void FMapManager::DrawMap()
 {
-	if (CurrentMapAsset != nullptr)
+	if (CurrentMap != nullptr)
 	{
-		CurrentMapAsset->Draw();
+		CurrentMap->Draw();
 	}
 }
 
-void FMapManager::LoadMap(const std::string& Name)
+FMapAsset* FMapManager::LoadMap(const std::string& Name)
 {
 	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
-		FMapAsset* Asset = AssetsManager->GetAsset<FMapAsset>(Name);
-		if (Asset != nullptr)
+		FMapAsset* MapAsset = AssetsManager->GetAsset<FMapAsset>(Name);
+		if (MapAsset != nullptr)
 		{
-			if (!Asset->IsLoaded())
+			if (!MapAsset->IsLoaded())
 			{
-				Asset->SetMapManager(this);
+				MapAsset->SetMapManager(this);
 
-				Asset->LoadMap();
-
-				CurrentMapAsset = Asset;
+				MapAsset->LoadMap();
 			}
+
+			return MapAsset;
 		}
 		else
 		{
-			// Missing asset
-			ENSURE_VALID(false);
+			LOG_ERROR("Map not found: " + Name);
 		}
 	}
+
+	return nullptr;
 }
 
 void FMapManager::UnLoadMap(const std::string& Name)
 {
-	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-	if (AssetsManager != nullptr)
+	if (!Name.empty())
 	{
-		FMapAsset* Asset = AssetsManager->GetAsset<FMapAsset>(Name);
-		if (Asset != nullptr)
+		FMapAsset* MapAsset = GetMapByName(Name);
+		if (MapAsset != nullptr)
 		{
-			if (Asset->IsLoaded())
-			{
-				Asset->UnLoadMap();
-			}
+			UnLoadMap(MapAsset);
 		}
 		else
 		{
-			// Missing asset
-			ENSURE_VALID(false);
+			LOG_ERROR("Map not found: " + Name);
 		}
+	}
+	else
+	{
+		LOG_ERROR("Map name is empty.");
+	}
+}
+
+void FMapManager::UnLoadMap(FMapAsset* MapAsset)
+{
+	if (MapAsset != nullptr && MapAsset->IsLoaded())
+	{
+		if (IsMapAssetCurrentlyUsed(MapAsset))
+		{
+			LOG_ERROR("Tried to unload current map. This is not allowed. Use DeactivateCurrentMap first instead.");
+		}
+		else
+		{
+			MapAsset->ClearMapData();
+		}
+	}
+}
+
+void FMapManager::UnloadAllMaps()
+{
+	for (FMapAsset* MapAsset : MapAssets)
+	{
+		UnLoadMap(MapAsset);
+	}
+}
+
+FMapAsset* FMapManager::GetMapByName(const std::string& Name)
+{
+	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+	if (AssetsManager != nullptr)
+	{
+		FMapAsset* MapAsset = AssetsManager->GetAsset<FMapAsset>(Name);
+		if (MapAsset != nullptr)
+		{
+			if (MapAsset->IsLoaded())
+			{
+				return MapAsset;
+			}
+			else
+			{
+				LOG_WARN("Map is not loaded. Load it first.");
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+void FMapManager::SetActiveMap(FMapAsset* MapAsset)
+{
+	if (MapAsset != nullptr)
+	{
+		if (MapAsset->IsLoaded())
+		{
+			if (CurrentMap != nullptr)
+			{
+				DeactivateCurrentMap();
+			}
+
+			CurrentMap = new FMap(MapAsset, this);
+			CurrentMap->Initialize();
+		}
+		else
+		{
+			LOG_ERROR("Map is not loaded. Load it first.");
+		}
+	}
+	else
+	{
+		LOG_ERROR("Map is nullptr.");
+	}
+}
+
+void FMapManager::DeactivateCurrentMap()
+{
+	if (CurrentMap != nullptr)
+	{
+		CurrentMap->DeInitialize();
+
+		delete CurrentMap;
+
+		CurrentMap = nullptr;
 	}
 }
 
@@ -73,9 +160,11 @@ void FMapManager::CacheAvailableMaps()
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
+		AvailableMaps.Clear();
+
 		CArray<std::string> DirectoriesFound = AssetsManager->GetFilesFromDirectory(AssetsManager->GetMapsPathRelative());
 
-		const char* Slash = AssetsManager->GetPlatformSlash();
+		const char Slash = AssetsManager->GetPlatformSlash();
 
 		const std::string PathPrefix = AssetsManager->GetMapsPathRelative() + Slash;
 
@@ -104,4 +193,9 @@ CArray<std::string> FMapManager::GetAvailableMaps() const
 #endif
 
 	return AvailableMaps;
+}
+
+bool FMapManager::IsMapAssetCurrentlyUsed(const FMapAsset* MapAsset)
+{
+	return (CurrentMap != nullptr && CurrentMap->GetMapAsset() == MapAsset);
 }

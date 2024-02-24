@@ -27,6 +27,7 @@ class FWidget : public UObject, public IWidgetPositionInterface
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
 	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
+	virtual ~FWidget();
 
 	/** Advanced, use Tick() if possible instead. */
 	virtual void ReceiveTick();
@@ -48,6 +49,7 @@ protected:
 
 public:
 	void DestroyWidget();
+	void FinalizeDestroyWidget();
 
 	/** True if DestroyWidget() has been called already */
 	bool IsPendingDelete() const { return bIsPendingDelete; }
@@ -72,6 +74,8 @@ public:
 	
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
+
+	virtual void OnWidgetVisibilityChanged();
 
 	/** Name of this widget. Can be displayed or widget can be get using this variable. */
 	_NODISCARD std::string GetName() const;
