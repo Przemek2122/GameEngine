@@ -323,13 +323,13 @@ void FEventHandler::InputWindowEvent()
 
 		case SDL_WINDOWEVENT_LEAVE:
 		{
-			SDL_Log("Mouse left window %d", Event.window.windowID);
+			LOG_DEBUG("Mouse left window: " << Event.window.windowID);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 		{
-			SDL_Log("Window %d gained keyboard focus", Event.window.windowID);
+			LOG_DEBUG("Window %d gained keyboard focus << " << Event.window.windowID);
 			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
 			break;
 		}

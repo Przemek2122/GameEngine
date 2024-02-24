@@ -12,14 +12,26 @@ IWidgetManagementInterface::~IWidgetManagementInterface()
 {
 	ClearChildren();
 
-	if (!ManagedWidgets.IsEmpty() || !ManagedWidgetsMap.IsEmpty())
+	// Log any memory leak if encountered
+	if (!ManagedWidgets.IsEmpty())
 	{
-		LOG_ERROR("Not all child widgets were destroyed");
+		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		{
+			FWidget* CurrentWidget = ManagedWidgets[i];
+
+			if (!CurrentWidget->IsPendingDelete())
+			{
+				LOG_ERROR("Memory leak detected, widget with name: '" << CurrentWidget->GetName() << "' has parent deleted but it's not destroyed.");
+			}
+		}
 	}
 
-	if (OnWidgetOrderChanged.IsBound())
+	// This two arrays should always have the same size. Log if not.
+	if (ManagedWidgets.Size() != ManagedWidgetsMap.Size())
 	{
-		LOG_ERROR("Found bound widgets when they should be not bound");
+		LOG_ERROR("ManagedWidgets and ManagedWidgetsMap size mismatch.");
+		LOG_ERROR("ManagedWidgets" << ManagedWidgets.Size());
+		LOG_ERROR("ManagedWidgetsMap" << ManagedWidgetsMap.Size());
 	}
 }
 
