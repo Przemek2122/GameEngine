@@ -30,19 +30,22 @@ public:
 	virtual void UnloadAllMaps();
 
 	/** Iterate over all maps to find this with given name. Inefficient. */
-	FMapAsset* GetMapByName(const std::string& Name);
+	static FMapAsset* GetMapByName(const std::string& Name);
 
 	/** Sets map active in game. */
-	void SetActiveMap(FMapAsset* MapAsset);
+	void SetActiveGameMap(FMapAsset* MapAsset);
 	/** Deactivates map */
-	void DeactivateCurrentMap();
+	void DeactivateCurrentGameMap();
+
+	void SetCurrentEditorMap(FMap* Map);
+	void DeactivateCurrentEditorMap();
 
 	virtual void CacheAvailableMaps();
 	virtual CArray<std::string> GetAvailableMaps() const;
 
 	FWindow* GetWindow() const { return Window; };
 
-	bool IsMapAssetCurrentlyUsed(const FMapAsset* MapAsset);
+	bool IsMapAssetCurrentlyUsed(FMapAsset* MapAsset);
 
 protected:
 	FMap* CurrentMap;

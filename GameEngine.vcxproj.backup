@@ -54,7 +54,9 @@
     <ClInclude Include="Source\Public\Core\ECS\Entities\PlayerCharacter.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entity.h" />
     <ClInclude Include="Source\Public\Core\ECS\EntityManager.h" />
-    <ClInclude Include="Source\Public\Core\Engine\RendererManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h" />
+    <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\RenderManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\TickManager.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
@@ -85,9 +87,11 @@
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\CheckBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\FPSTextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\HorizontalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ImageWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputStringWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputTextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InteractionBaseWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h" />
@@ -241,7 +245,9 @@
     <ClCompile Include="Source\Private\Core\ECS\Entities\PlayerCharacter.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entity.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
-    <ClCompile Include="Source\Private\Core\Engine\RendererManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\RenderManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\TickManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
@@ -264,9 +270,11 @@
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\CheckBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\FPSTextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\HorizontalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ImageWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputStringWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputTextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InteractionBaseWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp" />

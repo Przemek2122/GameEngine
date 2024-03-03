@@ -15,10 +15,16 @@ public:
 	FTextureAsset(const std::string& InAssetName, const std::string& InAssetPath);
 	~FTextureAsset() override;
 
+	EAssetType GetAssetType() const override;
+
+	/** Call to create texture in SDL */
 	void PrepareTexture(SDL_Renderer* InRenderer);
+
+	/** Get texture */
 	FTexture* GetTexture() const;
 
 protected:
+	/** Texture - deleted in destructor */
 	FTexture* Texture;
 
 };

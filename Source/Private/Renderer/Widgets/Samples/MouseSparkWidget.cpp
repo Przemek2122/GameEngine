@@ -41,7 +41,7 @@ void FMouseSparkWidget::Tick()
 	// Add sparks is focused
 	if (GetParent()->GetOwnerWindow()->IsWindowFocused())
 	{
-		FEventHandler* EventHandler = GEngine->GetEventHandler();
+		const FEventHandler* EventHandler = GEngine->GetEventHandler();
 
 		const FVector2D<int> MouseLocation = EventHandler->GetMouseLocationCurrent();
 
@@ -71,7 +71,7 @@ void FMouseSparkWidget::Tick()
 		
 	for (size_t i = 0; i < Sparks.Size(); i++)
 	{
-		FSpark& Spark = Sparks[i];
+		const FSpark& Spark = Sparks[i];
 			
 		const FVector2D<float> LocationChange = FUtil::GetPointAngle<float>(Spark.Speed, static_cast<float>(Spark.Angle));
 		
@@ -85,7 +85,7 @@ void FMouseSparkWidget::Render()
 {
 	Super::Render();
 	
-	if (FRenderer* Renderer = GetRenderer())
+	if (const FRenderer* Renderer = GetRenderer())
 	{
 		Renderer->DrawPointsAt(Points, FColorRGBA(0, 153, 154));
 	}

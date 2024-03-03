@@ -101,6 +101,8 @@ void FWidget::DestroyWidget()
 	{
 		PreDeInit();
 
+		SetWidgetVisibility(EWidgetVisibility::Collapsed);
+
 		ClearChildren();
 
 		GEngine->GetFunctionsToCallOnStartOfNextTick().BindObject(this, &FWidget::FinalizeDestroyWidget);
@@ -196,6 +198,11 @@ void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
+}
+
+bool FWidget::IsVisible() const
+{
+	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
 }
 
 void FWidget::OnWidgetVisibilityChanged()

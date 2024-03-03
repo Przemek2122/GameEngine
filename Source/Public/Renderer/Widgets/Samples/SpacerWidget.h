@@ -2,6 +2,9 @@
 
 #include "CoreMinimal.h"
 
+/**
+ * Widget that is used to create space between other widgets
+ */
 class FSpacerWidget : public FWidget
 {
 public:

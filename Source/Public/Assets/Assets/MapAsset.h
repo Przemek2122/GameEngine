@@ -80,6 +80,8 @@ public:
 	FMapAsset(const std::string& InAssetName, const std::string& InAssetPath);
 	virtual ~FMapAsset() override;
 
+	virtual EAssetType GetAssetType() const override;
+
 	/** Load assets from disk */
 	void LoadMap();
 	/** Clear all arrays from loaded files from FMapAsset::LoadMap */

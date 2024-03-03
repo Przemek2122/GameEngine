@@ -44,14 +44,34 @@ public:
 	}
 
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType&& Index)
+	SDL_FORCE_INLINE TValue& operator[](TAutoType& Key)
 	{
-		return Map[Index];
+		if (!Map.contains(Key))
+		{
+			// We should never encounter default type.
+			ENSURE_VALID(false);
+
+			TValue DefaultType = TValue();
+
+			return DefaultType;
+		}
+
+		return Map[Key];
 	}
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType&& Index) const
+	SDL_FORCE_INLINE TValue& operator[](TAutoType& Key) const
 	{
-		return Map[Index];
+		if (!Map.contains(Key))
+		{
+			// We should never encounter default type.
+			ENSURE_VALID(false);
+
+			TValue DefaultType = TValue();
+
+			return DefaultType;
+		}
+
+		return Map[Key];
 	}
 	
 	template<typename TAutoType>

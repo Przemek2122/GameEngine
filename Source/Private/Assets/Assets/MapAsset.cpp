@@ -23,6 +23,11 @@ FMapAsset::~FMapAsset()
 	ClearMapData();
 }
 
+EAssetType FMapAsset::GetAssetType() const
+{
+	return EAssetType::AT_MAP;
+}
+
 void FMapAsset::LoadMap()
 {
 	if (FFileSystem::Directory::Exists(AssetPath))

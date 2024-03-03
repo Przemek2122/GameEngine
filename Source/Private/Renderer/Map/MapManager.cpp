@@ -29,7 +29,7 @@ void FMapManager::DrawMap()
 
 FMapAsset* FMapManager::LoadMap(const std::string& Name)
 {
-	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		FMapAsset* MapAsset = AssetsManager->GetAsset<FMapAsset>(Name);
@@ -79,7 +79,7 @@ void FMapManager::UnLoadMap(FMapAsset* MapAsset)
 	{
 		if (IsMapAssetCurrentlyUsed(MapAsset))
 		{
-			LOG_ERROR("Tried to unload current map. This is not allowed. Use DeactivateCurrentMap first instead.");
+			LOG_ERROR("Tried to unload current map. This is not allowed. Use DeactivateCurrentGameMap first instead.");
 		}
 		else
 		{
@@ -98,7 +98,7 @@ void FMapManager::UnloadAllMaps()
 
 FMapAsset* FMapManager::GetMapByName(const std::string& Name)
 {
-	const FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		FMapAsset* MapAsset = AssetsManager->GetAsset<FMapAsset>(Name);
@@ -118,7 +118,7 @@ FMapAsset* FMapManager::GetMapByName(const std::string& Name)
 	return nullptr;
 }
 
-void FMapManager::SetActiveMap(FMapAsset* MapAsset)
+void FMapManager::SetActiveGameMap(FMapAsset* MapAsset)
 {
 	if (MapAsset != nullptr)
 	{
@@ -126,7 +126,7 @@ void FMapManager::SetActiveMap(FMapAsset* MapAsset)
 		{
 			if (CurrentMap != nullptr)
 			{
-				DeactivateCurrentMap();
+				DeactivateCurrentGameMap();
 			}
 
 			CurrentMap = new FMap(MapAsset, this);
@@ -143,7 +143,7 @@ void FMapManager::SetActiveMap(FMapAsset* MapAsset)
 	}
 }
 
-void FMapManager::DeactivateCurrentMap()
+void FMapManager::DeactivateCurrentGameMap()
 {
 	if (CurrentMap != nullptr)
 	{
@@ -153,6 +153,25 @@ void FMapManager::DeactivateCurrentMap()
 
 		CurrentMap = nullptr;
 	}
+}
+
+void FMapManager::SetCurrentEditorMap(FMap* Map)
+{
+	if (Map != nullptr)
+	{
+
+
+
+	}
+	else
+	{
+		LOG_ERROR("Map is nullptr.");
+	}
+}
+
+void FMapManager::DeactivateCurrentEditorMap()
+{
+
 }
 
 void FMapManager::CacheAvailableMaps()
@@ -195,7 +214,7 @@ CArray<std::string> FMapManager::GetAvailableMaps() const
 	return AvailableMaps;
 }
 
-bool FMapManager::IsMapAssetCurrentlyUsed(const FMapAsset* MapAsset)
+bool FMapManager::IsMapAssetCurrentlyUsed(FMapAsset* MapAsset)
 {
 	return (CurrentMap != nullptr && CurrentMap->GetMapAsset() == MapAsset);
 }

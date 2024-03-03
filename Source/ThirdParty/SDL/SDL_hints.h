@@ -1905,7 +1905,7 @@ extern DECLSPEC const char * SDLCALL SDL_GetHint(const char *name);
 extern DECLSPEC SDL_bool SDLCALL SDL_GetHintBoolean(const char *name, SDL_bool default_value);
 
 /**
- * Type definition of the hint callback function.
+ * TCLass definition of the hint callback function.
  *
  * \param userdata what was passed as `userdata` to SDL_AddHintCallback()
  * \param name what was passed as `name` to SDL_AddHintCallback()

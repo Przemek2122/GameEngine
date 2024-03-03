@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "../Widget.h"
-#include "Renderer/Widgets/WidgetInputInterface.h"
+
+enum class EInputState;
 
 enum class EHoverState : Uint8
 {

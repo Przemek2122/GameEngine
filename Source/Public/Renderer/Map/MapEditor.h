@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+class FMap;
+
 /**
  * Class for editing the map
  * It should have references to the map
@@ -9,6 +11,10 @@
  */
 class FMapEditor
 {
-	FMapEditor();
+public:
+	FMapEditor(FMap* InMap);
+
+protected:
+	FMap* Map;
 
 };

@@ -14,6 +14,9 @@ struct FSpark
 	int Angle;
 };
 
+/**
+ * Widget that creates sparks under mouse cursor
+ */
 class FMouseSparkWidget : public FWidget
 {
 public:

@@ -18,6 +18,11 @@ FTextureAsset::~FTextureAsset()
 	LOG_INFO("Texture destroyed " << AssetName);
 }
 
+EAssetType FTextureAsset::GetAssetType() const
+{
+	return EAssetType::AT_TEXTURE;
+}
+
 void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
 {
 	Texture = new FTexture(AssetPath, InRenderer);

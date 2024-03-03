@@ -128,7 +128,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
 
-	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Assets\\Fonts\\OpenSans\\OpenSans-Regular.ttf");
+	AssetsManager->AddAsset<FFontAsset>("OpenSans", R"(Assets\Fonts\OpenSans\OpenSans-Regular.ttf)");
 
 	LOG_INFO("GEngine init End");
 

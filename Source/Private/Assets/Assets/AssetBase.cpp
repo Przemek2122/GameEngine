@@ -9,6 +9,11 @@ FAssetBase::FAssetBase(std::string InAssetName, std::basic_string<char> InAssetP
 {
 }
 
+EAssetType FAssetBase::GetAssetType() const
+{
+	return EAssetType::AT_BASE;
+}
+
 std::string FAssetBase::GetAssetName() const
 {
 	return AssetName;
