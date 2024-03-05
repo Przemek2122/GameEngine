@@ -28,17 +28,17 @@ FEngine::FEngine()
 	, CounterCurrentFrame(SDL_GetPerformanceCounter())
 	, DeltaTimeFloat(0)
 	, DeltaTimeDouble(0)
-	, bContinueMainLoop(true)
-	, TicksThisSecond(0)
 	, EngineRender(nullptr)
-	, Second(0)
 	, SdlEvent()
 	, EventHandler(nullptr)
 	, AssetsManager(nullptr)
 	, EngineTickingManager(nullptr)
 	, EngineRenderingManager(nullptr)
-#if ENGINE_TESTS_ALLOW_ANY
 	, TestManager(nullptr)
+	, bContinueMainLoop(true)
+	, TicksThisSecond(0)
+#if ENGINE_TESTS_ALLOW_ANY
+	, Second(0)
 #endif
 {
 	FUtil::LogInit();
