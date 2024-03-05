@@ -1,4 +1,4 @@
-// Created by Przemys³aw Wiewióra 2020-2022 https://github.com/Przemek2122/GameEngine
+// Created by Przemys³aw Wiewióra 2020-2024 https://github.com/Przemek2122/GameEngine
 
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
@@ -26,12 +26,17 @@ FEngine::FEngine()
 	, FrameTime(0)
 	, CounterLastFrame(0)
 	, CounterCurrentFrame(SDL_GetPerformanceCounter())
+	, DeltaTimeFloat(0)
+	, DeltaTimeDouble(0)
 	, bContinueMainLoop(true)
 	, TicksThisSecond(0)
-	, Second(0)
 	, EngineRender(nullptr)
+	, Second(0)
+	, SdlEvent()
 	, EventHandler(nullptr)
 	, AssetsManager(nullptr)
+	, EngineTickingManager(nullptr)
+	, EngineRenderingManager(nullptr)
 #if ENGINE_TESTS_ALLOW_ANY
 	, TestManager(nullptr)
 #endif
@@ -142,7 +147,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 void FEngine::EngineTick()
 {
-	UpdateFramerateCounter();
+	UpdateFrameRateCounter();
 
 	// Tick functions for next tick
 	if (FunctionsToCallOnStartOfNextTick.IsBound())
@@ -242,7 +247,7 @@ bool FEngine::IsEngineInitialized() const
 	return bIsEngineInitialized;
 }
 
-void FEngine::UpdateFramerateCounter()
+void FEngine::UpdateFrameRateCounter()
 {
 	const auto SystemTime = FUtil::GetSeconds();
 
@@ -315,10 +320,41 @@ void FEngine::SetDeltaTime(const double &InDeltaTime)
 	}
 }
 
+float FEngine::GetDeltaTime() const
+{
+	return DeltaTimeFloat;
+}
+
+double FEngine::GetDeltaTimeDouble() const
+{
+	return DeltaTimeDouble;
+}
+
 FEngineRender* FEngine::CreateEngineRenderer() const
 {
 	return new FEngineRender();
 }
+
+FEventHandler* FEngine::CreateEventHandler() const
+{
+	return new FEventHandler(SdlEvent);
+}
+
+FAssetsManager* FEngine::CreateAssetsManager() const
+{
+	return new FAssetsManager;
+}
+
+FEngineTickingManager* FEngine::CreateEngineTickingManager() const
+{
+	return new FEngineTickingManager;
+}
+
+FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
+{
+	return new FEngineRenderingManager;
+}
+
 
 const std::string& FEngine::GetLaunchFullPath() const
 {
@@ -362,26 +398,6 @@ FEngineTickingManager* FEngine::GetEngineTickingManager() const
 FEngineRenderingManager* FEngine::GetEngineRenderingManager() const
 {
 	return EngineRenderingManager;
-}
-
-FEventHandler* FEngine::CreateEventHandler() const
-{
-	return new FEventHandler(SdlEvent);
-}
-
-FAssetsManager* FEngine::CreateAssetsManager() const
-{
-	return new FAssetsManager;
-}
-
-FEngineTickingManager* FEngine::CreateEngineTickingManager() const
-{
-	return new FEngineTickingManager;
-}
-
-FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
-{
-	return new FEngineRenderingManager;
 }
 
 #if ENGINE_TESTS_ALLOW_ANY

@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+enum class ERenderPhase : Uint8;
+
 class FRenderInterface;
 
 /**

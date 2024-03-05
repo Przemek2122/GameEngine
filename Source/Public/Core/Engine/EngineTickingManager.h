@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 
+enum class ETickPhase : Uint8;
+
 /**
  * This class is responsible for managing the tick of the engine
  */

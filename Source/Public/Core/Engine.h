@@ -1,4 +1,4 @@
-// Created by Przemys³aw Wiewióra 2020-2022 https://github.com/Przemek2122/GameEngine
+// Created by Przemys³aw Wiewióra 2020-2024 https://github.com/Przemek2122/GameEngine
 
 #pragma once
 
@@ -10,9 +10,6 @@ class FTickInterface;
 class FMapManager;
 class FEventHandler;
 class FEngineManager;
-
-enum class ETickPhase : Uint8;
-enum class ERenderPhase : Uint8;
 
 class FEngine
 {
@@ -66,26 +63,73 @@ public:
 	/** @returns true if Init() has finished */
 	_NODISCARD bool IsEngineInitialized() const;
 
-protected:
-	void UpdateFramerateCounter();
-
-public:
-
 	virtual void UpdateFrameTimeStart();
 	virtual void UpdateFrameTimeEnd();
 
 	_NODISCARD uint32_t GetFrameTime() const;
 	_NODISCARD uint32_t GetFrameDelay() const;
 
-	// Use to set engine frame rate - ticks per second
+	/* Use to set engine frame rate - ticks per second */
 	virtual void SetFrameRate(const uint32_t NewFrameRate);
 
 	_NODISCARD int GetFramesThisSecond() const;
 
 	virtual double GetMaxDeltaTime() const;
 	virtual void SetDeltaTime(const double &InDeltaTime);
+
 	_NODISCARD float GetDeltaTime() const;
 	_NODISCARD double GetDeltaTimeDouble() const;
+
+	/** @Returns engine render class (used for managing windows) */
+	_NODISCARD FEngineRender* GetEngineRender() const;
+
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TRenderClass>
+	TRenderClass* GetEngineRender() const
+	{
+		return static_cast<TRenderClass>(GetEngineRender());
+	}
+	_NODISCARD const std::string& GetLaunchFullPath() const;
+	_NODISCARD const std::string& GetLaunchRelativePath() const;
+
+	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
+	void AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function);
+
+	FDelegate<>& GetFunctionsToCallOnStartOfNextTick();
+
+	_NODISCARD FEventHandler* GetEventHandler() const;
+
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TEngineRenderClass>
+	TEngineRenderClass* GetEventHandler() const
+	{
+		return static_cast<TEngineRenderClass>(GetEngineRender());
+	}
+
+	_NODISCARD FAssetsManager* GetAssetsManager() const;
+
+	/** Use this if you changed to your own. Will return casted. */
+	template<typename TAssetsManager>
+	TAssetsManager* GetAssetsManager() const
+	{
+		return static_cast<TAssetsManager>(GetAssetsManager());
+	}
+
+	_NODISCARD FEngineTickingManager* GetEngineTickingManager() const;
+	_NODISCARD FEngineRenderingManager* GetEngineRenderingManager() const;
+
+protected:
+	void UpdateFrameRateCounter();
+
+	_NODISCARD virtual FEngineRender* CreateEngineRenderer() const;
+	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
+	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
+	_NODISCARD virtual FEngineTickingManager* CreateEngineTickingManager() const;
+	_NODISCARD virtual FEngineRenderingManager* CreateEngineRenderingManager() const;
+
+#if ENGINE_TESTS_ALLOW_ANY
+	_NODISCARD virtual class FTestManager* CreateTestManager() const;
+#endif
 
 protected:
 	bool bFrameRateLimited;
@@ -104,35 +148,9 @@ protected:
 	uint64_t CounterLastFrame;
 	uint64_t CounterCurrentFrame;
 
-	float DeltaTimeFloat{};
-	double DeltaTimeDouble{};
+	float DeltaTimeFloat;
+	double DeltaTimeDouble;
 
-private:
-	bool bContinueMainLoop;
-	int TicksThisSecond;
-	size_t Second;
-
-public:
-	/** @Returns engine render class (used for managing windows) */
-	_NODISCARD FEngineRender* GetEngineRender() const;
-
-	/** Use this if you changed to your own. Will return casted. */
-	template<typename TRenderClass>
-	TRenderClass* GetEngineRender() const
-	{
-		return static_cast<TRenderClass>(GetEngineRender());
-	}
-
-protected:
-	FEngineRender* EngineRender;
-
-	_NODISCARD virtual FEngineRender* CreateEngineRenderer() const;
-
-public:
-	_NODISCARD const std::string& GetLaunchFullPath() const;
-	_NODISCARD const std::string& GetLaunchRelativePath() const;
-
-protected:
 	/** First param of main. Absolute location C:/Programs/ThisProgram/Program.exe */
 	std::string LaunchFullPath;
 	/** Location of exe without exe. Like C:/Programs/ThisProgram */
@@ -141,41 +159,10 @@ protected:
 	// Parameters
 	CArray<std::string> LaunchParameters;
 
-public:
-	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
-	void AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function);
+	/** Class for managing windows,  */
+	FEngineRender* EngineRender;
 
-	FDelegate<>& GetFunctionsToCallOnStartOfNextTick();
-
-	_NODISCARD FEventHandler* GetEventHandler() const;
-
-	/** Use this if you changed to your own. Will return casted. */
-	template<typename TEngineRenderClass>
-	TEngineRenderClass* GetEventHandler() const
-	{
-		return static_cast<TEngineRenderClass>(GetEngineRender());
-	}
-	
-	_NODISCARD FAssetsManager* GetAssetsManager() const;
-
-	/** Use this if you changed to your own. Will return casted. */
-	template<typename TAssetsManager>
-	TAssetsManager* GetAssetsManager() const
-	{
-		return static_cast<TAssetsManager>(GetAssetsManager());
-	}
-
-	_NODISCARD FEngineTickingManager* GetEngineTickingManager() const;
-	_NODISCARD FEngineRenderingManager* GetEngineRenderingManager() const;
-
-protected:
-	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
-	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
-	_NODISCARD virtual FEngineTickingManager* CreateEngineTickingManager() const;
-	_NODISCARD virtual FEngineRenderingManager* CreateEngineRenderingManager() const;
-
-protected:
-	SDL_Event SdlEvent{};
+	SDL_Event SdlEvent;
 	FEventHandler* EventHandler;
 	FAssetsManager* AssetsManager;
 
@@ -186,9 +173,12 @@ protected:
 	FDelegate<void, float> TickingObjectsDelegate;
 
 #if ENGINE_TESTS_ALLOW_ANY
-	_NODISCARD virtual class FTestManager* CreateTestManager() const;
-	
 	class FTestManager* TestManager;
 #endif
+
+private:
+	bool bContinueMainLoop;
+	int TicksThisSecond;
+	size_t Second;
 
 };
