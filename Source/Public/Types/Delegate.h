@@ -100,6 +100,12 @@ public:
 	}
 
 	template<typename TClass>
+	void BindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		DelegateBase::Functors.Push(Functor);
+	}
+
+	template<typename TClass>
 	void UnBindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
 		int Index;
@@ -122,6 +128,12 @@ public:
 
 			DelegateBase::Functors.RemoveAt(Index);
 		}
+	}
+
+	template<typename TClass>
+	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		DelegateBase::Functors.Remove(Functor);
 	}
 	
 	/** Remove function by functor reference. Use with caution. */

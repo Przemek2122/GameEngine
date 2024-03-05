@@ -7,11 +7,13 @@
  */
 enum class ERenderPhase : Uint8
 {
-	// Special case for background rendering (map)
-	Background = 1,
-	Pre,
-	Main,
-	Post
+	None = 0,				// This should not be ever used.
+	Background,				// Special case for background rendering (map)
+	Entities,				// Main game rendering		
+	Default,				// Default rendering - Rendered in front of entities but behind widgets
+	Widgets,				// Widgets rendering
+	PostEverything = 254,	// Special case for objects that needs to be rendered last
+	MAX = 255				// Max value. This should not be ever used.
 };
 
 /**
@@ -24,6 +26,9 @@ public:
 	FRenderInterface();
 	virtual ~FRenderInterface();
 
+	/** This function must be called when you want your object to start ticking. */
+	void Register();
+
 	/** @returns Phase registered in constructor. */
 	ERenderPhase GetRegisteredPhase() const { return RegisteredPhase; }
 
@@ -31,8 +36,10 @@ public:
 	virtual ERenderPhase GetRenderPhase() const = 0;
 
 	/** Called every frame in given phase */
-	virtual void Draw(float DeltaTime) = 0;
+	virtual void Render() = 0;
 
 private:
+	bool bIsRegistered;
 	ERenderPhase RegisteredPhase;
+	FFunctorObject<FRenderInterface, void> RenderFunctor;
 };

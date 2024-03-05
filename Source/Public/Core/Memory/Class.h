@@ -24,6 +24,8 @@ public:
 class FClassAllocateInterface
 {
 public:
+	virtual void* Allocate() const = 0;
+	virtual void* Cast(void* Object) const = 0;
 
 };
 

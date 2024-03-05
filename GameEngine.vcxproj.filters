@@ -233,17 +233,17 @@
     <ClInclude Include="Source\Public\Core\ECS\EntityManager.h">
       <Filter>Public\Core\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h">
+      <Filter>Public\Core\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h">
+      <Filter>Public\Core\Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h">
       <Filter>Public\Core\Engine\Logic</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h">
       <Filter>Public\Core\Engine\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Core\Engine\RenderManager.h">
-      <Filter>Public\Core\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Core\Engine\TickManager.h">
-      <Filter>Public\Core\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine.h">
       <Filter>Public\Core</Filter>
@@ -766,17 +766,17 @@
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp">
       <Filter>Private\Core\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp">
+      <Filter>Private\Core\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp">
+      <Filter>Private\Core\Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp">
       <Filter>Private\Core\Engine\Logic</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp">
       <Filter>Private\Core\Engine\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\Engine\RenderManager.cpp">
-      <Filter>Private\Core\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\Engine\TickManager.cpp">
-      <Filter>Private\Core\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
       <Filter>Private\Core</Filter>

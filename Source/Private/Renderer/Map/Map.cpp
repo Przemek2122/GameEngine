@@ -10,6 +10,8 @@ FMap::FMap(FMapAsset* InMapAsset, FMapManager* InMapManager)
 	: MapAsset(InMapAsset)
 	, MapManager(InMapManager)
 	, bIsActive(false)
+	, Scale(0.f)
+	, ScaleJump(0.f)
 {
 }
 
@@ -23,8 +25,25 @@ void FMap::DeInitialize()
 	ClearData();
 }
 
+int FMap::GetMapWidth() const
+{
+	return MapData.MapArray[0].Array.Size();
+}
+
+int FMap::GetMapHeight() const
+{
+	return MapData.MapArray.Size();
+}
+
+FVector2D<int> FMap::GetMapSize() const
+{
+	return { GetMapWidth(), GetMapHeight() };
+}
+
 void FMap::Draw()
 {
+	LOG_INFO("" << GetMapSize().ToString());
+
 	if (bIsActive)
 	{
 		SDL_Renderer* WindowRenderer = MapManager->GetWindow()->GetRenderer()->GetSDLRenderer();

@@ -11,6 +11,8 @@
 #endif
 
 #include "Assets/Assets/FontAsset.h"
+#include "Engine/EngineRenderingManager.h"
+#include "Engine/EngineTickingManager.h"
 #include "Interfaces/CoreLoop/TickInterface.h"
 #include "Interfaces/CoreLoop/RenderInterface.h"
 #include "Renderer/Map/Mapmanager.h"
@@ -100,8 +102,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	}
 
 	// Initialize SDL - Load support for the OGG and MOD sample/music formats
-	const auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
-	const auto MixInitialized = Mix_Init(MixFlags);
+	constexpr auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
+	const int MixInitialized = Mix_Init(MixFlags);
 	if (!MixInitialized)
 	{
 		LOG_ERROR("Mix_Init: " << Mix_GetError());
@@ -119,6 +121,9 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineRender = CreateEngineRenderer();
 	EventHandler = CreateEventHandler();
 	AssetsManager = CreateAssetsManager();
+	EngineTickingManager = CreateEngineTickingManager();
+	EngineRenderingManager = CreateEngineRenderingManager();
+
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
 #endif
@@ -166,7 +171,11 @@ void FEngine::EngineTick()
 
 	Tick();
 
+	EngineTickingManager->EngineTick(DeltaTimeFloat);
+
 	EngineRender->Tick();
+
+	EngineRenderingManager->EngineRender();
 }
 
 void FEngine::EnginePostSecondTick()
@@ -189,6 +198,7 @@ void FEngine::PostInit()
 
 void FEngine::Tick()
 {
+
 }
 
 void FEngine::PostSecondTick()
@@ -219,6 +229,8 @@ void FEngine::Clean()
 	delete EngineRender;
 	delete EventHandler;
 	delete AssetsManager;
+	delete EngineTickingManager;
+	delete EngineRenderingManager;
 
 #if ENGINE_TESTS_ALLOW_ANY
 	delete TestManager;
@@ -342,14 +354,14 @@ FAssetsManager* FEngine::GetAssetsManager() const
 	return AssetsManager;
 }
 
-void FEngine::RegisterTickingObject(FTickInterface* TickInterface)
+FEngineTickingManager* FEngine::GetEngineTickingManager() const
 {
-	TickingObjectsDelegate.BindObject(TickInterface, &FTickInterface::Tick);
+	return EngineTickingManager;
 }
 
-void FEngine::UnRegisterTickingObject(FTickInterface* TickInterface)
+FEngineRenderingManager* FEngine::GetEngineRenderingManager() const
 {
-	TickingObjectsDelegate.UnBindObject(TickInterface, &FTickInterface::Tick);
+	return EngineRenderingManager;
 }
 
 FEventHandler* FEngine::CreateEventHandler() const
@@ -360,6 +372,16 @@ FEventHandler* FEngine::CreateEventHandler() const
 FAssetsManager* FEngine::CreateAssetsManager() const
 {
 	return new FAssetsManager;
+}
+
+FEngineTickingManager* FEngine::CreateEngineTickingManager() const
+{
+	return new FEngineTickingManager;
+}
+
+FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
+{
+	return new FEngineRenderingManager;
 }
 
 #if ENGINE_TESTS_ALLOW_ANY

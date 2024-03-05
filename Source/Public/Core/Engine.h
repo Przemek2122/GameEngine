@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+class FEngineRenderingManager;
+class FEngineTickingManager;
 class FTickInterface;
 class FMapManager;
 class FEventHandler;
@@ -163,17 +165,22 @@ public:
 		return static_cast<TAssetsManager>(GetAssetsManager());
 	}
 
-	void RegisterTickingObject(FTickInterface* TickInterface);
-	void UnRegisterTickingObject(FTickInterface* TickInterface);
+	_NODISCARD FEngineTickingManager* GetEngineTickingManager() const;
+	_NODISCARD FEngineRenderingManager* GetEngineRenderingManager() const;
 
 protected:
 	_NODISCARD virtual FEventHandler* CreateEventHandler() const;
 	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
+	_NODISCARD virtual FEngineTickingManager* CreateEngineTickingManager() const;
+	_NODISCARD virtual FEngineRenderingManager* CreateEngineRenderingManager() const;
 
 protected:
 	SDL_Event SdlEvent{};
 	FEventHandler* EventHandler;
 	FAssetsManager* AssetsManager;
+
+	FEngineTickingManager* EngineTickingManager;
+	FEngineRenderingManager* EngineRenderingManager;
 
 	FDelegate<> FunctionsToCallOnStartOfNextTick;
 	FDelegate<void, float> TickingObjectsDelegate;

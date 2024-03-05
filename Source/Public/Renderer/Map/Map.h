@@ -17,6 +17,11 @@ public:
 	void Initialize();
 	void DeInitialize();
 
+	int GetMapWidth() const;
+	int GetMapHeight() const;
+
+	FVector2D<int> GetMapSize() const;
+
 	/** Function used for drawing a map */
 	virtual void Draw();
 
@@ -32,7 +37,13 @@ public:
 	/** Write data from this class into asset into MapAsset memory */
 	virtual void WriteAsset();
 
+	/** Map asset used to load / save this map */
 	FMapAsset* GetMapAsset() const { return MapAsset; }
+
+	/** Scale of map */
+	float GetScale() const { return Scale; }
+	/** Change of map scale when zooming */
+	float GetScaleJump() const { return ScaleJump; }
 
 protected:
 	/** Map asset */
@@ -41,9 +52,16 @@ protected:
 	/** Pointer to owner */
 	FMapManager* MapManager;
 
+	/** Is map activated */
 	bool bIsActive;
 
 	/** Map data: tiles size, tiles location and assets for map */
 	FMapData MapData;
+
+	/** Map scale */
+	float Scale;
+
+	/** Map jump scale - How fast to change scale when zooming etc */
+	float ScaleJump;
 
 };

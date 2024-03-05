@@ -214,6 +214,11 @@ public:
 		}
 	}
 
+	//void Sort(FFunctorLambda<bool, const std::pair<TKey, TValue>&, const std::pair<TKey, TValue>&> Delegate)
+	//{
+	//	Map.sort(Delegate);
+	//}
+
 	/** Begin of bucket functions */
 	_NODISCARD SDL_FORCE_INLINE auto begin() noexcept -> auto
 	{
