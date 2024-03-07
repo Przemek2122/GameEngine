@@ -13,8 +13,8 @@ public:
 	FEngineTickingManager();
 	~FEngineTickingManager();
 
-	void RegisterInterface(FFunctorObject<FTickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase);
-	void UnRegisterInterface(FFunctorObject<FTickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase);
+	void RegisterInterface(FFunctorObject<ITickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase);
+	void UnRegisterInterface(FFunctorObject<ITickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase);
 
 	/** This is the main tick function that will be called from the engine (CoreEngine.cpp */
 	void EngineTick(const float DeltaTime);

@@ -1,16 +1,16 @@
 #include "CoreEngine.h"
-#include "Core/Interfaces/CoreLoop/TickInterface.h"
+#include "Core/Interfaces/CoreLoop/ITickInterface.h"
 
 #include "Engine/EngineTickingManager.h"
 
-FTickInterface::FTickInterface()
+ITickInterface::ITickInterface()
 	: bIsRegistered(false)
 	, RegisteredPhase(ETickPhase::None)
-	, TickFunctor(FFunctorObject(this, &FTickInterface::Tick))
+	, TickFunctor(FFunctorObject(this, &ITickInterface::Tick))
 {
 }
 
-FTickInterface::~FTickInterface()
+ITickInterface::~ITickInterface()
 {
 	if (bIsRegistered)
 	{
@@ -18,7 +18,7 @@ FTickInterface::~FTickInterface()
 	}
 }
 
-void FTickInterface::Register()
+void ITickInterface::Register()
 {
 	if (!bIsRegistered)
 	{

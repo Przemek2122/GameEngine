@@ -48,14 +48,14 @@ public:
 	
 	/** Create new widget from template, auto-managed. */
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(const char* InWidgetName, const int InWidgetOrder = 0)
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(const char* InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER)
 	{
 		return CreateWidget<TWidgetTemplate>(std::string(InWidgetName), InWidgetOrder);
 	}
 
 	/** Create new widget from template, auto-managed. */
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName = "", const int InWidgetOrder = 0)
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName = "", const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER)
 	{
 		if (InWidgetName == "")
 		{

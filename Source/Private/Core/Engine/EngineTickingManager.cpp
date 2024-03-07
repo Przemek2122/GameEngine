@@ -1,7 +1,7 @@
 #include "CoreEngine.h"
 #include "Engine/EngineTickingManager.h"
 
-#include "Interfaces/CoreLoop/TickInterface.h"
+#include "Interfaces/CoreLoop/ITickInterface.h"
 
 FEngineTickingManager::FEngineTickingManager()
 {
@@ -12,7 +12,7 @@ FEngineTickingManager::~FEngineTickingManager()
 	TickDelegateToIndex.Clear();
 }
 
-void FEngineTickingManager::RegisterInterface(FFunctorObject<FTickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase)
+void FEngineTickingManager::RegisterInterface(FFunctorObject<ITickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase)
 {
 	if (TickFunctor.IsValid())
 	{
@@ -26,7 +26,7 @@ void FEngineTickingManager::RegisterInterface(FFunctorObject<FTickInterface, voi
 	}
 }
 
-void FEngineTickingManager::UnRegisterInterface(FFunctorObject<FTickInterface, void, float>& TickFunctor,const ETickPhase TickInterfacePhase)
+void FEngineTickingManager::UnRegisterInterface(FFunctorObject<ITickInterface, void, float>& TickFunctor,const ETickPhase TickInterfacePhase)
 {
 	if (TickFunctor.IsValid())
 	{

@@ -42,7 +42,7 @@ FVector2D<int> FMap::GetMapSize() const
 
 void FMap::Draw()
 {
-	LOG_INFO("" << GetMapSize().ToString());
+	//LOG_INFO("" << GetMapSize().ToString());
 
 	if (bIsActive)
 	{

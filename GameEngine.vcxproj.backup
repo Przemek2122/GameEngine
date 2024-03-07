@@ -54,10 +54,10 @@
     <ClInclude Include="Source\Public\Core\ECS\Entities\PlayerCharacter.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entity.h" />
     <ClInclude Include="Source\Public\Core\ECS\EntityManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h" />
-    <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h" />
-    <ClInclude Include="Source\Public\Core\Engine\TickManager.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
@@ -99,6 +99,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\SpacerWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\IMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputInterface.h" />
@@ -246,10 +247,10 @@
     <ClCompile Include="Source\Private\Core\ECS\Entities\PlayerCharacter.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entity.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp" />
-    <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp" />
-    <ClCompile Include="Source\Private\Core\Engine\TickManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
@@ -283,6 +284,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\SpacerWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\FUIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />

@@ -41,3 +41,10 @@ enum class EWidgetOrientation : Uint8
 	Absolute = 0,			// Relative to window so it will be like absolute location
 	Relative,				// Relative to parent widget so it will try to align to be inside parent widget.
 };
+
+/** Widget size type */
+enum class EWidgetSizeType : Uint8
+{
+	Pixels = 0,				// Size in pixels
+	ParentPercentage,		// Size in screen percentage
+};

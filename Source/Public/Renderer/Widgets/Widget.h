@@ -10,8 +10,6 @@
 class FWidgetInputManager;
 class FInteractionBaseWidget;
 
-#define WIDGET_DEFINES_DEFAULT_ORDER 0
-
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
  * It's mostly to ensure widget render in proper window.

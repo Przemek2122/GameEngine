@@ -28,9 +28,13 @@ public:
 	
 	/** @returns size of this widget. */
 	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
-	/** Set size of this widget. */
+	/** Set size of this widget in pixels. */
 	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize);
-	
+	/** Set size of this widget in percentage of parent size (0.0 to 1.0) where 1.0 means 100% size. */
+	virtual void SetWidgetSizePercent(const FVector2D<float> InScreenPercentage);
+
+	void RefreshSizeInPercent();
+
 	/** Called when parent changed size */
 	void RefreshWidgetSize();
 	/** Called when parent changed location */
@@ -57,8 +61,14 @@ private:
 	/** Current widget location absolute */
 	FVector2D<int> WidgetLocationInterface;
 
-	/** Size of this widget */
-	FVector2D<int> WidgetSizeInterface;
+	/** Type of size of widgets. Pixels or Screen percentage */
+	EWidgetSizeType WidgetSizeType;
+
+	/** Size of this widget in pixels */
+	FVector2D<int> WidgetSizeInPixelsInterface;
+
+	/** Size of this widget in screen percentage */
+	FVector2D<float> WidgetSizeInScreenPercentInterface;
 
 	/** Default anchor when this widget is created.\n @See Init() */
 	EAnchor DefaultAnchorInterface;

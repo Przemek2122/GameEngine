@@ -13,8 +13,8 @@
 #include "Assets/Assets/FontAsset.h"
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
-#include "Interfaces/CoreLoop/TickInterface.h"
-#include "Interfaces/CoreLoop/RenderInterface.h"
+#include "Interfaces/CoreLoop/ITickInterface.h"
+#include "Interfaces/CoreLoop/IRenderInterface.h"
 #include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()

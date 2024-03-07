@@ -20,11 +20,11 @@ enum class ERenderPhase : Uint8
  * Class for objects that need to be ticked
  * Self registers and unregisters
  */
-class FRenderInterface
+class IRenderInterface
 {
 public:
-	FRenderInterface();
-	virtual ~FRenderInterface();
+	IRenderInterface();
+	virtual ~IRenderInterface();
 
 	/** This function must be called when you want your object to start ticking. */
 	void Register();
@@ -41,5 +41,5 @@ public:
 private:
 	bool bIsRegistered;
 	ERenderPhase RegisteredPhase;
-	FFunctorObject<FRenderInterface, void> RenderFunctor;
+	FFunctorObject<IRenderInterface, void> RenderFunctor;
 };

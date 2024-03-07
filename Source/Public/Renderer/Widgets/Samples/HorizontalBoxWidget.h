@@ -13,7 +13,7 @@ enum class EHorizontalBoxAlignMethod
 class FHorizontalBoxWidget : public FWidget
 {
 public:
-	FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName);
+	FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
 	/** Begin FWidget interface */
 	void Init() override;

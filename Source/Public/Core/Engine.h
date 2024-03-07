@@ -6,7 +6,7 @@
 
 class FEngineRenderingManager;
 class FEngineTickingManager;
-class FTickInterface;
+class ITickInterface;
 class FMapManager;
 class FEventHandler;
 class FEngineManager;

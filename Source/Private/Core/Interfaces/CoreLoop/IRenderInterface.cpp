@@ -1,17 +1,17 @@
 #include "CoreEngine.h"
-#include "Core/Interfaces/CoreLoop/RenderInterface.h"
+#include "Core/Interfaces/CoreLoop/IRenderInterface.h"
 
 #include "Engine/EngineRenderingManager.h"
 
-FRenderInterface::FRenderInterface()
+IRenderInterface::IRenderInterface()
 	: bIsRegistered(false)
 	, RegisteredPhase(ERenderPhase::None)
-	, RenderFunctor(FFunctorObject(this, &FRenderInterface::Render))
+	, RenderFunctor(FFunctorObject(this, &IRenderInterface::Render))
 {
 	Register();
 }
 
-FRenderInterface::~FRenderInterface()
+IRenderInterface::~IRenderInterface()
 {
 	if (bIsRegistered)
 	{
@@ -19,7 +19,7 @@ FRenderInterface::~FRenderInterface()
 	}
 }
 
-void FRenderInterface::Register()
+void IRenderInterface::Register()
 {
 	if (!bIsRegistered)
 	{

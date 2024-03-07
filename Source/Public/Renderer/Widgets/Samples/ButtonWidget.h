@@ -8,7 +8,7 @@
 class FButtonWidget : public FInteractionBaseWidget
 {
 public:
-	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
+	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 	virtual ~FButtonWidget() override = default;
 
 	/** Begin FWidget */

@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -191,9 +192,6 @@
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\CoreEngine.h">
-      <Filter>Public\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -281,10 +279,10 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\RenderInterface.h">
+    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\TickInterface.h">
+    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\ITickInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h">
@@ -367,6 +365,9 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\UIMenu.h">
+      <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
       <Filter>Public\Renderer\Widgets</Filter>
@@ -790,10 +791,10 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\RenderInterface.cpp">
+    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp">
       <Filter>Private\Core\Interfaces\CoreLoop</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\TickInterface.cpp">
+    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\ITickInterface.cpp">
       <Filter>Private\Core\Interfaces\CoreLoop</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp">
@@ -877,6 +878,9 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\UIMenu.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
@@ -933,6 +937,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" /> 
-  </ItemGroup> 
-</Project> 
+    <None Include="cpp.hint" />
+    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat" />
+    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat" />
+    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat" />
+    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Scripts\BuildActions\README.txt" />
+  </ItemGroup>
+</Project>

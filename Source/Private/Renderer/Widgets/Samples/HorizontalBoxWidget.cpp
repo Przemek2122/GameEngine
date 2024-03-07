@@ -3,8 +3,10 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/HorizontalBoxWidget.h"
 
-FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName)
-	: FWidget(InWidgetManagementInterface, InWidgetName)
+#include "Misc/Math.h"
+
+FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HorizontalBoxAlignMethod(EHorizontalBoxAlignMethod::FromTheLeft)
 	, bScaleToContent(false)
 {
@@ -99,7 +101,7 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 
 	for (auto i = 0; i < ManagedWidgets.Size(); i++)
 	{
-		FWidget* ChildWidget = ManagedWidgets[i];
+		FWidget* ChildWidget = ManagedWidgets[i - 1];
 
 		// We must ensure it's only done when it should be visible
 		if (ChildWidget->IsVisible())

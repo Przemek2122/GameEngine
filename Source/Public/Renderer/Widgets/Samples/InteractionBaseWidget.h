@@ -24,7 +24,7 @@ enum class EClickState : Uint8
 class FInteractionBaseWidget : public FWidget
 {
 public:
-	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
+	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 	virtual ~FInteractionBaseWidget() override;
 
 	/** Begin FWidget */

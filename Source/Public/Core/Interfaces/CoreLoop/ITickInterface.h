@@ -21,11 +21,11 @@ enum class ETickPhase : Uint8
  * Class for objects that need to be ticked
  * Self registers and unregisters
  */
-class FTickInterface
+class ITickInterface
 {
 public:
-	FTickInterface();
-	virtual ~FTickInterface();
+	ITickInterface();
+	virtual ~ITickInterface();
 
 	/** This function must be called when you want your object to start ticking. */
 	void Register();
@@ -42,5 +42,5 @@ public:
 private:
 	bool bIsRegistered;
 	ETickPhase RegisteredPhase;
-	FFunctorObject<FTickInterface, void, float> TickFunctor;
+	FFunctorObject<ITickInterface, void, float> TickFunctor;
 };

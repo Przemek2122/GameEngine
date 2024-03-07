@@ -15,7 +15,7 @@ enum class ETextRenderMode : Uint8
 class FTextWidget : public FWidget
 {
 public:
-	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
+	FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 	~FTextWidget() override;
 	
 	/** Begin FWidget */

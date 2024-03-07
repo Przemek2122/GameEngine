@@ -1,14 +1,14 @@
 #include "CoreEngine.h"
 #include "Engine/EngineRenderingManager.h"
 
-#include "Interfaces/CoreLoop/RenderInterface.h"
+#include "Interfaces/CoreLoop/IRenderInterface.h"
 
 FEngineRenderingManager::~FEngineRenderingManager()
 {
 	RenderDelegateToIndex.Clear();
 }
 
-void FEngineRenderingManager::RegisterInterface(FFunctorObject<FRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase)
+void FEngineRenderingManager::RegisterInterface(FFunctorObject<IRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase)
 {
 	if (TickFunctor.IsValid())
 	{
@@ -18,7 +18,7 @@ void FEngineRenderingManager::RegisterInterface(FFunctorObject<FRenderInterface,
 	}
 }
 
-void FEngineRenderingManager::UnRegisterInterface(FFunctorObject<FRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase)
+void FEngineRenderingManager::UnRegisterInterface(FFunctorObject<IRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase)
 {
 	if (TickFunctor.IsValid())
 	{

@@ -4,7 +4,7 @@
 
 enum class ERenderPhase : Uint8;
 
-class FRenderInterface;
+class IRenderInterface;
 
 /**
  * This class is responsible for managing the rendering of the engine
@@ -16,8 +16,8 @@ public:
 	~FEngineRenderingManager();
 
 	/** Register using delegate with Tick function */
-	void RegisterInterface(FFunctorObject<FRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase);
-	void UnRegisterInterface(FFunctorObject<FRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase);
+	void RegisterInterface(FFunctorObject<IRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase);
+	void UnRegisterInterface(FFunctorObject<IRenderInterface, void>& TickFunctor, const ERenderPhase TickInterfacePhase);
 
 	/** This is the main tick function that will be called from the engine (CoreEngine.cpp */
 	void EngineRender();
