@@ -101,7 +101,7 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 
 	for (auto i = 0; i < ManagedWidgets.Size(); i++)
 	{
-		FWidget* ChildWidget = ManagedWidgets[i - 1];
+		FWidget* ChildWidget = ManagedWidgets[i];
 
 		// We must ensure it's only done when it should be visible
 		if (ChildWidget->IsVisible())
