@@ -4,5 +4,12 @@
 FMapEditor::FMapEditor(FMap* InMap)
 	: Map(InMap)
 {
+}
 
+void FMapEditor::Initialize()
+{
+}
+
+void FMapEditor::DeInitialize()
+{
 }

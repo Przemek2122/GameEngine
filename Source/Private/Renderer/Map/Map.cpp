@@ -46,7 +46,7 @@ void FMap::Draw()
 
 	if (bIsActive)
 	{
-		SDL_Renderer* WindowRenderer = MapManager->GetWindow()->GetRenderer()->GetSDLRenderer();
+		SDL_Renderer* WindowRenderer = MapManager->GetOwnerWindow()->GetRenderer()->GetSDLRenderer();
 
 		SDL_Rect Source, Destination;
 		Source.x = 0;

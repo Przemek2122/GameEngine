@@ -291,6 +291,9 @@
     <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointer.h">
       <Filter>Public\Core\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Memory\AutoUIMenu.h">
+      <Filter>Public\Core\Memory</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Memory\Class.h">
       <Filter>Public\Core\Memory</Filter>
     </ClInclude>
@@ -801,6 +804,9 @@
       <Filter>Private\Core\Interfaces</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointer.cpp">
+      <Filter>Private\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Memory\AutoUserUI.cpp">
       <Filter>Private\Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Memory\Class.cpp">

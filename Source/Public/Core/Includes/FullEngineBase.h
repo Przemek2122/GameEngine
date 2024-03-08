@@ -25,6 +25,7 @@
 #include "Core/EngineMain.h"
 
 #include "Core/Memory/AutoDeletePointer.h"
+#include "Core/Memory/AutoUIMenu.h"
 
 #include "Core/ECS/EntityManager.h"
 

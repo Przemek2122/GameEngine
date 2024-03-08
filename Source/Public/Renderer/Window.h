@@ -95,7 +95,7 @@ public:
 
 protected:
 	SDL_Window* Window;
-	FRenderer* Renderer{};
+	FRenderer* Renderer;
 	char* WindowTitle;
 	int WindowPositionX;
 	int WindowPositionY;

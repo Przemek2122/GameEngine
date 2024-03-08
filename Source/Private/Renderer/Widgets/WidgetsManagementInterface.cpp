@@ -207,7 +207,6 @@ void IWidgetManagementInterface::UnRegisterWidget(FWidget* Widget)
 {
 #if _DEBUG
 	const auto IndexToDelete = ManagedWidgets.FindIndexOf(Widget);
-	ENSURE_VALID(IndexToDelete != -1);
 #endif
 	
 	ManagedWidgets.Remove(Widget);

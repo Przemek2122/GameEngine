@@ -49,4 +49,6 @@ class CQueueSafe;
 /** Begin of memory */
 template<typename TTypeToStore>
 class FAutoDeletePointer;
+template<typename TTypeToStore>
+class FAutoUIMenu;
 /** End of memory */

@@ -9,6 +9,7 @@
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
 	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags))
+	, Renderer(nullptr)
 	, WindowTitle(InTitle)
 	, WindowPositionX(InPositionX)
 	, WindowPositionY(InPositionY)

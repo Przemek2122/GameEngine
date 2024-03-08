@@ -279,10 +279,10 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\RenderInterface.h">
+    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\TickInterface.h">
+    <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\ITickInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h">
@@ -366,7 +366,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Renderer\Widgets\IMenu.h">
+    <ClInclude Include="Source\Public\Renderer\Widgets\UIMenu.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
@@ -791,10 +791,10 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\RenderInterface.cpp">
+    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp">
       <Filter>Private\Core\Interfaces\CoreLoop</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\TickInterface.cpp">
+    <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\ITickInterface.cpp">
       <Filter>Private\Core\Interfaces\CoreLoop</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp">
@@ -878,7 +878,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Renderer\Widgets\FUIMenu.cpp">
+    <ClCompile Include="Source\Private\Renderer\Widgets\UIMenu.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">

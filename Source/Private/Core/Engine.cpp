@@ -355,7 +355,6 @@ FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
 	return new FEngineRenderingManager;
 }
 
-
 const std::string& FEngine::GetLaunchFullPath() const
 {
 	return LaunchFullPath;

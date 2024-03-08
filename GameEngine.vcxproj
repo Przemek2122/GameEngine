@@ -74,6 +74,7 @@
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\ITickInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
     <ClInclude Include="Source\Public\Core\Memory\AutoDeletePointer.h" />
+    <ClInclude Include="Source\Public\Core\Memory\AutoUIMenu.h" />
     <ClInclude Include="Source\Public\Core\Memory\Class.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\ITickInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />
     <ClCompile Include="Source\Private\Core\Memory\AutoDeletePointer.cpp" />
+    <ClCompile Include="Source\Private\Core\Memory\AutoUserUI.cpp" />
     <ClCompile Include="Source\Private\Core\Memory\Class.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />

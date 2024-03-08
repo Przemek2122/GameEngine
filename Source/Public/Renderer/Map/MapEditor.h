@@ -14,6 +14,9 @@ class FMapEditor
 public:
 	FMapEditor(FMap* InMap);
 
+	void Initialize();
+	void DeInitialize();
+
 protected:
 	FMap* Map;
 

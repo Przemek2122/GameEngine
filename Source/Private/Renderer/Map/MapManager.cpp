@@ -3,11 +3,13 @@
 #include "CoreEngine.h"
 #include "Assets/Assets/MapAsset.h"
 #include "Renderer/Map/Map.h"
+#include "Renderer/Map/MapEditor.h"
 #include "Renderer/Map/Mapmanager.h"
 
 FMapManager::FMapManager(FWindow* InWindow)
 	: CurrentMap(nullptr)
-	, Window(InWindow)
+	, MapEditor(nullptr)
+	, OwnerWindow(InWindow)
 {
 }
 
@@ -25,6 +27,147 @@ void FMapManager::DrawMap()
 	{
 		CurrentMap->Draw();
 	}
+}
+
+FMapAsset* FMapManager::GetMapByName(const std::string& Name)
+{
+	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+	if (AssetsManager != nullptr)
+	{
+		FMapAsset* MapAsset = AssetsManager->GetAsset<FMapAsset>(Name);
+		if (MapAsset != nullptr)
+		{
+			if (MapAsset->IsLoaded())
+			{
+				return MapAsset;
+			}
+			else
+			{
+				LOG_WARN("Map is not loaded. Load it first.");
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+void FMapManager::SetActiveGameMap(FMapAsset* MapAsset)
+{
+	if (MapAsset != nullptr)
+	{
+		if (MapAsset->IsLoaded())
+		{
+			if (CurrentMap != nullptr)
+			{
+				DeactivateCurrentGameMap();
+			}
+
+			CurrentMap = new FMap(MapAsset, this);
+			CurrentMap->Initialize();
+		}
+		else
+		{
+			LOG_ERROR("Map is not loaded. Load it first.");
+		}
+	}
+	else
+	{
+		LOG_ERROR("Map is nullptr.");
+	}
+}
+
+void FMapManager::DeactivateCurrentGameMap()
+{
+	if (CurrentMap != nullptr)
+	{
+		CurrentMap->DeInitialize();
+
+		delete CurrentMap;
+		CurrentMap = nullptr;
+	}
+}
+
+void FMapManager::SetActiveEditorMap(FMapAsset* MapAsset)
+{
+	if (MapAsset != nullptr)
+	{
+		if (MapAsset->IsLoaded())
+		{
+			if (CurrentMap != nullptr)
+			{
+				DeactivateCurrentEditorMap();
+			}
+
+			CurrentMap = new FMap(MapAsset, this);
+			CurrentMap->Initialize();
+
+			MapEditor = new FMapEditor(CurrentMap);
+			MapEditor->Initialize();
+		}
+		else
+		{
+			LOG_ERROR("Map is not loaded. Load it first.");
+		}
+	}
+	else
+	{
+		LOG_ERROR("Map is nullptr.");
+	}
+}
+
+void FMapManager::DeactivateCurrentEditorMap()
+{
+	if (MapEditor != nullptr)
+	{
+		MapEditor->DeInitialize();
+
+		delete MapEditor;
+		MapEditor = nullptr;
+
+		DeactivateCurrentGameMap();
+	}
+}
+
+void FMapManager::CacheAvailableMaps()
+{
+	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+	if (AssetsManager != nullptr)
+	{
+		AvailableMaps.Clear();
+
+		CArray<std::string> DirectoriesFound = AssetsManager->GetFilesFromDirectory(AssetsManager->GetMapsPathRelative());
+
+		const char Slash = AssetsManager->GetPlatformSlash();
+
+		const std::string PathPrefix = AssetsManager->GetMapsPathRelative() + Slash;
+
+		for (std::string& Directory : DirectoriesFound)
+		{
+			std::string Path = PathPrefix + Directory;
+
+			AssetsManager->AddAsset<FMapAsset>(Directory, Path);
+
+			AvailableMaps.Push(Directory);
+		}
+	}
+}
+
+CArray<std::string> FMapManager::GetAvailableMaps() const
+{
+#if _DEBUG
+	if (AvailableMaps.IsEmpty())
+	{
+		// Maps are empty,
+		// either you forgot to call FMapManager::CacheAvailableMaps
+		// or
+		// maps are really empty
+		ENSURE_VALID(false);
+
+		LOG_ERROR("No maps found in FMapManager::GetAvailableMaps - Maps or empty or you did not call FMapManager::CacheAvailableMaps");
+	}
+#endif
+
+	return AvailableMaps;
 }
 
 FMapAsset* FMapManager::LoadMap(const std::string& Name)
@@ -94,124 +237,6 @@ void FMapManager::UnloadAllMaps()
 	{
 		UnLoadMap(MapAsset);
 	}
-}
-
-FMapAsset* FMapManager::GetMapByName(const std::string& Name)
-{
-	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-	if (AssetsManager != nullptr)
-	{
-		FMapAsset* MapAsset = AssetsManager->GetAsset<FMapAsset>(Name);
-		if (MapAsset != nullptr)
-		{
-			if (MapAsset->IsLoaded())
-			{
-				return MapAsset;
-			}
-			else
-			{
-				LOG_WARN("Map is not loaded. Load it first.");
-			}
-		}
-	}
-
-	return nullptr;
-}
-
-void FMapManager::SetActiveGameMap(FMapAsset* MapAsset)
-{
-	if (MapAsset != nullptr)
-	{
-		if (MapAsset->IsLoaded())
-		{
-			if (CurrentMap != nullptr)
-			{
-				DeactivateCurrentGameMap();
-			}
-
-			CurrentMap = new FMap(MapAsset, this);
-			CurrentMap->Initialize();
-		}
-		else
-		{
-			LOG_ERROR("Map is not loaded. Load it first.");
-		}
-	}
-	else
-	{
-		LOG_ERROR("Map is nullptr.");
-	}
-}
-
-void FMapManager::DeactivateCurrentGameMap()
-{
-	if (CurrentMap != nullptr)
-	{
-		CurrentMap->DeInitialize();
-
-		delete CurrentMap;
-
-		CurrentMap = nullptr;
-	}
-}
-
-void FMapManager::SetCurrentEditorMap(FMap* Map)
-{
-	if (Map != nullptr)
-	{
-
-
-
-	}
-	else
-	{
-		LOG_ERROR("Map is nullptr.");
-	}
-}
-
-void FMapManager::DeactivateCurrentEditorMap()
-{
-
-}
-
-void FMapManager::CacheAvailableMaps()
-{
-	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-	if (AssetsManager != nullptr)
-	{
-		AvailableMaps.Clear();
-
-		CArray<std::string> DirectoriesFound = AssetsManager->GetFilesFromDirectory(AssetsManager->GetMapsPathRelative());
-
-		const char Slash = AssetsManager->GetPlatformSlash();
-
-		const std::string PathPrefix = AssetsManager->GetMapsPathRelative() + Slash;
-
-		for (std::string& Directory : DirectoriesFound)
-		{
-			std::string Path = PathPrefix + Directory;
-
-			AssetsManager->AddAsset<FMapAsset>(Directory, Path);
-
-			AvailableMaps.Push(Directory);
-		}
-	}
-}
-
-CArray<std::string> FMapManager::GetAvailableMaps() const
-{
-#if _DEBUG
-	if (AvailableMaps.IsEmpty())
-	{
-		// Maps are empty,
-		// either you forgot to call FMapManager::CacheAvailableMaps
-		// or
-		// maps are really empty
-		ENSURE_VALID(false);
-	}
-#endif
-
-	return AvailableMaps;
 }
 
 bool FMapManager::IsMapAssetCurrentlyUsed(FMapAsset* MapAsset)

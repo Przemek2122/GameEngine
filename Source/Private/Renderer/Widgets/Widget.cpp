@@ -61,16 +61,12 @@ void FWidget::Init()
 
 void FWidget::DeInit()
 {
-#if _DEBUG
-	if (ENSURE_VALID(WidgetManagementInterface != nullptr))
+	if (WidgetManagementInterface != nullptr)
 	{
 		WidgetManagementInterface->UnRegisterWidget(this);
 
 		WidgetManagementInterface = nullptr;
 	}
-#else
-	WidgetManagementInterface->UnRegisterWidget(this);
-#endif
 }
 
 void FWidget::Tick()

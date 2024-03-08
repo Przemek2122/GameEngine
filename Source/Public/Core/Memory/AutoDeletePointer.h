@@ -3,6 +3,8 @@
 #pragma once
 #include "CoreMinimal.h"
 
+class FUIMenu;
+
 /**
  * Class managing other class pointer lifecycle
  * @Note if you declare this class twice with the same pointer, it will crash.
