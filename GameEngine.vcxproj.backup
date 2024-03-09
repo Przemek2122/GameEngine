@@ -70,6 +70,8 @@
     <ClInclude Include="Source\Public\Core\Includes\GlobalDefines.h" />
     <ClInclude Include="Source\Public\Core\Includes\GlobalProperties.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerKeyboard.h" />
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerMouse.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\ITickInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
@@ -101,6 +103,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\UIMenu.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\UIMenus\PauseUIMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputInterface.h" />
@@ -256,6 +259,8 @@
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerKeyboard.cpp" />
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerMouse.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\ITickInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />
@@ -287,6 +292,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\UIMenu.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\UIMenus\PauseUIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />

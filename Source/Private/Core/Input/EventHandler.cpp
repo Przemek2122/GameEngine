@@ -3,74 +3,6 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
-void FMouseInputDelegateWrapper::Execute(const FVector2D<int>& Location, const EInputState InputState)
-{
-	if (!bWasSentAlready)
-	{
-		AddToResetQueue();
-
-		if (InputState == EInputState::PRESS && CurrentInputState == EInputState::NOT_PRESSED)
-		{
-			Delegate.Execute(Location, InputState);
-
-			CurrentInputState = EInputState::PRESS;
-		}
-		else if (InputState == EInputState::RELEASE
-			&& (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
-		{
-			Delegate.Execute(Location, InputState);
-
-			bWasSentAlready = true;
-		}
-	}
-}
-
-void FMouseInputDelegateWrapper::AddToResetQueue()
-{
-	EventHandler->AddMouseInputDelegateToReset(this);
-}
-
-void FMouseInputDelegateWrapper::Reset()
-{
-	bWasSentAlready = false;
-
-	CurrentInputState = EInputState::NOT_PRESSED;
-}
-
-void FInputDelegateWrapper::Execute(const EInputState InputState)
-{
-	if (!bWasSentAlready)
-	{
-		AddToResetQueue();
-
-		if (EInputState::PRESS == InputState && CurrentInputState == EInputState::NOT_PRESSED)
-		{
-			Delegate.Execute(InputState);
-
-			CurrentInputState = EInputState::PRESS;
-		}
-		else if (EInputState::RELEASE == InputState 
-			&& (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
-		{
-			Delegate.Execute(InputState);
-
-			bWasSentAlready = true;
-		}
-	}
-}
-
-void FInputDelegateWrapper::Reset()
-{
-	bWasSentAlready = false;
-
-	CurrentInputState = EInputState::NOT_PRESSED;
-}
-
-void FInputDelegateWrapper::AddToResetQueue()
-{
-	EventHandler->AddKeyboardInputDelegateToReset(this);
-}
-
 FEventHandler::FEventHandler(const SDL_Event& InEvent)
 	: Event(InEvent)
 	, bQuitInputDetected(false)
@@ -114,6 +46,11 @@ void FEventHandler::ResetAll()
 	}
 
 	KeyboardInputDelegateResetQueue.Clear();
+}
+
+bool FEventHandler::QuitInputDetected() const
+{
+	return bQuitInputDetected;
 }
 
 bool FEventHandler::HasMouseMoved() const
@@ -507,9 +444,4 @@ void FEventHandler::InputMouseUp()
 			LOG_DEBUG("Unknown mouse input found.");
 		}
 	}
-}
-
-bool FEventHandler::QuitInputDetected() const
-{
-	return bQuitInputDetected;
 }

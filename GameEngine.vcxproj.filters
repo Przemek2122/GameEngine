@@ -287,6 +287,15 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerKeyboard.h">
+      <Filter>Public\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerMouse.h">
+      <Filter>Public\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerShared.h">
+      <Filter>Public\Core\Input</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
@@ -803,6 +812,15 @@
       <Filter>Private\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerKeyboard.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerMouse.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerShared.cpp">
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp">

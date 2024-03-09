@@ -3,76 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-/** This class is used to tell type of input, if it is pressed or released. */
-enum class EInputState
-{
-	NOT_PRESSED = 0,
-	PRESS = 1,
-	RELEASE = 2,
-	ENUM_MAX
-};
-
-/** This class is used to handle mouse events. */
-class FMouseInputDelegateWrapper
-{
-public:
-	FMouseInputDelegateWrapper(FEventHandler* InEventHandler)
-		: bWasSentAlready(false)
-		, EventHandler(InEventHandler)
-		, CurrentInputState(EInputState::NOT_PRESSED)
-	{
-	}
-
-	void Execute(const FVector2D<int>& Location, const EInputState InputState);
-
-	void Reset();
-
-	FDelegate<void, FVector2D<int>, EInputState> Delegate;
-
-private:
-	void AddToResetQueue();
-
-private:
-	/** True if input was sent already. */
-	bool bWasSentAlready;
-
-	FEventHandler* EventHandler;
-
-	/** Current state of input. It is incremented in execute and then reset in reset */
-	EInputState CurrentInputState;
-};
-
-/** This class is used to handle keyboard events. It exists to allow rebinding. */
-class FInputDelegateWrapper
-{
-public:
-	FInputDelegateWrapper(FEventHandler* InEventHandler)
-		: bWasSentAlready(false)
-		, EventHandler(InEventHandler)
-		, CurrentInputState(EInputState::NOT_PRESSED)
-	{
-	}
-
-	void Execute(EInputState InputState);
-
-	void Reset();
-
-	/** Called when input is detected. */
-	FDelegate<void, EInputState> Delegate;
-
-private:
-	void AddToResetQueue();
-
-private:
-	/** True if input was sent already. */
-	bool bWasSentAlready;
-
-	FEventHandler* EventHandler;
-
-	/** Current state of input. It is incremented in execute and then reset in reset */
-	EInputState CurrentInputState;
-};
+#include "Core/Input/EventHandlerMouse.h"
+#include "Core/Input/EventHandlerKeyboard.h"
 
 class FMouseDelegates
 {
@@ -104,13 +36,12 @@ public:
 	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
-protected:
-	SDL_Event Event;
-
 public:
 	void HandleEvents();
 
 	void ResetAll();
+
+	_NODISCARD bool QuitInputDetected() const;
 
 	_NODISCARD bool HasMouseMoved() const;
 	_NODISCARD FVector2D<int> GetMouseLocationCurrent() const;
@@ -137,9 +68,6 @@ protected:
 	virtual void InputMouseDown();
 	virtual void InputMouseUp();
 
-public:
-	_NODISCARD bool QuitInputDetected() const;
-
 protected:
 	/** This map is used to reset mouse delegates. */
 	CArray<FMouseInputDelegateWrapper*> MouseInputDelegateResetQueue;
@@ -148,6 +76,8 @@ protected:
 
 	FVector2D<int> MouseLocationCurrent;
 	FVector2D<int> MouseLocationLast;
+
+	SDL_Event Event;
 	
 	bool bQuitInputDetected;
 	

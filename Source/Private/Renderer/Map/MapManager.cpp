@@ -15,10 +15,9 @@ FMapManager::FMapManager(FWindow* InWindow)
 
 FMapManager::~FMapManager()
 {
-	if (CurrentMap != nullptr)
-	{
-		delete CurrentMap;
-	}
+	DeactivateCurrentEditorMap();
+
+	DeactivateCurrentGameMap();
 }
 
 void FMapManager::DrawMap()
@@ -83,6 +82,7 @@ void FMapManager::DeactivateCurrentGameMap()
 		CurrentMap->DeInitialize();
 
 		delete CurrentMap;
+
 		CurrentMap = nullptr;
 	}
 }
@@ -122,6 +122,7 @@ void FMapManager::DeactivateCurrentEditorMap()
 		MapEditor->DeInitialize();
 
 		delete MapEditor;
+
 		MapEditor = nullptr;
 
 		DeactivateCurrentGameMap();
