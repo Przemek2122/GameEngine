@@ -53,3 +53,8 @@ FGameModeManager* FGameModeBase::GetOwnerGameModeManager() const
 {
 	return OwnerGameModeManager;
 }
+
+FWindowAdvanced* FGameModeBase::GetWindowAdvanced() const
+{
+	return OwnerGameModeManager->GetOwnerWindowAdvanced();
+}

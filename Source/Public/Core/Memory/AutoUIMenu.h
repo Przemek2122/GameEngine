@@ -6,7 +6,7 @@
 #include "Renderer/Widgets/UIMenu.h"
 
 /**
- * \brief 
+ * \brief Class for FUIMenu auto cleanup.
  * \tparam TTypeToStore must be of type FUIMenu
  */
 template<typename TTypeToStore>

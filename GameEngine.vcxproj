@@ -101,6 +101,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\UIMenu.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\UIMenus\PauseUIMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputInterface.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\UIMenu.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\UIMenus\PauseUIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+class FWindowAdvanced;
 class FGameModeManager;
 
 /**
@@ -26,6 +27,7 @@ public:
 	bool IsInProgress() const { return bIsInProgress; }
 
 	FGameModeManager* GetOwnerGameModeManager() const;
+	FWindowAdvanced* GetWindowAdvanced() const;
 
 protected:
 	virtual void Start();
