@@ -23,12 +23,21 @@ EAssetType FTextureAsset::GetAssetType() const
 	return EAssetType::AT_TEXTURE;
 }
 
-void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
+FVector2D<int> FTextureAsset::GetSize() const
 {
-	Texture = new FTexture(AssetPath, InRenderer);
+	FVector2D<int> Size;
+
+	SDL_QueryTexture(Texture->GetSDLTexture(), nullptr, nullptr, &Size.X, &Size.Y);
+
+	return Size;
 }
 
 FTexture* FTextureAsset::GetTexture() const
 {
 	return Texture;
+}
+
+void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
+{
+	Texture = new FTexture(AssetPath, InRenderer);
 }

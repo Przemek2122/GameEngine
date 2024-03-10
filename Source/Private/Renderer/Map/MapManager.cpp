@@ -244,3 +244,13 @@ bool FMapManager::IsMapAssetCurrentlyUsed(FMapAsset* MapAsset)
 {
 	return (CurrentMap != nullptr && CurrentMap->GetMapAsset() == MapAsset);
 }
+
+FMap* FMapManager::GetCurrentMap() const
+{
+	return CurrentMap;
+}
+
+FMapEditor* FMapManager::GetMapEditor() const
+{
+	return MapEditor;
+}

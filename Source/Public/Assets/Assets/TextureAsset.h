@@ -15,13 +15,18 @@ public:
 	FTextureAsset(const std::string& InAssetName, const std::string& InAssetPath);
 	~FTextureAsset() override;
 
+	/** Begin FAssetBase */
 	EAssetType GetAssetType() const override;
+	/** End FAssetBase */
 
-	/** Call to create texture in SDL */
-	void PrepareTexture(SDL_Renderer* InRenderer);
+	/** Returns size of texture. */
+	FVector2D<int> GetSize() const;
 
 	/** Get texture */
 	FTexture* GetTexture() const;
+
+	/** Call to create texture in SDL. Requires SDL_Renderer. */
+	void PrepareTexture(SDL_Renderer* InRenderer);
 
 protected:
 	/** Texture - deleted in destructor */

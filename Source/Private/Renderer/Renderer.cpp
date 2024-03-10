@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "Renderer/Renderer.h"
 
+#include "Assets/Assets/TextureAsset.h"
+
 FColorPoint::FColorPoint()
 	: Location(0)
 	, Color(0)
@@ -108,6 +110,22 @@ FVector2D<int> FRenderer::GetWindowSize() const
 void FRenderer::SetWindowSize(const int X, const int Y, const bool bUpdateSDL) const
 {
 	Window->SetWindowSize(X, Y, bUpdateSDL);
+}
+
+void FRenderer::DrawTexture(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const
+{
+	DrawTexture(Texture->GetTexture()->GetSDLTexture(), Location, Size);
+}
+
+void FRenderer::DrawTexture(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const
+{
+	SDL_Rect Rect;
+	Rect.x = Location.X;
+	Rect.y = Location.Y;
+	Rect.w = Size.X;
+	Rect.h = Size.Y;
+
+	SDL_RenderCopy(Renderer, Texture, nullptr, &Rect);
 }
 
 void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const

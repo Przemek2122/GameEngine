@@ -12,6 +12,8 @@ public:
 
 	void Draw(SDL_Renderer* Renderer, SDL_Rect SourceRect, SDL_Rect DestinationRect) const;
 
+	SDL_Texture* GetSDLTexture() const;
+
 protected:
 	SDL_Texture* SDLTexture;
 	

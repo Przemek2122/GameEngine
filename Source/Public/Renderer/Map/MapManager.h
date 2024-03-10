@@ -64,6 +64,10 @@ public:
 
 	bool IsMapAssetCurrentlyUsed(FMapAsset* MapAsset);
 
+	FMap* GetCurrentMap() const;
+
+	FMapEditor* GetMapEditor() const;
+
 protected:
 	/** Current map, has refrence to map asset and renders map. */
 	FMap* CurrentMap;

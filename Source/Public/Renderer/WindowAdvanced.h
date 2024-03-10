@@ -13,7 +13,7 @@ class FGameModeManager;
 class FWindowAdvanced : public FWindow
 {
 public:
-	FWindowAdvanced(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0);
+	FWindowAdvanced(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = WINDOW_DEFAULT_FLAGS);
 	~FWindowAdvanced() override;
 
 	FGameModeManager* GetGameModeManager() const { return GameModeManager; }
