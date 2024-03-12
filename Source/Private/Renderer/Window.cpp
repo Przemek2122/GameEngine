@@ -42,8 +42,8 @@ FWindow::~FWindow()
 	delete Renderer;	
 	delete WidgetManager;
 	delete WidgetInputManager;
-	delete EntityManager;
 	delete MapManager;
+	delete EntityManager;
 
 	if (Window != nullptr)
 	{

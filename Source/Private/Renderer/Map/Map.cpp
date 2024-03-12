@@ -4,6 +4,7 @@
 #include "Renderer/Map/Map.h"
 
 #include "Assets/Assets/TextureAsset.h"
+#include "ECS/Entities/CameraManager.h"
 #include "Misc/Math.h"
 #include "Renderer/Map/MapManager.h"
 
@@ -13,17 +14,38 @@ FMap::FMap(FMapAsset* InMapAsset, FMapManager* InMapManager)
 	, bIsActive(false)
 	, Scale(0.f)
 	, ScaleJump(0.f)
+	, CameraManagerEntity(nullptr)
 {
 }
 
 void FMap::Initialize()
 {
 	ReadAsset();
+
+	FEntityManager* EntityManager = MapManager->GetOwnerWindow()->GetEntityManager();
+	if (EntityManager != nullptr)
+	{
+		CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>("CameraManager");
+	}
+	else
+	{
+		LOG_WARN("EntityManager is nullptr. CameraManager will not be created.");
+	}
 }
 
 void FMap::DeInitialize()
 {
 	ClearData();
+
+	FEntityManager* EntityManager = MapManager->GetOwnerWindow()->GetEntityManager();
+	if (EntityManager != nullptr)
+	{
+		EntityManager->DestroyEntity(CameraManagerEntity);
+	}
+	else if (EntityManager == nullptr)
+	{
+		LOG_ERROR("EntityManager is nullptr. Memory leak!");
+	}
 }
 
 int FMap::GetMapWidth() const

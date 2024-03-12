@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Assets/Assets/MapAsset.h"
 
+class ECameraManager;
 /**
  * Class for map management
  */
@@ -70,5 +71,7 @@ protected:
 
 	/** This property is for moving map */
 	FVector2D<int> MapLocation;
+
+	ECameraManager* CameraManagerEntity;
 
 };
