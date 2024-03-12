@@ -79,13 +79,13 @@ void FMap::Draw()
 
 		const int VerticalSize = MapData.MapArray.Size();
 
-		for (int VerticalIndex = 0; VerticalIndex < VerticalSize && VerticalIndex < MapLocationTileOffsetMax.Y; VerticalIndex++)
+		for (int VerticalIndex = 0; VerticalIndex < VerticalSize; VerticalIndex++)
 		{
 			const FMapRow& MapRow = MapData.MapArray[VerticalIndex];
 
 			const int HorizontalSize = MapRow.Array.Size();
 
-			for (int HorizontalIndex = 0; HorizontalIndex < HorizontalSize && HorizontalIndex < MapLocationTileOffsetMax.X; HorizontalIndex++)
+			for (int HorizontalIndex = 0; HorizontalIndex < HorizontalSize; HorizontalIndex++)
 			{
 				const int AssetIndex = MapRow.Array[HorizontalIndex];
 				if (AssetIndex >= 0)
@@ -148,25 +148,27 @@ void FMap:: AddMapLocation(const FVector2D<int>& LocationChange)
 {
 	MapLocation += LocationChange;
 
-	LOG_DEBUG(LocationChange.ToString());
-
 	const FVector2D<int> MapSize = GetMapSizeInPixels();
 	const FVector2D<int> WindowSize = MapManager->GetOwnerWindow()->GetWindowSize();
 	const FVector2D<int> HalfWindowSize = WindowSize / 2;
 
-	if (MapLocation.X > MapSize.X - HalfWindowSize.X)
+	// Width right limit
+	if (MapLocation.X > HalfWindowSize.X)
 	{
-		MapLocation.X = MapSize.X - HalfWindowSize.X;
+		MapLocation.X = HalfWindowSize.X;
 	}
+	// Width left limit
 	else if (MapLocation.X < -MapSize.X + HalfWindowSize.X)
 	{
 		MapLocation.X = -MapSize.X + HalfWindowSize.X;
 	}
 
-	if (MapLocation.Y > MapSize.Y - HalfWindowSize.Y)
+	// Height down limit
+	if (MapLocation.Y > HalfWindowSize.Y)
 	{
-		MapLocation.Y = MapSize.Y - HalfWindowSize.Y;
+		MapLocation.Y = HalfWindowSize.Y;
 	}
+	// Height up limit
 	else if (MapLocation.Y < -MapSize.Y + HalfWindowSize.Y)
 	{
 		MapLocation.Y = -MapSize.Y + HalfWindowSize.Y;
