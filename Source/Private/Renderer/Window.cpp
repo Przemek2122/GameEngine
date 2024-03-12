@@ -66,6 +66,11 @@ void FWindow::Init()
 	MapManager = CreateMapManager();
 }
 
+void FWindow::DeInit()
+{
+	WidgetManager->DeInit();
+}
+
 void FWindow::ReceiveTick()
 {
 	if (bIsWindowVisible)
@@ -84,9 +89,9 @@ FWidgetInputManager* FWindow::CreateWidgetInputManager()
 	return new FWidgetInputManager();
 }
 
-FEntityManager* FWindow::CreateEntityManager() const
+FEntityManager* FWindow::CreateEntityManager()
 {
-	return new FEntityManager();
+	return new FEntityManager(this);
 }
 
 FMapManager* FWindow::CreateMapManager()
@@ -101,6 +106,7 @@ FRenderer* FWindow::CreateRenderer()
 
 void FWindow::Tick()
 {
+	EntityManager->Tick(GEngine->GetDeltaTime());
 	WidgetManager->TickWidgets();
 }
 
@@ -109,7 +115,7 @@ void FWindow::Render()
 	Renderer->PreRender();
 	Renderer->Render();
 	MapManager->DrawMap();
-	//EntityManager
+	//EntityManager.
 	WidgetManager->RenderWidgets();
 	Renderer->PostRender();
 }

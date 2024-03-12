@@ -61,7 +61,7 @@ void FMouseSparkWidget::Tick()
 	}
 
 	// Limit sparks
-	while (Sparks.Size() > static_cast<unsigned int>(MaxNumOfPoints))
+	while (Sparks.Size() > MaxNumOfPoints)
 	{
 		Sparks.DequeFront();
 	}
@@ -69,7 +69,7 @@ void FMouseSparkWidget::Tick()
 	Points.Clear();
 	Points.SetNum(Sparks.Size());
 		
-	for (size_t i = 0; i < Sparks.Size(); i++)
+	for (int i = 0; i < Sparks.Size(); i++)
 	{
 		const FSpark& Spark = Sparks[i];
 			

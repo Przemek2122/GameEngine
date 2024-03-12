@@ -51,8 +51,6 @@ public:
 			// We should never encounter default type.
 			ENSURE_VALID(false);
 
-			TValue DefaultType = TValue();
-
 			return DefaultType;
 		}
 
@@ -65,8 +63,6 @@ public:
 		{
 			// We should never encounter default type.
 			ENSURE_VALID(false);
-
-			TValue DefaultType = TValue();
 
 			return DefaultType;
 		}
@@ -293,4 +289,8 @@ public:
 public:
 	// C++ Map
 	std::map<TKey, TValue> Map;
+
+protected:
+	TValue DefaultType;
+
 };

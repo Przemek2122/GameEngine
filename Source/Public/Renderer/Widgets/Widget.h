@@ -51,6 +51,9 @@ public:
 	void DestroyWidget();
 	void FinalizeDestroyWidget();
 
+	/** Currently a hack - Do not use at all. */
+	void DestroyWidgetImmediate();
+
 	/** True if DestroyWidget() has been called already */
 	bool IsPendingDelete() const { return bIsPendingDelete; }
 

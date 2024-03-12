@@ -72,6 +72,7 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandler.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandlerKeyboard.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandlerMouse.h" />
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerShared.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\ITickInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandler.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandlerKeyboard.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandlerMouse.cpp" />
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerShared.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\ITickInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />

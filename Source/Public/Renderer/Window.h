@@ -28,12 +28,13 @@ protected:
 	virtual ~FWindow();
 
 	virtual void Init();
+	virtual void DeInit();
 
 	void ReceiveTick();
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
 	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
-	_NODISCARD virtual FEntityManager* CreateEntityManager() const;
+	_NODISCARD virtual FEntityManager* CreateEntityManager();
 	_NODISCARD virtual FMapManager* CreateMapManager();
 
 	_NODISCARD virtual FRenderer* CreateRenderer();

@@ -293,6 +293,9 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandlerMouse.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Input\EventHandlerShared.h">
+      <Filter>Public\Core\Input</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
@@ -815,6 +818,9 @@
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Input\EventHandlerMouse.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\EventHandlerShared.cpp">
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp">

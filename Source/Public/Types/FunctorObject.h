@@ -21,7 +21,12 @@ public:
 	/** Begin FFunctorBase interface */
 	TReturnType operator()(TInParams... Params) override
     {
-		return (ClassObject->*FunctionPointer)(Params...);
+		if (FunctionPointer != nullptr && ClassObject != nullptr)
+		{
+			return (ClassObject->*FunctionPointer)(Params...);
+		}
+
+		return TReturnType();
     }
 	_NODISCARD virtual bool IsValid() const override
 	{

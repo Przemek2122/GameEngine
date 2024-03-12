@@ -15,6 +15,10 @@ public:
 	virtual void BeginPlay();
 	virtual void EndPlay();
 
+	virtual void Tick(float DeltaTime);
+
+	void ReceiveTick(float DeltaTime);
+
 protected:
 	FEntityManager* EntityManagerOwner;
 };

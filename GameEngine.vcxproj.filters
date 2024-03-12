@@ -431,6 +431,9 @@
     <ClInclude Include="Source\Public\Types\DelegateBase.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Types\DelegateSafe.h">
+      <Filter>Public\Types</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Types\FunctorBase.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
@@ -953,6 +956,9 @@
       <Filter>Private\Types</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\DelegateBase.cpp">
+      <Filter>Private\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\DelegateSafe.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\FunctorBase.cpp">

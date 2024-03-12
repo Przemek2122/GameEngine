@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DelegateSafe.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
 
@@ -19,6 +20,7 @@ protected:
 	FDelegate<> OnTestDelegateOne;
 	FDelegate<void, int> OnTestDelegateTwo;
 	FDelegate<void, int, float> OnTestDelegateThree;
+	FDelegateSafe<void, int, float> DelegateSafeTest;
 	
 };
 

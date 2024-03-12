@@ -36,6 +36,17 @@ namespace FMapGlobalSettings
 
 struct FMapSubAssetSettings
 {
+	FMapSubAssetSettings()
+		: AssetIndex(INDEX_INCORRECT)
+		, Collision(INDEX_INCORRECT)
+	{
+	}
+
+	bool IsValid() const
+	{
+		return (AssetIndex != INDEX_INCORRECT && Collision != INDEX_INCORRECT);
+	}
+
 	/** Index to match texture to map */
 	int AssetIndex;
 

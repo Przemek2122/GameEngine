@@ -88,3 +88,23 @@ void FButtonWidget::NativeMouseExitWidget()
 	
 	ButtonRenderColor = ButtonNormalColor;
 }
+
+void FButtonWidget::SetButtonRenderColor(const FColorRGBA& Color)
+{
+	ButtonRenderColor = Color;
+}
+
+void FButtonWidget::SetButtonNormalColor(const FColorRGBA& Color)
+{
+	ButtonNormalColor = Color;
+}
+
+void FButtonWidget::SetButtonHoverColor(const FColorRGBA& Color)
+{
+	ButtonHoverColor = Color;
+}
+
+void FButtonWidget::SetButtonClickColor(const FColorRGBA& Color)
+{
+	ButtonClickColor = Color;
+}

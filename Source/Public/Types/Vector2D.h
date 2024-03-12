@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 /* Two dimensional vector. */
-template<class TType = float>
+template<class TType>
 class FVector2D
 {
 public:

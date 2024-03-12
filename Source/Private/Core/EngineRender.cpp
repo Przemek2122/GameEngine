@@ -90,6 +90,8 @@ void FEngineRender::DestroyWindow(FWindow* InWindow)
 {
 	RemoveWindow(InWindow);
 
+	InWindow->DeInit();
+
 	delete InWindow;
 }
 

@@ -9,7 +9,7 @@ class FEntityManager
 	friend FWindow;
 
 protected:
-	FEntityManager();
+	FEntityManager(FWindow* InOwnerWindow);
 	virtual ~FEntityManager();
 
 public:
@@ -29,10 +29,19 @@ public:
 
 	bool DestroyEntity(const EEntity* Entity);
 
+	FWindow* GetOwnerWindow() const { return OwnerWindow; }
+
+	virtual void Tick(float DeltaTime);
+
 protected:
 	virtual void OnEntityCreated(EEntity* Entity);
 	virtual void OnEntityPreDestroyed(EEntity* Entity);
 
 private:
+	/** Array with entites */
 	CArray<EEntity*> Entities;
+
+	/** Owner window */
+	FWindow* OwnerWindow;
+
 };
