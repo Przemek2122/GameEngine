@@ -23,7 +23,15 @@ public:
 	
 	static FVector2D<int> GetRectCenter(const SDL_Rect Rect);
 
-	static int FloatToInt(const float Value);
-	static int DoubleToInt(const double Value);
-	
+	static int FloorToInt(const float Value);
+	static int FloorToInt(const double Value);
+
+	static int RoundToInt(const float Value);
+	static int RoundToInt(const double Value);
+
+	static int CeilToInt(const float Value);
+	static int CeilToInt(const double Value);
+
+	static int Max(const int A, const int B);
+
 };

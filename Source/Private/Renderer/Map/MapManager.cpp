@@ -241,17 +241,15 @@ void FMapManager::UnloadAllMaps()
 	}
 }
 
-void FMapManager::SetMapRenderOffset(const FVector2D<int>& InMapRenderOffset)
+void FMapManager::MoveMap(const FVector2D<int>& InMapRenderOffset) const
 {
-	MapRenderOffset = InMapRenderOffset;
+	if (CurrentMap != nullptr)
+	{
+		CurrentMap->AddMapLocation(InMapRenderOffset);
+	}
 }
 
-FVector2D<int> FMapManager::GetMapRenderOffset() const
-{
-	return MapRenderOffset;
-}
-
-bool FMapManager::IsMapAssetCurrentlyUsed(FMapAsset* MapAsset)
+bool FMapManager::IsMapAssetCurrentlyUsed(const FMapAsset* MapAsset) const
 {
 	return (CurrentMap != nullptr && CurrentMap->GetMapAsset() == MapAsset);
 }

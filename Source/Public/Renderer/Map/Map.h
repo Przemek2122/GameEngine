@@ -20,7 +20,8 @@ public:
 	int GetMapWidth() const;
 	int GetMapHeight() const;
 
-	FVector2D<int> GetMapSize() const;
+	FVector2D<int> GetMapSizeInTiles() const;
+	FVector2D<int> GetMapSizeInPixels() const;
 
 	/** Function used for drawing a map */
 	virtual void Draw();
@@ -39,6 +40,9 @@ public:
 
 	/** Map asset used to load / save this map */
 	FMapAsset* GetMapAsset() const { return MapAsset; }
+
+	void AddMapLocation(const FVector2D<int>& LocationChange);
+	FVector2D<int> GetMapLocation() const;
 
 	/** Scale of map */
 	float GetScale() const { return Scale; }
@@ -63,5 +67,8 @@ protected:
 
 	/** Map jump scale - How fast to change scale when zooming etc */
 	float ScaleJump;
+
+	/** This property is for moving map */
+	FVector2D<int> MapLocation;
 
 };

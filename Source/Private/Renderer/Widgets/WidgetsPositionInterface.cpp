@@ -106,8 +106,8 @@ void IWidgetPositionInterface::RefreshSizeInPercent()
 	{
 		const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 
-		WidgetSizeInPixelsInterface.X = FMath::FloatToInt(static_cast<float>(ParentSize.X) * WidgetSizeInScreenPercentInterface.X);
-		WidgetSizeInPixelsInterface.Y = FMath::FloatToInt(static_cast<float>(ParentSize.Y) * WidgetSizeInScreenPercentInterface.Y);
+		WidgetSizeInPixelsInterface.X = FMath::RoundToInt(static_cast<float>(ParentSize.X) * WidgetSizeInScreenPercentInterface.X);
+		WidgetSizeInPixelsInterface.Y = FMath::RoundToInt(static_cast<float>(ParentSize.Y) * WidgetSizeInScreenPercentInterface.Y);
 	}
 }
 

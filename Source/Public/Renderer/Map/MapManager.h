@@ -60,15 +60,14 @@ public:
 	/** Unload all maps which has been loaded. */
 	virtual void UnloadAllMaps();
 
-	void SetMapRenderOffset(const FVector2D<int>& InMapRenderOffset);
-
-	FVector2D<int> GetMapRenderOffset() const;
+	/** Moves current map by given vector */
+	void MoveMap(const FVector2D<int>& InMapRenderOffset) const;
 
 	/** @returns Owner window. */
 	FWindow* GetOwnerWindow() const { return OwnerWindow; };
 
 	/** @returns true if MapAsset is currently used inside of current map */
-	bool IsMapAssetCurrentlyUsed(FMapAsset* MapAsset);
+	bool IsMapAssetCurrentlyUsed(const FMapAsset* MapAsset) const;
 
 	FMap* GetCurrentMap() const;
 
@@ -86,9 +85,6 @@ protected:
 
 	/** Available map assets. */
 	CArray<FMapAsset*> MapAssets;
-
-	/** This property is for moving map */
-	FVector2D<int> MapRenderOffset;
 
 	/** Owner window. Required for MapAsset and Map classes */
 	FWindow* OwnerWindow;

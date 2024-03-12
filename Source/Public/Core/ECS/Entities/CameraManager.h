@@ -21,12 +21,16 @@ public:
 	void RegisterInput();
 	void UnregisterInput();
 
-	void OnMouseMove(FVector2D<int> Location, EInputState);
-	void OnMouseRightClick(FVector2D<int> Location, EInputState);
+	void OnMouseMove(FVector2D<int> CurrentMouseLocation, EInputState);
+	void OnMouseRightClick(FVector2D<int> CurrentMouseLocation, EInputState InputState);
 
 protected:
+	/** MapManager - Sending map location */
 	FMapManager* WindowMapManager;
 
-	FVector2D<int> CameraLocation;
+	FVector2D<int> LastMouseLocation;
+
+	/** Set in OnMouseRightClick and used in OnMouseMove to move map when holding right-click */
+	bool bIsRightMouseButtonPressed;
 
 }; 
