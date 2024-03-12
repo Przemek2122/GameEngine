@@ -54,4 +54,5 @@ inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 #define TEXT_CHAR(Text) (const_cast<char*>(Text))
 #define STRING(Text) std::string(Text)
 
+/** Macro allowing calls to parent class. @note Constructor Super call in init list is not allowed! */
 #define Super __super

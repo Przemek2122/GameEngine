@@ -43,7 +43,7 @@ namespace FUtil
 	{
 		while (KeepLogging)
 		{
-			if (MessagesQueue.Size() <= 0)
+			if (MessagesQueue.Size() == 0)
 			{
 				SDL_Delay(2);
 			}

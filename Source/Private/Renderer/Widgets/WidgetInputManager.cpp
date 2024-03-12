@@ -123,11 +123,11 @@ void FWidgetInputManager::ChangeOrder(FWidget* Widget)
 void FWidgetInputManager::SetupMouseDelegates(const FEventHandler* EventHandler)
 {
 	MouseInputCollection.OnMouseMove = CreateMouseWidgetInputWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.MouseMoveDelegate.Get()
+		EventHandler->MouseDelegates.Move.Get()
 	);
 
 	MouseInputCollection.OnMouseLeftButtonUsed = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.MouseLeftButtonDelegate.Get(),
+		EventHandler->MouseDelegates.LeftButton.Get(),
 		WIDGET_CONSUME_INPUT_ALLOW
 	);
 }
@@ -136,7 +136,7 @@ void FWidgetInputManager::SetupKeyboardDelegates(const FEventHandler* EventHandl
 {
 	KeyboardInputCollection.OnEscapeUsed = FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, EInputState>>(WIDGET_CONSUME_INPUT_ALLOW);
 
-	EventHandler->KeyBoardDelegates.EscapeDelegate.Get()->Delegate.BindObject(
+	EventHandler->KeyBoardDelegates.ButtonEscape.Get()->Delegate.BindObject(
 		KeyboardInputCollection.OnEscapeUsed.Get(), &FWidgetInputConsumableWrapper<bool, EInputState>::ExecuteByLambda
 	);
 }
@@ -144,17 +144,17 @@ void FWidgetInputManager::SetupKeyboardDelegates(const FEventHandler* EventHandl
 void FWidgetInputManager::ClearMouseDelegates(const FEventHandler* EventHandler)
 {
 	RemoveMouseWidgetInputWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.MouseMoveDelegate.Get(), MouseInputCollection.OnMouseMove.Get()
+		EventHandler->MouseDelegates.Move.Get(), MouseInputCollection.OnMouseMove.Get()
 	);
 
 	RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.MouseLeftButtonDelegate.Get(), MouseInputCollection.OnMouseLeftButtonUsed.Get()
+		EventHandler->MouseDelegates.LeftButton.Get(), MouseInputCollection.OnMouseLeftButtonUsed.Get()
 	);
 }
 
 void FWidgetInputManager::ClearKeyboardDelegates(const FEventHandler* EventHandler)
 {
-	EventHandler->KeyBoardDelegates.EscapeDelegate.Get()->Delegate.UnBindObject(
+	EventHandler->KeyBoardDelegates.ButtonEscape.Get()->Delegate.UnBindObject(
 		KeyboardInputCollection.OnEscapeUsed.Get(), &FWidgetInputConsumableWrapper<bool, EInputState>::ExecuteByLambda
 	);
 }

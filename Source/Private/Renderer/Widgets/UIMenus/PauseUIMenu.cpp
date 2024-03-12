@@ -38,7 +38,7 @@ void FPauseUIMenu::DeInitialize()
 
 void FPauseUIMenu::OnUnbindDelegateRequested()
 {
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.EscapeDelegate.Get();
+	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
 
 	EscapeDelegate->Delegate.UnBindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }
@@ -123,7 +123,7 @@ void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidg
 
 void FPauseUIMenu::OnBindDelegateRequested()
 {
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.EscapeDelegate.Get();
+	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
 
 	EscapeDelegate->Delegate.BindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }

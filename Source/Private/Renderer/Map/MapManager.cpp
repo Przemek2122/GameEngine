@@ -9,6 +9,7 @@
 FMapManager::FMapManager(FWindow* InWindow)
 	: CurrentMap(nullptr)
 	, MapEditor(nullptr)
+	, MapAssets()
 	, OwnerWindow(InWindow)
 {
 }
@@ -238,6 +239,16 @@ void FMapManager::UnloadAllMaps()
 	{
 		UnLoadMap(MapAsset);
 	}
+}
+
+void FMapManager::SetMapRenderOffset(const FVector2D<int>& InMapRenderOffset)
+{
+	MapRenderOffset = InMapRenderOffset;
+}
+
+FVector2D<int> FMapManager::GetMapRenderOffset() const
+{
+	return MapRenderOffset;
 }
 
 bool FMapManager::IsMapAssetCurrentlyUsed(FMapAsset* MapAsset)

@@ -16,7 +16,7 @@ public:
 	template<typename TEntityClass, typename... TInParams>
 	TEntityClass* CreateEntity(std::string EntityName, TInParams... InParams)
 	{
-		EEntity* NewEntity = new TEntityClass(this, InParams);
+		TEntityClass* NewEntity = new TEntityClass(this, InParams ...);
 
 		Entities.Push(NewEntity);
 

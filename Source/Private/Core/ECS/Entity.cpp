@@ -7,6 +7,12 @@ EEntity::EEntity(FEntityManager* InEntityManager)
 	: IComponentManagerInterface(nullptr)
 	, EntityManagerOwner(InEntityManager)
 {
+#if _DEBUG
+	if (InEntityManager != nullptr)
+	{
+		LOG_INFO("Entity created. (" << GetCppClassName() << ")");
+	}
+#endif
 }
 
 EEntity::~EEntity()
@@ -28,4 +34,14 @@ void EEntity::Tick(float DeltaTime)
 void EEntity::ReceiveTick(const float DeltaTime)
 {
 	Tick(DeltaTime);
+}
+
+FEntityManager* EEntity::GetEntityManagerOwner() const
+{
+	return EntityManagerOwner;
+}
+
+FWindow* EEntity::GetWindow() const
+{
+	return EntityManagerOwner->GetOwnerWindow();
 }
