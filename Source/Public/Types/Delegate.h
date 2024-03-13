@@ -59,7 +59,10 @@ public:
 	
 		for (int i = 0; i < FunctorsNum; i++)
 		{
-			DelegateBase::Functors[i]->operator()(InParams ...);
+			if (ENSURE_VALID(DelegateBase::Functors[i] != nullptr))
+			{
+				DelegateBase::Functors[i]->operator()(InParams ...);
+			}
 		}
 	}
 	/** Executes all bound functions using Lambda to define how it executes. */
