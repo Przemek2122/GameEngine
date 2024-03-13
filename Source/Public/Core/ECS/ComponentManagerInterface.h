@@ -14,11 +14,11 @@ public:
 	template<class TComponentClass, typename... TInParams>
 	TComponentClass* CreateComponent(std::string ComponentName, TInParams... InParams)
 	{
-		auto NewComponent = std::make_shared<TComponentClass>(this, InParams);
+		std::shared_ptr<TComponentClass> NewComponent = std::make_shared<TComponentClass>(this, InParams ...);
 
 		ComponentsMap.Emplace(ComponentName, NewComponent);
 
-		OnComponentCreated(ComponentName, NewComponent);
+		OnComponentCreated(ComponentName, NewComponent.get());
 
 		return NewComponent.get();
 	}
