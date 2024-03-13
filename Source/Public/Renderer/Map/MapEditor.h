@@ -17,6 +17,8 @@ public:
 	void Initialize();
 	void DeInitialize();
 
+
+
 protected:
 	FMap* Map;
 

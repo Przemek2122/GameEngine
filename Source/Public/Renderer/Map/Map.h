@@ -6,6 +6,7 @@
 #include "Assets/Assets/MapAsset.h"
 
 class ECameraManager;
+
 /**
  * Class for map management
  */
