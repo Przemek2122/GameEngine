@@ -80,6 +80,9 @@ public:
 	/** Iterate all elements to the top returning top level owner, most likely EEntity. */
 	_NODISCARD IComponentManagerInterface* GetOwnerTop() const;
 
+	void TickComponents();
+	void RenderComponents();
+
 protected:
 	/** Parent pointer - might be null! */
 	IComponentManagerInterface* ComponentManagerInterfaceParent;

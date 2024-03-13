@@ -32,6 +32,7 @@ public:
 	FWindow* GetOwnerWindow() const { return OwnerWindow; }
 
 	virtual void Tick(float DeltaTime);
+	virtual void Render();
 
 protected:
 	virtual void OnEntityCreated(EEntity* Entity);

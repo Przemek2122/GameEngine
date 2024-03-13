@@ -34,6 +34,19 @@ void EEntity::Tick(float DeltaTime)
 void EEntity::ReceiveTick(const float DeltaTime)
 {
 	Tick(DeltaTime);
+
+	TickComponents();
+}
+
+void EEntity::Render()
+{
+}
+
+void EEntity::ReceiveRender()
+{
+	Render();
+
+	RenderComponents();
 }
 
 FEntityManager* EEntity::GetEntityManagerOwner() const

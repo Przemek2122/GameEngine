@@ -23,6 +23,12 @@ public:
 	/** Called every frame from engine code. */
 	void ReceiveTick(float DeltaTime);
 
+	/** Called every frame for rendering purposes */
+	virtual void Render();
+
+	/** Called every frame from engine code. */
+	void ReceiveRender();
+
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
 

@@ -54,6 +54,14 @@ void FEntityManager::Tick(const float DeltaTime)
 	}
 }
 
+void FEntityManager::Render()
+{
+	for (EEntity* Entity : Entities)
+	{
+		Entity->ReceiveRender();
+	}
+}
+
 void FEntityManager::OnEntityCreated(EEntity* Entity)
 {
 }

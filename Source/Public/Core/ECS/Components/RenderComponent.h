@@ -13,4 +13,6 @@ public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~URenderComponent() override = default;
 
+
+
 };

@@ -115,7 +115,7 @@ void FWindow::Render()
 	Renderer->PreRender();
 	Renderer->Render();
 	MapManager->DrawMap();
-	//EntityManager.
+	EntityManager->Render();
 	WidgetManager->RenderWidgets();
 	Renderer->PostRender();
 }
