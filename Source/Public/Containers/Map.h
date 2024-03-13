@@ -44,14 +44,30 @@ public:
 	}
 
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType&& Index)
+	SDL_FORCE_INLINE TValue& operator[](TAutoType& Key)
 	{
-		return Map[Index];
+		if (!Map.contains(Key))
+		{
+			// We should never encounter default type.
+			ENSURE_VALID(false);
+
+			return DefaultType;
+		}
+
+		return Map[Key];
 	}
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType&& Index) const
+	SDL_FORCE_INLINE TValue& operator[](TAutoType& Key) const
 	{
-		return Map[Index];
+		if (!Map.contains(Key))
+		{
+			// We should never encounter default type.
+			ENSURE_VALID(false);
+
+			return DefaultType;
+		}
+
+		return Map[Key];
 	}
 	
 	template<typename TAutoType>
@@ -194,6 +210,11 @@ public:
 		}
 	}
 
+	//void Sort(FFunctorLambda<bool, const std::pair<TKey, TValue>&, const std::pair<TKey, TValue>&> Delegate)
+	//{
+	//	Map.sort(Delegate);
+	//}
+
 	/** Begin of bucket functions */
 	_NODISCARD SDL_FORCE_INLINE auto begin() noexcept -> auto
 	{
@@ -268,4 +289,8 @@ public:
 public:
 	// C++ Map
 	std::map<TKey, TValue> Map;
+
+protected:
+	TValue DefaultType;
+
 };

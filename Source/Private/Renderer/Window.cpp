@@ -9,6 +9,7 @@
 
 FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
 	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags))
+	, Renderer(nullptr)
 	, WindowTitle(InTitle)
 	, WindowPositionX(InPositionX)
 	, WindowPositionY(InPositionY)
@@ -41,8 +42,8 @@ FWindow::~FWindow()
 	delete Renderer;	
 	delete WidgetManager;
 	delete WidgetInputManager;
-	delete EntityManager;
 	delete MapManager;
+	delete EntityManager;
 
 	if (Window != nullptr)
 	{
@@ -65,6 +66,11 @@ void FWindow::Init()
 	MapManager = CreateMapManager();
 }
 
+void FWindow::DeInit()
+{
+	WidgetManager->DeInit();
+}
+
 void FWindow::ReceiveTick()
 {
 	if (bIsWindowVisible)
@@ -83,9 +89,9 @@ FWidgetInputManager* FWindow::CreateWidgetInputManager()
 	return new FWidgetInputManager();
 }
 
-FEntityManager* FWindow::CreateEntityManager() const
+FEntityManager* FWindow::CreateEntityManager()
 {
-	return new FEntityManager();
+	return new FEntityManager(this);
 }
 
 FMapManager* FWindow::CreateMapManager()
@@ -100,6 +106,7 @@ FRenderer* FWindow::CreateRenderer()
 
 void FWindow::Tick()
 {
+	EntityManager->Tick(GEngine->GetDeltaTime());
 	WidgetManager->TickWidgets();
 }
 
@@ -108,7 +115,7 @@ void FWindow::Render()
 	Renderer->PreRender();
 	Renderer->Render();
 	MapManager->DrawMap();
-	//EntityManager
+	EntityManager->Render();
 	WidgetManager->RenderWidgets();
 	Renderer->PostRender();
 }

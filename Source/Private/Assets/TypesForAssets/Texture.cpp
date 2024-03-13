@@ -39,3 +39,8 @@ void FTexture::Draw(SDL_Renderer* Renderer, const SDL_Rect SourceRect, const SDL
 {
 	SDL_RenderCopy(Renderer, SDLTexture, &SourceRect, &DestinationRect);
 }
+
+SDL_Texture* FTexture::GetSDLTexture() const
+{
+	return SDLTexture;
+}

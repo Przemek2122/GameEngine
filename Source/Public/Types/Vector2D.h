@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 /* Two dimensional vector. */
-template<class TType = float>
+template<class TType>
 class FVector2D
 {
 public:
@@ -142,6 +142,8 @@ public:
 		X /= V; Y /= V; return *this;
 	}
 
+
+
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }
 	//FVector2D operator*(const FVector2D<TType>& V, const TType& S) { return FVector2D<TType>(V) *= S; }
 	//FVector2D operator/(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) /= S; }
@@ -173,14 +175,19 @@ public:
 		Point.y = static_cast<int>(Y);
 		return Point;
 	}
-	
+
 	operator std::ostream() const 
 	{ 
-		return "(" << X << "," << Y << ")";
+		return "(" << X << ", " << Y << ")";
 	}
 	operator std::string() const 
 	{ 
 		return "(" + std::to_string(X) + ", " + std::to_string(Y) + ")"; 
+	}
+
+	std::string ToString() const
+	{
+		return "(" + std::to_string(X) + ", " + std::to_string(Y) + ")";
 	}
 
 public:

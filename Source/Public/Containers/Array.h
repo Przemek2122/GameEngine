@@ -164,8 +164,6 @@ public:
 			// Request out of range.
 			ENSURE_VALID(false);
 
-			TType DefaultType = TType();
-
 			return DefaultType;
 		}
 	}
@@ -178,9 +176,7 @@ public:
 		else
 		{
 			// Request out of range.
-			Inline_ENSURE_VALID_Lambda(false);
-
-			TType DefaultType = TType();
+			ENSURE_VALID(false);
 
 			return DefaultType;
 		}
@@ -345,4 +341,8 @@ public:
 public:
 	/** C++ Vector */
 	std::vector<TType> Vector;
+
+protected:
+	TType DefaultType;
+
 };

@@ -14,20 +14,49 @@ FAssetsManager::FAssetsManager()
 
 FAssetsManager::~FAssetsManager()
 {
-	AllAssetsMap.Clear();
-}
-
-void FAssetsManager::RemoveAsset(const std::string& InAssetName)
-{
-	AllAssetsMap.Remove(InAssetName);
-}
-
-std::shared_ptr<FAssetBase> FAssetsManager::GetAsset(const std::string& InAssetName) const
-{
-	if (AllAssetsMap.ContainsKey(InAssetName))
+	for (auto& [AssetType, Assets] : AssetsByType)
 	{
-		// @TODO dangling pointer
-		return AllAssetsMap.At(InAssetName);
+		Assets.AssetsMap.Clear();
+	}
+
+	AssetsByType.Clear();
+}
+
+void FAssetsManager::RemoveAsset(const std::string& InAssetName, const EAssetType OptionalAssetType)
+{
+	if (OptionalAssetType == EAssetType::AT_NONE)
+	{
+		for (std::pair<const EAssetType, FAssetsColection>& ByType : AssetsByType)
+		{
+			ByType.second.AssetsMap.Remove(InAssetName);
+		}
+	}
+	else
+	{
+		AssetsByType[OptionalAssetType].AssetsMap.Remove(InAssetName);
+	}
+}
+
+std::shared_ptr<FAssetBase> FAssetsManager::GetAsset(const std::string& InAssetName, const EAssetType OptionalAssetType)
+{
+	// Search all assets
+	if (OptionalAssetType == EAssetType::AT_NONE)
+	{
+		for (const std::pair<const EAssetType, FAssetsColection>& ByType : AssetsByType)
+		{
+			if (ByType.second.AssetsMap.ContainsKey(InAssetName))
+			{
+				return ByType.second.AssetsMap.At(InAssetName);
+			}
+		}
+	}
+	// Search specified type
+	else
+	{
+		if (AssetsByType[OptionalAssetType].AssetsMap.ContainsKey(InAssetName))
+		{
+			return AssetsByType[OptionalAssetType].AssetsMap.At(InAssetName);
+		}
 	}
 
 	return nullptr;

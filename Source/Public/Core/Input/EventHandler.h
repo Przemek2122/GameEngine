@@ -3,98 +3,91 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Core/Input/EventHandlerMouse.h"
+#include "Core/Input/EventHandlerKeyboard.h"
 
-/** This class is used to tell type of input, if it is pressed or released. */
-enum class EInputState
-{
-	NOT_PRESSED = 0,
-	PRESS = 1,
-	RELEASE = 2,
-	ENUM_MAX
-};
-
-/** This class is used to handle mouse events. */
-class FMouseInputDelegateWrapper
-{
-public:
-	FMouseInputDelegateWrapper(FEventHandler* InEventHandler)
-		: bWasSentAlready(false)
-		, EventHandler(InEventHandler)
-		, CurrentInputState(EInputState::NOT_PRESSED)
-	{
-	}
-
-	void Execute(const FVector2D<int>& Location, const EInputState InputState);
-
-	void Reset();
-
-	FDelegate<void, FVector2D<int>, EInputState> Delegate;
-
-private:
-	void AddToResetQueue();
-
-private:
-	/** True if input was sent already. */
-	bool bWasSentAlready;
-
-	FEventHandler* EventHandler;
-
-	/** Current state of input. It is incremented in execute and then reset in reset */
-	EInputState CurrentInputState;
-};
-
-/** This class is used to handle keyboard events. It exists to allow rebinding. */
-class FInputDelegateWrapper
-{
-public:
-	FInputDelegateWrapper(FEventHandler* InEventHandler)
-		: bWasSentAlready(false)
-		, EventHandler(InEventHandler)
-		, CurrentInputState(EInputState::NOT_PRESSED)
-	{
-	}
-
-	void Execute(EInputState InputState);
-
-	void Reset();
-
-	/** Called when input is detected. */
-	FDelegate<void, EInputState> Delegate;
-
-private:
-	void AddToResetQueue();
-
-private:
-	/** True if input was sent already. */
-	bool bWasSentAlready;
-
-	FEventHandler* EventHandler;
-
-	/** Current state of input. It is incremented in execute and then reset in reset */
-	EInputState CurrentInputState;
-};
-
+/**
+ * Mouse delegates.
+ * @Note Remember to initialize all delegates.
+ */
 class FMouseDelegates
 {
 public:
-	/* Mouse move delegate. Called when mouse moves. */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseMoveDelegate;
+	typedef FAutoDeletePointer<FMouseInputDelegateWrapper> FMouseDelegateWrapper;
+
+	/** Mouse move delegate. Called when mouse moves. */
+	FMouseDelegateWrapper Move;
 
 	/** Called when mouse left click is detected */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseLeftButtonDelegate;
+	FMouseDelegateWrapper LeftButton;
 
 	/** Called when mouse middle click is detected */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseMiddleButtonDelegate;
+	FMouseDelegateWrapper MiddleButton;
 
 	/** Called when mouse right click is detected */
-	FAutoDeletePointer<FMouseInputDelegateWrapper> MouseRightButtonDelegate;
+	FMouseDelegateWrapper RightButton;
 };
 
+/**
+ * Keyboard delegates.
+ * @Note Remember to initialize all delegates.
+ */
 class FKeyBoardDelegates
 {
 public:
+	typedef FAutoDeletePointer<FInputDelegateWrapper> FKeyBoardButtonDelegate;
+
 	/** Called when escape is used */
-	FAutoDeletePointer<FInputDelegateWrapper> EscapeDelegate;
+	FKeyBoardButtonDelegate ButtonEscape;
+
+	/** Called when '0' key is used */
+	FKeyBoardButtonDelegate Button0;
+	/** Called when '1' key is used */
+	FKeyBoardButtonDelegate Button1;
+	/** Called when '2' key is used */
+	FKeyBoardButtonDelegate Button2;
+	/** Called when '3' key is used */
+	FKeyBoardButtonDelegate Button3;
+	/** Called when '4' key is used */
+	FKeyBoardButtonDelegate Button4;
+	/** Called when '5' key is used */
+	FKeyBoardButtonDelegate Button5;
+	/** Called when '6' key is used */
+	FKeyBoardButtonDelegate Button6;
+	/** Called when '7' key is used */
+	FKeyBoardButtonDelegate Button7;
+	/** Called when '8' key is used */
+	FKeyBoardButtonDelegate Button8;
+	/** Called when '9' key is used */
+	FKeyBoardButtonDelegate Button9;
+
+	/** Called when 'A' key is used */
+	FKeyBoardButtonDelegate ButtonA;
+	/** Called when 'B' key is used */
+	FKeyBoardButtonDelegate ButtonB;
+	/** Called when 'C' key is used */
+	FKeyBoardButtonDelegate ButtonC;
+	/** Called when 'D' key is used */
+	FKeyBoardButtonDelegate ButtonD;
+	/** Called when 'E' key is used */
+	FKeyBoardButtonDelegate ButtonE;
+
+	/** Called when 'W' key is used */
+	FKeyBoardButtonDelegate ButtonW;
+	/** Called when 'S' key is used */
+	FKeyBoardButtonDelegate ButtonS;
+
+	/** Called when up arrow key is used */
+	FKeyBoardButtonDelegate ButtonArrowUP;
+	/** Called when down arrow key is used */
+	FKeyBoardButtonDelegate ButtonArrowDOWN;
+	/** Called when right arrow key is used */
+	FKeyBoardButtonDelegate ButtonArrowRIGHT;
+	/** Called when left arrow key is used */
+	FKeyBoardButtonDelegate ButtonArrowLEFT;
+
+	/** Called when 'Delete' key is used */
+	FKeyBoardButtonDelegate ButtonDELETE;
 
 };
 
@@ -104,13 +97,12 @@ public:
 	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
-protected:
-	SDL_Event Event;
-
 public:
 	void HandleEvents();
 
 	void ResetAll();
+
+	_NODISCARD bool QuitInputDetected() const;
 
 	_NODISCARD bool HasMouseMoved() const;
 	_NODISCARD FVector2D<int> GetMouseLocationCurrent() const;
@@ -122,6 +114,11 @@ public:
 	FMouseDelegates MouseDelegates;
 	FKeyBoardDelegates KeyBoardDelegates;
 
+	/**
+	 * Perhaps create an array with SDL KeyCodes? and binding them like
+	 * BindEvent(SDL_MOUSEMOTION, this, &ECameraManager::OnMouseMove);
+	 */
+
 protected:
 	/** Initializer, helper for constructor - Set mouse delegates. */
 	void SetMouseDelegates();
@@ -130,15 +127,12 @@ protected:
 
 	virtual void SwitchOnInput(Uint32 EventType);
 
+	virtual void InputKeyDown();
 	virtual void InputKeyUp();
 	virtual void MouseMotion();
-	virtual void InputWindowEvent();
-	virtual void InputKeyDown();
 	virtual void InputMouseDown();
 	virtual void InputMouseUp();
-
-public:
-	_NODISCARD bool QuitInputDetected() const;
+	virtual void InputWindowEvent();
 
 protected:
 	/** This map is used to reset mouse delegates. */
@@ -148,6 +142,8 @@ protected:
 
 	FVector2D<int> MouseLocationCurrent;
 	FVector2D<int> MouseLocationLast;
+
+	SDL_Event Event;
 	
 	bool bQuitInputDetected;
 	

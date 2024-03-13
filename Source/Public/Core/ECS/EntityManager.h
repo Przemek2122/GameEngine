@@ -9,14 +9,14 @@ class FEntityManager
 	friend FWindow;
 
 protected:
-	FEntityManager();
+	FEntityManager(FWindow* InOwnerWindow);
 	virtual ~FEntityManager();
 
 public:
 	template<typename TEntityClass, typename... TInParams>
 	TEntityClass* CreateEntity(std::string EntityName, TInParams... InParams)
 	{
-		EEntity* NewEntity = new TEntityClass(this, InParams);
+		TEntityClass* NewEntity = new TEntityClass(this, InParams ...);
 
 		Entities.Push(NewEntity);
 
@@ -29,10 +29,20 @@ public:
 
 	bool DestroyEntity(const EEntity* Entity);
 
+	FWindow* GetOwnerWindow() const { return OwnerWindow; }
+
+	virtual void Tick(float DeltaTime);
+	virtual void Render();
+
 protected:
 	virtual void OnEntityCreated(EEntity* Entity);
 	virtual void OnEntityPreDestroyed(EEntity* Entity);
 
 private:
+	/** Array with entites */
 	CArray<EEntity*> Entities;
+
+	/** Owner window */
+	FWindow* OwnerWindow;
+
 };

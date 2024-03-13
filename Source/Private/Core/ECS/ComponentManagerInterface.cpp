@@ -11,6 +11,7 @@ IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterfac
 
 IComponentManagerInterface::~IComponentManagerInterface()
 {
+	ComponentsMap.Clear();
 }
 
 bool IComponentManagerInterface::DestroyComponent(const std::string& ComponentName)
@@ -71,4 +72,20 @@ IComponentManagerInterface* IComponentManagerInterface::GetOwnerTop() const
 	}
 
 	return CurrentChainElement;
+}
+
+void IComponentManagerInterface::TickComponents()
+{
+	for (const auto& [ComponentName, Component] : ComponentsMap)
+	{
+		Component->Tick();
+	}
+}
+
+void IComponentManagerInterface::RenderComponents()
+{
+	for (const auto& [ComponentName, Component] : ComponentsMap)
+	{
+		Component->Render();
+	}
 }

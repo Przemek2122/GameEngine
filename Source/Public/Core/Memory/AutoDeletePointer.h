@@ -3,6 +3,8 @@
 #pragma once
 #include "CoreMinimal.h"
 
+class FUIMenu;
+
 /**
  * Class managing other class pointer lifecycle
  * @Note if you declare this class twice with the same pointer, it will crash.
@@ -57,7 +59,7 @@ public:
 		}
 	}
 
-	/** Move assignment operator - Currently we do not have a constructor supporting it. */
+	/** Move assignment operator */
 	FAutoDeletePointer& operator=(FAutoDeletePointer&& OtherAutoDeletePointer) noexcept
 	{
 		// We can not move class if there is already a class.

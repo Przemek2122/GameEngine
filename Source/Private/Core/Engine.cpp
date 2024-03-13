@@ -1,4 +1,4 @@
-// Created by Przemys³aw Wiewióra 2020-2022 https://github.com/Przemek2122/GameEngine
+// Created by Przemys³aw Wiewióra 2020-2024 https://github.com/Przemek2122/GameEngine
 
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
@@ -11,8 +11,10 @@
 #endif
 
 #include "Assets/Assets/FontAsset.h"
-#include "Interfaces/CoreLoop/TickInterface.h"
-#include "Interfaces/CoreLoop/RenderInterface.h"
+#include "Engine/EngineRenderingManager.h"
+#include "Engine/EngineTickingManager.h"
+#include "Interfaces/CoreLoop/ITickInterface.h"
+#include "Interfaces/CoreLoop/IRenderInterface.h"
 #include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()
@@ -24,14 +26,19 @@ FEngine::FEngine()
 	, FrameTime(0)
 	, CounterLastFrame(0)
 	, CounterCurrentFrame(SDL_GetPerformanceCounter())
-	, bContinueMainLoop(true)
-	, TicksThisSecond(0)
-	, Second(0)
+	, DeltaTimeFloat(0)
+	, DeltaTimeDouble(0)
 	, EngineRender(nullptr)
+	, SdlEvent()
 	, EventHandler(nullptr)
 	, AssetsManager(nullptr)
-#if ENGINE_TESTS_ALLOW_ANY
+	, EngineTickingManager(nullptr)
+	, EngineRenderingManager(nullptr)
 	, TestManager(nullptr)
+	, bContinueMainLoop(true)
+	, TicksThisSecond(0)
+#if ENGINE_TESTS_ALLOW_ANY
+	, Second(0)
 #endif
 {
 	FUtil::LogInit();
@@ -100,8 +107,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	}
 
 	// Initialize SDL - Load support for the OGG and MOD sample/music formats
-	const auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
-	const auto MixInitialized = Mix_Init(MixFlags);
+	constexpr auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
+	const int MixInitialized = Mix_Init(MixFlags);
 	if (!MixInitialized)
 	{
 		LOG_ERROR("Mix_Init: " << Mix_GetError());
@@ -119,6 +126,9 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineRender = CreateEngineRenderer();
 	EventHandler = CreateEventHandler();
 	AssetsManager = CreateAssetsManager();
+	EngineTickingManager = CreateEngineTickingManager();
+	EngineRenderingManager = CreateEngineRenderingManager();
+
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
 #endif
@@ -128,7 +138,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 #endif
 
-	AssetsManager->AddAsset<FFontAsset>("OpenSans", "Assets\\Fonts\\OpenSans\\OpenSans-Regular.ttf");
+	AssetsManager->AddAsset<FFontAsset>("OpenSans", R"(Assets\Fonts\OpenSans\OpenSans-Regular.ttf)");
 
 	LOG_INFO("GEngine init End");
 
@@ -137,7 +147,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 void FEngine::EngineTick()
 {
-	UpdateFramerateCounter();
+	UpdateFrameRateCounter();
 
 	// Tick functions for next tick
 	if (FunctionsToCallOnStartOfNextTick.IsBound())
@@ -166,7 +176,11 @@ void FEngine::EngineTick()
 
 	Tick();
 
+	EngineTickingManager->EngineTick(DeltaTimeFloat);
+
 	EngineRender->Tick();
+
+	EngineRenderingManager->EngineRender();
 }
 
 void FEngine::EnginePostSecondTick()
@@ -189,6 +203,7 @@ void FEngine::PostInit()
 
 void FEngine::Tick()
 {
+
 }
 
 void FEngine::PostSecondTick()
@@ -219,6 +234,8 @@ void FEngine::Clean()
 	delete EngineRender;
 	delete EventHandler;
 	delete AssetsManager;
+	delete EngineTickingManager;
+	delete EngineRenderingManager;
 
 #if ENGINE_TESTS_ALLOW_ANY
 	delete TestManager;
@@ -230,7 +247,7 @@ bool FEngine::IsEngineInitialized() const
 	return bIsEngineInitialized;
 }
 
-void FEngine::UpdateFramerateCounter()
+void FEngine::UpdateFrameRateCounter()
 {
 	const auto SystemTime = FUtil::GetSeconds();
 
@@ -303,9 +320,39 @@ void FEngine::SetDeltaTime(const double &InDeltaTime)
 	}
 }
 
+float FEngine::GetDeltaTime() const
+{
+	return DeltaTimeFloat;
+}
+
+double FEngine::GetDeltaTimeDouble() const
+{
+	return DeltaTimeDouble;
+}
+
 FEngineRender* FEngine::CreateEngineRenderer() const
 {
 	return new FEngineRender();
+}
+
+FEventHandler* FEngine::CreateEventHandler() const
+{
+	return new FEventHandler(SdlEvent);
+}
+
+FAssetsManager* FEngine::CreateAssetsManager() const
+{
+	return new FAssetsManager;
+}
+
+FEngineTickingManager* FEngine::CreateEngineTickingManager() const
+{
+	return new FEngineTickingManager;
+}
+
+FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
+{
+	return new FEngineRenderingManager;
 }
 
 const std::string& FEngine::GetLaunchFullPath() const
@@ -342,24 +389,14 @@ FAssetsManager* FEngine::GetAssetsManager() const
 	return AssetsManager;
 }
 
-void FEngine::RegisterTickingObject(FTickInterface* TickInterface)
+FEngineTickingManager* FEngine::GetEngineTickingManager() const
 {
-	TickingObjectsDelegate.BindObject(TickInterface, &FTickInterface::Tick);
+	return EngineTickingManager;
 }
 
-void FEngine::UnRegisterTickingObject(FTickInterface* TickInterface)
+FEngineRenderingManager* FEngine::GetEngineRenderingManager() const
 {
-	TickingObjectsDelegate.UnBindObject(TickInterface, &FTickInterface::Tick);
-}
-
-FEventHandler* FEngine::CreateEventHandler() const
-{
-	return new FEventHandler(SdlEvent);
-}
-
-FAssetsManager* FEngine::CreateAssetsManager() const
-{
-	return new FAssetsManager;
+	return EngineRenderingManager;
 }
 
 #if ENGINE_TESTS_ALLOW_ANY

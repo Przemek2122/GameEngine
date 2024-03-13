@@ -13,11 +13,11 @@
  * @Note: All functions passed in are deleted at end of this object life.
  */
 template<typename TReturnType = void, typename... TInParams>
-class FDelegate : public FDelegateBase<TReturnType, TInParams...>
+class FDelegate : public FDelegateBase<TReturnType, FFunctorBase<TReturnType, TInParams...>*, TInParams...>
 {
-using DelegateBase = FDelegateBase<TReturnType, TInParams...>;
-	
 public:
+	using DelegateBase = FDelegateBase<TReturnType, FFunctorBase<TReturnType, TInParams...>*, TInParams...>;
+
 	// Default constructor
 	FDelegate() = default;
 
@@ -29,6 +29,14 @@ public:
 	FDelegate(FDelegate&& InDelegate) noexcept
 	{
 		DelegateBase::Functors = std::move(InDelegate.DelegateBase::Functors);
+	}
+
+	virtual ~FDelegate() override
+	{
+		for (const typename DelegateBase::Functor* FunctorObject : DelegateBase::Functors)
+		{
+			delete FunctorObject;
+		}
 	}
 
 	// Copy operator - Forbidden, not efficient + causes double deletion of Functors
@@ -51,7 +59,10 @@ public:
 	
 		for (int i = 0; i < FunctorsNum; i++)
 		{
-			DelegateBase::Functors[i]->operator()(InParams ...);
+			if (ENSURE_VALID(DelegateBase::Functors[i] != nullptr))
+			{
+				DelegateBase::Functors[i]->operator()(InParams ...);
+			}
 		}
 	}
 	/** Executes all bound functions using Lambda to define how it executes. */
@@ -74,7 +85,7 @@ public:
 	template <typename TTypeAuto>
 	void BindLambda(TTypeAuto Lambda)
 	{
-		// @TODO Could be memory leak
+		// @TODO Can be memory leak
 		DelegateBase::Functors.Push(new FFunctorLambda<TReturnType, TInParams...>(Lambda));
 	}
 	
@@ -100,6 +111,12 @@ public:
 	}
 
 	template<typename TClass>
+	void BindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		DelegateBase::Functors.Push(Functor);
+	}
+
+	template<typename TClass>
 	void UnBindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
 		int Index;
@@ -122,6 +139,12 @@ public:
 
 			DelegateBase::Functors.RemoveAt(Index);
 		}
+	}
+
+	template<typename TClass>
+	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		DelegateBase::Functors.Remove(Functor);
 	}
 	
 	/** Remove function by functor reference. Use with caution. */

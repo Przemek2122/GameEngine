@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 
-template<typename TType = int>
+template<typename TType>
 class ITransformInterface2D
 {
 public:
 	ITransformInterface2D()
 		: Rotation(0)
 	{
-		
 	}
 	virtual ~ITransformInterface2D()
 	{
@@ -21,20 +20,12 @@ public:
 	{
 		return Location;
 	}
-	const FVector2D<TType>& GetLocation() const
-	{
-		return Location;
-	}
 	void SetLocation(const FVector2D<TType>& NewLocation)
 	{
 		Location = NewLocation;
 	}
 	
 	TType GetRotation() const
-	{
-		return Rotation;
-	}
-	const TType& GetRotation() const
 	{
 		return Rotation;
 	}

@@ -3,7 +3,8 @@
 #include "CoreEngine.h"
 #include "ECS/EntityManager.h"
 
-FEntityManager::FEntityManager()
+FEntityManager::FEntityManager(FWindow* InOwnerWindow)
+	: OwnerWindow(InOwnerWindow)
 {
 }
 
@@ -43,6 +44,22 @@ bool FEntityManager::DestroyEntity(const EEntity* Entity)
 	}
 
 	return bWasFound;
+}
+
+void FEntityManager::Tick(const float DeltaTime)
+{
+	for (EEntity* Entity : Entities)
+	{
+		Entity->ReceiveTick(DeltaTime);
+	}
+}
+
+void FEntityManager::Render()
+{
+	for (EEntity* Entity : Entities)
+	{
+		Entity->ReceiveRender();
+	}
 }
 
 void FEntityManager::OnEntityCreated(EEntity* Entity)

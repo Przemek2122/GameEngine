@@ -3,10 +3,11 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/WidgetsPositionInterface.h"
 
-#include "SDL/SDL_egl.h"
+#include "Misc/Math.h"
 
 IWidgetPositionInterface::IWidgetPositionInterface(IWidgetManagementInterface* InWidgetManagementInterface)
-	: DefaultAnchorInterface(EAnchor::Center)
+	: WidgetSizeType(EWidgetSizeType::Pixels)
+	, DefaultAnchorInterface(EAnchor::Center)
 	, AnchorInterface(EAnchor::None)
 	, ClippingMethodInterface(EClipping::Cut)
 {
@@ -72,20 +73,48 @@ void IWidgetPositionInterface::SetWidgetLocation(const FVector2D<int> InWidgetLo
 
 FVector2D<int> IWidgetPositionInterface::GetWidgetSize() const
 {
-	return WidgetSizeInterface;
+	return WidgetSizeInPixelsInterface;
 }
 
 void IWidgetPositionInterface::SetWidgetSize(const FVector2D<int> InWidgetSize)
 {
-	WidgetSizeInterface = InWidgetSize;
+	WidgetSizeType = EWidgetSizeType::Pixels;
+
+	WidgetSizeInPixelsInterface = InWidgetSize;
+
+	RefreshWidgetSize();
+
+	RefreshAnchor();
+}
+
+void IWidgetPositionInterface::SetWidgetSizePercent(const FVector2D<float> InScreenPercentage)
+{
+	WidgetSizeType = EWidgetSizeType::ParentPercentage;
+
+	WidgetSizeInScreenPercentInterface = InScreenPercentage;
+
+	RefreshSizeInPercent();
 
 	RefreshAnchor();
 
 	RefreshWidgetSize();
 }
 
+void IWidgetPositionInterface::RefreshSizeInPercent()
+{
+	if (WidgetSizeType == EWidgetSizeType::ParentPercentage)
+	{
+		const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
+
+		WidgetSizeInPixelsInterface.X = FMath::RoundToInt(static_cast<float>(ParentSize.X) * WidgetSizeInScreenPercentInterface.X);
+		WidgetSizeInPixelsInterface.Y = FMath::RoundToInt(static_cast<float>(ParentSize.Y) * WidgetSizeInScreenPercentInterface.Y);
+	}
+}
+
 void IWidgetPositionInterface::RefreshWidgetSize()
 {
+	RefreshSizeInPercent();
+
 	switch (ClippingMethodInterface)
 	{
 	case EClipping::None:
@@ -95,14 +124,14 @@ void IWidgetPositionInterface::RefreshWidgetSize()
 		{
 			const FVector2D<int> ParentSize = GetWidgetManagerSize();
 
-			if (ParentSize.X < WidgetSizeInterface.X)
+			if (ParentSize.X < WidgetSizeInPixelsInterface.X)
 			{
-				WidgetSizeInterface.X = ParentSize.X;
+				WidgetSizeInPixelsInterface.X = ParentSize.X;
 			}
 
-			if (ParentSize.Y < WidgetSizeInterface.Y)
+			if (ParentSize.Y < WidgetSizeInPixelsInterface.Y)
 			{
-				WidgetSizeInterface.Y = ParentSize.Y;
+				WidgetSizeInPixelsInterface.Y = ParentSize.Y;
 			}
 		}
 		break;
@@ -110,14 +139,14 @@ void IWidgetPositionInterface::RefreshWidgetSize()
 		{
 			const FVector2D<int> ParentSize = GetWidgetManagerSize();
 
-			if (ParentSize.X < WidgetSizeInterface.X)
+			if (ParentSize.X < WidgetSizeInPixelsInterface.X)
 			{
-				WidgetSizeInterface.X = ParentSize.X;
+				WidgetSizeInPixelsInterface.X = ParentSize.X;
 			}
 
-			if (ParentSize.Y < WidgetSizeInterface.Y)
+			if (ParentSize.Y < WidgetSizeInPixelsInterface.Y)
 			{
-				WidgetSizeInterface.Y = ParentSize.Y;
+				WidgetSizeInPixelsInterface.Y = ParentSize.Y;
 			}
 		}
 		break;

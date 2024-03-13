@@ -15,7 +15,7 @@ void UObject::Init()
 {
 }
 
-std::string UObject::GetObjectName() const
+std::string UObject::GetCppClassName() const
 {
 	return typeid(this).name();
 }

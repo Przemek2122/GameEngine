@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-inline FEngine* GEngine;
-
 /**
  * Singleton manager for engine class.
  */

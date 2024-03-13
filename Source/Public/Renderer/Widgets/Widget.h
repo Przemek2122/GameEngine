@@ -5,19 +5,19 @@
 #include "CoreMinimal.h"
 
 #include "WidgetsPositionInterface.h"
-#include "WidgetsManagementInterface.h"
 #include "WidgetEnums.h"
-#include "WidgetInputInterface.h"
-#include "WidgetInputManager.h"
 
 class FWidgetInputManager;
 class FInteractionBaseWidget;
 
-#define WIDGET_DEFINES_DEFAULT_ORDER 0
-
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
- * It's mostly to ensure widget render in proper window. 
+ * It's mostly to ensure widget render in proper window.
+ *
+ * LifeCycle:
+ * Widget is Created using IWidgetManagementInterface it inherits from. @See CreateWidget inside of this interface.
+ * Widget is destroying in same interface using DestroyWidget or DestroyWidget on widget you would like to destroy.
+ * @Note It's worth mentioning that after destroying it's kept for one frame to ensure proper destruction of all children.
  */
 class FWidget : public UObject, public IWidgetPositionInterface
 {
@@ -27,7 +27,7 @@ class FWidget : public UObject, public IWidgetPositionInterface
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
 	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
-	virtual ~FWidget();
+	~FWidget() override;
 
 	/** Advanced, use Tick() if possible instead. */
 	virtual void ReceiveTick();
@@ -50,6 +50,9 @@ protected:
 public:
 	void DestroyWidget();
 	void FinalizeDestroyWidget();
+
+	/** Currently a hack - Do not use at all. */
+	void DestroyWidgetImmediate();
 
 	/** True if DestroyWidget() has been called already */
 	bool IsPendingDelete() const { return bIsPendingDelete; }
@@ -74,6 +77,8 @@ public:
 	
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
+
+	bool IsVisible() const;
 
 	virtual void OnWidgetVisibilityChanged();
 

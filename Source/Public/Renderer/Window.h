@@ -10,6 +10,8 @@ class FWidgetInputManager;
 class FWidgetManager;
 class FWidget;
 
+#define WINDOW_DEFAULT_FLAGS (SDL_WINDOW_RESIZABLE)
+
 /**
  * Window class. Has SDL_Window and FRender.
  */
@@ -22,16 +24,17 @@ protected:
 	 * Creates SDL Window.
 	 * Take a look here for available flags (or at SDL_vide.h): https://wiki.libsdl.org/SDL_WindowFlags
 	 */
-	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = SDL_WINDOW_RESIZABLE);
+	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = WINDOW_DEFAULT_FLAGS);
 	virtual ~FWindow();
 
 	virtual void Init();
+	virtual void DeInit();
 
 	void ReceiveTick();
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
 	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
-	_NODISCARD virtual FEntityManager* CreateEntityManager() const;
+	_NODISCARD virtual FEntityManager* CreateEntityManager();
 	_NODISCARD virtual FMapManager* CreateMapManager();
 
 	_NODISCARD virtual FRenderer* CreateRenderer();
@@ -95,7 +98,7 @@ public:
 
 protected:
 	SDL_Window* Window;
-	FRenderer* Renderer{};
+	FRenderer* Renderer;
 	char* WindowTitle;
 	int WindowPositionX;
 	int WindowPositionY;

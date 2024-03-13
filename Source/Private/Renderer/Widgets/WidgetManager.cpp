@@ -11,7 +11,15 @@ FWidgetManager::FWidgetManager(FWindow* InOwnerWindow)
 
 FWidgetManager::~FWidgetManager()
 {
-	
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->DestroyWidgetImmediate();
+	}
+}
+
+void FWidgetManager::DeInit()
+{
+	ClearChildren();
 }
 
 FVector2D<int> FWidgetManager::GetWidgetManagerOffset() const

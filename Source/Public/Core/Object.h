@@ -11,6 +11,6 @@ public:
 
 	virtual void Init();
 	
-	_NODISCARD std::string GetObjectName() const;
+	_NODISCARD std::string GetCppClassName() const;
 	
 };

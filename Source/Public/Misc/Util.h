@@ -45,7 +45,7 @@ namespace FUtil
 	{
 		static constexpr double FullNanoSecond = 1e9;
 		
-		return (static_cast<double>(InNanosecond) / static_cast<double>(FullNanoSecond));
+		return (static_cast<TTypeOut>(InNanosecond) / static_cast<TTypeOut>(FullNanoSecond));
 	}
 	/* Convert MicroSeconds to seconds */
 	template <typename TTypeOut = double>
@@ -53,7 +53,7 @@ namespace FUtil
 	{
 		static constexpr double FullMicroSecond = 1e6;
 		
-		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMicroSecond));
+		return (static_cast<TTypeOut>(InNanosecond) / static_cast<TTypeOut>(FullMicroSecond));
 	}
 	/* Convert MiliSeconds to seconds */
 	template <typename TTypeOut = double>
@@ -61,7 +61,7 @@ namespace FUtil
 	{
 		static constexpr double FullMiliSecond = 1e3;
 		
-		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMiliSecond));
+		return (static_cast<TTypeOut>(InNanosecond) / static_cast<TTypeOut>(FullMiliSecond));
 	}
 
 	/** @returns time_t with current time. */

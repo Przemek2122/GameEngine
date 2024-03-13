@@ -5,5 +5,43 @@
 
 FVector2D<int> FMath::GetRectCenter(const SDL_Rect Rect)
 {
-	return FVector2D<int>(Rect.x + (Rect.w / 2), Rect.y + (Rect.h / 2));
+	return {
+		Rect.x + (Rect.w / 2),
+		Rect.y + (Rect.h / 2)
+	};
+}
+
+int FMath::RoundToInt(const float Value)
+{
+	return static_cast<int>(std::roundf(Value));
+}
+
+int FMath::RoundToInt(const double Value)
+{
+	return static_cast<int>(std::round(Value));
+}
+
+int FMath::CeilToInt(const float Value)
+{
+	return static_cast<int>(std::ceilf(Value));
+}
+
+int FMath::CeilToInt(const double Value)
+{
+	return static_cast<int>(std::ceil(Value));
+}
+
+int FMath::Max(const int A, const int B)
+{
+	return (A > B) ? A : B;
+}
+
+int FMath::FloorToInt(const float Value)
+{
+	return static_cast<int>(std::floorf(Value));
+}
+
+int FMath::FloorToInt(const double Value)
+{
+	return static_cast<int>(std::floor(Value));
 }

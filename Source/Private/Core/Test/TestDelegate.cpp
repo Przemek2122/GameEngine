@@ -33,18 +33,16 @@ void FTestDelegate::DoTest()
 		{
 			LOG_DEBUG("Test#3 lambda inline called");
 		}));
-	}
-	
-	{
+
 		OnTestDelegateOne.BindLambda(
 		[]
 		{
 			LOG_DEBUG("Test#4 lambda inline 2 called");
 		});
-	}
 
-	// Finally call all bound delegate functions.
-	OnTestDelegateOne.Execute();
+		// Finally call all bound delegate functions.
+		OnTestDelegateOne.Execute();
+	}
 
 	{
 		OnTestDelegateTwo.BindLambda(
@@ -52,9 +50,9 @@ void FTestDelegate::DoTest()
 		{
 			LOG_DEBUG("Test#4 lambda inline 2 called with int: " << Test);
 		});
-	}
 	
-	OnTestDelegateTwo.Execute(234);
+		OnTestDelegateTwo.Execute(234);
+	}
 
 	{
 		OnTestDelegateThree.BindLambda(
@@ -62,9 +60,31 @@ void FTestDelegate::DoTest()
 		{
 			LOG_DEBUG("Test#4 lambda inline 2 called with int: " << Test << " and float: " << Test2);
 		});
+
+		OnTestDelegateThree.Execute(545, 5.5f);
 	}
 
-	OnTestDelegateThree.Execute(545, 5.5f);
+	{
+		/** Safe delegate tests */
+		/*
+		DelegateSafeTest.BindLambdaRaw([](int Test, float Test2)
+		{
+			LOG_DEBUG("Test#5 lambda inline 2 called with int: " << Test << " and float: " << Test2);
+		});
+
+		FFunctorLambda<void, int, float> FunctorLambda = [](int Test, float Test2)
+		{
+			LOG_DEBUG("Test#5 lambda not-inline 2 called with int: " << Test << " and float: " << Test2);
+		};
+
+		DelegateSafeTest.BindLambda(FunctorLambda);
+		DelegateSafeTest.UnBindLambda(FunctorLambda);
+
+		DelegateSafeTest.Execute(545, 5.5f);
+
+		//DelegateSafeTest.UnBindAll();
+		*/
+	}
 }
 
 char* FTestDelegate::GetTestName() const

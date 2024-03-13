@@ -8,7 +8,7 @@
 class FButtonWidget : public FInteractionBaseWidget
 {
 public:
-	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = 0);
+	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 	virtual ~FButtonWidget() override = default;
 
 	/** Begin FWidget */
@@ -25,7 +25,16 @@ public:
 	void NativeMouseExitWidget() override;
 	/** End FInteractionBaseWidget */
 
-public:
+	FColorRGBA GetButtonRenderColor() const { return ButtonRenderColor; }
+	FColorRGBA GetButtonNormalColor() const { return ButtonNormalColor; }
+	FColorRGBA GetButtonHoverColor() const { return ButtonHoverColor; }
+	FColorRGBA GetButtonClickColor() const { return ButtonClickColor; }
+
+	void SetButtonRenderColor(const FColorRGBA& Color);
+	void SetButtonNormalColor(const FColorRGBA& Color);
+	void SetButtonHoverColor(const FColorRGBA& Color);
+	void SetButtonClickColor(const FColorRGBA& Color);
+
 	FDelegate<> OnHover;
 	FDelegate<> OnClickPress;
 	FDelegate<> OnClickRelease;

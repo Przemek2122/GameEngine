@@ -18,12 +18,26 @@ FTextureAsset::~FTextureAsset()
 	LOG_INFO("Texture destroyed " << AssetName);
 }
 
-void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
+EAssetType FTextureAsset::GetAssetType() const
 {
-	Texture = new FTexture(AssetPath, InRenderer);
+	return EAssetType::AT_TEXTURE;
+}
+
+FVector2D<int> FTextureAsset::GetSize() const
+{
+	FVector2D<int> Size;
+
+	SDL_QueryTexture(Texture->GetSDLTexture(), nullptr, nullptr, &Size.X, &Size.Y);
+
+	return Size;
 }
 
 FTexture* FTextureAsset::GetTexture() const
 {
 	return Texture;
+}
+
+void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
+{
+	Texture = new FTexture(AssetPath, InRenderer);
 }

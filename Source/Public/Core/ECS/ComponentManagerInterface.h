@@ -14,11 +14,11 @@ public:
 	template<class TComponentClass, typename... TInParams>
 	TComponentClass* CreateComponent(std::string ComponentName, TInParams... InParams)
 	{
-		auto NewComponent = std::make_shared<TComponentClass>(this, InParams);
+		std::shared_ptr<TComponentClass> NewComponent = std::make_shared<TComponentClass>(this, InParams ...);
 
 		ComponentsMap.Emplace(ComponentName, NewComponent);
 
-		OnComponentCreated(ComponentName, NewComponent);
+		OnComponentCreated(ComponentName, NewComponent.get());
 
 		return NewComponent.get();
 	}
@@ -56,9 +56,11 @@ public:
 	{
 		for (std::pair<const std::string, std::shared_ptr<UComponent>>& ComponentPair : ComponentsMap)
 		{
-			if (typeid(ComponentPair.second) == typeid(TComponentClass))
+			UComponent* Component = ComponentPair.second.get();
+
+			if (typeid(Component) == typeid(TComponentClass))
 			{
-				return ComponentPair.second;
+				return dynamic_cast<TComponentClass*>(Component);
 			}
 		}
 
@@ -67,21 +69,29 @@ public:
 
 	/** Called when new component is created. */
 	virtual void OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent);
+
 	/** Called before destroying component. */
 	virtual void OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent);
 
 	/** @returns true if has owner and GetOwner() is safe to call. */
 	_NODISCARD bool HasOwner() const { return bDoesHaveComponentManagerInterfaceParent; }
+
 	/** @return cached owner. */
 	_NODISCARD IComponentManagerInterface* GetOwner() const;
+
 	/** Iterate all elements to the top returning top level owner, most likely EEntity. */
 	_NODISCARD IComponentManagerInterface* GetOwnerTop() const;
 
+	void TickComponents();
+	void RenderComponents();
+
 protected:
-	/** Parent */
+	/** Parent pointer - might be null! */
 	IComponentManagerInterface* ComponentManagerInterfaceParent;
+
 	/** Components accessible by strings passed when creating components which are component names. */
 	CUnorderedMap<std::string, std::shared_ptr<UComponent>> ComponentsMap;
+
 	/** Cached in constructor (ComponentManagerInterfaceParent != nullptr) */
 	bool bDoesHaveComponentManagerInterfaceParent;
 

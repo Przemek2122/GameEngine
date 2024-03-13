@@ -9,20 +9,15 @@
  * Base Delegate storing functors.
  * Call ExecuteByLambda to execute all bound functions.
  */
-template<typename TReturnType, typename... TInParams>
+template<typename TReturnType, typename TFunctorType, typename... TInParams>
 class FDelegateBase
 {
-using Functor = FFunctorBase<TReturnType, TInParams...>;
-	
 public:
+	typedef FFunctorBase<TReturnType, TInParams ...> Functor;
+
 	FDelegateBase() = default;
 	virtual ~FDelegateBase()
 	{
-		for (const Functor* FunctorObject : Functors)
-		{
-			delete FunctorObject;
-		}
-
 		Functors.Clear();
 	}
 
@@ -36,6 +31,6 @@ public:
 	virtual void Execute(TInParams... InParams) = 0;
 
 protected:
-	CArray<Functor*> Functors;
+	CArray<TFunctorType> Functors;
 	
 };

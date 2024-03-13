@@ -2,4 +2,4 @@
 
 #pragma once
 
-
+inline FEngine* GEngine;

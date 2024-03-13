@@ -36,6 +36,17 @@ namespace FMapGlobalSettings
 
 struct FMapSubAssetSettings
 {
+	FMapSubAssetSettings()
+		: AssetIndex(INDEX_INCORRECT)
+		, Collision(INDEX_INCORRECT)
+	{
+	}
+
+	bool IsValid() const
+	{
+		return (AssetIndex != INDEX_INCORRECT && Collision != INDEX_INCORRECT);
+	}
+
 	/** Index to match texture to map */
 	int AssetIndex;
 
@@ -79,6 +90,8 @@ class FMapAsset : public FAssetBase
 public:
 	FMapAsset(const std::string& InAssetName, const std::string& InAssetPath);
 	virtual ~FMapAsset() override;
+
+	virtual EAssetType GetAssetType() const override;
 
 	/** Load assets from disk */
 	void LoadMap();

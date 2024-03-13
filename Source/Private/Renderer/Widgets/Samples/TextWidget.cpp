@@ -8,7 +8,7 @@
 #include "Assets/Assets/FontAsset.h"
 
 static const char* DefaultText = "Default text"; 
-static const char* DefaultFont = "OpenSans"; 
+static const char* DefaultFont = "OpenSans";
 
 FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)

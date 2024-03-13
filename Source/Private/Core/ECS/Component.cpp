@@ -11,3 +11,19 @@ UComponent::UComponent(IComponentManagerInterface* InComponentManagerInterface)
 UComponent::~UComponent()
 {
 }
+
+void UComponent::BeginPlay()
+{
+}
+
+void UComponent::EndPlay()
+{
+}
+
+void UComponent::Tick()
+{
+}
+
+void UComponent::Render()
+{
+}

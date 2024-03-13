@@ -23,6 +23,11 @@ FMapAsset::~FMapAsset()
 	ClearMapData();
 }
 
+EAssetType FMapAsset::GetAssetType() const
+{
+	return EAssetType::AT_MAP;
+}
+
 void FMapAsset::LoadMap()
 {
 	if (FFileSystem::Directory::Exists(AssetPath))
@@ -41,7 +46,7 @@ void FMapAsset::LoadMap()
 			CArray<std::string> MapAssetFiles = FFileSystem::GetFilesFromDirectory(MapAssetsDirPath);
 
 			FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-			SDL_Renderer* WindowRenderer = MapManager->GetWindow()->GetRenderer()->GetSDLRenderer();
+			SDL_Renderer* WindowRenderer = MapManager->GetOwnerWindow()->GetRenderer()->GetSDLRenderer();
 
 			LoadMapAssets(Parser, AssetsManager, WindowRenderer);
 

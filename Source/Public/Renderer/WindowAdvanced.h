@@ -4,15 +4,21 @@
 
 #include "CoreMinimal.h"
 
+class FGameModeManager;
+
 /**
  * Advanced window
+ * + GameModeManager
  */
 class FWindowAdvanced : public FWindow
 {
 public:
-	FWindowAdvanced(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = 0);
-	virtual ~FWindowAdvanced();
+	FWindowAdvanced(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = WINDOW_DEFAULT_FLAGS);
+	~FWindowAdvanced() override;
+
+	FGameModeManager* GetGameModeManager() const { return GameModeManager; }
 
 protected:
+	FGameModeManager* GameModeManager;
 
 };

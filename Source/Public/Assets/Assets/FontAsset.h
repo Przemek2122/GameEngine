@@ -13,6 +13,8 @@ class FFontAsset : public FAssetBase
 public:
 	FFontAsset(const std::string& InAssetName, const std::string& InAssetPath);
 	virtual ~FFontAsset() override;
+
+	EAssetType GetAssetType() const override;
 	
 	_NODISCARD FFont* GetFont(const int Size);
 	

@@ -3,74 +3,6 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
-void FMouseInputDelegateWrapper::Execute(const FVector2D<int>& Location, const EInputState InputState)
-{
-	if (!bWasSentAlready)
-	{
-		AddToResetQueue();
-
-		if (InputState == EInputState::PRESS && CurrentInputState == EInputState::NOT_PRESSED)
-		{
-			Delegate.Execute(Location, InputState);
-
-			CurrentInputState = EInputState::PRESS;
-		}
-		else if (InputState == EInputState::RELEASE
-			&& (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
-		{
-			Delegate.Execute(Location, InputState);
-
-			bWasSentAlready = true;
-		}
-	}
-}
-
-void FMouseInputDelegateWrapper::AddToResetQueue()
-{
-	EventHandler->AddMouseInputDelegateToReset(this);
-}
-
-void FMouseInputDelegateWrapper::Reset()
-{
-	bWasSentAlready = false;
-
-	CurrentInputState = EInputState::NOT_PRESSED;
-}
-
-void FInputDelegateWrapper::Execute(const EInputState InputState)
-{
-	if (!bWasSentAlready)
-	{
-		AddToResetQueue();
-
-		if (EInputState::PRESS == InputState && CurrentInputState == EInputState::NOT_PRESSED)
-		{
-			Delegate.Execute(InputState);
-
-			CurrentInputState = EInputState::PRESS;
-		}
-		else if (EInputState::RELEASE == InputState 
-			&& (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
-		{
-			Delegate.Execute(InputState);
-
-			bWasSentAlready = true;
-		}
-	}
-}
-
-void FInputDelegateWrapper::Reset()
-{
-	bWasSentAlready = false;
-
-	CurrentInputState = EInputState::NOT_PRESSED;
-}
-
-void FInputDelegateWrapper::AddToResetQueue()
-{
-	EventHandler->AddKeyboardInputDelegateToReset(this);
-}
-
 FEventHandler::FEventHandler(const SDL_Event& InEvent)
 	: Event(InEvent)
 	, bQuitInputDetected(false)
@@ -116,6 +48,11 @@ void FEventHandler::ResetAll()
 	KeyboardInputDelegateResetQueue.Clear();
 }
 
+bool FEventHandler::QuitInputDetected() const
+{
+	return bQuitInputDetected;
+}
+
 bool FEventHandler::HasMouseMoved() const
 {
 	return MouseLocationCurrent != MouseLocationLast;
@@ -143,18 +80,42 @@ void FEventHandler::AddKeyboardInputDelegateToReset(FInputDelegateWrapper* Keybo
 
 void FEventHandler::SetMouseDelegates()
 {
-	MouseDelegates.MouseMoveDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
-
-	MouseDelegates.MouseLeftButtonDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
-
-	MouseDelegates.MouseRightButtonDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
-
-	MouseDelegates.MouseMiddleButtonDelegate = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+	MouseDelegates.Move = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+	MouseDelegates.LeftButton = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+	MouseDelegates.RightButton = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
+	MouseDelegates.MiddleButton = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
 }
 
 void FEventHandler::SetKeyBoardDelegates()
 {
-	KeyBoardDelegates.EscapeDelegate = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonEscape = FAutoDeletePointer<FInputDelegateWrapper>(this);
+
+	KeyBoardDelegates.Button0 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button1 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button2 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button3 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button4 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button5 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button6 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button7 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button8 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.Button9 = FAutoDeletePointer<FInputDelegateWrapper>(this);
+
+	KeyBoardDelegates.ButtonA = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonB = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonC = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonD = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonE = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	// [...] @TODO Add other basic buttons
+	KeyBoardDelegates.ButtonW = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonS = FAutoDeletePointer<FInputDelegateWrapper>(this);
+
+	KeyBoardDelegates.ButtonArrowUP = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonArrowDOWN = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonArrowRIGHT = FAutoDeletePointer<FInputDelegateWrapper>(this);
+	KeyBoardDelegates.ButtonArrowLEFT = FAutoDeletePointer<FInputDelegateWrapper>(this);
+
+	KeyBoardDelegates.ButtonDELETE = FAutoDeletePointer<FInputDelegateWrapper>(this);
 }
 
 void FEventHandler::SwitchOnInput(const Uint32 EventType)
@@ -225,15 +186,313 @@ void FEventHandler::SwitchOnInput(const Uint32 EventType)
 	}
 }
 
+void FEventHandler::InputKeyDown()
+{
+	switch (Event.key.keysym.sym)
+	{
+		case SDLK_ESCAPE:
+		{
+			KeyBoardDelegates.ButtonEscape->Execute(EInputState::PRESS);
+
+			break;
+		}
+
+		case SDLK_0:
+		{
+			KeyBoardDelegates.Button0->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_1:
+		{
+			KeyBoardDelegates.Button1->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_2:
+		{
+			KeyBoardDelegates.Button2->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_3:
+		{
+			KeyBoardDelegates.Button3->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_4:
+		{
+			KeyBoardDelegates.Button4->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_5:
+		{
+			KeyBoardDelegates.Button5->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_6:
+		{
+			KeyBoardDelegates.Button6->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_7:
+		{
+			KeyBoardDelegates.Button7->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_8:
+		{
+			KeyBoardDelegates.Button8->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_9:
+		{
+			KeyBoardDelegates.Button9->Execute(EInputState::PRESS);
+
+			break;
+		}
+
+		case SDLK_UP:
+		{
+			KeyBoardDelegates.ButtonArrowUP->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_DOWN:
+		{
+			KeyBoardDelegates.ButtonArrowDOWN->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_RIGHT:
+		{
+			KeyBoardDelegates.ButtonArrowRIGHT->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_LEFT:
+		{
+			KeyBoardDelegates.ButtonArrowLEFT->Execute(EInputState::PRESS);
+
+			break;
+		}
+
+		case SDLK_DELETE:
+		{
+			KeyBoardDelegates.ButtonDELETE->Execute(EInputState::PRESS);
+
+			break;
+		}
+
+		case SDLK_a:
+		{
+			KeyBoardDelegates.ButtonA->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_b:
+		{
+			KeyBoardDelegates.ButtonB->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_c:
+		{
+			KeyBoardDelegates.ButtonC->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_d:
+		{
+			KeyBoardDelegates.ButtonD->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_e:
+		{
+			KeyBoardDelegates.ButtonE->Execute(EInputState::PRESS);
+
+			break;
+		}
+		// [...] @TODO Someday all add buttons
+		case SDLK_w:
+		{
+			KeyBoardDelegates.ButtonW->Execute(EInputState::PRESS);
+
+			break;
+		}
+		case SDLK_s:
+		{
+			KeyBoardDelegates.ButtonS->Execute(EInputState::PRESS);
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown keyboard input found.");
+		}
+	}
+}
+
 void FEventHandler::InputKeyUp()
 {
-	if (Event.key.keysym.sym == SDLK_ESCAPE)
+	switch (Event.key.keysym.sym)
 	{
-		KeyBoardDelegates.EscapeDelegate->Execute(EInputState::RELEASE);
-	}
-	else
-	{
-		LOG_DEBUG("Unknown keyboard input found.");
+		case SDLK_ESCAPE:
+		{
+			KeyBoardDelegates.ButtonEscape->Execute(EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDLK_0:
+		{
+			KeyBoardDelegates.Button0->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_1:
+		{
+			KeyBoardDelegates.Button1->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_2:
+		{
+			KeyBoardDelegates.Button2->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_3:
+		{
+			KeyBoardDelegates.Button3->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_4:
+		{
+			KeyBoardDelegates.Button4->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_5:
+		{
+			KeyBoardDelegates.Button5->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_6:
+		{
+			KeyBoardDelegates.Button6->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_7:
+		{
+			KeyBoardDelegates.Button7->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_8:
+		{
+			KeyBoardDelegates.Button8->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_9:
+		{
+			KeyBoardDelegates.Button9->Execute(EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDLK_UP:
+		{
+			KeyBoardDelegates.ButtonArrowUP->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_DOWN:
+		{
+			KeyBoardDelegates.ButtonArrowDOWN->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_RIGHT:
+		{
+			KeyBoardDelegates.ButtonArrowRIGHT->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_LEFT:
+		{
+			KeyBoardDelegates.ButtonArrowLEFT->Execute(EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDLK_DELETE:
+		{
+			KeyBoardDelegates.ButtonDELETE->Execute(EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDLK_a:
+		{
+			KeyBoardDelegates.ButtonA->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_b:
+		{
+			KeyBoardDelegates.ButtonB->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_c:
+		{
+			KeyBoardDelegates.ButtonC->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_d:
+		{
+			KeyBoardDelegates.ButtonD->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_e:
+		{
+			KeyBoardDelegates.ButtonE->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		// [...] @TODO Someday all add buttons
+		case SDLK_w:
+		{
+			KeyBoardDelegates.ButtonW->Execute(EInputState::RELEASE);
+
+			break;
+		}
+		case SDLK_s:
+		{
+			KeyBoardDelegates.ButtonS->Execute(EInputState::RELEASE);
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown keyboard input found.");
+		}
 	}
 }
 
@@ -243,11 +502,75 @@ void FEventHandler::MouseMotion()
 	{
 		MouseLocationLast = MouseLocationCurrent;
 
-		MouseDelegates.MouseMoveDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
+		MouseDelegates.Move->Execute(MouseLocationCurrent, EInputState::PRESS);
 	}
 
 	MouseLocationCurrent.X = Event.motion.x;
 	MouseLocationCurrent.Y = Event.motion.y;
+}
+
+void FEventHandler::InputMouseDown()
+{
+	switch (Event.button.button)
+	{
+		case SDL_BUTTON_LEFT:
+		{
+			MouseDelegates.LeftButton->Execute(MouseLocationCurrent, EInputState::PRESS);
+
+			break;
+		}
+
+		case SDL_BUTTON_MIDDLE:
+		{
+			MouseDelegates.MiddleButton->Execute(MouseLocationCurrent, EInputState::PRESS);
+
+			break;
+		}
+
+		case SDL_BUTTON_RIGHT:
+		{
+			MouseDelegates.RightButton->Execute(MouseLocationCurrent, EInputState::PRESS);
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown mouse input found.");
+		}
+	}
+}
+
+void FEventHandler::InputMouseUp()
+{
+	switch (Event.button.button)
+	{
+		case SDL_BUTTON_LEFT:
+		{
+			MouseDelegates.LeftButton->Execute(MouseLocationCurrent, EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDL_BUTTON_MIDDLE:
+		{
+			MouseDelegates.MiddleButton->Execute(MouseLocationCurrent, EInputState::RELEASE);
+
+			break;
+		}
+
+		case SDL_BUTTON_RIGHT:
+		{
+			MouseDelegates.RightButton->Execute(MouseLocationCurrent, EInputState::RELEASE);
+
+			break;
+		}
+
+		default:
+		{
+			LOG_DEBUG("Unknown mouse input found.");
+		}
+	}
 }
 
 void FEventHandler::InputWindowEvent()
@@ -364,152 +687,4 @@ void FEventHandler::InputWindowEvent()
 			LOG_DEBUG("Window " << Event.window.windowID << " got unknown event" << Event.window.event);
 		}
 	}
-}
-
-void FEventHandler::InputKeyDown()
-{
-	switch (Event.key.keysym.sym)
-	{
-		case SDLK_ESCAPE:
-		{
-			KeyBoardDelegates.EscapeDelegate->Execute(EInputState::PRESS);
-
-			break;
-		}
-
-		case SDLK_1:
-		{
-
-
-			break;
-		}
-		case SDLK_2:
-		{
-
-
-			break;
-		}
-		case SDLK_3:
-		{
-
-
-			break;
-		}
-		case SDLK_4:
-		{
-
-
-			break;
-		}
-		case SDLK_5:
-		{
-
-
-			break;
-		}
-		case SDLK_6:
-		{
-
-
-			break;
-		}
-		case SDLK_7:
-		{
-
-
-			break;
-		}
-		case SDLK_8:
-		{
-
-
-			break;
-		}
-		case SDLK_9:
-		{
-
-
-			break;
-		}
-		case SDLK_0:
-		{
-
-
-			break;
-		}
-
-		default:
-		{
-			LOG_DEBUG("Unknown keyboard input found.");
-		}
-	}
-}
-
-void FEventHandler::InputMouseDown()
-{
-	switch (Event.button.button)
-	{
-		case SDL_BUTTON_LEFT:
-		{
-			MouseDelegates.MouseLeftButtonDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
-
-			break;
-		}
-
-		case SDL_BUTTON_MIDDLE:
-		{
-			MouseDelegates.MouseMiddleButtonDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
-
-			break;
-		}
-
-		case SDL_BUTTON_RIGHT:
-		{
-			MouseDelegates.MouseRightButtonDelegate->Execute(MouseLocationCurrent, EInputState::PRESS);
-
-			break;
-		}
-
-		default:
-		{
-			LOG_DEBUG("Unknown mouse input found.");
-		}
-	}
-}
-
-void FEventHandler::InputMouseUp()
-{
-	switch (Event.button.button)
-	{
-		case SDL_BUTTON_LEFT:
-		{
-			MouseDelegates.MouseLeftButtonDelegate->Execute(MouseLocationCurrent, EInputState::RELEASE);
-
-			break;
-		}
-
-		case SDL_BUTTON_MIDDLE:
-		{
-			MouseDelegates.MouseMiddleButtonDelegate->Execute(MouseLocationCurrent, EInputState::RELEASE);
-
-			break;
-		}
-
-		case SDL_BUTTON_RIGHT:
-		{
-			MouseDelegates.MouseRightButtonDelegate->Execute(MouseLocationCurrent, EInputState::RELEASE);
-
-			break;
-		}
-
-		default:
-		{
-			LOG_DEBUG("Unknown mouse input found.");
-		}
-	}
-}
-
-bool FEventHandler::QuitInputDetected() const
-{
-	return bQuitInputDetected;
 }

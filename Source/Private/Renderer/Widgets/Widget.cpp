@@ -61,16 +61,6 @@ void FWidget::Init()
 
 void FWidget::DeInit()
 {
-#if _DEBUG
-	if (ENSURE_VALID(WidgetManagementInterface != nullptr))
-	{
-		WidgetManagementInterface->UnRegisterWidget(this);
-
-		WidgetManagementInterface = nullptr;
-	}
-#else
-	WidgetManagementInterface->UnRegisterWidget(this);
-#endif
 }
 
 void FWidget::Tick()
@@ -93,19 +83,27 @@ void FWidget::ReCalculate()
 
 void FWidget::PreDeInit()
 {
+	if (WidgetManagementInterface != nullptr)
+	{
+		WidgetManagementInterface->UnRegisterWidget(this);
+
+		WidgetManagementInterface = nullptr;
+	}
 }
 
 void FWidget::DestroyWidget()
 {
 	if (!bIsPendingDelete)
 	{
-		PreDeInit();
+		bIsPendingDelete = true;
 
 		ClearChildren();
 
-		GEngine->GetFunctionsToCallOnStartOfNextTick().BindObject(this, &FWidget::FinalizeDestroyWidget);
+		SetWidgetVisibility(EWidgetVisibility::Collapsed);
 
-		bIsPendingDelete = true;
+		PreDeInit();
+
+		GEngine->GetFunctionsToCallOnStartOfNextTick().BindObject(this, &FWidget::FinalizeDestroyWidget);
 	}
 }
 
@@ -120,6 +118,24 @@ void FWidget::FinalizeDestroyWidget()
 	else
 	{
 		LOG_ERROR("FinalizeDestroyWidget called but bIsPendingDelete is " << bIsPendingDelete << ". Make sure to call DestroyWidget instead.");
+	}
+}
+
+void FWidget::DestroyWidgetImmediate()
+{
+	if (!bIsPendingDelete)
+	{
+		bIsPendingDelete = true;
+
+		ClearChildren();
+
+		SetWidgetVisibility(EWidgetVisibility::Collapsed);
+
+		PreDeInit();
+
+		DeInit();
+
+		delete this;
 	}
 }
 
@@ -196,6 +212,11 @@ void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
+}
+
+bool FWidget::IsVisible() const
+{
+	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
 }
 
 void FWidget::OnWidgetVisibilityChanged()

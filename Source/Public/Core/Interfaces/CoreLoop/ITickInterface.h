@@ -7,20 +7,28 @@
  */
 enum class ETickPhase : Uint8
 {
-	Pre = 1,
-	Main,
-	Post
+	None = 0,					// Not used
+	PostEngine,					// Called right after engine tick
+	Background,					// Called for background rendering callculations
+	Entity,						// Called for entities	
+	Default,					// Called for everything else
+	Widget,						// Called for widgets
+	PostEverything = 254,		// Called after everything else
+	MAX = 255					// Max value
 };
 
 /**
  * Class for objects that need to be ticked
  * Self registers and unregisters
  */
-class FTickInterface
+class ITickInterface
 {
 public:
-	FTickInterface();
-	virtual ~FTickInterface();
+	ITickInterface();
+	virtual ~ITickInterface();
+
+	/** This function must be called when you want your object to start ticking. */
+	void Register();
 
 	/** @returns Phase registered in constructor. */
 	ETickPhase GetRegisteredPhase() const { return RegisteredPhase; }
@@ -32,5 +40,7 @@ public:
 	virtual void Tick(float DeltaTime) = 0;
 
 private:
+	bool bIsRegistered;
 	ETickPhase RegisteredPhase;
+	FFunctorObject<ITickInterface, void, float> TickFunctor;
 };

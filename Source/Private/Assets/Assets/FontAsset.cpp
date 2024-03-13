@@ -24,6 +24,11 @@ FFontAsset::~FFontAsset()
 #endif
 }
 
+EAssetType FFontAsset::GetAssetType() const
+{
+	return EAssetType::AT_FONT;
+}
+
 FFont* FFontAsset::GetFont(const int Size)
 {
 	if (!Fonts.ContainsKey(Size))
