@@ -56,9 +56,11 @@ public:
 	{
 		for (std::pair<const std::string, std::shared_ptr<UComponent>>& ComponentPair : ComponentsMap)
 		{
-			if (typeid(ComponentPair.second) == typeid(TComponentClass))
+			UComponent* Component = ComponentPair.second.get();
+
+			if (typeid(Component) == typeid(TComponentClass))
 			{
-				return ComponentPair.second;
+				return dynamic_cast<TComponentClass*>(Component);
 			}
 		}
 
