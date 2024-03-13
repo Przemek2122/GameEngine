@@ -11,5 +11,11 @@ class UComponent : public UObject, public IComponentManagerInterface
 public:
 	UComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UComponent() override;
-	
+
+	virtual void BeginPlay();
+	virtual void EndPlay();
+
+	virtual void Tick();
+	virtual void Render();
+
 };
