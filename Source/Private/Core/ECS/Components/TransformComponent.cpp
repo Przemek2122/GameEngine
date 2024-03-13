@@ -1,12 +1,9 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
+#include "ECS/Components/TransformComponent.h"
 
-#include "Interfaces/TransformInterface2D.h"
-
-class UTransformComponent : public UComponent, public ITransformInterface2D<int>
+UTransformComponent::UTransformComponent(IComponentManagerInterface* InComponentManagerInterface)
+	: UComponent(InComponentManagerInterface)
 {
-public:
-
-
-};
+}

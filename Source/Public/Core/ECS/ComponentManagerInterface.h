@@ -67,21 +67,26 @@ public:
 
 	/** Called when new component is created. */
 	virtual void OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent);
+
 	/** Called before destroying component. */
 	virtual void OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent);
 
 	/** @returns true if has owner and GetOwner() is safe to call. */
 	_NODISCARD bool HasOwner() const { return bDoesHaveComponentManagerInterfaceParent; }
+
 	/** @return cached owner. */
 	_NODISCARD IComponentManagerInterface* GetOwner() const;
+
 	/** Iterate all elements to the top returning top level owner, most likely EEntity. */
 	_NODISCARD IComponentManagerInterface* GetOwnerTop() const;
 
 protected:
-	/** Parent */
+	/** Parent pointer - might be null! */
 	IComponentManagerInterface* ComponentManagerInterfaceParent;
+
 	/** Components accessible by strings passed when creating components which are component names. */
 	CUnorderedMap<std::string, std::shared_ptr<UComponent>> ComponentsMap;
+
 	/** Cached in constructor (ComponentManagerInterfaceParent != nullptr) */
 	bool bDoesHaveComponentManagerInterfaceParent;
 

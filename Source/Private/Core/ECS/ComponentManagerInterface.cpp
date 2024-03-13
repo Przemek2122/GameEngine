@@ -11,6 +11,7 @@ IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterfac
 
 IComponentManagerInterface::~IComponentManagerInterface()
 {
+	ComponentsMap.Clear();
 }
 
 bool IComponentManagerInterface::DestroyComponent(const std::string& ComponentName)
