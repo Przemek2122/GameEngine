@@ -99,8 +99,7 @@ public:
 		}
 		else
 		{
-			// Tried to add asset which does not exists, see FullFilePath
-			ENSURE_VALID(false);
+			LOG_ERROR("Asset does not exists with name '" << InAssetName << "' and path: '" << InAssetPath << "'.");
 		}
 
 		return nullptr;
