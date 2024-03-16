@@ -147,6 +147,10 @@ void FMap::ClearData()
 
 void FMap::Save()
 {
+	// Write data from this class to FMapAsset
+	WriteAsset();
+
+	// Save data from FMapAsset to file on disk
 	MapAsset->SaveMapData();
 }
 

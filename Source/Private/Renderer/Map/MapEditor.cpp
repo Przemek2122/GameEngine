@@ -32,3 +32,15 @@ void FMapEditor::OnMapClicked(const FVector2D<int>& Location) const
 		LOG_ERROR("Map is nullptr");
 	}
 }
+
+void FMapEditor::SaveMap() const
+{
+	if (Map != nullptr)
+	{
+		Map->Save();
+	}
+	else
+	{
+		LOG_ERROR("Map is nullptr");
+	}
+}

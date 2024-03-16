@@ -26,6 +26,8 @@ IWidgetManagementInterface::~IWidgetManagementInterface()
 		}
 	}
 
+	OnWidgetOrderChanged.UnBindAll();
+
 	// This two arrays should always have the same size. Log if not.
 	if (ManagedWidgets.Size() != ManagedWidgetsMap.Size())
 	{

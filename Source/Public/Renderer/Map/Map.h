@@ -35,11 +35,6 @@ public:
 	/** Function used for saving a map */
 	virtual void Save();
 
-	/** Reads data from asset into this class from MapAsset memory */
-	virtual void ReadAsset();
-	/** Write data from this class into asset into MapAsset memory */
-	virtual void WriteAsset();
-
 	/** Map asset used to load / save this map */
 	FMapAsset* GetMapAsset() const { return MapAsset; }
 
@@ -57,6 +52,13 @@ public:
 
 	/** Changes tile at given @Location with given @MapAssetIndexToSet. */
 	void ChangeTileAtLocation(const FVector2D<int>& Location, int MapAssetIndexToSet);
+
+protected:
+	/** Reads data from asset into this class from MapAsset memory */
+	virtual void ReadAsset();
+
+	/** Write data from this class into asset into MapAsset memory */
+	virtual void WriteAsset();
 
 protected:
 	/** Map data: tiles size, tiles location and assets for map */
