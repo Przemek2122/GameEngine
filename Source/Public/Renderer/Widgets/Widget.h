@@ -94,6 +94,8 @@ public:
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
 
+	bool IsInteractive() const;
+
 protected:
 	/** True if WidgetManagementInterface decided to render this widget. */
 	bool bWasRenderedThisFrame;

@@ -43,36 +43,41 @@ public:
 	/** Map asset used to load / save this map */
 	FMapAsset* GetMapAsset() const { return MapAsset; }
 
-	void AddMapLocation(const FVector2D<int>& LocationChange);
-	FVector2D<int> GetMapLocation() const;
+	/** Checks given location (assumes it's absolute) if it's inside of bounds */
+	bool IsInBounds(const FVector2D<int>& Location) const;
 
-	/** Scale of map */
-	float GetScale() const { return Scale; }
-	/** Change of map scale when zooming */
-	float GetScaleJump() const { return ScaleJump; }
+	/** Move map */
+	void AddMapRenderOffset(const FVector2D<int>& LocationChange);
+
+	/** Get map render offset */
+	FVector2D<int> GetMapRenderOffset() const;
+
+	/** Delegate triggered each time when map is moved */
+	FDelegate<void, FVector2D<int>>& GetMapLocationChangeDelegate();
+
+	/** Changes tile at given @Location with given @MapAssetIndexToSet. */
+	void ChangeTileAtLocation(const FVector2D<int>& Location, int MapAssetIndexToSet);
 
 protected:
+	/** Map data: tiles size, tiles location and assets for map */
+	FMapData MapData;
+
 	/** Map asset */
 	FMapAsset* MapAsset;
 
 	/** Pointer to owner */
 	FMapManager* MapManager;
 
+	/** This property is for moving map */
+	FVector2D<int> MapRenderOffset;
+
+	/** Camera manager entity for map movement */
+	ECameraManager* CameraManagerEntity;
+
+	/** MapLocationChangeDelegate for map location change - Send new offset each time it's called */
+	FDelegate<void, FVector2D<int>> MapLocationChangeDelegate;
+
 	/** Is map activated */
 	bool bIsActive;
-
-	/** Map data: tiles size, tiles location and assets for map */
-	FMapData MapData;
-
-	/** Map scale */
-	float Scale;
-
-	/** Map jump scale - How fast to change scale when zooming etc */
-	float ScaleJump;
-
-	/** This property is for moving map */
-	FVector2D<int> MapLocation;
-
-	ECameraManager* CameraManagerEntity;
 
 };

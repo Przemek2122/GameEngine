@@ -14,4 +14,10 @@ public:
 	UTransformComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UTransformComponent() override = default;
 
+	void BeginPlay() override;
+	void EndPlay() override;
+
+	/** Called from map using delegate each time map location (camera position) is changed */
+	void OnMapLocationChanged(FVector2D<int> NewLocation);
+
 };

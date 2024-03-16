@@ -245,7 +245,7 @@ void FMapManager::MoveMap(const FVector2D<int>& InMapRenderOffset) const
 {
 	if (CurrentMap != nullptr)
 	{
-		CurrentMap->AddMapLocation(InMapRenderOffset);
+		CurrentMap->AddMapRenderOffset(InMapRenderOffset);
 	}
 }
 

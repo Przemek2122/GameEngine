@@ -149,14 +149,6 @@ void FEngine::EngineTick()
 {
 	UpdateFrameRateCounter();
 
-	// Tick functions for next tick
-	if (FunctionsToCallOnStartOfNextTick.IsBound())
-	{
-		FunctionsToCallOnStartOfNextTick.Execute();
-
-		FunctionsToCallOnStartOfNextTick.UnBindAll();
-	}
-
 	// Wait for Render thread.
 	// We need to do this to avoid changing data when render is not finished
 	//while (!EngineRender->IsRenderTickFinished())
@@ -181,6 +173,14 @@ void FEngine::EngineTick()
 	EngineRender->Tick();
 
 	EngineRenderingManager->EngineRender();
+
+	// Tick functions for next tick
+	if (FunctionsToCallOnStartOfNextTick.IsBound())
+	{
+		FunctionsToCallOnStartOfNextTick.Execute();
+
+		FunctionsToCallOnStartOfNextTick.UnBindAll();
+	}
 }
 
 void FEngine::EnginePostSecondTick()
@@ -365,7 +365,7 @@ const std::string& FEngine::GetLaunchRelativePath() const
 	return LaunchRelativePath;
 }
 
-void FEngine::AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function)
+void FEngine::AddLambdaToCallOnStartOfNextTick(const FFunctorLambda<void>& Function)
 {
 	FunctionsToCallOnStartOfNextTick.BindLambda(Function);
 }

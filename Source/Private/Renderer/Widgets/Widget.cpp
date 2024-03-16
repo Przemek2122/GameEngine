@@ -267,3 +267,8 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 
 	return nullptr;
 }
+
+bool FWidget::IsInteractive() const
+{
+	return (GetWidgetVisibility() == EWidgetVisibility::Visible || GetWidgetVisibility() == EWidgetVisibility::Hidden);
+}

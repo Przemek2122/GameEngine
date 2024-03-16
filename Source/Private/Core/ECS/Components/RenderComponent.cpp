@@ -17,7 +17,7 @@ void URenderComponent::Tick()
 
 	if (TransformComponent != nullptr)
 	{
-		LocationCached = TransformComponent->GetLocation();
+		LocationCached = TransformComponent->GetLocationFinal();
 	}
 }
 

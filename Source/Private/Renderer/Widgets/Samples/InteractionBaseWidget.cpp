@@ -54,7 +54,7 @@ void FInteractionBaseWidget::ClearInput(FWidgetInputManager* InWidgetInputManage
 
 bool FInteractionBaseWidget::OnMouseLeftButtonUsed(FVector2D<int> Location, EInputState InputState)
 {
-	if (bIsInWidget && GetWidgetVisibility() == EWidgetVisibility::Visible)
+	if (bIsInWidget && IsInteractive())
 	{
 		if (ClickState == EClickState::NotClicked)
 		{
@@ -176,16 +176,19 @@ void FInteractionBaseWidget::OnHoverStateChanged()
 		case EHoverState::None:
 		{
 			ENSURE_VALID(false);
+
 			break;
 		}
 		case EHoverState::Entered:
 		{
 			NativeMouseEnterWidget();
+
 			break;
 		}
 		case EHoverState::Exited:
 		{
 			NativeMouseExitWidget();
+
 			break;
 		}
 	}
