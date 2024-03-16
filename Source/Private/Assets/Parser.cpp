@@ -67,9 +67,23 @@ std::string FParser::SimpleParseStringsIntoLine(const CArray<std::string>& Strin
 {
 	std::string ParsedLine;
 
-	for (const std::string& String : Strings)
+	const int StringsCount = Strings.Size();
+	const int LastStringIndex = StringsCount - 1;
+
+	for (int i = 0; i < StringsCount; i++)
 	{
-		ParsedLine += String;
+		const bool bIsLast = (i == LastStringIndex);
+
+		const std::string& String = Strings[i];
+
+		if (bIsLast)
+		{
+			ParsedLine += String;
+		}
+		else
+		{
+			ParsedLine += String + SeparatorCharArray[0];
+		}
 	}
 
 	return ParsedLine;
@@ -145,22 +159,32 @@ std::string FParser::ParseLinesIntoString(const CArray<FParserLine>& Lines)
 	{
 		std::string CurrentLine;
 
-		for (const FParserText& FParserText : ParserLine.Texts)
+		for (int ParserTextIndex = 0; ParserTextIndex < ParserLine.Texts.Size(); ParserTextIndex++)
 		{
+			const FParserText& FParserText = ParserLine.Texts[ParserTextIndex];
+
 			std::string CurrentWord;
 
 			switch (FParserText.Type)
 			{
 				case EParserTextType::Word:
 				{
-					CurrentWord += CommentCharArray[0] + FParserText.Text;
+					// Do not add separator before first value
+					if (ParserTextIndex == 0)
+					{
+						CurrentWord += FParserText.Text;
+					}
+					else
+					{
+						CurrentWord += SeparatorCharArray[0] + FParserText.Text;
+					}
 
 					break;
 				}
 
 				case EParserTextType::Comment:
 				{
-					CurrentWord += SeparatorCharArray[0] + FParserText.Text;
+					CurrentWord += CommentCharArray[0] + FParserText.Text;
 
 					break;
 				}
@@ -191,14 +215,14 @@ std::string FParser::ParseLinesIntoString(const CArray<FParserLine>& Lines)
 		OutParsedString += CurrentLine + NewLineChar;
 	}
 
-	return std::move(OutParsedString);
+	return OutParsedString;
 }
 
 CArray<std::string> FParser::SplitString(const std::string& InString, const CArray<char>& InSeparatorCharArray)
 {
 	CArray<std::string> SubStrings;
 
-	std::string CurrentSubString = "";
+	std::string CurrentSubString;
 
 	for (char Char : InString)
 	{

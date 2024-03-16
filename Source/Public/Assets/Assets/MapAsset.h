@@ -116,11 +116,13 @@ protected:
 
 	/** Load map assets into MapSubAssetSettingsArray */
 	void LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer);
+
 	/** Load information about tiles location. */
 	void LoadMapTilesLocationInformation(FParser Parser);
 
 	/** Save map tiles location */
 	void SaveMapFile(FParser& Parser);
+
 	/** Save map assets from MapSubAssetSettingsArray */
 	void SaveMapDataFile(FParser& Parser);
 

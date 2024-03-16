@@ -48,6 +48,18 @@ struct FParserLine
 {
 	FParserLine() = default;
 
+	/** Copy constructor */
+	FParserLine(const FParserLine& InOther)
+		: Texts(InOther.Texts)
+	{
+	}
+
+	/** Move constructor */
+	FParserLine(const FParserLine&& InOther) noexcept
+		: Texts(std::move(InOther.Texts))
+	{
+	}
+
 	FParserLine(CArray<FParserText> InTexts)
 		: Texts(std::move(InTexts))
 	{
