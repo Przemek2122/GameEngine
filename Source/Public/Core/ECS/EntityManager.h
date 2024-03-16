@@ -4,9 +4,11 @@
 
 #include "ECS/Entity.h"
 
+class FMap;
+
 class FEntityManager
 {
-	friend FWindow;
+	friend FMap;
 
 protected:
 	FEntityManager(FWindow* InOwnerWindow);

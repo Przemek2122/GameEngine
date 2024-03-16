@@ -21,11 +21,19 @@ FMapManager::~FMapManager()
 	DeactivateCurrentGameMap();
 }
 
+void FMapManager::TickMap(const float DeltaTime)
+{
+	if (CurrentMap != nullptr)
+	{
+		CurrentMap->Tick(DeltaTime);
+	}
+}
+
 void FMapManager::DrawMap()
 {
 	if (CurrentMap != nullptr)
 	{
-		CurrentMap->Draw();
+		CurrentMap->Render();
 	}
 }
 

@@ -13,37 +13,34 @@ FMap::FMap(FMapAsset* InMapAsset, FMapManager* InMapManager)
 	, CameraManagerEntity(nullptr)
 	, MapLocationChangeDelegate()
 	, bIsActive(false)
+	, EntityManager(nullptr)
 {
 }
 
 void FMap::Initialize()
 {
+	EntityManager = CreateEntityManager();
+
 	ReadAsset();
 
-	FEntityManager* EntityManager = MapManager->GetOwnerWindow()->GetEntityManager();
-	if (EntityManager != nullptr)
-	{
-		CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>("CameraManager");
-	}
-	else
-	{
-		LOG_WARN("EntityManager is nullptr. CameraManager will not be created.");
-	}
+	CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>("CameraManager");
 }
 
 void FMap::DeInitialize()
 {
 	ClearData();
 
-	FEntityManager* EntityManager = MapManager->GetOwnerWindow()->GetEntityManager();
 	if (EntityManager != nullptr)
 	{
 		EntityManager->DestroyEntity(CameraManagerEntity);
+
+		delete EntityManager;
 	}
-	else if (EntityManager == nullptr)
-	{
-		LOG_ERROR("EntityManager is nullptr. Memory leak!");
-	}
+}
+
+FEntityManager* FMap::GetEntityManager() const
+{
+	return EntityManager;
 }
 
 int FMap::GetMapWidth() const
@@ -66,7 +63,15 @@ FVector2D<int> FMap::GetMapSizeInPixels() const
 	return { GetMapWidth() * MapData.AssetsTileSize.X, GetMapHeight() * MapData.AssetsTileSize.Y };
 }
 
-void FMap::Draw()
+void FMap::Tick(float DeltaTime)
+{
+	if (bIsActive)
+	{
+		EntityManager->Tick(DeltaTime);
+	}
+}
+
+void FMap::Render()
 {
 	if (bIsActive)
 	{
@@ -126,6 +131,8 @@ void FMap::Draw()
 				}
 			}
 		}
+
+		EntityManager->Render();
 	}
 }
 
@@ -167,6 +174,11 @@ void FMap::ReadAsset()
 void FMap::WriteAsset()
 {
 	MapAsset->WriteMapData(MapData);
+}
+
+FEntityManager* FMap::CreateEntityManager()
+{
+	return new FEntityManager(MapManager->GetOwnerWindow());
 }
 
 bool FMap::IsInBounds(const FVector2D<int>& Location) const

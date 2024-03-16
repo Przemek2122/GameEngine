@@ -19,19 +19,24 @@ public:
 	void Initialize();
 	void DeInitialize();
 
+	FEntityManager* GetEntityManager() const;
+
 	int GetMapWidth() const;
 	int GetMapHeight() const;
 
 	FVector2D<int> GetMapSizeInTiles() const;
 	FVector2D<int> GetMapSizeInPixels() const;
 
-	/** Function used for drawing a map */
-	virtual void Draw();
+	virtual void Tick(float DeltaTime);
+
+	virtual void Render();
 
 	/** Function used for loading a map */
 	virtual void Load();
+
 	/** Function used for unloading a map */
 	virtual void ClearData();
+
 	/** Function used for saving a map */
 	virtual void Save();
 
@@ -60,6 +65,8 @@ protected:
 	/** Write data from this class into asset into MapAsset memory */
 	virtual void WriteAsset();
 
+	_NODISCARD virtual FEntityManager* CreateEntityManager();
+
 protected:
 	/** Map data: tiles size, tiles location and assets for map */
 	FMapData MapData;
@@ -81,5 +88,7 @@ protected:
 
 	/** Is map activated */
 	bool bIsActive;
+
+	FEntityManager* EntityManager;
 
 };
