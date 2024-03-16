@@ -32,12 +32,12 @@ void FInteractionBaseWidget::Init()
 
 void FInteractionBaseWidget::PreDeInit()
 {
-	FWidget::PreDeInit();
-
 	FDelegate<void, FWidgetInputManager*> ClearDelegate;
 	ClearDelegate.BindObject(this, &FInteractionBaseWidget::ClearInput);
 
 	WidgetInputManager->UnRegister(this, ClearDelegate);
+
+	FWidget::PreDeInit();
 }
 
 void FInteractionBaseWidget::SetupInput(FWidgetInputManager* InWidgetInputManager)
