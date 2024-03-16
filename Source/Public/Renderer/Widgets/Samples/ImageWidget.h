@@ -21,7 +21,7 @@ public:
 	/** End FWidget */
 
 	/** Call to change texture of widget */
-	void SetImage(const std::string& InImageName);
+	void SetImage(const std::string& InImageName, const std::string& OptionalPath = "");
 
 	/** Call to change texture of widget but only if you already have texture. */
 	void SetImage(const std::shared_ptr<FTextureAsset>& TexturePtr);

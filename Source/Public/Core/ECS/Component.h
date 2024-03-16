@@ -10,7 +10,7 @@ class UComponent : public UObject, public IComponentManagerInterface
 {
 public:
 	UComponent(IComponentManagerInterface* InComponentManagerInterface);
-	virtual ~UComponent() override;
+	virtual ~UComponent() override = default;
 
 	virtual void BeginPlay();
 	virtual void EndPlay();
@@ -18,18 +18,33 @@ public:
 	virtual void Tick();
 	virtual void Render();
 
+	virtual void ActivateComponent();
+	virtual void DeactivateComponent();
+
+	bool IsComponentActive() const;
+
 	template<typename TComponentClass>
-	void RequireComponent() const
+	TComponentClass* RequireComponent() const
 	{
 		if (HasOwner())
 		{
 			TComponentClass* Component = GetOwner()->GetComponentByClass<TComponentClass>();
 
-			if (Component == nullptr)
+			if (Component != nullptr)
+			{
+				return Component;
+			}
+			else
 			{
 				LOG_ERROR("Missing component of type: " << typeid(TComponentClass).name());
 			}
 		}
+
+		return nullptr;
 	}
+
+protected:
+	bool bIsComponentActive;
+
 
 };

@@ -10,7 +10,7 @@ class EEntity : public UObject, public IComponentManagerInterface
 {
 public:
 	EEntity(FEntityManager* InEntityManager);
-	virtual ~EEntity() override;
+	~EEntity() override = default;
 
 	/** Called when starting or creating Entity */
 	virtual void BeginPlay();

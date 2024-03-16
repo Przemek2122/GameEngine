@@ -4,18 +4,8 @@
 #include "ECS/Entity.h"
 
 EEntity::EEntity(FEntityManager* InEntityManager)
-	: IComponentManagerInterface(nullptr)
+	: IComponentManagerInterface(nullptr, InEntityManager->GetOwnerWindow())
 	, EntityManagerOwner(InEntityManager)
-{
-#if _DEBUG
-	if (InEntityManager != nullptr)
-	{
-		LOG_INFO("Entity created. (" << GetCppClassName() << ")");
-	}
-#endif
-}
-
-EEntity::~EEntity()
 {
 }
 
