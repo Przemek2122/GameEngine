@@ -170,10 +170,6 @@ void FEngine::EngineTick()
 
 	EngineTickingManager->EngineTick(DeltaTimeFloat);
 
-	EngineRender->Tick();
-
-	EngineRenderingManager->EngineRender();
-
 	// Tick functions for next tick
 	if (FunctionsToCallOnStartOfNextTick.IsBound())
 	{
@@ -181,6 +177,10 @@ void FEngine::EngineTick()
 
 		FunctionsToCallOnStartOfNextTick.UnBindAll();
 	}
+
+	EngineRender->Tick();
+
+	EngineRenderingManager->EngineRender();
 }
 
 void FEngine::EnginePostSecondTick()

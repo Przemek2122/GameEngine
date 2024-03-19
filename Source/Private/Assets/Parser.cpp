@@ -155,8 +155,10 @@ std::string FParser::ParseLinesIntoString(const CArray<FParserLine>& Lines)
 
 	std::string OutParsedString;
 
-	for (const FParserLine& ParserLine : Lines)
+	for (int CurrentLineIndex = 0; CurrentLineIndex < Lines.Size(); CurrentLineIndex++)
 	{
+		const FParserLine& ParserLine = Lines[CurrentLineIndex];
+
 		std::string CurrentLine;
 
 		for (int ParserTextIndex = 0; ParserTextIndex < ParserLine.Texts.Size(); ParserTextIndex++)
@@ -212,7 +214,15 @@ std::string FParser::ParseLinesIntoString(const CArray<FParserLine>& Lines)
 			CurrentLine += CurrentWord;
 		}
 
-		OutParsedString += CurrentLine + NewLineChar;
+		if (CurrentLineIndex != Lines.Size() - 1)
+		{
+			OutParsedString += CurrentLine + NewLineChar;
+		}
+		else
+		{
+			// Do not add new line at the end (it is not needed for the last line
+			OutParsedString += CurrentLine;
+		}
 	}
 
 	return OutParsedString;

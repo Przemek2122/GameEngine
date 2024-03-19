@@ -41,7 +41,7 @@ void FMapAsset::LoadMap()
 		{
 			LOG_INFO("Loading map: " << AssetName);
 
-			const FParser Parser = CreateMapFilesParser();
+			FParser Parser = CreateMapFilesParser();
 
 			CArray<std::string> MapAssetFiles = FFileSystem::GetFilesFromDirectory(MapAssetsDirPath);
 
@@ -154,9 +154,10 @@ void FMapAsset::GenerateNamesForMapAssets()
 	}
 }
 
-void FMapAsset::LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer)
+void FMapAsset::LoadMapAssets(FParser& Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer)
 {
 	std::ifstream MapDataFilePathStream(MapDataFilePath);
+
 	for (std::string Line; getline(MapDataFilePathStream, Line); )
 	{
 		CArray<std::string> StringArray = Parser.SimpleParseLineIntoStrings(Line);
@@ -167,7 +168,6 @@ void FMapAsset::LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL
 			MapSubAssetSettings.Collision = atoi(StringArray[1].c_str());
 
 			std::string SubAsset = StringArray[2];
-
 			std::string SubAssetName = AssetName + SubAsset;
 
 			char Slash = AssetsManager->GetPlatformSlash();
@@ -189,40 +189,46 @@ void FMapAsset::LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL
 			}
 		}
 	}
+
 	MapDataFilePathStream.close();
 }
 
-void FMapAsset::LoadMapTilesLocationInformation(FParser Parser)
+void FMapAsset::LoadMapTilesLocationInformation(FParser& Parser)
 {
 	const int MaxAssetIndex = MapData.MapSubAssetSettingsArray.Size();
 
-	// Map, where should be which tile
+	// Map - each tile location
 	std::ifstream MapNameFilePathStream(MapNameFilePath);
+
 	for (std::string Line; getline(MapNameFilePathStream, Line); )
 	{
 		CArray<std::string> ParsedArray = Parser.SimpleParseLineIntoStrings(Line);
 
-		FMapRow MapRow;
-
-		for (std::string& Element : ParsedArray)
+		if (!ParsedArray.IsEmpty())
 		{
-			// @TODO Could switch to strtol to make sure conversion does not fail
-			const int Index = atoi(Element.c_str());
+			FMapRow MapRow;
 
-			if (Index >= MaxAssetIndex)
+			for (std::string& Element : ParsedArray)
 			{
-				LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+				// @TODO Could switch to strtol to make sure conversion does not fail
+				const int Index = atoi(Element.c_str());
 
-				MapRow.Array.Push(INDEX_INCORRECT);
+				if (Index >= MaxAssetIndex)
+				{
+					LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+
+					MapRow.Array.Push(INDEX_INCORRECT);
+				}
+				else
+				{
+					MapRow.Array.Push(Index);
+				}
 			}
-			else
-			{
-				MapRow.Array.Push(Index);
-			}
+
+			MapData.MapArray.Push(MapRow);
 		}
-
-		MapData.MapArray.Push(MapRow);
 	}
+
 	MapNameFilePathStream.close();
 }
 
@@ -251,7 +257,15 @@ void FMapAsset::SaveMapFile(FParser& Parser)
 
 			for (const int MapElement : MapRow.Array)
 			{
-				FParserText ParserText = FParserText(std::to_string(MapElement), EParserTextType::Word);
+				int MapElementToSave = 0;
+
+				// Make sure we do not have any negative values
+				if (MapElement >= 0)
+				{
+					MapElementToSave = MapElement;
+				}
+
+				FParserText ParserText = FParserText(std::to_string(MapElementToSave), EParserTextType::Word);
 
 				ParserLine.Texts.Push(std::move(ParserText));
 			}

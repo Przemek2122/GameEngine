@@ -95,8 +95,10 @@ public:
 
 	/** Load assets from disk */
 	void LoadMap();
+
 	/** Clear all arrays from loaded files from FMapAsset::LoadMap */
 	void ClearMapData();
+
 	/** OVERRIDE file map source. This will removed old map. Be carefull when calling */
 	void SaveMapData();
 
@@ -115,10 +117,10 @@ protected:
 	void GenerateNamesForMapAssets();
 
 	/** Load map assets into MapSubAssetSettingsArray */
-	void LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer);
+	void LoadMapAssets(FParser& Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer);
 
 	/** Load information about tiles location. */
-	void LoadMapTilesLocationInformation(FParser Parser);
+	void LoadMapTilesLocationInformation(FParser& Parser);
 
 	/** Save map tiles location */
 	void SaveMapFile(FParser& Parser);
