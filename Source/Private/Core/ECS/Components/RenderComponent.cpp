@@ -95,6 +95,4 @@ void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 void URenderComponent::OnLocationChanged(const FVector2D<int> InLocation)
 {
 	LocationCached = InLocation;
-
-	LOG_INFO("InLocation" << InLocation);
 }
