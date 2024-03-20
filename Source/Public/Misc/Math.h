@@ -32,6 +32,10 @@ public:
 	static int CeilToInt(const float Value);
 	static int CeilToInt(const double Value);
 
-	static int Max(const int A, const int B);
+	template<typename TType>
+	static int Max(const TType A, const TType B)
+	{
+		return (A > B) ? A : B;
+	}
 
 };

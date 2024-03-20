@@ -81,16 +81,16 @@ void FMap::Render()
 
 		// Minimal render tile offset - Everything before that vector will not be rendered
 		FVector2D<int> MapLocationTileOffsetMin;
-		MapLocationTileOffsetMin.X = FMath::FloorToInt(MapLocationFloat.X / MapAssetsTileSizeFloat.X);
-		MapLocationTileOffsetMin.Y = FMath::FloorToInt(MapLocationFloat.Y / MapAssetsTileSizeFloat.Y);
+		MapLocationTileOffsetMin.X = FMath::FloorToInt(-MapLocationFloat.X / MapAssetsTileSizeFloat.X) - 1;
+		MapLocationTileOffsetMin.Y = FMath::FloorToInt(-MapLocationFloat.Y / MapAssetsTileSizeFloat.Y) - 1;
 
 		MapLocationTileOffsetMin.X = FMath::Max(MapLocationTileOffsetMin.X, 0);
 		MapLocationTileOffsetMin.Y = FMath::Max(MapLocationTileOffsetMin.Y, 0);
 
-		// Maximal render tile offset - Everything after that vector will not be rendered
+		// Max render
 		FVector2D<int> MapLocationTileOffsetMax = MapLocationTileOffsetMin;
-		MapLocationTileOffsetMax.X += FMath::CeilToInt(OwnerWindowSize.X / MapAssetsTileSizeFloat.X);
-		MapLocationTileOffsetMax.Y += FMath::CeilToInt(OwnerWindowSize.Y / MapAssetsTileSizeFloat.Y);
+		MapLocationTileOffsetMax.X += FMath::CeilToInt(OwnerWindowSize.X / MapAssetsTileSizeFloat.X) + 2;
+		MapLocationTileOffsetMax.Y += FMath::CeilToInt(OwnerWindowSize.Y / MapAssetsTileSizeFloat.Y) + 2;
 
 		SDL_Renderer* WindowRenderer = MapManager->GetOwnerWindow()->GetRenderer()->GetSDLRenderer();
 
@@ -102,32 +102,40 @@ void FMap::Render()
 		Destination.h = MapData.AssetsTileSize.Y;
 		Destination.w = MapData.AssetsTileSize.X;
 
-		const int VerticalSize = MapData.MapArray.Size();
+		const int VerticalArraySize = MapData.MapArray.Size();
 
-		for (int VerticalIndex = 0; VerticalIndex < VerticalSize; VerticalIndex++)
+		for (int VerticalIndex = 0; VerticalIndex < VerticalArraySize; VerticalIndex++)
 		{
-			const FMapRow& MapRow = MapData.MapArray[VerticalIndex];
-
-			const int HorizontalSize = MapRow.Array.Size();
-
-			for (int HorizontalIndex = 0; HorizontalIndex < HorizontalSize; HorizontalIndex++)
+			// Optimization - Do not render offscreen
+			if (VerticalIndex > MapLocationTileOffsetMin.Y && VerticalIndex < MapLocationTileOffsetMax.Y)
 			{
-				const int AssetIndex = MapRow.Array[HorizontalIndex];
+				const FMapRow& MapRow = MapData.MapArray[VerticalIndex];
 
-				if (AssetIndex >= 0)
+				const int HorizontalArraySize = MapRow.Array.Size();
+
+				for (int HorizontalIndex = 0; HorizontalIndex < HorizontalArraySize; HorizontalIndex++)
 				{
-					const FMapSubAssetSettings CurrentAssetSettings = MapData.MapSubAssetSettingsArray[AssetIndex];
+					// Optimization - Do not render offscreen
+					if (HorizontalIndex > MapLocationTileOffsetMin.X && HorizontalIndex < MapLocationTileOffsetMax.X)
+					{
+						const int AssetIndex = MapRow.Array[HorizontalIndex];
 
-					Destination.x = MapRenderOffset.X + HorizontalIndex * MapData.AssetsTileSize.X;
-					Destination.y = MapRenderOffset.Y + VerticalIndex * MapData.AssetsTileSize.Y;
+						if (AssetIndex >= 0)
+						{
+							const FMapSubAssetSettings CurrentAssetSettings = MapData.MapSubAssetSettingsArray[AssetIndex];
 
-					CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
-				}
-				else
-				{
-					// Do sth when index is not found
+							Destination.x = MapRenderOffset.X + HorizontalIndex * MapData.AssetsTileSize.X;
+							Destination.y = MapRenderOffset.Y + VerticalIndex * MapData.AssetsTileSize.Y;
 
-					// @TODO ...
+							CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
+						}
+						else
+						{
+							// Do sth when index is not found
+
+							// @TODO ...
+						}
+					}
 				}
 			}
 		}

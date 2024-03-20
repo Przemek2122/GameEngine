@@ -31,11 +31,6 @@ int FMath::CeilToInt(const double Value)
 	return static_cast<int>(std::ceil(Value));
 }
 
-int FMath::Max(const int A, const int B)
-{
-	return (A > B) ? A : B;
-}
-
 int FMath::FloorToInt(const float Value)
 {
 	return static_cast<int>(std::floorf(Value));
