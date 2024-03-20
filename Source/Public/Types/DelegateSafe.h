@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "DelegateBase.h"
 #include "FunctorLambda.h"
 #include "FunctorObject.h"
@@ -21,7 +20,6 @@ public:
 	using DelegateBase = FDelegateBase<TReturnType, std::shared_ptr<FunctorType>, TInParams...>;
 
 	using FunctorLambdaType = FFunctorLambda<TReturnType, TInParams...>;
-	using FunctorObjectType = FFunctorObject<TReturnType, TInParams...>;
 
 	// Default constructor
 	FDelegateSafe() = default;
@@ -58,6 +56,18 @@ public:
 		}
 	}
 
+	/** Executes all bound functions using Lambda to define how it executes. */
+	using ExecuteByLambdaDefinitionFunctor = FFunctorBase<TReturnType, TInParams...>;
+	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
+	virtual void ExecuteByLambda(ExecuteByLambdaDefinition Lambda, TInParams... InParams)
+	{
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		{
+			Lambda(DelegateBase::Functors[i].get(), InParams ...);
+		}
+	}
+	/** End FDelegateBase interface */
+
 	/** Bind C++ raw Lambda - Fast but not recommended */
 	template <typename TTypeAuto>
 	void BindLambda(TTypeAuto Lambda)
@@ -74,7 +84,7 @@ public:
 	/** Remove lambda, only by previously added type (function pointer must be equal) */
 	void UnBindLambda(FunctorLambdaType& Lambda)
 	{
-		int Index = FindIndexOfLambda(Lambda);
+		int Index = FindIndexOfLambdaFunctor(Lambda);
 
 		if (Index != INDEX_NONE)
 		{
@@ -88,7 +98,55 @@ public:
 	{
 		std::shared_ptr<FunctorLambdaType> TemporarySharedLambdaPointer = std::make_shared<FunctorLambdaType>(Lambda);
 
-		int Index = FindIndexOfLambda(*TemporarySharedLambdaPointer);
+		int Index = FindIndexOfLambdaFunctor(*TemporarySharedLambdaPointer);
+
+		if (Index != INDEX_NONE)
+		{
+			DelegateBase::Functors.RemoveAt(Index);
+		}
+	}
+
+	/*
+	 * Example on how to bind your object
+	 * OnYourDelegateChanged.BindObject(this, &FYourClass::YourFunctionName);
+	 */
+	template<class TClass>
+	void BindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		DelegateBase::Functors.Push(std::make_shared<FunctorObjectType>(InClassObject, InFunctionPointer));
+	}
+
+	template<class TClass>
+	void BindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		DelegateBase::Functors.Push(std::make_shared<FunctorObjectType>(Functor));
+	}
+
+	template<class TClass>
+	void UnBindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		std::shared_ptr<FunctorObjectType> TemporaryFunctor = std::make_shared<FunctorObjectType>(InClassObject, InFunctionPointer);
+
+		int Index = FindIndexOfObjectFunctor(*TemporaryFunctor);
+
+		if (Index != INDEX_NONE)
+		{
+			DelegateBase::Functors.RemoveAt(Index);
+		}
+	}
+
+	template<class TClass>
+	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		int Index = FindIndexOfObjectFunctor(Functor);
 
 		if (Index != INDEX_NONE)
 		{
@@ -103,7 +161,7 @@ public:
 	}
 
 protected:
-	int FindIndexOfLambda(FunctorLambdaType& Lambda)
+	int FindIndexOfLambdaFunctor(FunctorLambdaType& LambdaFunctor)
 	{
 		int Index = INDEX_NONE;
 
@@ -116,7 +174,35 @@ protected:
 			{
 				FunctorLambdaType* FunctorLambda = dynamic_cast<FunctorLambdaType*>(Functor.get());
 
-				if (FunctorLambda->IsEqual(Lambda))
+				if (FunctorLambda->IsEqual(LambdaFunctor))
+				{
+					Index = i;
+
+					break;
+				}
+			}
+		}
+
+		return Index;
+	}
+
+	template<class TClass>
+	int FindIndexOfObjectFunctor(FFunctorObject<TClass, TReturnType, TInParams...>& ObjectFunctor)
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		int Index = INDEX_NONE;
+
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		{
+			std::shared_ptr<FunctorType>& Functor = DelegateBase::Functors[i];
+
+			// Quick check if it is lambda - Fast
+			if (Functor->GetFunctorType() == EFunctorType::FT_OBJECT)
+			{
+				FunctorObjectType* FunctorObject = dynamic_cast<FunctorObjectType*>(Functor.get());
+
+				if (FunctorObject->IsEqual(ObjectFunctor))
 				{
 					Index = i;
 

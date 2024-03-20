@@ -8,10 +8,12 @@
  * Function storage class. Supports:
  * Function on objects
  */
-template<typename TClass, typename TReturnType, typename... TInParams>
+template<class TClass, typename TReturnType, typename... TInParams>
 class FFunctorObject : public FFunctorBase<TReturnType, TInParams...>
 {
 public:
+	typedef FFunctorObject<TClass, TReturnType, TInParams...> TSelfType;
+
 	FFunctorObject(TClass* InClassObject, TReturnType (TClass::*InFunctionPointer)(TInParams...))
 		: FunctionPointer(InFunctionPointer)
 		, ClassObject(InClassObject)
@@ -37,7 +39,7 @@ public:
 	_NODISCARD EFunctorType GetFunctorType() const override { return EFunctorType::FT_OBJECT; }
 	/** End FFunctorBase interface */
 
-	FFunctorObject& operator=(FFunctorObject const& InFunctor)
+	TSelfType& operator=(TSelfType& InFunctor)
     {
 		FunctionPointer = InFunctor.FunctionPointer;
 		ClassObject = InFunctor.ClassObject;
@@ -45,7 +47,7 @@ public:
 		return this;
     }
 
-	bool operator==(FFunctorObject const& OtherFunctor)
+	bool IsEqual(TSelfType& OtherFunctor)
 	{
 		return (ClassObject == OtherFunctor.ClassObject && FunctionPointer == OtherFunctor.FunctionPointer);
 	}

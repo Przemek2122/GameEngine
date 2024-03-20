@@ -105,7 +105,7 @@ public:
 	 * OnYourDelegateChanged.BindObject(this, &FYourClass::YourFunctionName);
 	 * Real example from code:
 	 * OnWidgetOrderChanged.BindObject(this, &FWidgetInputManager::ChangeOrder);
-	*/
+	 */
 	template<typename TClass>
 	void BindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{

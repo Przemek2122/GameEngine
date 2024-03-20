@@ -98,8 +98,16 @@ void FTestDelegate::TestFirstSafeDelegate()
 	OnFirstSafeDelegate.UnBindLambda(FunctorLambda);
 	OnFirstSafeDelegate.UnBindLambda(LambdaInline);
 
+	OnFirstSafeDelegate.BindObject(this, &FTestDelegate::TestFirstSafeDelegateObjectCall);
+	OnFirstSafeDelegate.UnBindObject(this, &FTestDelegate::TestFirstSafeDelegateObjectCall);
+
 	OnFirstSafeDelegate.Execute(545, 5.5f);
 
 	//OnFirstSafeDelegate.UnBindAll();
+}
+
+void FTestDelegate::TestFirstSafeDelegateObjectCall(int SomeInt, float SomeFloat)
+{
+	LOG_DEBUG("Test#5 object call with int: " << SomeInt << " and float: " << SomeFloat);
 }
 #endif

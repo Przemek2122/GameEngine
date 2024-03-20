@@ -21,6 +21,7 @@ protected:
 	void TestSecondDelegate();
 	void TestThirdDelegate();
 	void TestFirstSafeDelegate();
+	void TestFirstSafeDelegateObjectCall(int SomeInt, float SomeFloat);
 
 protected:
 	FDelegate<> OnFirstDelegate;

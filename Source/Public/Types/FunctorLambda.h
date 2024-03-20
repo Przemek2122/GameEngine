@@ -29,6 +29,7 @@ public:
 		: Function(std::move(InFunction))
 	{
 	}
+
 	/** Move function constructor */
 	FFunctorLambda(std::function<TReturnType(TInParams ...)>&& InFunction)
 		: Function(std::move(InFunction))
@@ -39,6 +40,7 @@ public:
 	{
 		return (Function.target_type() == Other.Function.target_type() && GetFunctionAddress() == Other.GetFunctionAddress());
 	}
+
 	bool IsEqual(TSelfType* Other)
 	{
 		return (Function.target_type() == Other.Function.target_type() && GetFunctionAddress() == Other.GetFunctionAddress());
