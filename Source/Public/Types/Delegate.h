@@ -19,7 +19,9 @@ public:
 	using DelegateBase = FDelegateBase<TReturnType, FFunctorBase<TReturnType, TInParams...>*, TInParams...>;
 
 	// Default constructor
-	FDelegate() = default;
+	FDelegate()
+	{
+	}
 
 	// Copy constructor - Forbidden, not efficient + causes double deletion of Functors
 	// Could be fixed by creating flag telling destructor if Functors are moved or not

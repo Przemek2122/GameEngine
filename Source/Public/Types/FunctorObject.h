@@ -28,10 +28,13 @@ public:
 
 		return TReturnType();
     }
-	_NODISCARD virtual bool IsValid() const override
+
+	_NODISCARD bool IsValid() const override
 	{
 		return (FunctionPointer != nullptr && ClassObject != nullptr);
 	}
+
+	_NODISCARD EFunctorType GetFunctorType() const override { return EFunctorType::FT_OBJECT; }
 	/** End FFunctorBase interface */
 
 	FFunctorObject& operator=(FFunctorObject const& InFunctor)

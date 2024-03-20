@@ -32,6 +32,11 @@ public:
 	{
 		return FunctionPointer != nullptr;
 	}
+
+	_NODISCARD virtual EFunctorType GetFunctorType() const override
+	{
+		return EFunctorType::FT_STATIC;
+	}
 	/** End FFunctorBase interface */
 
 	/** Assign other instance to this. */

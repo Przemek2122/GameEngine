@@ -3,14 +3,9 @@
 #pragma once
 
 #include <functional>
+#include <iostream>
 
-template<typename T, typename... U>
-size_t getAddress(std::function<T(U...)> Func)
-{
-	typedef T(fnType)(U...);
-	fnType** fnPointer = Func.template target<fnType*>();
-	return (size_t)*fnPointer;
-}
+#include "FunctorBase.h"
 
 /**
  * Function storage class. Supports:
@@ -22,7 +17,7 @@ class FFunctorLambda : public FFunctorBase<TReturnType, TInParams...>
 public:
 	typedef FFunctorLambda<TReturnType, TInParams...> TSelfType;
 
-	/** Constructor for lamdas */
+	/** Constructor for lambdas */
 	template<typename TTypeAuto>
 	FFunctorLambda(TTypeAuto InFunction)
 		: Function(std::move(InFunction))
@@ -40,16 +35,13 @@ public:
 	{
 	}
 
-	/*
-	friend bool operator==(TSelfType& A, TSelfType& B)
-	{
-		return (A.Function.target_type() == B.Function.target_type() && getAddress(A.Function) == getAddress(B.Function));
-	}
-	*/
-
 	bool IsEqual(TSelfType& Other)
 	{
-		return (Function.target_type() == Other.Function.target_type() && getAddress(Function) == getAddress(Other.Function));
+		return (Function.target_type() == Other.Function.target_type() && GetFunctionAddress() == Other.GetFunctionAddress());
+	}
+	bool IsEqual(TSelfType* Other)
+	{
+		return (Function.target_type() == Other.Function.target_type() && GetFunctionAddress() == Other.GetFunctionAddress());
 	}
 
 	/** Begin FFunctorBase interface */
@@ -57,11 +49,23 @@ public:
 	{
 		return Function(Params ...);
 	}
+
 	_NODISCARD virtual bool IsValid() const override
 	{
 		return false;
 	}
+
+	_NODISCARD EFunctorType GetFunctorType() const override
+	{
+		return EFunctorType::FT_LAMBDA;
+	}
 	/** End FFunctorBase interface */
+
+	/** Get low level function address - If you would like to compare, use IsEqual instead */
+	long GetFunctionAddress()
+	{
+		return (*(long*)(char*)(&Function));
+	}
 
 protected:
 	/** Stored lambda */

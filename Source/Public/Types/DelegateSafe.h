@@ -27,7 +27,6 @@ public:
 	FDelegateSafe() = default;
 
 	// Copy constructor - Forbidden, not efficient + causes double deletion of Functors
-	// Could be fixed by creating flag telling destructor if Functors are moved or not
 	FDelegateSafe(const FDelegateSafe& InDelegate) = delete;
 
 	// Move constructor
@@ -37,7 +36,6 @@ public:
 	}
 
 	// Copy operator - Forbidden, not efficient + causes double deletion of Functors
-	// Could be fixed by creating flag telling destructor if Functors are moved or not
 	FDelegateSafe& operator=(const FDelegateSafe& InDelegate) = delete;
 
 	// Copy assignment operator
@@ -60,83 +58,74 @@ public:
 		}
 	}
 
+	/** Bind C++ raw Lambda - Fast but not recommended */
+	template <typename TTypeAuto>
+	void BindLambda(TTypeAuto Lambda)
+	{
+		DelegateBase::Functors.Push(std::make_shared<FunctorLambdaType>(Lambda));
+	}
+
 	/** You can make new FFunctorLambda<TReturnType, TInParams...> */
 	void BindLambda(FunctorLambdaType& Lambda)
 	{
 		DelegateBase::Functors.Push(std::make_shared<FunctorLambdaType>(Lambda));
 	}
 
-	/** Bind C++ Lambda - Fast but not recommended - Cannot be unbind */
-	template <typename TTypeAuto>
-	void BindLambdaRaw(TTypeAuto Lambda)
-	{
-		DelegateBase::Functors.Push(std::make_shared<FunctorLambdaType>(Lambda));
-	}
-
+	/** Remove lambda, only by previously added type (function pointer must be equal) */
 	void UnBindLambda(FunctorLambdaType& Lambda)
 	{
-		auto Index = INDEX_NONE;
-
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
-		{
-			if (Lambda.IsEqual(DelegateBase::Functors[i].get()))
-			{
-				Index = i;
-
-				break;
-			}
-		}
-
-		//if (Index != INDEX_NONE)
-		//{
-		//	DelegateBase::Functors.RemoveAt(Index);
-		//}
-	}
-
-	/*
-	template <typename TTypeAuto>
-	void UnBindLambda(TTypeAuto& Lambda)
-	{
-		int Index = INDEX_NONE;
-
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
-		{
-			if (DelegateBase::Functors[i] == Lambda)
-			{
-				Index = i;
-
-				break;
-			}
-		}
+		int Index = FindIndexOfLambda(Lambda);
 
 		if (Index != INDEX_NONE)
 		{
 			DelegateBase::Functors.RemoveAt(Index);
 		}
 	}
-	*/
 
+	/** Remove C++ raw Lambda - Fast but not recommended */
+	template <typename TTypeAuto>
+	void UnBindLambda(TTypeAuto& Lambda)
+	{
+		std::shared_ptr<FunctorLambdaType> TemporarySharedLambdaPointer = std::make_shared<FunctorLambdaType>(Lambda);
+
+		int Index = FindIndexOfLambda(*TemporarySharedLambdaPointer);
+
+		if (Index != INDEX_NONE)
+		{
+			DelegateBase::Functors.RemoveAt(Index);
+		}
+	}
+
+	/** Remove all bound functions. */
+	void UnBindAll()
+	{
+		DelegateBase::Functors.Clear();
+	}
+
+protected:
 	int FindIndexOfLambda(FunctorLambdaType& Lambda)
 	{
 		int Index = INDEX_NONE;
 
 		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
-			if (Lambda == DelegateBase::Functors[i].get())
-			{
-				Index = i;
+			std::shared_ptr<FunctorType>& Functor = DelegateBase::Functors[i];
 
-				break;
+			// Quick check if it is lambda - Fast
+			if (Functor->GetFunctorType() == EFunctorType::FT_LAMBDA)
+			{
+				FunctorLambdaType* FunctorLambda = dynamic_cast<FunctorLambdaType*>(Functor.get());
+
+				if (FunctorLambda->IsEqual(Lambda))
+				{
+					Index = i;
+
+					break;
+				}
 			}
 		}
 
 		return Index;
-	}
-
-	/** Remove function by functor reference. Use with caution. */
-	void UnBindAll()
-	{
-		DelegateBase::Functors.Clear();
 	}
 	
 };
