@@ -13,11 +13,6 @@ public:
 	{
 	}
 
-	virtual ~ITransformInterface2D()
-	{
-	}
-
-
 	/** User location */
 	FVector2D<TType> GetLocationUser() const
 	{
@@ -55,7 +50,7 @@ public:
 	{
 		FinalLocation = NewLocation;
 
-		UserLocation = FinalLocation - MapLocationOffset;
+		UpdateFinalLocationItself();
 	}
 
 	
@@ -67,12 +62,31 @@ public:
 	void SetRotation(const TType& NewRotation) const
 	{
 		Rotation = NewRotation;
+
+		OnTransformRotationChanged();
+	}
+
+	virtual void OnTransformLocationChanged()
+	{
+	}
+
+	virtual void OnTransformRotationChanged()
+	{
 	}
 
 protected:
 	void UpdateFinalLocation()
 	{
 		FinalLocation = UserLocation + MapLocationOffset;
+
+		OnTransformLocationChanged();
+	}
+
+	void UpdateFinalLocationItself()
+	{
+		UserLocation = FinalLocation - MapLocationOffset;
+
+		OnTransformLocationChanged();
 	}
 
 protected:

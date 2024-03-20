@@ -12,10 +12,9 @@ class URenderComponent : public UComponent
 {
 public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
-	virtual ~URenderComponent() override = default;
+	~URenderComponent() override;
 
 	/** Begin UComponent */
-	void Tick() override;
 	void Render() override;
 	/** End UComponent */
 
@@ -27,6 +26,8 @@ public:
 
 	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
 	void SetImageSize(const FVector2D<int>& InSize);
+
+	void OnLocationChanged(const FVector2D<int> InLocation);
 
 protected:
 	/** Image to render */

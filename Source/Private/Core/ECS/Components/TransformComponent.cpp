@@ -48,6 +48,13 @@ void UTransformComponent::EndPlay()
 	}
 }
 
+void UTransformComponent::OnTransformLocationChanged()
+{
+	ITransformInterface2D<int>::OnTransformLocationChanged();
+
+	OnLocationChanged.Execute(GetLocationFinal());
+}
+
 void UTransformComponent::OnMapLocationChanged(const FVector2D<int> NewLocation)
 {
 	SetLocationMap(NewLocation);

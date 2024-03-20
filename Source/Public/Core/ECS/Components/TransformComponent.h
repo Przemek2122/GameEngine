@@ -17,7 +17,12 @@ public:
 	void BeginPlay() override;
 	void EndPlay() override;
 
+	void OnTransformLocationChanged() override;
+
 	/** Called from map using delegate each time map location (camera position) is changed */
 	void OnMapLocationChanged(FVector2D<int> NewLocation);
+
+	/** Called when location is changed - Either by unit or map movement */
+	FDelegate<void, FVector2D<int>> OnLocationChanged;
 
 };

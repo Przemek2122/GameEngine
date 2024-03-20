@@ -9,16 +9,15 @@ URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManage
 	: UComponent(InComponentManagerInterface)
 {
 	TransformComponent = RequireComponent<UTransformComponent>();
+
+	TransformComponent->OnLocationChanged.BindObject(this, &URenderComponent::OnLocationChanged);
+
+	LocationCached = TransformComponent->GetLocationFinal();
 }
 
-void URenderComponent::Tick()
+URenderComponent::~URenderComponent()
 {
-	Super::Tick();
-
-	if (TransformComponent != nullptr)
-	{
-		LocationCached = TransformComponent->GetLocationFinal();
-	}
+	TransformComponent->OnLocationChanged.UnBindObject(this, &URenderComponent::OnLocationChanged);
 }
 
 void URenderComponent::Render()
@@ -91,4 +90,11 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 {
 	SizeCached = InSize;
+}
+
+void URenderComponent::OnLocationChanged(const FVector2D<int> InLocation)
+{
+	LocationCached = InLocation;
+
+	LOG_INFO("InLocation" << InLocation);
 }
