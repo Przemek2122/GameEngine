@@ -9,6 +9,7 @@
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
+ * Same as FDelegate but with safer memory management.
  *
  * @Note: When passing by parameter use reference or pointer, otherwise it will not compile.
  * @Note: All functions passed in are deleted at end of this object life.
