@@ -5,6 +5,7 @@
 #include "ECS/Component.h"
 
 class UTransformComponent;
+
 /**
  * Component for handling transform of the entity
  */
@@ -15,6 +16,8 @@ public:
 	~URenderComponent() override;
 
 	/** Begin UComponent */
+	void EndPlay() override;
+
 	void Render() override;
 	/** End UComponent */
 
@@ -28,6 +31,8 @@ public:
 	void SetImageSize(const FVector2D<int>& InSize);
 
 	void OnLocationChanged(const FVector2D<int> InLocation);
+
+	void DecrementTextureIfPresent() const;
 
 protected:
 	/** Image to render */

@@ -83,7 +83,7 @@ void FTextWidget::RefreshWidget(const bool bRefreshChildren)
 {
 	Super::RefreshWidget(bRefreshChildren);
 
-	OnTextChanged();
+	//OnTextChanged();
 }
 
 void FTextWidget::SetText(const std::string& InText)

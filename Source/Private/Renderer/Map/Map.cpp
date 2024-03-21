@@ -80,17 +80,16 @@ void FMap::Render()
 		const FVector2D<float> MapAssetsTileSizeFloat = MapData.AssetsTileSize;
 
 		// Minimal render tile offset - Everything before that vector will not be rendered
-		FVector2D<int> MapLocationTileOffsetMin;
-		MapLocationTileOffsetMin.X = FMath::FloorToInt(-MapLocationFloat.X / MapAssetsTileSizeFloat.X) - 1;
-		MapLocationTileOffsetMin.Y = FMath::FloorToInt(-MapLocationFloat.Y / MapAssetsTileSizeFloat.Y) - 1;
+		MapLocationTileOffsetMin.X = FMath::FloorToInt(-MapLocationFloat.X / MapAssetsTileSizeFloat.X);
+		MapLocationTileOffsetMin.Y = FMath::FloorToInt(-MapLocationFloat.Y / MapAssetsTileSizeFloat.Y);
 
 		MapLocationTileOffsetMin.X = FMath::Max(MapLocationTileOffsetMin.X, 0);
 		MapLocationTileOffsetMin.Y = FMath::Max(MapLocationTileOffsetMin.Y, 0);
 
-		// Max render
-		FVector2D<int> MapLocationTileOffsetMax = MapLocationTileOffsetMin;
-		MapLocationTileOffsetMax.X += FMath::CeilToInt(OwnerWindowSize.X / MapAssetsTileSizeFloat.X) + 2;
-		MapLocationTileOffsetMax.Y += FMath::CeilToInt(OwnerWindowSize.Y / MapAssetsTileSizeFloat.Y) + 2;
+		// Max render tile offset - Everything after that vector will not be rendered
+		MapLocationTileOffsetMax = MapLocationTileOffsetMin;
+		MapLocationTileOffsetMax.X += FMath::CeilToInt(OwnerWindowSize.X / MapAssetsTileSizeFloat.X);
+		MapLocationTileOffsetMax.Y += FMath::CeilToInt(OwnerWindowSize.Y / MapAssetsTileSizeFloat.Y);
 
 		SDL_Renderer* WindowRenderer = MapManager->GetOwnerWindow()->GetRenderer()->GetSDLRenderer();
 
@@ -107,7 +106,7 @@ void FMap::Render()
 		for (int VerticalIndex = 0; VerticalIndex < VerticalArraySize; VerticalIndex++)
 		{
 			// Optimization - Do not render offscreen
-			if (VerticalIndex > MapLocationTileOffsetMin.Y && VerticalIndex < MapLocationTileOffsetMax.Y)
+			if (VerticalIndex >= MapLocationTileOffsetMin.Y && VerticalIndex <= MapLocationTileOffsetMax.Y)
 			{
 				const FMapRow& MapRow = MapData.MapArray[VerticalIndex];
 
@@ -116,7 +115,7 @@ void FMap::Render()
 				for (int HorizontalIndex = 0; HorizontalIndex < HorizontalArraySize; HorizontalIndex++)
 				{
 					// Optimization - Do not render offscreen
-					if (HorizontalIndex > MapLocationTileOffsetMin.X && HorizontalIndex < MapLocationTileOffsetMax.X)
+					if (HorizontalIndex >= MapLocationTileOffsetMin.X && HorizontalIndex <= MapLocationTileOffsetMax.X)
 					{
 						const int AssetIndex = MapRow.Array[HorizontalIndex];
 

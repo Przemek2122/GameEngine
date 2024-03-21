@@ -70,6 +70,7 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 	{
 		IWidgetManagementInterface* ParentInterface = InWidget->GetParent();
 
+		// @TODO Double calls RegisterWidget
 		if (ParentInterface != nullptr)
 		{
 			ParentInterface->UnRegisterWidget(InWidget);
@@ -154,6 +155,10 @@ void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 }
 
 void IWidgetManagementInterface::OnChildWidgetDestroyed(FWidget* NewWidget)
+{
+}
+
+void IWidgetManagementInterface::OnChildSizeChanged()
 {
 }
 

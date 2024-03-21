@@ -32,8 +32,23 @@ public:
 	_NODISCARD virtual std::string GetAssetName() const;
 	_NODISCARD virtual std::string GetAssetPath() const;
 
+	/** Adds one to number of referenced asset, use for automatic release */
+	void IncrementNumberOfReferences();
+
+	/** Removes one to number of referenced asset, use for automatic release */
+	void DecrementNumberOfReferences();
+
+	/** @returns number of  */
+	int GetNumberOfReferences() const;
+
+protected:
+	virtual void OnNumberOfReferencesLowered();
+	virtual void ReleaseTexture();
+
 protected:
 	std::string AssetName;
 	std::string AssetPath;
+
+	int NumberOfReferences;
 	
 };

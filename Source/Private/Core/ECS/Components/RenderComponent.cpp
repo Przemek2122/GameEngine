@@ -7,6 +7,7 @@
 
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
+	, TextureAsset(nullptr)
 {
 	TransformComponent = RequireComponent<UTransformComponent>();
 
@@ -18,6 +19,13 @@ URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManage
 URenderComponent::~URenderComponent()
 {
 	TransformComponent->OnLocationChanged.UnBindObject(this, &URenderComponent::OnLocationChanged);
+}
+
+void URenderComponent::EndPlay()
+{
+	UComponent::EndPlay();
+
+	DecrementTextureIfPresent();
 }
 
 void URenderComponent::Render()
@@ -32,6 +40,8 @@ void URenderComponent::Render()
 
 void URenderComponent::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
+	DecrementTextureIfPresent();
+
 	bool bHasTexture = false;
 
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
@@ -66,6 +76,8 @@ void URenderComponent::SetImage(const std::string& InImageName, const std::strin
 	if (bHasTexture)
 	{
 		SizeCached = TextureAsset->GetSize();
+
+		TextureAsset->IncrementNumberOfReferences();
 	}
 	else
 	{
@@ -95,4 +107,12 @@ void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 void URenderComponent::OnLocationChanged(const FVector2D<int> InLocation)
 {
 	LocationCached = InLocation;
+}
+
+void URenderComponent::DecrementTextureIfPresent() const
+{
+	if (TextureAsset != nullptr)
+	{
+		TextureAsset->DecrementNumberOfReferences();
+	}
 }

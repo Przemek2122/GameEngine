@@ -49,12 +49,16 @@ protected:
 
 	/** Auto adjusts size for @RenderedText */
 	void AutoAdjustSize(const bool bLimitToParentSize = false);
+
 	/** Helper for AutoAdjustSize */
 	virtual void AutoAdjustTextSize(const FVector2D<int>& InMaxSize);
+
 	/** SDL Wrapper */
 	int CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) const;
+
 	/** Calculate size for SDL */
 	void UpdateSDLRectSize() const;
+
 	/** Makes new texture for text */
 	void RedrawText();
 

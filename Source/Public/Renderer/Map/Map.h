@@ -86,6 +86,10 @@ protected:
 	/** MapLocationChangeDelegate for map location change - Send new offset each time it's called */
 	FDelegate<void, FVector2D<int>> MapLocationChangeDelegate;
 
+	/** Minimal render tile offset - Everything before that vector will not be rendered */
+	FVector2D<int> MapLocationTileOffsetMin;
+	FVector2D<int> MapLocationTileOffsetMax;
+
 	/** Is map activated */
 	bool bIsActive;
 

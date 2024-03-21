@@ -4,6 +4,15 @@
 
 #include "CoreMinimal.h"
 
+enum class ELocationChangeType
+{
+	/** Location changed by user */
+	LCT_User,
+
+	/** Location changed by map */
+	LCT_Map
+};
+
 template<typename TType>
 class ITransformInterface2D
 {
@@ -36,14 +45,14 @@ public:
 	{
 		UserLocation = NewLocation;
 
-		UpdateFinalLocation();
+		UpdateFinalLocation(ELocationChangeType::LCT_User);
 	}
 
 	void SetLocationMap(const FVector2D<TType>& NewLocation)
 	{
 		MapLocationOffset = NewLocation;
 
-		UpdateFinalLocation();
+		UpdateFinalLocation(ELocationChangeType::LCT_Map);
 	}
 
 	void SetLocationFinal(const FVector2D<TType>& NewLocation)
@@ -66,7 +75,7 @@ public:
 		OnTransformRotationChanged();
 	}
 
-	virtual void OnTransformLocationChanged()
+	virtual void OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
 	{
 	}
 
@@ -75,18 +84,18 @@ public:
 	}
 
 protected:
-	void UpdateFinalLocation()
+	void UpdateFinalLocation(const ELocationChangeType LocationChangeType)
 	{
 		FinalLocation = UserLocation + MapLocationOffset;
 
-		OnTransformLocationChanged();
+		OnTransformLocationChanged(LocationChangeType);
 	}
 
 	void UpdateFinalLocationItself()
 	{
 		UserLocation = FinalLocation - MapLocationOffset;
 
-		OnTransformLocationChanged();
+		OnTransformLocationChanged(ELocationChangeType::LCT_User);
 	}
 
 protected:

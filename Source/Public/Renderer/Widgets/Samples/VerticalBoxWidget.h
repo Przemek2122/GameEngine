@@ -32,7 +32,7 @@ public:
 	void SetScaleToContent(const bool bNewScaleToContent);
 	bool ShouldScaleToContent() const { return bScaleToContent; }
 	
-	void AlignWidgets();
+	void AlignWidgets(const bool bForce = false);
 
 	void AlignDefault();
 	void AlignEven();
@@ -42,6 +42,9 @@ public:
 		 
 protected:
 	EVerticalBoxAlignMethod VerticalBoxAlignMethod;
+
 	bool bScaleToContent;
+
+	int CurrentlyCalculatedNumberOfWidgets;
 	
 };

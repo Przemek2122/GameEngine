@@ -89,6 +89,8 @@ public:
 	void TickComponents();
 	void RenderComponents();
 
+	void Cleanup();
+
 protected:
 	/** Parent pointer - might be null! @see bool bDoesHaveComponentManagerInterfaceParent */
 	IComponentManagerInterface* ComponentManagerInterfaceParent;

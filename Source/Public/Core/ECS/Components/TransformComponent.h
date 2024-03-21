@@ -17,7 +17,7 @@ public:
 	void BeginPlay() override;
 	void EndPlay() override;
 
-	void OnTransformLocationChanged() override;
+	void OnTransformLocationChanged(const ELocationChangeType LocationChangeType) override;
 
 	/** Called from map using delegate each time map location (camera position) is changed */
 	void OnMapLocationChanged(FVector2D<int> NewLocation);

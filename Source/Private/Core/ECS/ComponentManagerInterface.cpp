@@ -12,7 +12,7 @@ IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterfac
 
 IComponentManagerInterface::~IComponentManagerInterface()
 {
-	ComponentsMap.Clear();
+	Cleanup();
 }
 
 bool IComponentManagerInterface::DestroyComponent(const std::string& ComponentName)
@@ -104,4 +104,16 @@ void IComponentManagerInterface::RenderComponents()
 			Component->Render();
 		}
 	}
+}
+
+void IComponentManagerInterface::Cleanup()
+{
+	for (auto& [ComponentName, ComponentPtr] : ComponentsMap)
+	{
+		ComponentPtr->EndPlay();
+
+		OnComponentDestroy(ComponentName, ComponentPtr.get());
+	}
+
+	ComponentsMap.Clear();
 }

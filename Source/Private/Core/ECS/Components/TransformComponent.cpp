@@ -25,7 +25,19 @@ void UTransformComponent::BeginPlay()
 			{
 				CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &UTransformComponent::OnMapLocationChanged);
 			}
+			else
+			{
+				LOG_ERROR("UTransformComponent::BeginPlay: CurrentMap is nullptr");
+			}
 		}
+		else
+		{
+			LOG_ERROR("UTransformComponent::BeginPlay: MapManager is nullptr");
+		}
+	}
+	else
+	{
+		LOG_ERROR("UTransformComponent::BeginPlay: Window is nullptr");
 	}
 }
 
@@ -48,9 +60,9 @@ void UTransformComponent::EndPlay()
 	}
 }
 
-void UTransformComponent::OnTransformLocationChanged()
+void UTransformComponent::OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
 {
-	ITransformInterface2D<int>::OnTransformLocationChanged();
+	ITransformInterface2D<int>::OnTransformLocationChanged(LocationChangeType);
 
 	OnLocationChanged.Execute(GetLocationFinal());
 }
