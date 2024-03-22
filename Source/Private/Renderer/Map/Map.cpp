@@ -23,7 +23,7 @@ void FMap::Initialize()
 
 	ReadAsset();
 
-	CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>("CameraManager");
+	CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>();
 }
 
 void FMap::DeInitialize()

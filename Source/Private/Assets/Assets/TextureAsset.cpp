@@ -7,6 +7,7 @@
 FTextureAsset::FTextureAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
 	, Texture(nullptr)
+	, bIsTexturePrepared(false)
 {
 	LOG_INFO("Texture created " << AssetName);
 }
@@ -39,5 +40,15 @@ FTexture* FTextureAsset::GetTexture() const
 
 void FTextureAsset::PrepareTexture(SDL_Renderer* InRenderer)
 {
-	Texture = new FTexture(AssetPath, InRenderer);
+	if (!bIsTexturePrepared)
+	{
+		Texture = new FTexture(AssetPath, InRenderer);
+
+		bIsTexturePrepared = true;
+	}
+}
+
+bool FTextureAsset::IsTexturePrepared() const
+{
+	return bIsTexturePrepared;
 }

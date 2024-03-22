@@ -28,8 +28,12 @@ public:
 	/** Call to create texture in SDL. Requires SDL_Renderer. */
 	void PrepareTexture(SDL_Renderer* InRenderer);
 
+	bool IsTexturePrepared() const;
+
 protected:
 	/** Texture - deleted in destructor */
 	FTexture* Texture;
+
+	bool bIsTexturePrepared;
 
 };

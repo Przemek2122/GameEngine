@@ -14,8 +14,12 @@ public:
 	UTransformComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UTransformComponent() override = default;
 
+	/** Begin UComponent */
 	void BeginPlay() override;
 	void EndPlay() override;
+	/** End UComponent */
+
+	FVector2D<int> GetSize() const;
 
 	void OnTransformLocationChanged(const ELocationChangeType LocationChangeType) override;
 
@@ -24,5 +28,8 @@ public:
 
 	/** Called when location is changed - Either by unit or map movement */
 	FDelegate<void, FVector2D<int>> OnLocationChanged;
+
+protected:
+	FVector2D<int> Size;
 
 };

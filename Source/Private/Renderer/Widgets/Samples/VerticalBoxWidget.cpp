@@ -15,7 +15,7 @@ void FVerticalBoxWidget::Init()
 {
 	SetWidgetSize({ 200, 300 });
 
-	FWidget::Init();
+	Super::Init();
 }
 
 void FVerticalBoxWidget::Render()

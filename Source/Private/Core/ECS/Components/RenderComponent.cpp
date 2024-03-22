@@ -40,30 +40,28 @@ void URenderComponent::Render()
 
 void URenderComponent::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
-	DecrementTextureIfPresent();
-
 	bool bHasTexture = false;
+
+	FTextureAsset* TemporaryTexture = nullptr;
 
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
 		if (AssetsManager->HasAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE))
 		{
-			TextureAsset = AssetsManager->GetAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE);
+			TemporaryTexture = AssetsManager->GetAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE);
 
-			if (TextureAsset != nullptr)
+			if (TemporaryTexture != nullptr)
 			{
 				bHasTexture = true;
 			}
 		}
 		else if (!OptionalPath.empty())
 		{
-			TextureAsset = AssetsManager->AddAsset<FTextureAsset>(InImageName, OptionalPath);
+			TemporaryTexture = AssetsManager->AddAsset<FTextureAsset>(InImageName, OptionalPath);
 
-			if (TextureAsset != nullptr)
+			if (TemporaryTexture != nullptr)
 			{
-				TextureAsset->PrepareTexture(GetOwnerWindow()->GetRenderer()->GetSDLRenderer());
-
 				bHasTexture = true;
 			}
 		}
@@ -75,9 +73,7 @@ void URenderComponent::SetImage(const std::string& InImageName, const std::strin
 
 	if (bHasTexture)
 	{
-		SizeCached = TextureAsset->GetSize();
-
-		TextureAsset->IncrementNumberOfReferences();
+		SetImage(TemporaryTexture);
 	}
 	else
 	{
@@ -89,13 +85,25 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 {
 	if (TextureAsset != nullptr)
 	{
+		DecrementTextureIfPresent();
+	}
+
+	if (InAsset != nullptr)
+	{
 		TextureAsset = InAsset;
 
-		SizeCached = TextureAsset->GetSize();
+		if (!TextureAsset->IsTexturePrepared())
+		{
+			TextureAsset->PrepareTexture(GetOwnerWindow()->GetRenderer()->GetSDLRenderer());
+		}
+
+		SetImageSize(TextureAsset->GetSize());
+
+		TextureAsset->IncrementNumberOfReferences();
 	}
 	else
 	{
-		LOG_ERROR("Texture asset is nullptr");
+		LOG_ERROR("Texture 'InAsset' is nullptr.");
 	}
 }
 

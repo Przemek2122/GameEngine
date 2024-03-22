@@ -7,6 +7,7 @@
 
 UTransformComponent::UTransformComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
+	, Size(32, 32)
 {
 }
 
@@ -58,6 +59,11 @@ void UTransformComponent::EndPlay()
 			}
 		}
 	}
+}
+
+FVector2D<int> UTransformComponent::GetSize() const
+{
+	return Size;
 }
 
 void UTransformComponent::OnTransformLocationChanged(const ELocationChangeType LocationChangeType)

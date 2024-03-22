@@ -16,7 +16,7 @@ protected:
 
 public:
 	template<typename TEntityClass, typename... TInParams>
-	TEntityClass* CreateEntity(std::string EntityName, TInParams... InParams)
+	TEntityClass* CreateEntity(TInParams... InParams)
 	{
 		TEntityClass* NewEntity = new TEntityClass(this, InParams ...);
 
@@ -30,6 +30,20 @@ public:
 	}
 
 	bool DestroyEntity(const EEntity* Entity);
+
+	template<typename TEntityClass>
+	TEntityClass* GetEntityByType() const
+	{
+		for (EEntity* Entity : Entities)
+		{
+			if (TEntityClass* EntitySearch = dynamic_cast<TEntityClass>(Entity))
+			{
+				return EntitySearch;
+			}
+		}
+
+		return nullptr;
+	}
 
 	FWindow* GetOwnerWindow() const { return OwnerWindow; }
 

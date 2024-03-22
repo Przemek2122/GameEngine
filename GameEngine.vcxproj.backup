@@ -52,8 +52,10 @@
     <ClInclude Include="Source\Public\Core\ECS\Entities\Character.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\NPCCharacter.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\PlayerCharacter.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Entities\ScreenSelectionEntity.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entity.h" />
     <ClInclude Include="Source\Public\Core\ECS\EntityManager.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Interfaces\ScreenSelectionInterface.h" />
     <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h" />
@@ -118,6 +120,7 @@
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
     <ClInclude Include="Source\Public\Types\Delegate.h" />
     <ClInclude Include="Source\Public\Types\DelegateBase.h" />
+    <ClInclude Include="Source\Public\Types\DelegateSafe.h" />
     <ClInclude Include="Source\Public\Types\FunctorBase.h" />
     <ClInclude Include="Source\Public\Types\FunctorLambda.h" />
     <ClInclude Include="Source\Public\Types\FunctorObject.h" />
@@ -252,6 +255,7 @@
     <ClCompile Include="Source\Private\Core\ECS\Entities\PlayerCharacter.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entity.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Interfaces\ScreenSelectionInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp" />
@@ -307,6 +311,7 @@
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
     <ClCompile Include="Source\Private\Types\Delegate.cpp" />
     <ClCompile Include="Source\Private\Types\DelegateBase.cpp" />
+    <ClCompile Include="Source\Private\Types\DelegateSafe.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorBase.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorLambda.cpp" />
     <ClCompile Include="Source\Private\Types\FunctorObject.cpp" />
