@@ -7,7 +7,6 @@ static EScreenSelectionEntity* ScreenSelectionEntityStatic;
 
 IScreenSelectionInterface::IScreenSelectionInterface()
 	: bIsRegistered(false)
-	, EntityManager(nullptr)
 {
 }
 
@@ -22,8 +21,6 @@ void IScreenSelectionInterface::RegisterToScreenSelection(FEntityManager* InEnti
 	{
 		if (InEntityManager != nullptr)
 		{
-			EntityManager = InEntityManager;
-
 			if (ScreenSelectionEntityStatic != nullptr)
 			{
 				ScreenSelectionEntityStatic->RegisterScreenSelectable(this);
