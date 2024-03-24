@@ -5,6 +5,7 @@
 #include "DelegateBase.h"
 #include "FunctorLambda.h"
 #include "FunctorObject.h"
+#include "FunctorStatic.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
@@ -57,9 +58,7 @@ public:
 	/** Executes all bound functions. */
 	virtual void Execute(TInParams... InParams) override
 	{
-		const auto FunctorsNum = DelegateBase::Functors.Size();
-	
-		for (int i = 0; i < FunctorsNum; i++)
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			if (ENSURE_VALID(DelegateBase::Functors[i] != nullptr))
 			{
@@ -67,6 +66,7 @@ public:
 			}
 		}
 	}
+
 	/** Executes all bound functions using Lambda to define how it executes. */
 	using ExecuteByLambdaDefinitionFunctor = FFunctorBase<TReturnType, TInParams...>;
 	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
@@ -147,6 +147,11 @@ public:
 	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
 	{
 		DelegateBase::Functors.Remove(Functor);
+	}
+
+	void BindStatic(TReturnType(*InFunctionPointer)(TInParams...))
+	{
+		DelegateBase::Functors.Push(new FFunctorStatic<TReturnType, TInParams...>(InFunctionPointer));
 	}
 	
 	/** Remove function by functor reference. Use with caution. */

@@ -25,6 +25,8 @@ public:
 
 	static EScreenSelectionEntity* GetScreenSelectionEntityStatic();
 
+	static void ResetScreenSelection();
+
 protected:
 	bool bIsRegistered;
 

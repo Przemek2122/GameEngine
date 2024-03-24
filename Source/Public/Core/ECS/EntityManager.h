@@ -50,6 +50,8 @@ public:
 	virtual void Tick(float DeltaTime);
 	virtual void Render();
 
+	FDelegate<> OnEntityManagerDestroyed;
+
 protected:
 	virtual void OnEntityCreated(EEntity* Entity);
 	virtual void OnEntityPreDestroyed(EEntity* Entity);

@@ -18,6 +18,13 @@ void EScreenSelectionEntity::BeginPlay()
 	RegisterInput();
 }
 
+void EScreenSelectionEntity::EndPlay()
+{
+	EEntity::EndPlay();
+
+	UnRegisterInput();
+}
+
 void EScreenSelectionEntity::RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable)
 {
 	ScreenSelectableObjects.Push(InScreenSelectable);
@@ -34,8 +41,10 @@ void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 	{
 		const FVector2D<int> SelectionEnd = InMousePosition;
 
-		for (IScreenSelectionInterface* ScreenSelectable : ScreenSelectableObjects)
+		for (int i = 0; i < ScreenSelectableObjects.Size(); i++)
 		{
+			IScreenSelectionInterface* ScreenSelectable = ScreenSelectableObjects[i];
+
 			const FVector2D<int> ScreenSelectableLocation = ScreenSelectable->GetLocation();
 			const FVector2D<int> ScreenSelectableSize = ScreenSelectable->GetSize();
 

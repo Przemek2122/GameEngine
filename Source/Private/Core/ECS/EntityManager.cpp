@@ -11,6 +11,8 @@ FEntityManager::FEntityManager(FWindow* InOwnerWindow)
 
 FEntityManager::~FEntityManager()
 {
+	OnEntityManagerDestroyed.Execute();
+
 	for (EEntity* Entity : Entities)
 	{
 		Entity->EndPlay();

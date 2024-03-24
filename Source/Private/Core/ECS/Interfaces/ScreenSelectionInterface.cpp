@@ -30,6 +30,8 @@ void IScreenSelectionInterface::RegisterToScreenSelection(FEntityManager* InEnti
 				ScreenSelectionEntityStatic = InEntityManager->CreateEntity<EScreenSelectionEntity>();
 
 				ScreenSelectionEntityStatic->RegisterScreenSelectable(this);
+
+				InEntityManager->OnEntityManagerDestroyed.BindStatic(&IScreenSelectionInterface::ResetScreenSelection);
 			}
 		}
 
@@ -48,4 +50,9 @@ void IScreenSelectionInterface::UnregisterFromScreenSelection()
 EScreenSelectionEntity* IScreenSelectionInterface::GetScreenSelectionEntityStatic()
 {
 	return ScreenSelectionEntityStatic;
+}
+
+void IScreenSelectionInterface::ResetScreenSelection()
+{
+	ScreenSelectionEntityStatic = nullptr;
 }

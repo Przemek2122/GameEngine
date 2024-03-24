@@ -14,6 +14,7 @@ public:
 
 	/** Begin EEntity */
 	void BeginPlay() override;
+	void EndPlay() override;
 	/** End EEntity */
 
 	void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);

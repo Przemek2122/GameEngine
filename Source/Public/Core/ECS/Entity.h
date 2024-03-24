@@ -14,6 +14,7 @@ public:
 
 	/** Called when starting or creating Entity */
 	virtual void BeginPlay();
+
 	/** Called right before destruction */
 	virtual void EndPlay();
 
