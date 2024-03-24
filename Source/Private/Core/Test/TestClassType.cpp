@@ -33,7 +33,7 @@ void FTestClassType::DoTest()
 
 	if (ClassInstance != nullptr)
 	{
-		LOG_DEBUG("TemporaryTestClass instance created.");
+		LOG_DEBUG("TemporaryTestClass instance created from class name: " << StoredClass.GetClassName());
 	}
 
 	delete ClassInstance;

@@ -12,6 +12,7 @@ public:
 
     virtual void* Allocate() const = 0;
     virtual void* Cast(void* Object) const = 0;
+	virtual std::string GetClassName() const = 0;
 };
 
 /** Do not use directly - Use FClassStorage instead */
@@ -29,7 +30,7 @@ public:
         return static_cast<TType*>(Object);
     }
 
-	std::string GetClassName() const
+	std::string GetClassName() const override
 	{
 		return typeid(TType).name();
 	}
@@ -94,6 +95,16 @@ public:
 		}
 
 		return dynamic_cast<TClass<TType>*>(StoredClass) != nullptr;
+	}
+
+	std::string GetClassName() const
+	{
+		if (StoredClass == nullptr)
+		{
+			return "nullptr";
+		}
+
+		return StoredClass->GetClassName();
 	}
 
 	void Reset()
