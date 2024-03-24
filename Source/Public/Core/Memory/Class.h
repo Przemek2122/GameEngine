@@ -11,7 +11,6 @@ public:
     virtual ~FClass() = default;
 
     virtual void* Allocate() const = 0;
-    virtual void* Cast(void* Object) const = 0;
 	virtual std::string GetClassName() const = 0;
 };
 
@@ -20,14 +19,10 @@ template<typename TType>
 class TClass : public FClass
 {
 public:
+	/** Create instance */
 	void* Allocate() const override
 	{
         return new TType;
-    }
-
-    void* Cast(void* Object) const override
-    {
-        return static_cast<TType*>(Object);
     }
 
 	std::string GetClassName() const override
@@ -58,6 +53,9 @@ public:
 	template<typename TType>
 	void Set()
 	{
+		// Perform check for base class, it has to be child of TType
+		static_assert(std::is_base_of_v<TBaseClass, TType>, "FClassStorage::Set given class does not inherit from TBaseClass");
+
 		delete StoredClass;
 
 		StoredClass = new TClass<TType>;
@@ -73,7 +71,6 @@ public:
 	{
 		if (StoredClass == nullptr)
 		{
-			// Never return nullptr, use base class as default
 			Set<TBaseClass>();
 		}
 

@@ -23,6 +23,7 @@ class FTestClassType : public FTestCase
 {
 public:
 	void DoTest() override;
+	char* GetTestName() const override;
 
 protected:
 	FClassStorage<FTemporaryTestClass> StoredClass;
