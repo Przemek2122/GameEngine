@@ -52,4 +52,5 @@ template<typename TTypeToStore>
 class FAutoDeletePointer;
 template<typename TTypeToStore>
 class FAutoUIMenu;
+#include "Memory/Class.h"
 /** End of memory */

@@ -4,31 +4,106 @@
 
 #include "CoreMinimal.h"
 
-/** Storage class for storing TClass or FClassAllocateInterface */
-class FCLass
+/** Do not use directly - Use FClassStorage instead */
+class FClass
 {
 public:
-    virtual ~FCLass() = default;
+    virtual ~FClass() = default;
 
     virtual void* Allocate() const = 0;
     virtual void* Cast(void* Object) const = 0;
 };
 
-template<typename T> class TClass : public FCLass
+/** Do not use directly - Use FClassStorage instead */
+template<typename TType>
+class TClass : public FClass
 {
 public:
-	void* Allocate() const override { return new T; }
-	void* Cast(void* Object) const override { return static_cast<T*>(Object); }
+	void* Allocate() const override
+	{
+        return new TType;
+    }
+
+    void* Cast(void* Object) const override
+    {
+        return static_cast<TType*>(Object);
+    }
+
+	std::string GetClassName() const
+	{
+		return typeid(TType).name();
+	}
 };
 
-class FClassAllocateInterface
+/** Storage class for storing TClass */
+template<typename TBaseClass>
+class FClassStorage
 {
 public:
-	virtual void* Allocate() const = 0;
-	virtual void* Cast(void* Object) const = 0;
+	FClassStorage()
+		: StoredClass(nullptr)
+	{
+	}
+
+	FClassStorage(FClassStorage& ClassStorage) = delete;
+	FClassStorage(FClassStorage&& ClassStorage) = delete;
+
+	~FClassStorage()
+	{
+		delete StoredClass;
+	}
+
+	/** Set stored class. */
+	template<typename TType>
+	void Set()
+	{
+		delete StoredClass;
+
+		StoredClass = new TClass<TType>;
+	}
+
+	/**
+	 * Function for actually creating class instance.
+	 *
+	 * @Note: Might return null if class is not set.
+	 * @Note: Will not be garbage collected any way so make sure to delete it after use!
+	 */
+	_NODISCARD TBaseClass* Allocate()
+	{
+		if (StoredClass == nullptr)
+		{
+			// Never return nullptr, use base class as default
+			Set<TBaseClass>();
+		}
+
+		return static_cast<TBaseClass*>(StoredClass->Allocate());
+	}
+
+	/** @returns true if any type is in storage */
+	_NODISCARD bool IsSet() const
+	{
+		return StoredClass != nullptr;
+	}
+
+	template<typename TType>
+	_NODISCARD bool IsSame()
+	{
+		if (StoredClass == nullptr)
+		{
+			return false;
+		}
+
+		return dynamic_cast<TClass<TType>*>(StoredClass) != nullptr;
+	}
+
+	void Reset()
+	{
+		delete StoredClass;
+
+		StoredClass = nullptr;
+	}
+
+protected:
+	FClass* StoredClass;
 
 };
-
-/** Ussage sample */
-FCLass* type = new TClass<int>;
-void* myint = type->Allocate();

@@ -332,6 +332,9 @@
     <ClInclude Include="Source\Public\Core\Test\TestCase.h">
       <Filter>Public\Core\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\TestClassType.h">
+      <Filter>Public\Core\Test</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\TestDelegate.h">
       <Filter>Public\Core\Test</Filter>
     </ClInclude>
@@ -866,6 +869,9 @@
       <Filter>Private\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp">
+      <Filter>Private\Core\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\TestClassType.cpp">
       <Filter>Private\Core\Test</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp">

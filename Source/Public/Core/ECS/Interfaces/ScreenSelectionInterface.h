@@ -19,9 +19,21 @@ public:
 	/** Unregister does not have to be called */
 	void UnregisterFromScreenSelection();
 
+	void NativeSelect();
+
+	void NativeDeselect();
+
+	/** Override to return location of selection */
 	virtual FVector2D<int> GetLocation() = 0;
+
+	/** Override to return size of selection */
 	virtual FVector2D<int> GetSize() = 0;
-	virtual void OnSelection() = 0;
+
+	/** Called when object is selected (once) */
+	virtual void OnSelect() = 0;
+
+	/** Called when object is de-selected (once) */
+	virtual void OnDeSelect() = 0;
 
 	static EScreenSelectionEntity* GetScreenSelectionEntityStatic();
 
@@ -29,5 +41,6 @@ public:
 
 protected:
 	bool bIsRegistered;
+	bool bIsSelected;
 
 };

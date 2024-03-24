@@ -62,7 +62,11 @@ void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 
 			if ((bIsSelectedHorizontalToRight || bIsSelectedHorizontalToLeft) && (bIsSelectedVerticalToDown || bIsSelectedVerticalToUp))
 			{
-				ScreenSelectable->OnSelection();
+				ScreenSelectable->OnSelect();
+			}
+			else
+			{
+				ScreenSelectable->OnDeSelect();
 			}
 		}
 	}
@@ -76,14 +80,14 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 		{
 			SelectionStart = InMousePosition;
 
-			bIsSelecting = true;
+			OnStartSelecting();
 
 			break;
 		}
 
 		case EInputState::RELEASE:
 		{
-			bIsSelecting = false;
+			OnEndSelecting();
 
 			break;
 		}
@@ -93,6 +97,16 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 			LOG_ERROR("EScreenSelectionEntity::OnMouseLeftClick: Unknown InputState");
 		}
 	}
+}
+
+void EScreenSelectionEntity::OnStartSelecting()
+{
+	bIsSelecting = true;
+}
+
+void EScreenSelectionEntity::OnEndSelecting()
+{
+	bIsSelecting = false;
 }
 
 void EScreenSelectionEntity::RegisterInput()

@@ -7,6 +7,7 @@ static EScreenSelectionEntity* ScreenSelectionEntityStatic;
 
 IScreenSelectionInterface::IScreenSelectionInterface()
 	: bIsRegistered(false)
+	, bIsSelected(false)
 {
 }
 
@@ -44,6 +45,22 @@ void IScreenSelectionInterface::UnregisterFromScreenSelection()
 	if (bIsRegistered && ScreenSelectionEntityStatic != nullptr)
 	{
 		ScreenSelectionEntityStatic->UnRegisterScreenSelectable(this);
+	}
+}
+
+void IScreenSelectionInterface::NativeSelect()
+{
+	if (!bIsSelected)
+	{
+		OnSelect();
+	}
+}
+
+void IScreenSelectionInterface::NativeDeselect()
+{
+	if (bIsSelected)
+	{
+		OnDeSelect();
 	}
 }
 

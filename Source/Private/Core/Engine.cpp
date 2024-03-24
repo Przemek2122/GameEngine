@@ -8,14 +8,12 @@
 
 #include "Test/TestDelegate.h"
 #include "Test/TestTypes.h"
+#include "Test/TestClassType.h"
 #endif
 
 #include "Assets/Assets/FontAsset.h"
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
-#include "Interfaces/CoreLoop/ITickInterface.h"
-#include "Interfaces/CoreLoop/IRenderInterface.h"
-#include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()
 	: bFrameRateLimited(true)
@@ -136,6 +134,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 #if ENGINE_TESTS_ALLOW_ANY && ENGINE_TESTS_RUN
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
+	TestManager->SpawnTestCaseByClass<FTestClassType>();
 #endif
 
 	AssetsManager->AddAsset<FFontAsset>("OpenSans", R"(Assets\Fonts\OpenSans\OpenSans-Regular.ttf)");

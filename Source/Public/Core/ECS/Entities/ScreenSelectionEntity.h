@@ -23,6 +23,9 @@ public:
 	void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
 	void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
 
+	virtual void OnStartSelecting();
+	virtual void OnEndSelecting();
+
 protected:
 	void RegisterInput();
 	void UnRegisterInput();

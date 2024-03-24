@@ -83,6 +83,7 @@
     <ClInclude Include="Source\Public\Core\Memory\Class.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestClassType.h" />
     <ClInclude Include="Source\Public\Core\Test\TestDelegate.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestTypes.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="Source\Private\Core\Memory\Class.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestClassType.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp" />

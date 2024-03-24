@@ -83,6 +83,7 @@
     <ClInclude Include="Source\Public\Core\Memory\Class.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
+    <ClInclude Include="Source\Public\Core\Test\FTestClassType.h" />
     <ClInclude Include="Source\Public\Core\Test\TestDelegate.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestTypes.h" />
@@ -253,6 +254,7 @@
     <ClCompile Include="Source\Private\Core\ECS\Entities\Character.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\NPCCharacter.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\PlayerCharacter.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Entities\ScreenSelectionEntity.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entity.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Interfaces\ScreenSelectionInterface.cpp" />
@@ -275,6 +277,7 @@
     <ClCompile Include="Source\Private\Core\Memory\Class.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\FTestClassType.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp" />
