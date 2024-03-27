@@ -4,13 +4,50 @@
 
 #include "ECS/Component.h"
 
+class URenderComponent;
+
 /**
- * Component for handling transform of the entity
+ * Component for managing health
+ * + Damage, healing, death with delegate
  */
 class UHealthComponent : public UComponent
 {
 public:
 	UHealthComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UHealthComponent() override = default;
+
+	void BeginPlay() override;
+
+	virtual void TakeDamage(const float Damage);
+	virtual void Heal(const float HealthToAdd);
+
+	bool IsDead() const;
+
+	/** Called when health drops below 0 */
+	FDelegate<> OnDeathDelegate;
+
+protected:
+	virtual void SetHealthDefaults();
+
+	/** Called when killed (Health is 0 or below) */
+	virtual void OnDie();
+
+protected:
+	/** Current health */
+	float CurrentHealth;
+
+	/** Health which was set before start */
+	float StartingHealth;
+
+	/** Max health - Used when healing */
+	float MaxHealth;
+
+	/** Is currently dead? */
+	bool bIsDead;
+
+	/** Should use another component (RenderComponent) for health bar display? */
+	bool bUseHealthBarComponent;
+
+	URenderComponent* HealthBarRenderComponent;
 
 };

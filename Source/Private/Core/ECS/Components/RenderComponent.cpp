@@ -34,7 +34,7 @@ void URenderComponent::Render()
 
 	if (TextureAsset != nullptr)
 	{
-		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, LocationCached, SizeCached);
+		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, LocationCached + LocationRenderOffset, SizeCached);
 	}
 }
 
@@ -123,4 +123,14 @@ void URenderComponent::DecrementTextureIfPresent() const
 	{
 		TextureAsset->DecrementNumberOfReferences();
 	}
+}
+
+void URenderComponent::SetLocationRenderOffset(const FVector2D<int>& NewLocationOffset)
+{
+	LocationRenderOffset = NewLocationOffset;
+}
+
+FVector2D<int> URenderComponent::GetLocationRenderOffset() const
+{
+	return LocationRenderOffset;
 }

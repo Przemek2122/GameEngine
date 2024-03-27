@@ -36,7 +36,7 @@ public:
 	{
 		for (EEntity* Entity : Entities)
 		{
-			if (TEntityClass* EntitySearch = dynamic_cast<TEntityClass>(Entity))
+			if (TEntityClass* EntitySearch = dynamic_cast<TEntityClass*>(Entity))
 			{
 				return EntitySearch;
 			}

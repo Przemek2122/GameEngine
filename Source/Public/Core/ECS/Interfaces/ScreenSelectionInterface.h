@@ -14,7 +14,7 @@ public:
 	virtual ~IScreenSelectionInterface();
 
 	/** You need to call register */
-	void RegisterToScreenSelection(FEntityManager* InEntityManager);
+	void RegisterToScreenSelection(const FEntityManager* InEntityManager);
 
 	/** Unregister does not have to be called */
 	void UnregisterFromScreenSelection();
@@ -35,11 +35,9 @@ public:
 	/** Called when object is de-selected (once) */
 	virtual void OnDeSelect() = 0;
 
-	static EScreenSelectionEntity* GetScreenSelectionEntityStatic();
-
-	static void ResetScreenSelection();
-
 protected:
+	EScreenSelectionEntity* ScreenSelectionEntity;
+
 	bool bIsRegistered;
 	bool bIsSelected;
 

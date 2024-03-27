@@ -12,13 +12,8 @@ public:
 	EScreenSelectionEntity(FEntityManager* InEntityManager);
 	~EScreenSelectionEntity() override = default;
 
-	/** Begin EEntity */
-	void BeginPlay() override;
-	void EndPlay() override;
-	/** End EEntity */
-
-	void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
-	void UnRegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
+	virtual void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
+	virtual void UnRegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 
 	void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
 	void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
@@ -26,13 +21,23 @@ public:
 	virtual void OnStartSelecting();
 	virtual void OnEndSelecting();
 
+	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
+
 protected:
-	void RegisterInput();
-	void UnRegisterInput();
+	/** Begin EEntity */
+	void RegisterInput(const FEventHandler* InputHandler) override;
+	void UnRegisterInput(const FEventHandler* InputHandler) override;
+	/** End EEntity */
+
+	virtual void AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
+	virtual void RemoveFromCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
 
 protected:
 	/** Array with screen selectable items */
 	CArray<IScreenSelectionInterface*> ScreenSelectableObjects;
+
+	/** Currently selected objects list */
+	CArray<IScreenSelectionInterface*> CurrentlySelectedObjects;
 
 	/** Selecting when left mouse button is pressed */
 	bool bIsSelecting;

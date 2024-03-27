@@ -34,5 +34,12 @@ public:
 	FWindow* GetWindow() const;
 
 protected:
+	virtual void RegisterInput(const FEventHandler* InputHandler);
+	virtual void UnRegisterInput(const FEventHandler* InputHandler);
+
+	void RegisterInputInternal();
+	void UnRegisterInputInternal();
+
+protected:
 	FEntityManager* EntityManagerOwner;
 };

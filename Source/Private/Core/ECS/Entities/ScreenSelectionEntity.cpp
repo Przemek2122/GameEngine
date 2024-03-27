@@ -1,6 +1,5 @@
 #include "CoreEngine.h"
 #include "ECS/Entities/ScreenSelectionEntity.h"
-
 #include "ECS/Interfaces/ScreenSelectionInterface.h"
 #include "Input/EventHandler.h"
 
@@ -9,20 +8,6 @@ EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
 	, ScreenSelectableObjects()
 	, bIsSelecting(false)
 {
-}
-
-void EScreenSelectionEntity::BeginPlay()
-{
-	EEntity::BeginPlay();
-
-	RegisterInput();
-}
-
-void EScreenSelectionEntity::EndPlay()
-{
-	EEntity::EndPlay();
-
-	UnRegisterInput();
 }
 
 void EScreenSelectionEntity::RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable)
@@ -43,7 +28,7 @@ void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 
 		for (int i = 0; i < ScreenSelectableObjects.Size(); i++)
 		{
-			IScreenSelectionInterface* ScreenSelectable = ScreenSelectableObjects[i];
+			IScreenSelectionInterface* ScreenSelectable = ScreenSelectableObjects[i]; 
 
 			const FVector2D<int> ScreenSelectableLocation = ScreenSelectable->GetLocation();
 			const FVector2D<int> ScreenSelectableSize = ScreenSelectable->GetSize();
@@ -62,11 +47,15 @@ void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 
 			if ((bIsSelectedHorizontalToRight || bIsSelectedHorizontalToLeft) && (bIsSelectedVerticalToDown || bIsSelectedVerticalToUp))
 			{
-				ScreenSelectable->OnSelect();
+				ScreenSelectable->NativeSelect();
+
+				AddToCurrentlySelectedObjects(ScreenSelectable);
 			}
 			else
 			{
-				ScreenSelectable->OnDeSelect();
+				ScreenSelectable->NativeDeselect();
+
+				RemoveFromCurrentlySelectedObjects(ScreenSelectable);
 			}
 		}
 	}
@@ -109,18 +98,29 @@ void EScreenSelectionEntity::OnEndSelecting()
 	bIsSelecting = false;
 }
 
-void EScreenSelectionEntity::RegisterInput()
+const CArray<IScreenSelectionInterface*>& EScreenSelectionEntity::GetCurrentlySelectedObjects() const
 {
-	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+	return CurrentlySelectedObjects;
+}
 
+void EScreenSelectionEntity::RegisterInput(const FEventHandler* InputHandler)
+{
 	InputHandler->MouseDelegates.Move->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.LeftButton->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
 }
 
-void EScreenSelectionEntity::UnRegisterInput()
+void EScreenSelectionEntity::UnRegisterInput(const FEventHandler* InputHandler)
 {
-	const FEventHandler* InputHandler = GEngine->GetEventHandler();
-
 	InputHandler->MouseDelegates.Move->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.LeftButton->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
+}
+
+void EScreenSelectionEntity::AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable)
+{
+	CurrentlySelectedObjects.Push(InScreenSelectable);
+}
+
+void EScreenSelectionEntity::RemoveFromCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable)
+{
+	CurrentlySelectedObjects.Remove(InScreenSelectable);
 }

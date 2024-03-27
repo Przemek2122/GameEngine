@@ -34,6 +34,9 @@ public:
 
 	void DecrementTextureIfPresent() const;
 
+	void SetLocationRenderOffset(const FVector2D<int>& NewLocationOffset);
+	FVector2D<int> GetLocationRenderOffset() const;
+
 protected:
 	/** Image to render */
 	FTextureAsset* TextureAsset;
@@ -42,6 +45,7 @@ protected:
 	UTransformComponent* TransformComponent;
 
 	FVector2D<int> LocationCached;
+	FVector2D<int> LocationRenderOffset;
 	FVector2D<int> SizeCached;
 
 };
