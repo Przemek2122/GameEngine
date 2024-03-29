@@ -16,10 +16,14 @@ public:
 	UHealthComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UHealthComponent() override = default;
 
+	/** Begin UComponent */
 	void BeginPlay() override;
+	/** End UComponent */
 
 	virtual void TakeDamage(const float Damage);
 	virtual void Heal(const float HealthToAdd);
+
+	void SetStartingHealth(const float NewHealth);
 
 	bool IsDead() const;
 

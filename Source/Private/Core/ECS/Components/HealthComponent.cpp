@@ -53,6 +53,12 @@ void UHealthComponent::Heal(const float HealthToAdd)
 	}
 }
 
+void UHealthComponent::SetStartingHealth(const float NewHealth)
+{
+	StartingHealth = NewHealth;
+	CurrentHealth = NewHealth;
+}
+
 bool UHealthComponent::IsDead() const
 {
 	return bIsDead;
