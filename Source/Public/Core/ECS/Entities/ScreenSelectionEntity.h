@@ -12,6 +12,10 @@ public:
 	EScreenSelectionEntity(FEntityManager* InEntityManager);
 	~EScreenSelectionEntity() override = default;
 
+	/** Begin EEntity */
+	void EndPlay() override;
+	/** End EEntity */
+
 	virtual void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 	virtual void UnRegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 
@@ -22,6 +26,8 @@ public:
 	virtual void OnEndSelecting();
 
 	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
+
+	FDelegate<> OnEndPlay;
 
 protected:
 	/** Begin EEntity */
