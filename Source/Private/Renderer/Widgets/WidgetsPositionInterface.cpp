@@ -85,6 +85,11 @@ void IWidgetPositionInterface::SetWidgetSize(const FVector2D<int> InWidgetSize)
 	RefreshWidgetSize();
 
 	RefreshAnchor();
+
+	if (HasParent())
+	{
+		GetParent()->OnChildSizeChanged();
+	}
 }
 
 void IWidgetPositionInterface::SetWidgetSizePercent(const FVector2D<float> InScreenPercentage)

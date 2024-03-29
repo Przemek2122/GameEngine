@@ -2,13 +2,14 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "DelegateBase.h"
 #include "FunctorLambda.h"
 #include "FunctorObject.h"
+#include "Includes/GlobalDefines.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
+ * Same as FDelegate but with safer memory management.
  *
  * @Note: When passing by parameter use reference or pointer, otherwise it will not compile.
  * @Note: All functions passed in are deleted at end of this object life.
@@ -21,13 +22,11 @@ public:
 	using DelegateBase = FDelegateBase<TReturnType, std::shared_ptr<FunctorType>, TInParams...>;
 
 	using FunctorLambdaType = FFunctorLambda<TReturnType, TInParams...>;
-	using FunctorObjectType = FFunctorObject<TReturnType, TInParams...>;
 
 	// Default constructor
 	FDelegateSafe() = default;
 
 	// Copy constructor - Forbidden, not efficient + causes double deletion of Functors
-	// Could be fixed by creating flag telling destructor if Functors are moved or not
 	FDelegateSafe(const FDelegateSafe& InDelegate) = delete;
 
 	// Move constructor
@@ -37,7 +36,6 @@ public:
 	}
 
 	// Copy operator - Forbidden, not efficient + causes double deletion of Functors
-	// Could be fixed by creating flag telling destructor if Functors are moved or not
 	FDelegateSafe& operator=(const FDelegateSafe& InDelegate) = delete;
 
 	// Copy assignment operator
@@ -60,83 +58,162 @@ public:
 		}
 	}
 
+	/** Executes all bound functions using Lambda to define how it executes. */
+	using ExecuteByLambdaDefinitionFunctor = FFunctorBase<TReturnType, TInParams...>;
+	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
+	virtual void ExecuteByLambda(ExecuteByLambdaDefinition Lambda, TInParams... InParams)
+	{
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		{
+			Lambda(DelegateBase::Functors[i].get(), InParams ...);
+		}
+	}
+	/** End FDelegateBase interface */
+
+	/** Bind C++ raw Lambda - Fast but not recommended */
+	template <typename TTypeAuto>
+	void BindLambda(TTypeAuto Lambda)
+	{
+		DelegateBase::Functors.Push(std::make_shared<FunctorLambdaType>(Lambda));
+	}
+
 	/** You can make new FFunctorLambda<TReturnType, TInParams...> */
 	void BindLambda(FunctorLambdaType& Lambda)
 	{
 		DelegateBase::Functors.Push(std::make_shared<FunctorLambdaType>(Lambda));
 	}
 
-	/** Bind C++ Lambda - Fast but not recommended - Cannot be unbind */
-	template <typename TTypeAuto>
-	void BindLambdaRaw(TTypeAuto Lambda)
-	{
-		DelegateBase::Functors.Push(std::make_shared<FunctorLambdaType>(Lambda));
-	}
-
+	/** Remove lambda, only by previously added type (function pointer must be equal) */
 	void UnBindLambda(FunctorLambdaType& Lambda)
 	{
-		auto Index = INDEX_NONE;
-
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
-		{
-			if (Lambda.IsEqual(DelegateBase::Functors[i].get()))
-			{
-				Index = i;
-
-				break;
-			}
-		}
-
-		//if (Index != INDEX_NONE)
-		//{
-		//	DelegateBase::Functors.RemoveAt(Index);
-		//}
-	}
-
-	/*
-	template <typename TTypeAuto>
-	void UnBindLambda(TTypeAuto& Lambda)
-	{
-		int Index = INDEX_NONE;
-
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
-		{
-			if (DelegateBase::Functors[i] == Lambda)
-			{
-				Index = i;
-
-				break;
-			}
-		}
+		int Index = FindIndexOfLambdaFunctor(Lambda);
 
 		if (Index != INDEX_NONE)
 		{
 			DelegateBase::Functors.RemoveAt(Index);
 		}
 	}
-	*/
 
-	int FindIndexOfLambda(FunctorLambdaType& Lambda)
+	/** Remove C++ raw Lambda - Fast but not recommended */
+	template <typename TTypeAuto>
+	void UnBindLambda(TTypeAuto& Lambda)
+	{
+		std::shared_ptr<FunctorLambdaType> TemporarySharedLambdaPointer = std::make_shared<FunctorLambdaType>(Lambda);
+
+		int Index = FindIndexOfLambdaFunctor(*TemporarySharedLambdaPointer);
+
+		if (Index != INDEX_NONE)
+		{
+			DelegateBase::Functors.RemoveAt(Index);
+		}
+	}
+
+	/*
+	 * Example on how to bind your object
+	 * OnYourDelegateChanged.BindObject(this, &FYourClass::YourFunctionName);
+	 */
+	template<class TClass>
+	void BindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		DelegateBase::Functors.Push(std::make_shared<FunctorObjectType>(InClassObject, InFunctionPointer));
+	}
+
+	template<class TClass>
+	void BindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		DelegateBase::Functors.Push(std::make_shared<FunctorObjectType>(Functor));
+	}
+
+	template<class TClass>
+	void UnBindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		std::shared_ptr<FunctorObjectType> TemporaryFunctor = std::make_shared<FunctorObjectType>(InClassObject, InFunctionPointer);
+
+		int Index = FindIndexOfObjectFunctor(*TemporaryFunctor);
+
+		if (Index != INDEX_NONE)
+		{
+			DelegateBase::Functors.RemoveAt(Index);
+		}
+	}
+
+	template<class TClass>
+	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	{
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		int Index = FindIndexOfObjectFunctor(Functor);
+
+		if (Index != INDEX_NONE)
+		{
+			DelegateBase::Functors.RemoveAt(Index);
+		}
+	}
+
+	/** Remove all bound functions. */
+	void UnBindAll()
+	{
+		DelegateBase::Functors.Clear();
+	}
+
+protected:
+	int FindIndexOfLambdaFunctor(FunctorLambdaType& LambdaFunctor)
 	{
 		int Index = INDEX_NONE;
 
 		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
-			if (Lambda == DelegateBase::Functors[i].get())
-			{
-				Index = i;
+			std::shared_ptr<FunctorType>& Functor = DelegateBase::Functors[i];
 
-				break;
+			// Quick check if it is lambda - Fast
+			if (Functor->GetFunctorType() == EFunctorType::FT_LAMBDA)
+			{
+				FunctorLambdaType* FunctorLambda = dynamic_cast<FunctorLambdaType*>(Functor.get());
+
+				if (FunctorLambda->IsEqual(LambdaFunctor))
+				{
+					Index = i;
+
+					break;
+				}
 			}
 		}
 
 		return Index;
 	}
 
-	/** Remove function by functor reference. Use with caution. */
-	void UnBindAll()
+	template<class TClass>
+	int FindIndexOfObjectFunctor(FFunctorObject<TClass, TReturnType, TInParams...>& ObjectFunctor)
 	{
-		DelegateBase::Functors.Clear();
+		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		int Index = INDEX_NONE;
+
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		{
+			std::shared_ptr<FunctorType>& Functor = DelegateBase::Functors[i];
+
+			// Quick check if it is lambda - Fast
+			if (Functor->GetFunctorType() == EFunctorType::FT_OBJECT)
+			{
+				FunctorObjectType* FunctorObject = dynamic_cast<FunctorObjectType*>(Functor.get());
+
+				if (FunctorObject->IsEqual(ObjectFunctor))
+				{
+					Index = i;
+
+					break;
+				}
+			}
+		}
+
+		return Index;
 	}
 	
 };

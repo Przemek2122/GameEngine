@@ -48,7 +48,7 @@ public:
 	}
 
 protected:
-	FDelegate<TReturnType, TInParams...> Delegate;
+	FDelegateSafe<TReturnType, TInParams...> Delegate;
 
 };
 

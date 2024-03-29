@@ -3,21 +3,24 @@
 #include "CoreEngine.h"
 #include "ECS/ComponentManagerInterface.h"
 
-IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterface* InComponentManagerInterfaceParent)
+IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterface* InComponentManagerInterfaceParent, FWindow* InOwnerWindow)
 	: ComponentManagerInterfaceParent(InComponentManagerInterfaceParent)
 	, bDoesHaveComponentManagerInterfaceParent(InComponentManagerInterfaceParent != nullptr)
+	, OwnerWindow(InOwnerWindow)
 {
 }
 
 IComponentManagerInterface::~IComponentManagerInterface()
 {
-	ComponentsMap.Clear();
+	Cleanup();
 }
 
 bool IComponentManagerInterface::DestroyComponent(const std::string& ComponentName)
 {
 	if (ComponentsMap.IsValidKey(ComponentName))
 	{
+		ComponentsMap[ComponentName]->EndPlay();
+
 		OnComponentDestroy(ComponentName, ComponentsMap[ComponentName].get());
 
 		ComponentsMap[ComponentName].reset();
@@ -30,12 +33,14 @@ bool IComponentManagerInterface::DestroyComponent(const std::string& ComponentNa
 	return false;
 }
 
-bool IComponentManagerInterface::DestroyComponentByInstance(UComponent* Component)
+bool IComponentManagerInterface::DestroyComponentByInstance(const UComponent* Component)
 {
 	for (std::pair<const std::string, std::shared_ptr<UComponent>>& ComponentPair : ComponentsMap)
 	{
 		if (ComponentPair.second.get() == Component)
 		{
+			ComponentPair.second->EndPlay();
+
 			OnComponentDestroy(ComponentPair.first, ComponentPair.second.get());
 
 			ComponentPair.second.reset();
@@ -74,11 +79,19 @@ IComponentManagerInterface* IComponentManagerInterface::GetOwnerTop() const
 	return CurrentChainElement;
 }
 
+FWindow* IComponentManagerInterface::GetOwnerWindow() const
+{
+	return OwnerWindow;
+}
+
 void IComponentManagerInterface::TickComponents()
 {
 	for (const auto& [ComponentName, Component] : ComponentsMap)
 	{
-		Component->Tick();
+		if (Component->IsComponentActive())
+		{
+			Component->Tick();
+		}
 	}
 }
 
@@ -86,6 +99,21 @@ void IComponentManagerInterface::RenderComponents()
 {
 	for (const auto& [ComponentName, Component] : ComponentsMap)
 	{
-		Component->Render();
+		if (Component->IsComponentActive())
+		{
+			Component->Render();
+		}
 	}
+}
+
+void IComponentManagerInterface::Cleanup()
+{
+	for (auto& [ComponentName, ComponentPtr] : ComponentsMap)
+	{
+		ComponentPtr->EndPlay();
+
+		OnComponentDestroy(ComponentName, ComponentPtr.get());
+	}
+
+	ComponentsMap.Clear();
 }

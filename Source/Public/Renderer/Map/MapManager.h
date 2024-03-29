@@ -25,6 +25,7 @@ public:
 	FMapManager(FWindow* InWindow);
 	virtual ~FMapManager();
 
+	virtual void TickMap(const float DeltaTime);
 	virtual void DrawMap();
 
 	/** Iterate over all maps to find this with given name. Inefficient. */

@@ -5,6 +5,7 @@
 #include "DelegateBase.h"
 #include "FunctorLambda.h"
 #include "FunctorObject.h"
+#include "FunctorStatic.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
@@ -19,7 +20,9 @@ public:
 	using DelegateBase = FDelegateBase<TReturnType, FFunctorBase<TReturnType, TInParams...>*, TInParams...>;
 
 	// Default constructor
-	FDelegate() = default;
+	FDelegate()
+	{
+	}
 
 	// Copy constructor - Forbidden, not efficient + causes double deletion of Functors
 	// Could be fixed by creating flag telling destructor if Functors are moved or not
@@ -55,9 +58,7 @@ public:
 	/** Executes all bound functions. */
 	virtual void Execute(TInParams... InParams) override
 	{
-		const auto FunctorsNum = DelegateBase::Functors.Size();
-	
-		for (int i = 0; i < FunctorsNum; i++)
+		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			if (ENSURE_VALID(DelegateBase::Functors[i] != nullptr))
 			{
@@ -65,6 +66,7 @@ public:
 			}
 		}
 	}
+
 	/** Executes all bound functions using Lambda to define how it executes. */
 	using ExecuteByLambdaDefinitionFunctor = FFunctorBase<TReturnType, TInParams...>;
 	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
@@ -103,7 +105,7 @@ public:
 	 * OnYourDelegateChanged.BindObject(this, &FYourClass::YourFunctionName);
 	 * Real example from code:
 	 * OnWidgetOrderChanged.BindObject(this, &FWidgetInputManager::ChangeOrder);
-	*/
+	 */
 	template<typename TClass>
 	void BindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
@@ -145,6 +147,11 @@ public:
 	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
 	{
 		DelegateBase::Functors.Remove(Functor);
+	}
+
+	void BindStatic(TReturnType(*InFunctionPointer)(TInParams...))
+	{
+		DelegateBase::Functors.Push(new FFunctorStatic<TReturnType, TInParams...>(InFunctionPointer));
 	}
 	
 	/** Remove function by functor reference. Use with caution. */

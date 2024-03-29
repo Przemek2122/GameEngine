@@ -4,12 +4,15 @@
 #include "ECS/EntityManager.h"
 
 FEntityManager::FEntityManager(FWindow* InOwnerWindow)
-	: OwnerWindow(InOwnerWindow)
+	: Entities()
+	, OwnerWindow(InOwnerWindow)
 {
 }
 
 FEntityManager::~FEntityManager()
 {
+	OnEntityManagerDestroyed.Execute();
+
 	for (EEntity* Entity : Entities)
 	{
 		Entity->EndPlay();

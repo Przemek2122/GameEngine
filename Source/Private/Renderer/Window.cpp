@@ -20,7 +20,6 @@ FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, co
 	, bIsWindowVisible(true)
 	, WidgetManager(nullptr)
 	, WidgetInputManager(nullptr)
-	, EntityManager(nullptr)
 	, MapManager(nullptr)
 {
 	if (Window != nullptr)
@@ -43,7 +42,6 @@ FWindow::~FWindow()
 	delete WidgetManager;
 	delete WidgetInputManager;
 	delete MapManager;
-	delete EntityManager;
 
 	if (Window != nullptr)
 	{
@@ -62,7 +60,6 @@ void FWindow::Init()
 	Renderer = CreateRenderer();
 	WidgetManager = CreateWidgetManager();
 	WidgetInputManager = CreateWidgetInputManager();
-	EntityManager = CreateEntityManager();
 	MapManager = CreateMapManager();
 }
 
@@ -89,11 +86,6 @@ FWidgetInputManager* FWindow::CreateWidgetInputManager()
 	return new FWidgetInputManager();
 }
 
-FEntityManager* FWindow::CreateEntityManager()
-{
-	return new FEntityManager(this);
-}
-
 FMapManager* FWindow::CreateMapManager()
 {
 	return new FMapManager(this);
@@ -106,8 +98,10 @@ FRenderer* FWindow::CreateRenderer()
 
 void FWindow::Tick()
 {
-	EntityManager->Tick(GEngine->GetDeltaTime());
+	const float DeltaTime = GEngine->GetDeltaTime();
+
 	WidgetManager->TickWidgets();
+	MapManager->TickMap(DeltaTime);
 }
 
 void FWindow::Render()
@@ -115,7 +109,6 @@ void FWindow::Render()
 	Renderer->PreRender();
 	Renderer->Render();
 	MapManager->DrawMap();
-	EntityManager->Render();
 	WidgetManager->RenderWidgets();
 	Renderer->PostRender();
 }
@@ -218,9 +211,4 @@ FWidgetManager* FWindow::GetWidgetManager() const
 FWidgetInputManager* FWindow::GetWidgetInputManager() const
 {
 	return WidgetInputManager;
-}
-
-FEntityManager* FWindow::GetEntityManager() const
-{
-	return EntityManager;
 }

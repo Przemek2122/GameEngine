@@ -10,10 +10,11 @@ class EEntity : public UObject, public IComponentManagerInterface
 {
 public:
 	EEntity(FEntityManager* InEntityManager);
-	virtual ~EEntity() override;
+	~EEntity() override = default;
 
 	/** Called when starting or creating Entity */
 	virtual void BeginPlay();
+
 	/** Called right before destruction */
 	virtual void EndPlay();
 
@@ -31,6 +32,13 @@ public:
 
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
+
+protected:
+	virtual void RegisterInput(const FEventHandler* InputHandler);
+	virtual void UnRegisterInput(const FEventHandler* InputHandler);
+
+	void RegisterInputInternal();
+	void UnRegisterInputInternal();
 
 protected:
 	FEntityManager* EntityManagerOwner;

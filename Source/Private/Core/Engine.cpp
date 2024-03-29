@@ -8,14 +8,12 @@
 
 #include "Test/TestDelegate.h"
 #include "Test/TestTypes.h"
+#include "Test/TestClassType.h"
 #endif
 
 #include "Assets/Assets/FontAsset.h"
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
-#include "Interfaces/CoreLoop/ITickInterface.h"
-#include "Interfaces/CoreLoop/IRenderInterface.h"
-#include "Renderer/Map/Mapmanager.h"
 
 FEngine::FEngine()
 	: bFrameRateLimited(true)
@@ -136,6 +134,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 #if ENGINE_TESTS_ALLOW_ANY && ENGINE_TESTS_RUN
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
+	TestManager->SpawnTestCaseByClass<FTestClassType>();
 #endif
 
 	AssetsManager->AddAsset<FFontAsset>("OpenSans", R"(Assets\Fonts\OpenSans\OpenSans-Regular.ttf)");
@@ -148,14 +147,6 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 void FEngine::EngineTick()
 {
 	UpdateFrameRateCounter();
-
-	// Tick functions for next tick
-	if (FunctionsToCallOnStartOfNextTick.IsBound())
-	{
-		FunctionsToCallOnStartOfNextTick.Execute();
-
-		FunctionsToCallOnStartOfNextTick.UnBindAll();
-	}
 
 	// Wait for Render thread.
 	// We need to do this to avoid changing data when render is not finished
@@ -177,6 +168,14 @@ void FEngine::EngineTick()
 	Tick();
 
 	EngineTickingManager->EngineTick(DeltaTimeFloat);
+
+	// Tick functions for next tick
+	if (FunctionsToCallOnStartOfNextTick.IsBound())
+	{
+		FunctionsToCallOnStartOfNextTick.Execute();
+
+		FunctionsToCallOnStartOfNextTick.UnBindAll();
+	}
 
 	EngineRender->Tick();
 
@@ -365,7 +364,7 @@ const std::string& FEngine::GetLaunchRelativePath() const
 	return LaunchRelativePath;
 }
 
-void FEngine::AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function)
+void FEngine::AddLambdaToCallOnStartOfNextTick(const FFunctorLambda<void>& Function)
 {
 	FunctionsToCallOnStartOfNextTick.BindLambda(Function);
 }

@@ -2,7 +2,6 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Map/Map.h"
-
 #include "Assets/Assets/TextureAsset.h"
 #include "ECS/Entities/CameraManager.h"
 #include "Misc/Math.h"
@@ -11,41 +10,37 @@
 FMap::FMap(FMapAsset* InMapAsset, FMapManager* InMapManager)
 	: MapAsset(InMapAsset)
 	, MapManager(InMapManager)
-	, bIsActive(false)
-	, Scale(0.f)
-	, ScaleJump(0.f)
 	, CameraManagerEntity(nullptr)
+	, MapLocationChangeDelegate()
+	, bIsActive(false)
+	, EntityManager(nullptr)
 {
 }
 
 void FMap::Initialize()
 {
+	EntityManager = CreateEntityManager();
+
 	ReadAsset();
 
-	FEntityManager* EntityManager = MapManager->GetOwnerWindow()->GetEntityManager();
-	if (EntityManager != nullptr)
-	{
-		CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>("CameraManager");
-	}
-	else
-	{
-		LOG_WARN("EntityManager is nullptr. CameraManager will not be created.");
-	}
+	CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>();
 }
 
 void FMap::DeInitialize()
 {
 	ClearData();
 
-	FEntityManager* EntityManager = MapManager->GetOwnerWindow()->GetEntityManager();
 	if (EntityManager != nullptr)
 	{
 		EntityManager->DestroyEntity(CameraManagerEntity);
+
+		delete EntityManager;
 	}
-	else if (EntityManager == nullptr)
-	{
-		LOG_ERROR("EntityManager is nullptr. Memory leak!");
-	}
+}
+
+FEntityManager* FMap::GetEntityManager() const
+{
+	return EntityManager;
 }
 
 int FMap::GetMapWidth() const
@@ -68,24 +63,31 @@ FVector2D<int> FMap::GetMapSizeInPixels() const
 	return { GetMapWidth() * MapData.AssetsTileSize.X, GetMapHeight() * MapData.AssetsTileSize.Y };
 }
 
-void FMap::Draw()
+void FMap::Tick(float DeltaTime)
+{
+	if (bIsActive)
+	{
+		EntityManager->Tick(DeltaTime);
+	}
+}
+
+void FMap::Render()
 {
 	if (bIsActive)
 	{
 		const FVector2D<float> OwnerWindowSize = MapManager->GetOwnerWindow()->GetWindowSize();
-		const FVector2D<float> MapLocationFloat = MapLocation;
+		const FVector2D<float> MapLocationFloat = MapRenderOffset;
 		const FVector2D<float> MapAssetsTileSizeFloat = MapData.AssetsTileSize;
 
 		// Minimal render tile offset - Everything before that vector will not be rendered
-		FVector2D<int> MapLocationTileOffsetMin;
-		MapLocationTileOffsetMin.X = FMath::FloorToInt(MapLocationFloat.X / MapAssetsTileSizeFloat.X);
-		MapLocationTileOffsetMin.Y = FMath::FloorToInt(MapLocationFloat.Y / MapAssetsTileSizeFloat.Y);
+		MapLocationTileOffsetMin.X = FMath::FloorToInt(-MapLocationFloat.X / MapAssetsTileSizeFloat.X);
+		MapLocationTileOffsetMin.Y = FMath::FloorToInt(-MapLocationFloat.Y / MapAssetsTileSizeFloat.Y);
 
 		MapLocationTileOffsetMin.X = FMath::Max(MapLocationTileOffsetMin.X, 0);
 		MapLocationTileOffsetMin.Y = FMath::Max(MapLocationTileOffsetMin.Y, 0);
 
-		// Maximal render tile offset - Everything after that vector will not be rendered
-		FVector2D<int> MapLocationTileOffsetMax = MapLocationTileOffsetMin;
+		// Max render tile offset - Everything after that vector will not be rendered
+		MapLocationTileOffsetMax = MapLocationTileOffsetMin;
 		MapLocationTileOffsetMax.X += FMath::CeilToInt(OwnerWindowSize.X / MapAssetsTileSizeFloat.X);
 		MapLocationTileOffsetMax.Y += FMath::CeilToInt(OwnerWindowSize.Y / MapAssetsTileSizeFloat.Y);
 
@@ -99,34 +101,45 @@ void FMap::Draw()
 		Destination.h = MapData.AssetsTileSize.Y;
 		Destination.w = MapData.AssetsTileSize.X;
 
-		const int VerticalSize = MapData.MapArray.Size();
+		const int VerticalArraySize = MapData.MapArray.Size();
 
-		for (int VerticalIndex = 0; VerticalIndex < VerticalSize; VerticalIndex++)
+		for (int VerticalIndex = 0; VerticalIndex < VerticalArraySize; VerticalIndex++)
 		{
-			const FMapRow& MapRow = MapData.MapArray[VerticalIndex];
-
-			const int HorizontalSize = MapRow.Array.Size();
-
-			for (int HorizontalIndex = 0; HorizontalIndex < HorizontalSize; HorizontalIndex++)
+			// Optimization - Do not render offscreen
+			if (VerticalIndex >= MapLocationTileOffsetMin.Y && VerticalIndex <= MapLocationTileOffsetMax.Y)
 			{
-				const int AssetIndex = MapRow.Array[HorizontalIndex];
-				if (AssetIndex >= 0)
+				const FMapRow& MapRow = MapData.MapArray[VerticalIndex];
+
+				const int HorizontalArraySize = MapRow.Array.Size();
+
+				for (int HorizontalIndex = 0; HorizontalIndex < HorizontalArraySize; HorizontalIndex++)
 				{
-					const FMapSubAssetSettings CurrentAssetSettings = MapData.MapSubAssetSettingsArray[AssetIndex];
+					// Optimization - Do not render offscreen
+					if (HorizontalIndex >= MapLocationTileOffsetMin.X && HorizontalIndex <= MapLocationTileOffsetMax.X)
+					{
+						const int AssetIndex = MapRow.Array[HorizontalIndex];
 
-					Destination.x = MapLocation.X + HorizontalIndex * MapData.AssetsTileSize.X;
-					Destination.y = MapLocation.Y + VerticalIndex * MapData.AssetsTileSize.Y;
+						if (AssetIndex >= 0)
+						{
+							const FMapSubAssetSettings CurrentAssetSettings = MapData.MapSubAssetSettingsArray[AssetIndex];
 
-					CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
-				}
-				else
-				{
-					// Do sth when index is not found
+							Destination.x = MapRenderOffset.X + HorizontalIndex * MapData.AssetsTileSize.X;
+							Destination.y = MapRenderOffset.Y + VerticalIndex * MapData.AssetsTileSize.Y;
 
-					// @TODO ...
+							CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
+						}
+						else
+						{
+							// Do sth when index is not found
+
+							// @TODO ...
+						}
+					}
 				}
 			}
 		}
+
+		EntityManager->Render();
 	}
 }
 
@@ -148,6 +161,10 @@ void FMap::ClearData()
 
 void FMap::Save()
 {
+	// Write data from this class to FMapAsset
+	WriteAsset();
+
+	// Save data from FMapAsset to file on disk
 	MapAsset->SaveMapData();
 }
 
@@ -166,38 +183,88 @@ void FMap::WriteAsset()
 	MapAsset->WriteMapData(MapData);
 }
 
-void FMap:: AddMapLocation(const FVector2D<int>& LocationChange)
+FEntityManager* FMap::CreateEntityManager()
 {
-	MapLocation += LocationChange;
+	return new FEntityManager(MapManager->GetOwnerWindow());
+}
+
+bool FMap::IsInBounds(const FVector2D<int>& Location) const
+{
+	const FVector2D<int> LocationMinusOffset = Location - MapRenderOffset;
+	const FVector2D<int> MapSize = GetMapSizeInPixels();
+
+	return (	(LocationMinusOffset.X >= 0 && LocationMinusOffset.X < MapSize.X)	&& 
+				(LocationMinusOffset.Y >= 0 && LocationMinusOffset.Y < MapSize.Y)	);
+}
+
+void FMap::AddMapRenderOffset(const FVector2D<int>& LocationChange)
+{
+	MapRenderOffset += LocationChange;
 
 	const FVector2D<int> MapSize = GetMapSizeInPixels();
 	const FVector2D<int> WindowSize = MapManager->GetOwnerWindow()->GetWindowSize();
 	const FVector2D<int> HalfWindowSize = WindowSize / 2;
 
 	// Width right limit
-	if (MapLocation.X > HalfWindowSize.X)
+	if (MapRenderOffset.X > HalfWindowSize.X)
 	{
-		MapLocation.X = HalfWindowSize.X;
+		MapRenderOffset.X = HalfWindowSize.X;
 	}
 	// Width left limit
-	else if (MapLocation.X < -MapSize.X + HalfWindowSize.X)
+	else if (MapRenderOffset.X < -MapSize.X + HalfWindowSize.X)
 	{
-		MapLocation.X = -MapSize.X + HalfWindowSize.X;
+		MapRenderOffset.X = -MapSize.X + HalfWindowSize.X;
 	}
 
 	// Height down limit
-	if (MapLocation.Y > HalfWindowSize.Y)
+	if (MapRenderOffset.Y > HalfWindowSize.Y)
 	{
-		MapLocation.Y = HalfWindowSize.Y;
+		MapRenderOffset.Y = HalfWindowSize.Y;
 	}
 	// Height up limit
-	else if (MapLocation.Y < -MapSize.Y + HalfWindowSize.Y)
+	else if (MapRenderOffset.Y < -MapSize.Y + HalfWindowSize.Y)
 	{
-		MapLocation.Y = -MapSize.Y + HalfWindowSize.Y;
+		MapRenderOffset.Y = -MapSize.Y + HalfWindowSize.Y;
 	}
+
+	// Trigger delegate for changed location
+	MapLocationChangeDelegate.Execute(MapRenderOffset);
 }
 
-FVector2D<int> FMap::GetMapLocation() const
+FVector2D<int> FMap::GetMapRenderOffset() const
 {
-	return MapLocation;
+	return MapRenderOffset;
+}
+
+FDelegate<void, FVector2D<int>>& FMap::GetMapLocationChangeDelegate()
+{
+	return MapLocationChangeDelegate;
+}
+
+void FMap::ChangeTileAtLocation(const FVector2D<int>& Location, const int MapAssetIndexToSet)
+{
+	const bool bDoesAssetIndexExists = MapData.MapSubAssetSettingsArray.IsValidIndex(MapAssetIndexToSet);
+
+	if (bDoesAssetIndexExists)
+	{
+		const FVector2D<int> AbsoluteLocation = Location - MapRenderOffset;
+
+		FVector2D<int> TileLocation;
+		TileLocation.X = FMath::CeilToInt(static_cast<float>(AbsoluteLocation.X) / static_cast<float>(MapData.AssetsTileSize.X)) - 1;
+		TileLocation.Y = FMath::CeilToInt(static_cast<float>(AbsoluteLocation.Y) / static_cast<float>(MapData.AssetsTileSize.Y)) - 1;
+
+		if (MapData.MapArray.IsValidIndex(TileLocation.Y))
+		{
+			FMapRow& MapRow = MapData.MapArray[TileLocation.Y];
+
+			if (MapRow.Array.IsValidIndex(TileLocation.X))
+			{
+				MapRow.Array[TileLocation.X] = MapAssetIndexToSet;
+			}
+		}
+	}
+	else
+	{
+		LOG_WARN("Location is out of bounds.");
+	}
 }

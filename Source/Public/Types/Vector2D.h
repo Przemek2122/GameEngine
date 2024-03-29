@@ -173,16 +173,20 @@ public:
 		SDL_Point Point;
 		Point.x = static_cast<int>(X);
 		Point.y = static_cast<int>(Y);
+
 		return Point;
 	}
 
-	operator std::ostream() const 
-	{ 
-		return "(" << X << ", " << Y << ")";
+	friend std::ostream& operator<<(std::ostream& InputStream, const FVector2D& Vector)
+	{
+		InputStream << Vector.ToString();
+
+		return InputStream;
 	}
+
 	operator std::string() const 
 	{ 
-		return "(" + std::to_string(X) + ", " + std::to_string(Y) + ")"; 
+		return ToString();
 	}
 
 	std::string ToString() const

@@ -128,6 +128,8 @@ public:
 	virtual void OnChildWidgetCreated(FWidget* NewWidget);
 	virtual void OnChildWidgetDestroyed(FWidget* NewWidget);
 
+	virtual void OnChildSizeChanged();
+
 protected:
 	/** Called by wiget when order is changed. */
 	void ChangeWidgetOrder(FWidget* InWidget);

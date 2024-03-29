@@ -4,27 +4,19 @@
 #include "ECS/Entity.h"
 
 EEntity::EEntity(FEntityManager* InEntityManager)
-	: IComponentManagerInterface(nullptr)
+	: IComponentManagerInterface(nullptr, InEntityManager->GetOwnerWindow())
 	, EntityManagerOwner(InEntityManager)
-{
-#if _DEBUG
-	if (InEntityManager != nullptr)
-	{
-		LOG_INFO("Entity created. (" << GetCppClassName() << ")");
-	}
-#endif
-}
-
-EEntity::~EEntity()
 {
 }
 
 void EEntity::BeginPlay()
 {
+	RegisterInputInternal();
 }
 
 void EEntity::EndPlay()
 {
+	UnRegisterInputInternal();
 }
 
 void EEntity::Tick(float DeltaTime)
@@ -49,6 +41,14 @@ void EEntity::ReceiveRender()
 	RenderComponents();
 }
 
+void EEntity::RegisterInput(const FEventHandler* InputHandler)
+{
+}
+
+void EEntity::UnRegisterInput(const FEventHandler* InputHandler)
+{
+}
+
 FEntityManager* EEntity::GetEntityManagerOwner() const
 {
 	return EntityManagerOwner;
@@ -57,4 +57,18 @@ FEntityManager* EEntity::GetEntityManagerOwner() const
 FWindow* EEntity::GetWindow() const
 {
 	return EntityManagerOwner->GetOwnerWindow();
+}
+
+void EEntity::RegisterInputInternal()
+{
+	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+
+	RegisterInput(InputHandler);
+}
+
+void EEntity::UnRegisterInputInternal()
+{
+	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+
+	UnRegisterInput(InputHandler);
 }

@@ -32,6 +32,19 @@ public:
 	static int CeilToInt(const float Value);
 	static int CeilToInt(const double Value);
 
-	static int Max(const int A, const int B);
+	/** @returns bigger value of two given */
+	template<typename TType>
+	static int Max(const TType A, const TType B)
+	{
+		return (A > B) ? A : B;
+	}
+
+	/** @returns absolute value (non negative) */
+	template<typename TType>
+	static TType Abs(const TType Value)
+	{
+		return (Value < 0) ? -Value : Value;
+	}
+
 
 };

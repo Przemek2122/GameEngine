@@ -41,7 +41,7 @@ void FMapAsset::LoadMap()
 		{
 			LOG_INFO("Loading map: " << AssetName);
 
-			const FParser Parser = CreateMapFilesParser();
+			FParser Parser = CreateMapFilesParser();
 
 			CArray<std::string> MapAssetFiles = FFileSystem::GetFilesFromDirectory(MapAssetsDirPath);
 
@@ -94,6 +94,7 @@ void FMapAsset::SaveMapData()
 		FParser Parser = CreateMapFilesParser();
 
 		SaveMapFile(Parser);
+
 		SaveMapDataFile(Parser);
 	}
 	else
@@ -153,9 +154,10 @@ void FMapAsset::GenerateNamesForMapAssets()
 	}
 }
 
-void FMapAsset::LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer)
+void FMapAsset::LoadMapAssets(FParser& Parser, FAssetsManager* AssetsManager, SDL_Renderer* WindowRenderer)
 {
 	std::ifstream MapDataFilePathStream(MapDataFilePath);
+
 	for (std::string Line; getline(MapDataFilePathStream, Line); )
 	{
 		CArray<std::string> StringArray = Parser.SimpleParseLineIntoStrings(Line);
@@ -166,54 +168,67 @@ void FMapAsset::LoadMapAssets(FParser Parser, FAssetsManager* AssetsManager, SDL
 			MapSubAssetSettings.Collision = atoi(StringArray[1].c_str());
 
 			std::string SubAsset = StringArray[2];
-
 			std::string SubAssetName = AssetName + SubAsset;
 
 			char Slash = AssetsManager->GetPlatformSlash();
 			std::string SubAssetAbsolutePath = MapAssetsDirPath + Slash + SubAsset;
 
 			std::shared_ptr<FTextureAsset> Asset = AssetsManager->CreateAssetFromAbsolutePath<FTextureAsset>(SubAssetName, SubAssetAbsolutePath);
-			Asset->PrepareTexture(WindowRenderer);
 
-			MapSubAssetSettings.TextureAssetPtr = Asset;
+			if (Asset != nullptr)
+			{
+				Asset->PrepareTexture(WindowRenderer);
 
-			MapData.MapSubAssetSettingsArray.Push(MapSubAssetSettings);
+				MapSubAssetSettings.TextureAssetPtr = Asset;
+
+				MapData.MapSubAssetSettingsArray.Push(MapSubAssetSettings);
+			}
+			else
+			{
+				LOG_ERROR("Failed to load asset: " << SubAssetName << " from path: " << SubAssetAbsolutePath);
+			}
 		}
 	}
+
 	MapDataFilePathStream.close();
 }
 
-void FMapAsset::LoadMapTilesLocationInformation(FParser Parser)
+void FMapAsset::LoadMapTilesLocationInformation(FParser& Parser)
 {
 	const int MaxAssetIndex = MapData.MapSubAssetSettingsArray.Size();
 
-	// Map, where should be which tile
+	// Map - each tile location
 	std::ifstream MapNameFilePathStream(MapNameFilePath);
+
 	for (std::string Line; getline(MapNameFilePathStream, Line); )
 	{
 		CArray<std::string> ParsedArray = Parser.SimpleParseLineIntoStrings(Line);
 
-		FMapRow MapRow;
-
-		for (std::string& Element : ParsedArray)
+		if (!ParsedArray.IsEmpty())
 		{
-			// @TODO Could switch to strtol to make sure conversion does not fail
-			const int Index = atoi(Element.c_str());
+			FMapRow MapRow;
 
-			if (Index >= MaxAssetIndex)
+			for (std::string& Element : ParsedArray)
 			{
-				LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+				// @TODO Could switch to strtol to make sure conversion does not fail
+				const int Index = atoi(Element.c_str());
 
-				MapRow.Array.Push(INDEX_INCORRECT);
+				if (Index >= MaxAssetIndex)
+				{
+					LOG_WARN("Found invalid index: '" << Index << "' Plase make sure asset for that index exists.");
+
+					MapRow.Array.Push(INDEX_INCORRECT);
+				}
+				else
+				{
+					MapRow.Array.Push(Index);
+				}
 			}
-			else
-			{
-				MapRow.Array.Push(Index);
-			}
+
+			MapData.MapArray.Push(MapRow);
 		}
-
-		MapData.MapArray.Push(MapRow);
 	}
+
 	MapNameFilePathStream.close();
 }
 
@@ -233,25 +248,36 @@ void FMapAsset::SaveMapFile(FParser& Parser)
 	if (MapNameFileOfStream.is_open())
 	{
 		// Add comments at top of the file
-		CArray<FParserLine> CommentParserLines;
-		CommentParserLines.Push(FParserLine({ FParserText(FMapGlobalSettings::FileComments::MapTilesFileCommentLine1, Comment) }));
-
-		const std::string CommentsString = Parser.ParseLinesIntoString(CommentParserLines);
-		MapNameFileOfStream.write(CommentsString.c_str(), CommentsString.size());
+		CArray<FParserLine> ParserLines;
+		ParserLines.Push(FParserLine({ FParserText(FMapGlobalSettings::FileComments::MapTilesFileCommentLine1, Comment) }));
 
 		for (FMapRow& MapRow : MapData.MapArray)
 		{
-			CArray<std::string> ParserLines;
+			FParserLine ParserLine;
 
 			for (const int MapElement : MapRow.Array)
 			{
-				ParserLines.Push(std::to_string(MapElement));
+				int MapElementToSave = 0;
+
+				// Make sure we do not have any negative values
+				if (MapElement >= 0)
+				{
+					MapElementToSave = MapElement;
+				}
+
+				FParserText ParserText = FParserText(std::to_string(MapElementToSave), EParserTextType::Word);
+
+				ParserLine.Texts.Push(std::move(ParserText));
 			}
 
-			std::string StringToSave = Parser.SimpleParseStringsIntoLine(ParserLines);
-
-			MapNameFileOfStream.write(StringToSave.c_str(), StringToSave.size());
+			ParserLines.Push(ParserLine);
 		}
+
+		// Convert array into string (@TODO This might be big - and is todo)
+		const std::string StringToWrite = Parser.ParseLinesIntoString(ParserLines);
+
+		// Write string to file
+		MapNameFileOfStream.write(StringToWrite.c_str(), StringToWrite.size());
 	}
 
 	MapNameFileOfStream.close();
@@ -273,7 +299,22 @@ void FMapAsset::SaveMapDataFile(FParser& Parser)
 	{
 		CArray<FParserLine> ParserLines;
 
+		ParserLines.Push(FParserLine({ FParserText(FMapGlobalSettings::FileComments::MapAssetsFileCommentLine1, Comment) }));
+		ParserLines.Push(FParserLine({ FParserText(FMapGlobalSettings::FileComments::MapAssetsFileCommentLine2, Comment) }));
+		ParserLines.Push(FParserLine({ FParserText(FMapGlobalSettings::FileComments::MapAssetsFileCommentLine3, Comment) }));
 
+		for (FMapSubAssetSettings& MapSubAssetSettingsArray : MapData.MapSubAssetSettingsArray)
+		{
+			FParserLine ParserLine;
+
+			std::string AssetNameWithoutMapName = MapSubAssetSettingsArray.TextureAssetPtr->GetAssetName().substr(AssetName.size());
+
+			ParserLine.Texts.Push(FParserText(std::to_string(MapSubAssetSettingsArray.AssetIndex), EParserTextType::Word));
+			ParserLine.Texts.Push(FParserText(std::to_string(MapSubAssetSettingsArray.Collision), EParserTextType::Word));
+			ParserLine.Texts.Push(FParserText(AssetNameWithoutMapName, EParserTextType::Word));
+
+			ParserLines.Push(ParserLine);
+		}
 
 		const std::string StringToSave = Parser.ParseLinesIntoString(ParserLines);
 

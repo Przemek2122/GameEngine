@@ -9,12 +9,13 @@ FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetM
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HorizontalBoxAlignMethod(EHorizontalBoxAlignMethod::FromTheLeft)
 	, bScaleToContent(false)
+	, CurrentlyCalculatedNumberOfWidgets(0)
 {
 }
 
 void FHorizontalBoxWidget::Init()
 {
-	SetWidgetSize({ 300, 200 });
+	//SetWidgetSize({ 300, 200 });
 
 	Super::Init();
 }
@@ -32,7 +33,7 @@ void FHorizontalBoxWidget::ReCalculate()
 {
 	Super::ReCalculate();
 
-	AlignWidgets();
+	AlignWidgets(true);
 }
 
 void FHorizontalBoxWidget::RegisterWidgetPostInit(FWidget* Widget)
@@ -49,15 +50,29 @@ void FHorizontalBoxWidget::UnRegisterWidget(FWidget* Widget)
 	AlignWidgets();
 }
 
-void FHorizontalBoxWidget::AlignWidgets()
+void FHorizontalBoxWidget::OnChildSizeChanged()
 {
-	switch (HorizontalBoxAlignMethod)
-	{
-		case EHorizontalBoxAlignMethod::FromTheLeft:
-		{
-			AlignFromTheLeft();
+	Super::OnChildSizeChanged();
 
-			break;
+	AlignWidgets(true);
+}
+
+void FHorizontalBoxWidget::AlignWidgets(const bool bForce)
+{
+	const int CurrentNumberOfManagedWidgets = ManagedWidgets.Size();
+
+	if (bForce || (CurrentNumberOfManagedWidgets > 0 && CurrentlyCalculatedNumberOfWidgets != CurrentNumberOfManagedWidgets))
+	{
+		CurrentlyCalculatedNumberOfWidgets = CurrentNumberOfManagedWidgets;
+
+		switch (HorizontalBoxAlignMethod)
+		{
+			case EHorizontalBoxAlignMethod::FromTheLeft:
+			{
+				AlignFromTheLeft();
+
+				break;
+			}
 		}
 	}
 }
@@ -131,4 +146,9 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 			ChildWidget->RefreshWidget();
 		}
 	}
+}
+
+void FHorizontalBoxWidget::SetScaleToContent(const bool bInScaleToContent)
+{
+	bScaleToContent = bInScaleToContent;
 }

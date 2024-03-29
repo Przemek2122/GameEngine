@@ -70,10 +70,10 @@ void ECameraManager::OnMouseMove(const FVector2D<int> CurrentMouseLocation, EInp
 			const FVector2D<int> LocationChange = CurrentMouseLocation - LastMouseLocation;
 
 			WindowMapManager->MoveMap(LocationChange);
-
-			LastMouseLocation = CurrentMouseLocation;
 		}
 	}
+
+	LastMouseLocation = CurrentMouseLocation;
 }
 
 void ECameraManager::OnMouseRightClick(const FVector2D<int> CurrentMouseLocation, const EInputState InputState)

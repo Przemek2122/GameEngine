@@ -4,6 +4,8 @@
 
 #include "ECS/Component.h"
 
+class UTransformComponent;
+
 /**
  * Component for handling transform of the entity
  */
@@ -11,8 +13,39 @@ class URenderComponent : public UComponent
 {
 public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
-	virtual ~URenderComponent() override = default;
+	~URenderComponent() override;
 
+	/** Begin UComponent */
+	void EndPlay() override;
 
+	void Render() override;
+	/** End UComponent */
+
+	/** Set image from given name. It will try to find asset. If it was not created it will try to use OptionalPath to load it. */
+	void SetImage(const std::string& InImageName, const std::string& OptionalPath = "");
+
+	/** Set image from given asset. */
+	void SetImage(FTextureAsset* InAsset);
+
+	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
+	void SetImageSize(const FVector2D<int>& InSize);
+
+	void OnLocationChanged(const FVector2D<int> InLocation);
+
+	void DecrementTextureIfPresent() const;
+
+	void SetLocationRenderOffset(const FVector2D<int>& NewLocationOffset);
+	FVector2D<int> GetLocationRenderOffset() const;
+
+protected:
+	/** Image to render */
+	FTextureAsset* TextureAsset;
+
+	/** Transform component - Required for location */
+	UTransformComponent* TransformComponent;
+
+	FVector2D<int> LocationCached;
+	FVector2D<int> LocationRenderOffset;
+	FVector2D<int> SizeCached;
 
 };

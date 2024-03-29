@@ -21,15 +21,17 @@ public:
 	virtual void OnSizeChanged();
 	virtual void OnAnchorChanged(const EAnchor NewAnchor);
 
-	/**  */
 	_NODISCARD virtual FVector2D<int> GetWidgetLocation(EWidgetOrientation WidgetOrientation = EWidgetOrientation::Absolute) const;
+
 	/** Set widget location on screen/n @bSetNoneAnchor set to true if you want to disable Anchors */
 	virtual void SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation = EWidgetOrientation::Absolute, const bool bSetNoneAnchor = true);
 	
 	/** @returns size of this widget. */
 	_NODISCARD virtual FVector2D<int> GetWidgetSize() const;
+
 	/** Set size of this widget in pixels. */
 	virtual void SetWidgetSize(const FVector2D<int> InWidgetSize);
+
 	/** Set size of this widget in percentage of parent size (0.0 to 1.0) where 1.0 means 100% size. */
 	virtual void SetWidgetSizePercent(const FVector2D<float> InScreenPercentage);
 
@@ -37,6 +39,7 @@ public:
 
 	/** Called when parent changed size */
 	void RefreshWidgetSize();
+
 	/** Called when parent changed location */
 	void RefreshWidgetLocation();
 
@@ -47,6 +50,7 @@ public:
 
 	_NODISCARD EClipping GetClippingMethod() const;
 	void SetClippingMethod(const EClipping NewClippingMethod);
+
 	/** @Note: Called before setting ClippingMethod with NewClippingMethod */
 	virtual void OnClippingMethodChanged(EClipping NewClippingMethod);
 

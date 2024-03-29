@@ -7,6 +7,7 @@ FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManag
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::Default)
 	, bScaleToContent(true)
+	, CurrentlyCalculatedNumberOfWidgets(0)
 {
 }
 
@@ -14,7 +15,7 @@ void FVerticalBoxWidget::Init()
 {
 	SetWidgetSize({ 200, 300 });
 
-	FWidget::Init();
+	Super::Init();
 }
 
 void FVerticalBoxWidget::Render()
@@ -30,7 +31,7 @@ void FVerticalBoxWidget::ReCalculate()
 {
 	Super::ReCalculate();
 
-	AlignWidgets();
+	AlignWidgets(true);
 }
 
 void FVerticalBoxWidget::RegisterWidgetPostInit(FWidget* Widget)
@@ -52,21 +53,28 @@ void FVerticalBoxWidget::SetScaleToContent(const bool bNewScaleToContent)
 	bScaleToContent = bNewScaleToContent;
 }
 
-void FVerticalBoxWidget::AlignWidgets()
+void FVerticalBoxWidget::AlignWidgets(const bool bForce)
 {
-	switch (VerticalBoxAlignMethod)
+	const int CurrentNumberOfManagedWidgets = ManagedWidgets.Size();
+
+	if (bForce || CurrentNumberOfManagedWidgets > 0 && CurrentlyCalculatedNumberOfWidgets != CurrentNumberOfManagedWidgets)
 	{
-		case EVerticalBoxAlignMethod::Default:
-		{
-			AlignDefault();
+		CurrentlyCalculatedNumberOfWidgets = CurrentNumberOfManagedWidgets;
 
-			break;
-		}
-		case EVerticalBoxAlignMethod::Even:
+		switch (VerticalBoxAlignMethod)
 		{
-			AlignEven();
+			case EVerticalBoxAlignMethod::Default:
+			{
+				AlignDefault();
 
-			break;
+				break;
+			}
+			case EVerticalBoxAlignMethod::Even:
+			{
+				AlignEven();
+
+				break;
+			}
 		}
 	}
 }
@@ -102,6 +110,7 @@ void FVerticalBoxWidget::AlignDefault()
 				VerticalBoxSizeCalculated.Y += ChildWidgetSize.Y;
 			}
 		}
+
 		SetWidgetSize(VerticalBoxSizeCalculated);
 	}
 

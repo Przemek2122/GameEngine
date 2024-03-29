@@ -30,6 +30,7 @@ class FColorRGBA;
 template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
 #include "Types/Delegate.h"
+#include "Types/DelegateSafe.h"
 
 /** Begin of containers */
 template<typename TType, typename TSizeType>
@@ -51,4 +52,5 @@ template<typename TTypeToStore>
 class FAutoDeletePointer;
 template<typename TTypeToStore>
 class FAutoUIMenu;
+#include "Memory/Class.h"
 /** End of memory */

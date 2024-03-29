@@ -93,7 +93,7 @@ public:
 	_NODISCARD const std::string& GetLaunchRelativePath() const;
 
 	/** Call to add function to execute on next tick, FFunctorBase will be cleaned after executing. */
-	void AddLambdaToCallOnStartOfNextTick(FFunctorLambda<void>& Function);
+	void AddLambdaToCallOnStartOfNextTick(const FFunctorLambda<void>& Function);
 
 	FDelegate<>& GetFunctionsToCallOnStartOfNextTick();
 

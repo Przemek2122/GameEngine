@@ -28,7 +28,7 @@ void FImageWidget::Render()
 	FWidget::Render();
 }
 
-void FImageWidget::SetImage(const std::string& InImageName)
+void FImageWidget::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
 	bool bHasTexture = false;
 
@@ -38,18 +38,26 @@ void FImageWidget::SetImage(const std::string& InImageName)
 		if (AssetsManager->HasAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE))
 		{
 			TextureAsset = AssetsManager->GetAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE);
+
 			if (TextureAsset != nullptr)
 			{
 				bHasTexture = true;
 			}
 		}
-		else
+		else if (!OptionalPath.empty())
 		{
-			TextureAsset = AssetsManager->CreateAssetFromRelativePath<FTextureAsset>(InImageName, "FakePath").get();
+			TextureAsset = AssetsManager->AddAsset<FTextureAsset>(InImageName, OptionalPath);
+
 			if (TextureAsset != nullptr)
 			{
+				TextureAsset->PrepareTexture(GetOwnerWindow()->GetRenderer()->GetSDLRenderer());
+
 				bHasTexture = true;
 			}
+		}
+		else
+		{
+			LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in FImageWidget::SetImage");
 		}
 	}
 

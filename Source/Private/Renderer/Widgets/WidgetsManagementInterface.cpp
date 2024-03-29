@@ -26,6 +26,8 @@ IWidgetManagementInterface::~IWidgetManagementInterface()
 		}
 	}
 
+	OnWidgetOrderChanged.UnBindAll();
+
 	// This two arrays should always have the same size. Log if not.
 	if (ManagedWidgets.Size() != ManagedWidgetsMap.Size())
 	{
@@ -51,10 +53,10 @@ void IWidgetManagementInterface::RenderWidgets()
 	
 	for (auto i = 0; i < Size; i++)
 	{
-		auto CurrentWidget = ManagedWidgets[i];
+		FWidget* CurrentWidget = ManagedWidgets[i];
 
-		CurrentWidget->bWasRenderedThisFrame = ManagedWidgets[i]->ShouldBeRendered();
-		
+		CurrentWidget->bWasRenderedThisFrame = CurrentWidget->ShouldBeRendered();
+
 		if (CurrentWidget->bWasRenderedThisFrame)
 		{
 			CurrentWidget->ReceiveRender();
@@ -68,6 +70,7 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 	{
 		IWidgetManagementInterface* ParentInterface = InWidget->GetParent();
 
+		// @TODO Double calls RegisterWidget
 		if (ParentInterface != nullptr)
 		{
 			ParentInterface->UnRegisterWidget(InWidget);
@@ -152,6 +155,10 @@ void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 }
 
 void IWidgetManagementInterface::OnChildWidgetDestroyed(FWidget* NewWidget)
+{
+}
+
+void IWidgetManagementInterface::OnChildSizeChanged()
 {
 }
 

@@ -34,7 +34,6 @@ protected:
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
 	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
-	_NODISCARD virtual FEntityManager* CreateEntityManager();
 	_NODISCARD virtual FMapManager* CreateMapManager();
 
 	_NODISCARD virtual FRenderer* CreateRenderer();
@@ -84,7 +83,6 @@ public:
 
 	_NODISCARD FWidgetManager* GetWidgetManager() const;
 	_NODISCARD FWidgetInputManager* GetWidgetInputManager() const;
-	_NODISCARD FEntityManager* GetEntityManager() const;
 
 	template<class TWidgetTemplate>
 	_NODISCARD TWidgetTemplate* CreateWidget() const
@@ -112,7 +110,6 @@ protected:
 
 	FWidgetManager* WidgetManager;
 	FWidgetInputManager* WidgetInputManager;
-	FEntityManager* EntityManager;
 
 	FMapManager* MapManager;
 

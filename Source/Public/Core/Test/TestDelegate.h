@@ -17,10 +17,17 @@ public:
 	_NODISCARD char* GetTestName() const override;
 
 protected:
-	FDelegate<> OnTestDelegateOne;
-	FDelegate<void, int> OnTestDelegateTwo;
-	FDelegate<void, int, float> OnTestDelegateThree;
-	FDelegateSafe<void, int, float> DelegateSafeTest;
+	void TestFirstDelegate();
+	void TestSecondDelegate();
+	void TestThirdDelegate();
+	void TestFirstSafeDelegate();
+	void TestFirstSafeDelegateObjectCall(int SomeInt, float SomeFloat);
+
+protected:
+	FDelegate<> OnFirstDelegate;
+	FDelegate<void, int> OnSecondDelegate;
+	FDelegate<void, int, float> OnThirdDelegate;
+	FDelegateSafe<void, int, float> OnFirstSafeDelegate;
 	
 };
 

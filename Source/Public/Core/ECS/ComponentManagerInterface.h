@@ -7,7 +7,7 @@ class UComponent;
 class IComponentManagerInterface
 {
 protected:
-	IComponentManagerInterface(IComponentManagerInterface* InComponentManagerInterfaceParent);
+	IComponentManagerInterface(IComponentManagerInterface* InComponentManagerInterfaceParent, FWindow* InOwnerWindow);
 	virtual ~IComponentManagerInterface();
 
 public:
@@ -18,13 +18,15 @@ public:
 
 		ComponentsMap.Emplace(ComponentName, NewComponent);
 
+		NewComponent.get()->BeginPlay();
+
 		OnComponentCreated(ComponentName, NewComponent.get());
 
 		return NewComponent.get();
 	}
 
 	bool DestroyComponent(const std::string& ComponentName);
-	bool DestroyComponentByInstance(UComponent* Component);
+	bool DestroyComponentByInstance(const UComponent* Component);
 
 	/** Try to avoid getting by name, eg cache in property */
 	template<typename TComponentClass = UComponent>
@@ -56,11 +58,11 @@ public:
 	{
 		for (std::pair<const std::string, std::shared_ptr<UComponent>>& ComponentPair : ComponentsMap)
 		{
-			UComponent* Component = ComponentPair.second.get();
+			TComponentClass* ComponentCasted = dynamic_cast<TComponentClass*>(ComponentPair.second.get());
 
-			if (typeid(Component) == typeid(TComponentClass))
+			if (ComponentCasted != nullptr)
 			{
-				return dynamic_cast<TComponentClass*>(Component);
+				return ComponentCasted;
 			}
 		}
 
@@ -82,11 +84,15 @@ public:
 	/** Iterate all elements to the top returning top level owner, most likely EEntity. */
 	_NODISCARD IComponentManagerInterface* GetOwnerTop() const;
 
+	_NODISCARD FWindow* GetOwnerWindow() const;
+
 	void TickComponents();
 	void RenderComponents();
 
+	void Cleanup();
+
 protected:
-	/** Parent pointer - might be null! */
+	/** Parent pointer - might be null! @see bool bDoesHaveComponentManagerInterfaceParent */
 	IComponentManagerInterface* ComponentManagerInterfaceParent;
 
 	/** Components accessible by strings passed when creating components which are component names. */
@@ -94,5 +100,8 @@ protected:
 
 	/** Cached in constructor (ComponentManagerInterfaceParent != nullptr) */
 	bool bDoesHaveComponentManagerInterfaceParent;
+
+	/** Window owner */
+	FWindow* OwnerWindow;
 
 };

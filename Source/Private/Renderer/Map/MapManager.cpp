@@ -21,11 +21,19 @@ FMapManager::~FMapManager()
 	DeactivateCurrentGameMap();
 }
 
+void FMapManager::TickMap(const float DeltaTime)
+{
+	if (CurrentMap != nullptr)
+	{
+		CurrentMap->Tick(DeltaTime);
+	}
+}
+
 void FMapManager::DrawMap()
 {
 	if (CurrentMap != nullptr)
 	{
-		CurrentMap->Draw();
+		CurrentMap->Render();
 	}
 }
 
@@ -245,7 +253,7 @@ void FMapManager::MoveMap(const FVector2D<int>& InMapRenderOffset) const
 {
 	if (CurrentMap != nullptr)
 	{
-		CurrentMap->AddMapLocation(InMapRenderOffset);
+		CurrentMap->AddMapRenderOffset(InMapRenderOffset);
 	}
 }
 

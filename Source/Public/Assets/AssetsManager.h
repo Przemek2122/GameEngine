@@ -40,6 +40,10 @@ public:
 
 			return Asset;
 		}
+		else
+		{
+			LOG_ERROR("Missing asset at absolute path: " << InAssetPath);
+		}
 
 		return std::shared_ptr<TAssetType>(nullptr);
 	}
@@ -56,34 +60,49 @@ public:
 
 			return Asset;
 		}
+		else
+		{
+			LOG_ERROR("Missing asset at relative path: " << FullFilePath);
+		}
 
 		return std::shared_ptr<TAssetType>(nullptr);
 	}
 
 	/** Create and ADD asset by template type. */
 	template<class TAssetType>
-	void AddAsset(const std::string& InAssetName, const std::string& InAssetPath)
+	TAssetType* AddAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	{
 		const std::string FullFilePath = ConvertRelativeToFullPath(InAssetPath);
 		
 		if (FFileSystem::File::Exists(FullFilePath) || FFileSystem::Directory::Exists(FullFilePath))
 		{
 			std::shared_ptr<TAssetType> Asset = CreateAssetFromRelativePath<TAssetType>(InAssetName, InAssetPath);
-			EAssetType AssetTypeKey = Asset.get()->GetAssetType();
 
-			// Add type if does not exists
-			if (!AssetsByType.HasKey(AssetTypeKey))
+			if (Asset.get() != nullptr)
 			{
-				AssetsByType.Emplace(AssetTypeKey, FAssetsColection());
-			}
+				EAssetType AssetTypeKey = Asset.get()->GetAssetType();
 
-			AssetsByType[AssetTypeKey].AssetsMap.Emplace(InAssetName, Asset);
+				// Add type if does not exists
+				if (!AssetsByType.HasKey(AssetTypeKey))
+				{
+					AssetsByType.Emplace(AssetTypeKey, FAssetsColection());
+				}
+
+				AssetsByType[AssetTypeKey].AssetsMap.Emplace(InAssetName, Asset);
+
+				return Asset.get();
+			}
+			else
+			{
+				LOG_ERROR("Failed to create asset: " << InAssetName);
+			}
 		}
 		else
 		{
-			// Tried to add asset which does not exists, see FullFilePath
-			ENSURE_VALID(false);
+			LOG_ERROR("Asset does not exists with name '" << InAssetName << "' and path: '" << InAssetPath << "'.");
 		}
+
+		return nullptr;
 	}
 	
 	/** Delete asset by name. */
@@ -114,7 +133,7 @@ public:
 				}
 			}
 		}
-		else
+		else if (AssetsByType.HasKey(OptionalAssetType))
 		{
 			if (AssetsByType[OptionalAssetType].AssetsMap.ContainsKey(InAssetName))
 			{

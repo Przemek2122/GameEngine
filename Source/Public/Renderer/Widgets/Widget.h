@@ -22,7 +22,6 @@ class FInteractionBaseWidget;
 class FWidget : public UObject, public IWidgetPositionInterface
 {
 	friend IWidgetManagementInterface;
-	friend FWidgetInputManager; // ?
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
@@ -31,19 +30,25 @@ protected:
 
 	/** Advanced, use Tick() if possible instead. */
 	virtual void ReceiveTick();
+
 	/** Advanced, use Render() if possible instead. */
 	virtual void ReceiveRender();
 
 	/** Called right after construction\n Usage: Set default size, bind delegates etc...*/
 	virtual void Init() override;
+
 	/** Called before DestroyWidget */
 	virtual void PreDeInit();
+
 	/** Called right before destruction, @NOTE PreDeInit is called earlier. */
 	virtual void DeInit();
+
 	/** Called each frame.\n Should be used for code logic. */
 	virtual void Tick();
+
 	/** Called each frame.\n Should be used To draw data only. */
 	virtual void Render();
+
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
 
@@ -72,10 +77,13 @@ public:
 	_NODISCARD virtual bool ShouldBeRendered() const;
 	
 	_NODISCARD FWindow* GetWindow() const;
+
 	_NODISCARD FRenderer* GetRenderer() const;
+
 	static _NODISCARD FEventHandler* GetEventHandler();
 	
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
+
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
 
 	bool IsVisible() const;
@@ -86,13 +94,18 @@ public:
 	_NODISCARD std::string GetName() const;
 
 	_NODISCARD int GetWidgetOrder() const;
+
 	void SetWidgetOrder(const int InWidgetOrder);
+
 	virtual void OnWidgetOrderChanged();
 
 	/** @returns parent IWidgetManagementInterface pointer */
 	_NODISCARD IWidgetManagementInterface* GetParent() const override;
+
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
+
+	bool IsInteractive() const;
 
 protected:
 	/** True if WidgetManagementInterface decided to render this widget. */

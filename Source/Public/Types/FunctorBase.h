@@ -4,6 +4,14 @@
 
 #include "CoreMinimal.h"
 
+enum class EFunctorType
+{
+	FT_NONE,		// Default value
+	FT_LAMBDA,		// Lambda function
+	FT_OBJECT,		// Member function
+	FT_STATIC,		// Static function
+};
+
 /**
  * A functor (or function object) is a C++ class that acts like a function.
  * Supports:
@@ -24,4 +32,8 @@ public:
 
 	/** True if any function was bound. */                                                                                                                                                
 	_NODISCARD virtual bool IsValid() const = 0;
+
+	/** Returns type of functor defined in EFunctorType */
+	_NODISCARD virtual EFunctorType GetFunctorType() const = 0;
+
 };
