@@ -6,8 +6,16 @@
 EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 	, ScreenSelectableObjects()
+	, CurrentlySelectedObjects()
 	, bIsSelecting(false)
 {
+}
+
+void EScreenSelectionEntity::EndPlay()
+{
+	OnEndPlay.Execute();
+
+	EEntity::EndPlay();
 }
 
 void EScreenSelectionEntity::RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable)

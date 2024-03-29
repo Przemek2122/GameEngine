@@ -29,11 +29,14 @@ public:
 	/** Override to return size of selection */
 	virtual FVector2D<int> GetSize() = 0;
 
+protected:
 	/** Called when object is selected (once) */
 	virtual void OnSelect() = 0;
 
 	/** Called when object is de-selected (once) */
 	virtual void OnDeSelect() = 0;
+
+	virtual void RegisterToScreenSelectionInternal();
 
 protected:
 	EScreenSelectionEntity* ScreenSelectionEntity;

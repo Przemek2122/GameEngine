@@ -3,7 +3,8 @@
 #include "ECS/Entities/ScreenSelectionEntity.h"
 
 IScreenSelectionInterface::IScreenSelectionInterface()
-	: bIsRegistered(false)
+	: ScreenSelectionEntity(nullptr)
+	, bIsRegistered(false)
 	, bIsSelected(false)
 {
 }
@@ -21,7 +22,7 @@ void IScreenSelectionInterface::RegisterToScreenSelection(const FEntityManager* 
 		{
 			if (ScreenSelectionEntity != nullptr)
 			{
-				ScreenSelectionEntity->RegisterScreenSelectable(this);
+				RegisterToScreenSelectionInternal();
 			}
 			else
 			{
@@ -29,7 +30,7 @@ void IScreenSelectionInterface::RegisterToScreenSelection(const FEntityManager* 
 				ScreenSelectionEntity = InEntityManager->GetEntityByType<EScreenSelectionEntity>();
 				if (ScreenSelectionEntity != nullptr)
 				{
-					ScreenSelectionEntity->RegisterScreenSelectable(this);
+					RegisterToScreenSelectionInternal();
 				}
 			}
 		}
@@ -43,6 +44,8 @@ void IScreenSelectionInterface::UnregisterFromScreenSelection()
 	if (bIsRegistered && ScreenSelectionEntity != nullptr)
 	{
 		ScreenSelectionEntity->UnRegisterScreenSelectable(this);
+
+		bIsRegistered = false;
 	}
 }
 
@@ -64,4 +67,11 @@ void IScreenSelectionInterface::NativeDeselect()
 
 		bIsSelected = false;
 	}
+}
+
+void IScreenSelectionInterface::RegisterToScreenSelectionInternal()
+{
+	ScreenSelectionEntity->RegisterScreenSelectable(this);
+
+	ScreenSelectionEntity->OnEndPlay.BindObject(this, &IScreenSelectionInterface::UnregisterFromScreenSelection);
 }
