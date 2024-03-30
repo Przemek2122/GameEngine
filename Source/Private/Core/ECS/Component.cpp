@@ -21,10 +21,14 @@ void UComponent::EndPlay()
 
 void UComponent::Tick()
 {
+	// Tick sub-components
+	TickComponents();
 }
 
 void UComponent::Render()
 {
+	// Render sub-components
+	RenderComponents();
 }
 
 void UComponent::ActivateComponent()

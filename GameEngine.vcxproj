@@ -44,10 +44,12 @@
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h" />
-    <ClInclude Include="Source\Public\Core\ECS\Components\TransformComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\CameraManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\Character.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\NPCCharacter.h" />
@@ -246,10 +248,12 @@
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\Components\TransformComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\CameraManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\Character.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\NPCCharacter.cpp" />

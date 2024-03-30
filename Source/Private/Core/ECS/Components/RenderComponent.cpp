@@ -2,28 +2,21 @@
 
 #include "CoreEngine.h"
 #include "ECS/Components/RenderComponent.h"
-#include "ECS/Components/TransformComponent.h"
 #include "Assets/Assets/TextureAsset.h"
 
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, TextureAsset(nullptr)
 {
-	TransformComponent = RequireComponent<UTransformComponent>();
-
-	TransformComponent->OnLocationChanged.BindObject(this, &URenderComponent::OnLocationChanged);
-
-	LocationCached = TransformComponent->GetLocationFinal();
 }
 
 URenderComponent::~URenderComponent()
 {
-	TransformComponent->OnLocationChanged.UnBindObject(this, &URenderComponent::OnLocationChanged);
 }
 
 void URenderComponent::EndPlay()
 {
-	UComponent::EndPlay();
+	Super::EndPlay();
 
 	DecrementTextureIfPresent();
 }
@@ -34,7 +27,7 @@ void URenderComponent::Render()
 
 	if (TextureAsset != nullptr)
 	{
-		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, LocationCached + LocationRenderOffset, SizeCached);
+		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, GetLocation(), SizeCached);
 	}
 }
 
@@ -112,25 +105,10 @@ void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 	SizeCached = InSize;
 }
 
-void URenderComponent::OnLocationChanged(const FVector2D<int> InLocation)
-{
-	LocationCached = InLocation;
-}
-
 void URenderComponent::DecrementTextureIfPresent() const
 {
 	if (TextureAsset != nullptr)
 	{
 		TextureAsset->DecrementNumberOfReferences();
 	}
-}
-
-void URenderComponent::SetLocationRenderOffset(const FVector2D<int>& NewLocationOffset)
-{
-	LocationRenderOffset = NewLocationOffset;
-}
-
-FVector2D<int> URenderComponent::GetLocationRenderOffset() const
-{
-	return LocationRenderOffset;
 }

@@ -19,14 +19,18 @@ public:
 	virtual void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 	virtual void UnRegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 
-	void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
-	void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
+	virtual void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
 
+	/** Called when selection is started */
 	virtual void OnStartSelecting();
+
+	/** Called when selection is finished */
 	virtual void OnEndSelecting();
 
 	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
 
+	/** Delegate called on EndPlay (destroy this entity) */
 	FDelegate<> OnEndPlay;
 
 protected:

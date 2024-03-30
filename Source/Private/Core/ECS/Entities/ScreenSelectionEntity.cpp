@@ -5,8 +5,6 @@
 
 EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
-	, ScreenSelectableObjects()
-	, CurrentlySelectedObjects()
 	, bIsSelecting(false)
 {
 }
@@ -113,12 +111,14 @@ const CArray<IScreenSelectionInterface*>& EScreenSelectionEntity::GetCurrentlySe
 
 void EScreenSelectionEntity::RegisterInput(const FEventHandler* InputHandler)
 {
+	// Bind input
 	InputHandler->MouseDelegates.Move->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.LeftButton->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
 }
 
 void EScreenSelectionEntity::UnRegisterInput(const FEventHandler* InputHandler)
 {
+	// Input must be unregistered, otherwise it might be called after the entity is destroyed
 	InputHandler->MouseDelegates.Move->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.LeftButton->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
 }

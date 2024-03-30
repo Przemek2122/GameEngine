@@ -2,14 +2,12 @@
 
 #pragma once
 
-#include "ECS/Component.h"
-
-class UTransformComponent;
+#include "BaseTransformComponent.h"
 
 /**
  * Component for handling transform of the entity
  */
-class URenderComponent : public UComponent
+class URenderComponent : public UComponent, public ITransformChildInterface2D<int>
 {
 public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
@@ -30,21 +28,12 @@ public:
 	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
 	void SetImageSize(const FVector2D<int>& InSize);
 
-	void OnLocationChanged(const FVector2D<int> InLocation);
-
 	void DecrementTextureIfPresent() const;
-
-	void SetLocationRenderOffset(const FVector2D<int>& NewLocationOffset);
-	FVector2D<int> GetLocationRenderOffset() const;
 
 protected:
 	/** Image to render */
 	FTextureAsset* TextureAsset;
 
-	/** Transform component - Required for location */
-	UTransformComponent* TransformComponent;
-
-	FVector2D<int> LocationCached;
 	FVector2D<int> LocationRenderOffset;
 	FVector2D<int> SizeCached;
 

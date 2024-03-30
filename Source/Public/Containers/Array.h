@@ -36,7 +36,9 @@ public:
 		Vector.reserve(Number);
 	}
 
-	CArray() = default;
+	CArray()
+	{
+	}
 
 	/** Bracket list constructor */
 	CArray(std::initializer_list<TType> List)
