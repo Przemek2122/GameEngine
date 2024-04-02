@@ -34,6 +34,6 @@ protected:
 	virtual void DeInitialize();
 
 private:
-	bool bIsInitialized;
+	bool bIsInitializedUIMenu;
 	FWindow* OwnerWindow;
 };
