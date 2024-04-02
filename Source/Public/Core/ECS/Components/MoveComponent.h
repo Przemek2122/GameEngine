@@ -8,7 +8,7 @@
 /**
  * Component for handling transform of the entity
  */
-class UMoveComponent : public UComponent, public ITransformParentInterface2D<int>
+class UMoveComponent : public UComponent, public ITransformChildInterface2D<int>
 {
 public:
 	UMoveComponent(IComponentManagerInterface* InComponentManagerInterface);

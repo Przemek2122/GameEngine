@@ -6,9 +6,9 @@
 #include "Interfaces/TransformInterface2D.h"
 
 /**
- * Component for handling transform of the entity
+ * Component for finding target
  */
-class UTargetingComponent : public UComponent, public ITransformParentInterface2D<int>
+class UTargetingComponent : public UComponent, public ITransformChildInterface2D<int>
 {
 public:
 	UTargetingComponent(IComponentManagerInterface* InComponentManagerInterface);
