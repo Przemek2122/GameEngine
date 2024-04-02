@@ -4,7 +4,7 @@
 #include "Engine/EngineTickingManager.h"
 
 ITickInterface::ITickInterface()
-	: bIsRegistered(false)
+	: bIsRegisteredTickInterface(false)
 	, RegisteredPhase(ETickPhase::None)
 	, TickFunctor(FFunctorObject(this, &ITickInterface::Tick))
 {
@@ -12,17 +12,17 @@ ITickInterface::ITickInterface()
 
 ITickInterface::~ITickInterface()
 {
-	if (bIsRegistered)
+	if (bIsRegisteredTickInterface)
 	{
 		GEngine->GetEngineTickingManager()->UnRegisterInterface(TickFunctor, RegisteredPhase);
 	}
 }
 
-void ITickInterface::Register()
+void ITickInterface::RegisterTickInterface()
 {
-	if (!bIsRegistered)
+	if (!bIsRegisteredTickInterface)
 	{
-		bIsRegistered = true;
+		bIsRegisteredTickInterface = true;
 
 		RegisteredPhase = GetTickPhase();
 

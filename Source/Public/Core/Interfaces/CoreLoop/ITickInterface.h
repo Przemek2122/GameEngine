@@ -28,7 +28,7 @@ public:
 	virtual ~ITickInterface();
 
 	/** This function must be called when you want your object to start ticking. */
-	void Register();
+	void RegisterTickInterface();
 
 	/** @returns Phase registered in constructor. */
 	ETickPhase GetRegisteredPhase() const { return RegisteredPhase; }
@@ -40,7 +40,8 @@ public:
 	virtual void Tick(float DeltaTime) = 0;
 
 private:
-	bool bIsRegistered;
+	bool bIsRegisteredTickInterface;
 	ETickPhase RegisteredPhase;
 	FFunctorObject<ITickInterface, void, float> TickFunctor;
+
 };
