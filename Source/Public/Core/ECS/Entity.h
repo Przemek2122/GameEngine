@@ -4,6 +4,9 @@
 
 #include "ECS/Component.h"
 
+class FWindowAdvanced;
+class FMap;
+class FGameModeManager;
 class FEntityManager;
 
 class EEntity : public UObject, public IComponentManagerInterface
@@ -32,6 +35,9 @@ public:
 
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
+	FWindowAdvanced* GetWindowAdvanced() const;
+	FGameModeManager* GetGameModeManager() const;
+	FMap* GetCurrentMap() const;
 
 protected:
 	virtual void RegisterInput(const FEventHandler* InputHandler);

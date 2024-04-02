@@ -9,7 +9,7 @@ FEngineTickingManager::FEngineTickingManager()
 
 FEngineTickingManager::~FEngineTickingManager()
 {
-	TickDelegateToIndex.Clear();
+	//TickDelegateToIndex.Clear();
 }
 
 void FEngineTickingManager::RegisterInterface(FFunctorObject<ITickInterface, void, float>& TickFunctor, const ETickPhase TickInterfacePhase)

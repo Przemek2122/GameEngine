@@ -3,6 +3,9 @@
 #include "CoreEngine.h"
 #include "ECS/Entity.h"
 
+#include "Renderer/WindowAdvanced.h"
+#include "Renderer/Map/MapManager.h"
+
 EEntity::EEntity(FEntityManager* InEntityManager)
 	: IComponentManagerInterface(nullptr, InEntityManager->GetOwnerWindow())
 	, EntityManagerOwner(InEntityManager)
@@ -57,6 +60,21 @@ FEntityManager* EEntity::GetEntityManagerOwner() const
 FWindow* EEntity::GetWindow() const
 {
 	return EntityManagerOwner->GetOwnerWindow();
+}
+
+FWindowAdvanced* EEntity::GetWindowAdvanced() const
+{
+	return reinterpret_cast<FWindowAdvanced*>(GetWindow());
+}
+
+FMap* EEntity::GetCurrentMap() const
+{
+	return GetWindow()->GetMapManager()->GetCurrentMap();
+}
+
+FGameModeManager* EEntity::GetGameModeManager() const
+{
+	return GetWindowAdvanced()->GetGameModeManager();
 }
 
 void EEntity::RegisterInputInternal()
