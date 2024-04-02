@@ -215,7 +215,13 @@
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h">
       <Filter>Public\Core\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h">
@@ -224,7 +230,7 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\ECS\Components\TransformComponent.h">
+    <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Entities\CameraManager.h">
@@ -778,7 +784,13 @@
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp">
       <Filter>Private\Core\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp">
@@ -787,7 +799,7 @@
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\ECS\Components\TransformComponent.cpp">
+    <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Entities\CameraManager.cpp">
