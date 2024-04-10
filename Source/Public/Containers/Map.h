@@ -32,7 +32,7 @@ public:
 	}
 	
 	template<typename TAutoType>
-	_NODISCARD SDL_FORCE_INLINE void IsValidKey(const TAutoType Key) const
+	_NODISCARD SDL_FORCE_INLINE bool IsValidKey(const TAutoType Key) const
 	{
 		return HasKey(Key);
 	}
