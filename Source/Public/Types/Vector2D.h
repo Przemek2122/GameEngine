@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Misc/Math.h"
 
 /* Two dimensional vector. */
 template<class TType>
@@ -142,7 +143,13 @@ public:
 		X /= V; Y /= V; return *this;
 	}
 
+	float DistanceTo(const FVector2D& OtherVector)
+	{
+		const float DiffXSquared = FMath::Power(OtherVector.X - X);
+		const float DiffYSquared = FMath::Power(OtherVector.Y - Y);
 
+		return FMath::Sqrt(DiffXSquared + DiffYSquared);
+	}
 
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }
 	//FVector2D operator*(const FVector2D<TType>& V, const TType& S) { return FVector2D<TType>(V) *= S; }

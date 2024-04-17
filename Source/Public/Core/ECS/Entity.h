@@ -33,6 +33,9 @@ public:
 	/** Called every frame from engine code. */
 	void ReceiveRender();
 
+	virtual void SetRootComponent(UComponent* NewComponent);
+	virtual UComponent* GetRootComponent();
+
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
 	FWindowAdvanced* GetWindowAdvanced() const;
@@ -46,6 +49,15 @@ protected:
 	void RegisterInputInternal();
 	void UnRegisterInputInternal();
 
+	/** Begin IComponentManagerInterface */
+	void OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent) override;
+	/** End IComponentManagerInterface */
+
 protected:
 	FEntityManager* EntityManagerOwner;
+
+private:
+	/** Root component. First component added or set by user */
+	UComponent* DefaultRootComponent;
+
 };

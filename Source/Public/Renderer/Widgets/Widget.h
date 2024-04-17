@@ -63,7 +63,7 @@ public:
 	bool IsPendingDelete() const { return bIsPendingDelete; }
 
 	/** Full widget refresh. Performance heavy. */
-	virtual void RefreshWidget(const bool bRefreshChilds = true);
+	virtual void RefreshWidget(const bool bRefreshChildren = true);
 
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;

@@ -13,13 +13,6 @@ FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetM
 {
 }
 
-void FHorizontalBoxWidget::Init()
-{
-	//SetWidgetSize({ 300, 200 });
-
-	Super::Init();
-}
-
 void FHorizontalBoxWidget::Render()
 {
 	Super::Render();

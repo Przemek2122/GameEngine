@@ -6,6 +6,11 @@
 
 class EEntity;
 
+/**
+ * Base component class.
+ * Children should have one of transform interfaces included.
+ * Most common would be 'public ITransformChildInterface2D<int>'
+ */
 class UComponent : public UObject, public IComponentManagerInterface
 {
 public:
@@ -15,7 +20,7 @@ public:
 	virtual void BeginPlay();
 	virtual void EndPlay();
 
-	virtual void Tick();
+	virtual void Tick(const float DeltaTime);
 	virtual void Render();
 
 	virtual void ActivateComponent();

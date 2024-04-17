@@ -19,10 +19,10 @@ void UComponent::EndPlay()
 	DeactivateComponent();
 }
 
-void UComponent::Tick()
+void UComponent::Tick(const float DeltaTime)
 {
 	// Tick sub-components
-	TickComponents();
+	TickComponents(DeltaTime);
 }
 
 void UComponent::Render()

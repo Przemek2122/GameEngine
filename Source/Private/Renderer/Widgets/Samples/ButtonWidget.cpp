@@ -2,9 +2,6 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
-#include "FunctorLambda.h"
-
-#define BUTTON_WIDGET_TEST_ENABLED 0
 
 FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FInteractionBaseWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
@@ -17,20 +14,6 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 
 void FButtonWidget::Init()
 {
-#if _DEBUG && BUTTON_WIDGET_TEST_ENABLED
-	OnClickPress.BindLambda(
-	[this]
-	{
-		LOG_DEBUG("Button '" << GetName() << "' pressed!");
-	});
-	
-	OnClickRelease.BindLambda(
-	[this]
-	{
-		LOG_DEBUG("Button '" << GetName() << "' released!");
-	});
-#endif
-
 	SetWidgetSize({ 200, 40 });
 
 	Super::Init();

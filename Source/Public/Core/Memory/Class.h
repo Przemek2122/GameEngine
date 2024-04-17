@@ -10,7 +10,7 @@ class FClass
 public:
     virtual ~FClass() = default;
 
-    virtual void* Allocate() const = 0;
+	virtual void* Allocate() const = 0;
 	virtual std::string GetClassName() const = 0;
 };
 

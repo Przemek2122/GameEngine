@@ -32,6 +32,8 @@
     <ClInclude Include="Source\Public\Assets\Assets\MapAsset.h" />
     <ClInclude Include="Source\Public\Assets\Assets\TextureAsset.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
+    <ClInclude Include="Source\Public\Assets\BaseAssetsCollection.h" />
+    <ClInclude Include="Source\Public\Assets\EngineAssetsCollection.h" />
     <ClInclude Include="Source\Public\Assets\Parser.h" />
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h" />
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Texture.h" />

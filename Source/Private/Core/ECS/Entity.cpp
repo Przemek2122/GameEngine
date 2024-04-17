@@ -9,6 +9,7 @@
 EEntity::EEntity(FEntityManager* InEntityManager)
 	: IComponentManagerInterface(nullptr, InEntityManager->GetOwnerWindow())
 	, EntityManagerOwner(InEntityManager)
+	, DefaultRootComponent(nullptr)
 {
 }
 
@@ -30,7 +31,7 @@ void EEntity::ReceiveTick(const float DeltaTime)
 {
 	Tick(DeltaTime);
 
-	TickComponents();
+	TickComponents(DeltaTime);
 }
 
 void EEntity::Render()
@@ -42,6 +43,16 @@ void EEntity::ReceiveRender()
 	Render();
 
 	RenderComponents();
+}
+
+void EEntity::SetRootComponent(UComponent* NewComponent)
+{
+	DefaultRootComponent = NewComponent;
+}
+
+UComponent* EEntity::GetRootComponent()
+{
+	return DefaultRootComponent;
 }
 
 void EEntity::RegisterInput(const FEventHandler* InputHandler)
@@ -89,4 +100,14 @@ void EEntity::UnRegisterInputInternal()
 	const FEventHandler* InputHandler = GEngine->GetEventHandler();
 
 	UnRegisterInput(InputHandler);
+}
+
+void EEntity::OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent)
+{
+	IComponentManagerInterface::OnComponentCreated(ComponentName, NewComponent);
+
+	if (DefaultRootComponent == nullptr)
+	{
+		DefaultRootComponent = NewComponent;
+	}
 }

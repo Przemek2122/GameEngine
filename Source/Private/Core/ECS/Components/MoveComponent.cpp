@@ -7,3 +7,13 @@ UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInt
 	: UComponent(InComponentManagerInterface)
 {
 }
+
+void UMoveComponent::Tick(const float DeltaTime)
+{
+	
+}
+
+void UMoveComponent::SetTargetMoveLocation(const FVector2D<int> NewTargetLocation)
+{
+	TargetLocation = NewTargetLocation;
+}

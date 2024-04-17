@@ -14,6 +14,12 @@ public:
 	UMoveComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UMoveComponent() override = default;
 
-	
+	void Tick(const float DeltaTime) override;
+
+	/** Set where unit should go. */
+	void SetTargetMoveLocation(const FVector2D<int> NewTargetLocation);
+
+protected:
+	FVector2D<int> TargetLocation;
 
 };

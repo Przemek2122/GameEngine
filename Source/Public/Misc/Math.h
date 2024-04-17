@@ -46,5 +46,20 @@ public:
 		return (Value < 0) ? -Value : Value;
 	}
 
+	/** Square root */
+	template<typename TType>
+	static TType Sqrt(const TType Value)
+	{
+		return (sqrt(Value));
+	}
+
+	/** Returns power of given value */
+	template<typename TType>
+	static TType Power(const TType Value)
+	{
+		return (Value * Value);
+	}
+
+
 
 };

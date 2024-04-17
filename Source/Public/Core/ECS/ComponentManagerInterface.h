@@ -86,7 +86,7 @@ public:
 
 	_NODISCARD FWindow* GetOwnerWindow() const;
 
-	void TickComponents();
+	void TickComponents(const float DeltaTime);
 	void RenderComponents();
 
 	void Cleanup();

@@ -84,13 +84,13 @@ FWindow* IComponentManagerInterface::GetOwnerWindow() const
 	return OwnerWindow;
 }
 
-void IComponentManagerInterface::TickComponents()
+void IComponentManagerInterface::TickComponents(const float DeltaTime)
 {
 	for (const auto& [ComponentName, Component] : ComponentsMap)
 	{
 		if (Component->IsComponentActive())
 		{
-			Component->Tick();
+			Component->Tick(DeltaTime);
 		}
 	}
 }

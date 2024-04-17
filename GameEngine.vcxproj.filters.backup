@@ -176,6 +176,12 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\BaseAssetsCollection.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Assets\EngineAssetsCollection.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\Parser.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
