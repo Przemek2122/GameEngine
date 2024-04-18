@@ -32,6 +32,7 @@
     <ClInclude Include="Source\Public\Assets\Assets\MapAsset.h" />
     <ClInclude Include="Source\Public\Assets\Assets\TextureAsset.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
+    <ClInclude Include="Source\Public\Assets\AssetsManagerHelpers.h" />
     <ClInclude Include="Source\Public\Assets\Collection\AssetCollectionItem.h" />
     <ClInclude Include="Source\Public\Assets\Collection\BaseAssetsCollection.h" />
     <ClInclude Include="Source\Public\Assets\Collection\EngineAssetsCollection.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h" />
@@ -254,6 +256,7 @@
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp" />

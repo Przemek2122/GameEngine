@@ -73,7 +73,7 @@ IComponentManagerInterface* IComponentManagerInterface::GetOwnerTop() const
 
 	if (CurrentChainElement->HasOwner())
 	{
-		CurrentChainElement = CurrentChainElement->GetOwner();
+		CurrentChainElement = CurrentChainElement->GetOwnerTop();
 	}
 
 	return CurrentChainElement;

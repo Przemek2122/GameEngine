@@ -26,7 +26,7 @@ void FAssetsManager::RemoveAsset(const std::string& InAssetName, const EAssetTyp
 {
 	if (OptionalAssetType == EAssetType::AT_NONE)
 	{
-		for (std::pair<const EAssetType, FAssetsColection>& ByType : AssetsByType)
+		for (std::pair<const EAssetType, FAssetsStructure>& ByType : AssetsByType)
 		{
 			ByType.second.AssetsMap.Remove(InAssetName);
 		}
@@ -42,7 +42,7 @@ std::shared_ptr<FAssetBase> FAssetsManager::GetAsset(const std::string& InAssetN
 	// Search all assets
 	if (OptionalAssetType == EAssetType::AT_NONE)
 	{
-		for (const std::pair<const EAssetType, FAssetsColection>& ByType : AssetsByType)
+		for (const std::pair<const EAssetType, FAssetsStructure>& ByType : AssetsByType)
 		{
 			if (ByType.second.AssetsMap.ContainsKey(InAssetName))
 			{

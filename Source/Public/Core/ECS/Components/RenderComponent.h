@@ -28,8 +28,6 @@ public:
 	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
 	void SetImageSize(const FVector2D<int>& InSize);
 
-	void DecrementTextureIfPresent() const;
-
 protected:
 	/** Image to render */
 	FTextureAsset* TextureAsset;

@@ -32,6 +32,20 @@ public:
 	static int CeilToInt(const float Value);
 	static int CeilToInt(const double Value);
 
+	static float GetRandomFloat(float A, float B);
+
+	static float RadiansToDegrees(float Value);
+	static double RadiansToDegreesDouble(double Value);
+
+	static float DegreesToRadians(float Value);
+	static double DegreesToRadiansDouble(double Value);
+
+	/* Returns radians */
+	static double Get2DAngleOfPointRadians(FVector2D<> A, FVector2D<> B);
+
+	/* Expects radians not degree */
+	static void inline RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Angle, FVector2D<int>& Point);
+
 	/** @returns bigger value of two given */
 	template<typename TType>
 	static int Max(const TType A, const TType B)

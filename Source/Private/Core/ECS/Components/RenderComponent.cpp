@@ -2,6 +2,8 @@
 
 #include "CoreEngine.h"
 #include "ECS/Components/RenderComponent.h"
+
+#include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
 
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
@@ -18,7 +20,10 @@ void URenderComponent::EndPlay()
 {
 	Super::EndPlay();
 
-	DecrementTextureIfPresent();
+	if (TextureAsset != nullptr)
+	{
+		TextureAsset->DecrementNumberOfReferences();
+	}
 }
 
 void URenderComponent::Render()
@@ -35,64 +40,37 @@ void URenderComponent::SetImage(const std::string& InImageName, const std::strin
 {
 	bool bHasTexture = false;
 
-	FTextureAsset* TemporaryTexture = nullptr;
-
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
-		if (AssetsManager->HasAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE))
-		{
-			TemporaryTexture = AssetsManager->GetAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE);
+		FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, InImageName, EAssetType::AT_TEXTURE, OptionalPath, GetOwnerWindow());
 
-			if (TemporaryTexture != nullptr)
-			{
-				bHasTexture = true;
-			}
-		}
-		else if (!OptionalPath.empty())
+		if (TemporaryTexture != nullptr)
 		{
-			TemporaryTexture = AssetsManager->AddAsset<FTextureAsset>(InImageName, OptionalPath);
-
-			if (TemporaryTexture != nullptr)
-			{
-				bHasTexture = true;
-			}
+			SetImage(TemporaryTexture);
 		}
 		else
 		{
 			LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in URenderComponent::SetImage");
 		}
 	}
-
-	if (bHasTexture)
-	{
-		SetImage(TemporaryTexture);
-	}
-	else
-	{
-		LOG_ERROR("Unable to find texture asset: " << InImageName);
-	}
 }
 
 void URenderComponent::SetImage(FTextureAsset* InAsset)
 {
-	if (TextureAsset != nullptr)
-	{
-		DecrementTextureIfPresent();
-	}
-
 	if (InAsset != nullptr)
 	{
-		TextureAsset = InAsset;
-
-		if (!TextureAsset->IsTexturePrepared())
+		// Decrement old one - potentialy freeing memory
+		if (TextureAsset != nullptr)
 		{
-			TextureAsset->PrepareTexture(GetOwnerWindow()->GetRenderer()->GetSDLRenderer());
+			TextureAsset->DecrementNumberOfReferences();
 		}
 
-		SetImageSize(TextureAsset->GetSize());
-
+		// Set new one
+		TextureAsset = InAsset;
 		TextureAsset->IncrementNumberOfReferences();
+
+		SetImageSize(TextureAsset->GetSize());
 	}
 	else
 	{
@@ -103,12 +81,4 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 {
 	SizeCached = InSize;
-}
-
-void URenderComponent::DecrementTextureIfPresent() const
-{
-	if (TextureAsset != nullptr)
-	{
-		TextureAsset->DecrementNumberOfReferences();
-	}
 }

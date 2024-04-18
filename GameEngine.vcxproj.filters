@@ -182,6 +182,9 @@
     <ClInclude Include="Source\Public\Assets\AssetsManager.h">
       <Filter>Public\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Assets\AssetsManagerHelpers.h">
+      <Filter>Public\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\Collection\AssetCollectionItem.h">
       <Filter>Public\Assets\Collection</Filter>
     </ClInclude>
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h">
       <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
@@ -807,6 +813,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp">
       <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>

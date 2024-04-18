@@ -23,6 +23,9 @@ public:
 	void OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent) override;
 	/** End UComponent */
 
+	/** Final location - returns location in center of object */
+	FVector2D<int> GetLocationCenter() const;
+
 	FVector2D<int> GetSize() const;
 
 	/** Called from map using delegate each time map location (camera position) is changed */

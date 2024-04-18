@@ -86,6 +86,11 @@ void UBaseTransformComponent::OnComponentDestroy(const std::string& ComponentNam
 	}
 }
 
+FVector2D<int> UBaseTransformComponent::GetLocationCenter() const
+{
+	return (GetLocation() + (Size / 2));
+}
+
 FVector2D<int> UBaseTransformComponent::GetSize() const
 {
 	return Size;

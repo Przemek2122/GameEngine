@@ -17,6 +17,7 @@ public:
 
 	/** Begin FWidget */
 	void Init() override;
+	void DeInit() override;
 	void Render() override;
 	/** End FWidget */
 
@@ -25,6 +26,9 @@ public:
 
 	/** Call to change texture of widget but only if you already have texture. */
 	void SetImage(const std::shared_ptr<FTextureAsset>& TexturePtr);
+
+	/** Set image from given asset. */
+	void SetImage(FTextureAsset* NewTexture);
 
 	/** Should size of widget be changed to size of image? */
 	void SetScaleWidgetToImage(const bool bInScaleWidgetToImage);

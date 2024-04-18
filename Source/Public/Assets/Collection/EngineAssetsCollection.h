@@ -10,5 +10,6 @@
 class FEngineAssetsCollection : public FBaseAssetsCollection
 {
 	inline static FAssetCollectionItem UIButton1 = { "UIButton1", R"(Assets\Textures\UI\Button_400_80\1.png)" };
+	inline static FAssetCollectionItem ArrowTransparent1 = { "ArrowTransparent1", R"(Assets\Textures\Arrow\Transparent1.png)" };
 
 };

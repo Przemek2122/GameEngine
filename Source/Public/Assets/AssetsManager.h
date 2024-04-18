@@ -12,7 +12,7 @@ class FAssetBase;
 class FFontAsset;
 class FFont;
 
-struct FAssetsColection
+struct FAssetsStructure
 {
 	CMap<std::string, std::shared_ptr<FAssetBase>> AssetsMap;
 };
@@ -85,7 +85,7 @@ public:
 				// Add type if does not exists
 				if (!AssetsByType.HasKey(AssetTypeKey))
 				{
-					AssetsByType.Emplace(AssetTypeKey, FAssetsColection());
+					AssetsByType.Emplace(AssetTypeKey, FAssetsStructure());
 				}
 
 				AssetsByType[AssetTypeKey].AssetsMap.Emplace(InAssetName, Asset);
@@ -125,7 +125,7 @@ public:
 		{
 			LOG_WARN("Using FAssetsManager::HasAsset with all assets. Do you really do not know what type of asset you want. This is inefficient.");
 
-			for (const std::pair<const EAssetType, FAssetsColection>& AssetsColection : AssetsByType)
+			for (const std::pair<const EAssetType, FAssetsStructure>& AssetsColection : AssetsByType)
 			{
 				if (AssetsColection.second.AssetsMap.ContainsKey(InAssetName))
 				{
@@ -162,7 +162,7 @@ protected:
 
 protected:
 	/** All types of assets sorted by type */
-	CMap<EAssetType, FAssetsColection> AssetsByType;
+	CMap<EAssetType, FAssetsStructure> AssetsByType;
 
 	/** Assets generic directory */
 	std::string AssetDirName;

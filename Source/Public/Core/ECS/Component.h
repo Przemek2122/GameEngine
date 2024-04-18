@@ -28,6 +28,11 @@ public:
 
 	bool IsComponentActive() const;
 
+	/** Component is owned by entity and this function returns parent */
+	EEntity* GetEntity() const;
+
+	UComponent* GetRootComponentOfEntity() const;
+
 	template<typename TComponentClass>
 	TComponentClass* RequireComponent() const
 	{
