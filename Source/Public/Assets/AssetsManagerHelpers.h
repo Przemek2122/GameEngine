@@ -11,10 +11,14 @@
 class FAssetsManagerHelpers
 {
 public:
-	/** Find or create asset. It will try to return existing asset. If it does not exist it will create one. */
+	/**
+	 * Find or create asset. It will try to return existing asset. If it does not exist it will create one.
+	 * To manage asset lifecycle after getting it use functions:
+	 * FAssetBase::IncrementNumberOfReferences() and FAssetBase::DecrementNumberOfReferences()
+	 * If used properly, memory (for given assets) will be freed and allocated based on need.
+	 */
 	template<typename TAssetSubClass>
-	static TAssetSubClass* GetOrCreateAsset(FAssetsManager* InAssetsManager, const std::string& InAssetName, 
-		const EAssetType OptionalAssetType = EAssetType::AT_NONE, const std::string& InAssetPath = "", FWindow* Window = nullptr)
+	static TAssetSubClass* GetOrCreateAsset(FAssetsManager* InAssetsManager, FWindow* Window, const std::string& InAssetName, const std::string& InAssetPath, const EAssetType OptionalAssetType = EAssetType::AT_NONE)
 	{
 		bool bHasAsset = false;
 		TAssetSubClass* TextureAsset = nullptr;

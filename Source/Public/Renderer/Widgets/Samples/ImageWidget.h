@@ -17,7 +17,7 @@ public:
 
 	/** Begin FWidget */
 	void Init() override;
-	void DeInit() override;
+	void PreDeInit() override;
 	void Render() override;
 	/** End FWidget */
 
@@ -36,11 +36,18 @@ public:
 	void ScaleWidgetToTextureSize();
 
 protected:
+	void ClearPreviousImage();
+
+protected:
 	/** Should we change size of widget depending on image? */
 	bool bScaleWidgetToImage;
 
 	/** Texture which we will render */
 	FTextureAsset* TextureAsset;
+
+private:
+	/** Optional texture to keep pointer alive */
+	std::shared_ptr<FTextureAsset> OptionalTexturePtr;
 
 };
 

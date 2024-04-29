@@ -6,14 +6,14 @@
 #include "Renderer/Map/MapManager.h"
 
 UBaseTransformComponent::UBaseTransformComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: UComponent(InComponentManagerInterface)
+	: UBaseComponent(InComponentManagerInterface)
 	, Size(32, 32)
 {
 }
 
 void UBaseTransformComponent::BeginPlay()
 {
-	UComponent::BeginPlay();
+	UBaseComponent::BeginPlay();
 
 	const FWindow* Window = GetOwnerWindow();
 	if (Window != nullptr)
@@ -44,7 +44,7 @@ void UBaseTransformComponent::BeginPlay()
 
 void UBaseTransformComponent::EndPlay()
 {
-	UComponent::EndPlay();
+	UBaseComponent::EndPlay();
 
 	const FWindow* Window = GetOwnerWindow();
 	if (Window != nullptr)
@@ -61,7 +61,7 @@ void UBaseTransformComponent::EndPlay()
 	}
 }
 
-void UBaseTransformComponent::OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent)
+void UBaseTransformComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);
 
@@ -72,10 +72,11 @@ void UBaseTransformComponent::OnComponentCreated(const std::string& ComponentNam
 
 		// Update location of new component
 		TransformComponent->SetLocationFromParent(GetLocation());
+		TransformComponent->SetParentRotation(GetRotation());
 	}
 }
 
-void UBaseTransformComponent::OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent)
+void UBaseTransformComponent::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
 {
 	Super::OnComponentDestroy(ComponentName, OldComponent);
 
@@ -84,6 +85,32 @@ void UBaseTransformComponent::OnComponentDestroy(const std::string& ComponentNam
 	{
 		RemoveUpdatedComponent(TransformComponent);
 	}
+}
+
+FVector2D<float> UBaseTransformComponent::GetForwardVector() const
+{
+	static const FVector2D<float> ForwardVector = { 0, -1 };
+	constexpr float VectorRotation = 360;
+
+	FVector2D<int> CurrentForwardVector = ForwardVector * VectorRotation;
+
+	const int CurrentRotation = GetRotation();
+	const float CurrentRotationRadian = FMath::DegreesToRadians(static_cast<float>(CurrentRotation));
+
+	FMath::RotatePointAroundPoint({ 0, 0 }, CurrentRotationRadian, CurrentForwardVector);
+
+	return FVector2D<float>(CurrentForwardVector) / VectorRotation;
+}
+
+FVector2D<float> UBaseTransformComponent::GetRightVector() const
+{
+	static const FVector2D<float> RightVector = { 1, 0 };
+
+	FVector2D<int> CurrentRightVector = RightVector;
+
+	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<int>(GetRotation()), CurrentRightVector);
+
+	return RightVector;
 }
 
 FVector2D<int> UBaseTransformComponent::GetLocationCenter() const

@@ -2,7 +2,7 @@
 
 #pragma once
 
-class UComponent;
+class UBaseComponent;
 
 class IComponentManagerInterface
 {
@@ -26,10 +26,10 @@ public:
 	}
 
 	bool DestroyComponent(const std::string& ComponentName);
-	bool DestroyComponentByInstance(const UComponent* Component);
+	bool DestroyComponentByInstance(const UBaseComponent* Component);
 
 	/** Try to avoid getting by name, eg cache in property */
-	template<typename TComponentClass = UComponent>
+	template<typename TComponentClass = UBaseComponent>
 	TComponentClass* GetComponent(std::string ComponentName)
 	{
 		if (ComponentsMap.IsValidKey(ComponentName))
@@ -41,7 +41,7 @@ public:
 	}
 
 	/** Try to avoid getting by name, eg cache in property */
-	template<typename TComponentClass = UComponent>
+	template<typename TComponentClass = UBaseComponent>
 	TComponentClass* GetComponent(const std::string& ComponentName)
 	{
 		if (ComponentsMap.IsValidKey(ComponentName))
@@ -56,7 +56,7 @@ public:
 	template<typename TComponentClass>
 	TComponentClass* GetComponentByClass()
 	{
-		for (std::pair<const std::string, std::shared_ptr<UComponent>>& ComponentPair : ComponentsMap)
+		for (std::pair<const std::string, std::shared_ptr<UBaseComponent>>& ComponentPair : ComponentsMap)
 		{
 			TComponentClass* ComponentCasted = dynamic_cast<TComponentClass*>(ComponentPair.second.get());
 
@@ -70,10 +70,10 @@ public:
 	}
 
 	/** Called when new component is created. */
-	virtual void OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent);
+	virtual void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent);
 
 	/** Called before destroying component. */
-	virtual void OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent);
+	virtual void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent);
 
 	/** @returns true if has owner and GetOwner() is safe to call. */
 	_NODISCARD bool HasOwner() const { return bDoesHaveComponentManagerInterfaceParent; }
@@ -96,7 +96,7 @@ protected:
 	IComponentManagerInterface* ComponentManagerInterfaceParent;
 
 	/** Components accessible by strings passed when creating components which are component names. */
-	CUnorderedMap<std::string, std::shared_ptr<UComponent>> ComponentsMap;
+	CUnorderedMap<std::string, std::shared_ptr<UBaseComponent>> ComponentsMap;
 
 	/** Cached in constructor (ComponentManagerInterfaceParent != nullptr) */
 	bool bDoesHaveComponentManagerInterfaceParent;

@@ -14,6 +14,7 @@ void FMapData::Clear()
 
 FMapAsset::FMapAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
+	, MapManager(nullptr)
 	, bIsLoaded(false)
 {
 }

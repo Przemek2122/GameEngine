@@ -6,6 +6,7 @@
 EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 	, bIsSelecting(false)
+	, ClickInsteadOfSelectionTolerance(10.f)
 {
 }
 
@@ -84,6 +85,11 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 		{
 			OnEndSelecting();
 
+			if (SelectionStart.DistanceTo(InMousePosition) < ClickInsteadOfSelectionTolerance)
+			{
+				OnClickInsteadOfSelection();
+			}
+
 			break;
 		}
 
@@ -102,6 +108,11 @@ void EScreenSelectionEntity::OnStartSelecting()
 void EScreenSelectionEntity::OnEndSelecting()
 {
 	bIsSelecting = false;
+}
+
+void EScreenSelectionEntity::OnClickInsteadOfSelection()
+{
+	LOG_INFO("Click instead of selection");
 }
 
 const CArray<IScreenSelectionInterface*>& EScreenSelectionEntity::GetCurrentlySelectedObjects() const

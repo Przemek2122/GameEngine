@@ -99,7 +99,7 @@ public:
 	/** Clear all arrays from loaded files from FMapAsset::LoadMap */
 	void ClearMapData();
 
-	/** OVERRIDE file map source. This will removed old map. Be carefull when calling */
+	/** OVERRIDE file map source. This will remove old map. Be carefull when calling */
 	void SaveMapData();
 
 	bool IsMapDataValid() const;

@@ -156,6 +156,23 @@ public:
 
 		return false;
 	}
+
+	_NODISCARD SDL_FORCE_INLINE bool ContainsByPredicate(FFunctorLambda<bool, TKey, TValue> Delegate) const
+	{
+		bool bContains = false;
+
+		for (auto it = Map.begin(); it != Map.end(); ++it)
+		{
+			if (Delegate(it->first, it->second))
+			{
+				bContains = true;
+
+				continue;
+			}
+		}
+
+		return bContains;
+	}
 	
 	template<typename TAutoType>
 	_NODISCARD SDL_FORCE_INLINE TValue FindValueByKey(TAutoType Key)

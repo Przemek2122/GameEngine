@@ -28,9 +28,12 @@ public:
 	/** Called when selection is finished */
 	virtual void OnEndSelecting();
 
+	/** Called when should select but it was in place - click */
+	virtual void OnClickInsteadOfSelection();
+
 	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
 
-	/** Delegate called on EndPlay (destroy this entity) */
+	/** Delegate called on EndPlay (destroy this entity) - Used in IScreenSelectionInterface */
 	FDelegate<> OnEndPlay;
 
 protected:
@@ -51,6 +54,9 @@ protected:
 
 	/** Selecting when left mouse button is pressed */
 	bool bIsSelecting;
+
+	/** Defines how far can it be from click to release to be click instead of selection */
+	float ClickInsteadOfSelectionTolerance;
 
 	/** Start of the selection */
 	FVector2D<int> SelectionStart;

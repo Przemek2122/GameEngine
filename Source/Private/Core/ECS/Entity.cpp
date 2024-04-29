@@ -45,12 +45,12 @@ void EEntity::ReceiveRender()
 	RenderComponents();
 }
 
-void EEntity::SetRootComponent(UComponent* NewComponent)
+void EEntity::SetRootComponent(UBaseComponent* NewComponent)
 {
 	DefaultRootComponent = NewComponent;
 }
 
-UComponent* EEntity::GetRootComponent()
+UBaseComponent* EEntity::GetRootComponent()
 {
 	return DefaultRootComponent;
 }
@@ -102,7 +102,7 @@ void EEntity::UnRegisterInputInternal()
 	UnRegisterInput(InputHandler);
 }
 
-void EEntity::OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent)
+void EEntity::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 	IComponentManagerInterface::OnComponentCreated(ComponentName, NewComponent);
 

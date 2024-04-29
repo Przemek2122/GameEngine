@@ -59,6 +59,12 @@ public:
 	void DrawTexture(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const;
 	void DrawTexture(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const;
 
+	void DrawTextureAdvanced(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_RendererFlip::SDL_FLIP_NONE) const;
+	void DrawTextureAdvanced(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_RendererFlip::SDL_FLIP_NONE) const;
+
+	static void OverrideTextureColor(SDL_Texture* Texture, const FColorRGBA& Color);
+	static void OverrideTextureColorReset(SDL_Texture* Texture);
+
 	/** Draw single point. */
 	void DrawPointAt(const FColorPoint& ColorPoint) const;
 

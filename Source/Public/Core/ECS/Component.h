@@ -2,59 +2,20 @@
 
 #pragma once
 
-#include "ComponentManagerInterface.h"
+#include "BaseComponent.h"
+#include "Interfaces/TransformInterface2D.h"
 
 class EEntity;
 
 /**
- * Base component class.
- * Children should have one of transform interfaces included.
- * Most common would be 'public ITransformChildInterface2D<int>'
+ * It's UBaseComponent but with transform
  */
-class UComponent : public UObject, public IComponentManagerInterface
+class UComponent : public UBaseComponent, public ITransformChildInterface2D<int>
 {
 public:
 	UComponent(IComponentManagerInterface* InComponentManagerInterface);
-	virtual ~UComponent() override = default;
 
-	virtual void BeginPlay();
-	virtual void EndPlay();
-
-	virtual void Tick(const float DeltaTime);
-	virtual void Render();
-
-	virtual void ActivateComponent();
-	virtual void DeactivateComponent();
-
-	bool IsComponentActive() const;
-
-	/** Component is owned by entity and this function returns parent */
-	EEntity* GetEntity() const;
-
-	UComponent* GetRootComponentOfEntity() const;
-
-	template<typename TComponentClass>
-	TComponentClass* RequireComponent() const
-	{
-		if (HasOwner())
-		{
-			TComponentClass* Component = GetOwner()->GetComponentByClass<TComponentClass>();
-
-			if (Component != nullptr)
-			{
-				return Component;
-			}
-			else
-			{
-				LOG_ERROR("Missing component of type: " << typeid(TComponentClass).name());
-			}
-		}
-
-		return nullptr;
-	}
-
-protected:
-	bool bIsComponentActive;
-
+	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
+	void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent) override;
 
 };

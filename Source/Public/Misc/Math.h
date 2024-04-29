@@ -44,7 +44,28 @@ public:
 	static double Get2DAngleOfPointRadians(FVector2D<> A, FVector2D<> B);
 
 	/* Expects radians not degree */
-	static void inline RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Angle, FVector2D<int>& Point);
+	static void RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Angle, FVector2D<int>& Point);
+
+	/** @Returns radians angle to look at @To */
+	template <typename TType>
+	static float FindLookAtRotationInRadians(const FVector2D<TType>& From, const FVector2D<TType>& LookAtTarget)
+	{
+		// Calculate the difference between the two vectors 
+		float DiffX = LookAtTarget.x - From.x;
+		float DiffY = LookAtTarget.y - From.y;
+
+		// Calculate the angle using atan2 
+		const float Angle = atan2(DiffY, DiffX);
+
+		return Angle;
+	}
+
+	/** @Returns radians angle to look at LookAtTarget. Performs automatic conversion to degrees */
+	template <typename TType>
+	static float FindLookAtRotationInDegrees(const FVector2D<TType> From, const FVector2D<TType> LookAtTarget)
+	{
+		return RadiansToDegrees(FindLookAtRotationInRadians(From, LookAtTarget));
+	}
 
 	/** @returns bigger value of two given */
 	template<typename TType>

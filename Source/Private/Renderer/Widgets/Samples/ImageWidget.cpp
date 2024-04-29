@@ -15,19 +15,20 @@ FImageWidget::FImageWidget(IWidgetManagementInterface* InWidgetManagementInterfa
 
 void FImageWidget::Init()
 {
-	FWidget::Init();
+	Super::Init();
 
 	SetWidgetSize({ 40, 40 });
 }
 
-void FImageWidget::DeInit()
+void FImageWidget::PreDeInit()
 {
 	if (TextureAsset != nullptr)
 	{
 		TextureAsset->DecrementNumberOfReferences();
+		TextureAsset = nullptr;
 	}
 
-	FWidget::DeInit();
+	Super::PreDeInit();
 }
 
 void FImageWidget::Render()
@@ -45,7 +46,7 @@ void FImageWidget::SetImage(const std::string& InImageName, const std::string& O
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
-		FTextureAsset* TemporaryTextureAsset = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, InImageName, EAssetType::AT_TEXTURE, OptionalPath, GetOwnerWindow());
+		FTextureAsset* TemporaryTextureAsset = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
 
 		if (TemporaryTextureAsset != nullptr)
 		{
@@ -63,6 +64,8 @@ void FImageWidget::SetImage(const std::shared_ptr<FTextureAsset>& TexturePtr)
 	if (TexturePtr != nullptr)
 	{
 		SetImage(TexturePtr.get());
+
+		OptionalTexturePtr = TexturePtr;
 	}
 }
 
@@ -70,9 +73,13 @@ void FImageWidget::SetImage(FTextureAsset* NewTexture)
 {
 	if (NewTexture != nullptr)
 	{
-		// Decrement old one - potentialy freeing memory
-		if (TextureAsset != nullptr)
+		if (OptionalTexturePtr != nullptr)
 		{
+			OptionalTexturePtr = nullptr;
+		}
+		else if (TextureAsset != nullptr)
+		{
+			// Decrement old one - potentialy freeing memory
 			TextureAsset->DecrementNumberOfReferences();
 		}
 
@@ -106,4 +113,9 @@ void FImageWidget::ScaleWidgetToTextureSize()
 	const FVector2D<int> TextureSize = TextureAsset->GetSize();
 
 	SetWidgetSize(TextureSize);
+}
+
+void FImageWidget::ClearPreviousImage()
+{
+	OptionalTexturePtr = nullptr;
 }

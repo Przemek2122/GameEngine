@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include "ECS/Component.h"
+#include "ECS/BaseComponent.h"
 #include "Interfaces/TransformInterface2D.h"
 
 /**
  * Component for finding target
  */
-class UTargetingComponent : public UComponent, public ITransformChildInterface2D<int>
+class UTargetingComponent : public UBaseComponent, public ITransformChildInterface2D<int>
 {
 public:
 	UTargetingComponent(IComponentManagerInterface* InComponentManagerInterface);

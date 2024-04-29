@@ -4,82 +4,34 @@
 #include "ECS/Component.h"
 
 UComponent::UComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: IComponentManagerInterface(InComponentManagerInterface, InComponentManagerInterface->GetOwnerWindow())
-	, bIsComponentActive(true)
+	: UBaseComponent(InComponentManagerInterface)
 {
 }
 
-void UComponent::BeginPlay()
+void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
-	ActivateComponent();
-}
+	UBaseComponent::OnComponentCreated(ComponentName, NewComponent);
 
-void UComponent::EndPlay()
-{
-	DeactivateComponent();
-}
-
-void UComponent::Tick(const float DeltaTime)
-{
-	// Tick sub-components
-	TickComponents(DeltaTime);
-}
-
-void UComponent::Render()
-{
-	// Render sub-components
-	RenderComponents();
-}
-
-void UComponent::ActivateComponent()
-{
-	bIsComponentActive = true;
-}
-
-void UComponent::DeactivateComponent()
-{
-	bIsComponentActive = false;
-}
-
-bool UComponent::IsComponentActive() const
-{
-	return bIsComponentActive;
-}
-
-EEntity* UComponent::GetEntity() const
-{
-	EEntity* Owner = nullptr;
-
-	IComponentManagerInterface* TopOwner = GetOwnerTop();
-	if (TopOwner != nullptr)
+	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(NewComponent);
+	if (TransformComponent != nullptr)
 	{
-		Owner = dynamic_cast<EEntity*>(TopOwner);
-	}
+		AddUpdatedComponent(TransformComponent);
 
-	return Owner;
+		// Update location of new component
+		TransformComponent->SetLocationFromParent(GetLocation());
+		TransformComponent->SetParentRotation(GetRotation());
+	}
 }
 
-UComponent* UComponent::GetRootComponentOfEntity() const
+void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
 {
-	UComponent* RetComponent = nullptr;
+	UBaseComponent::OnComponentDestroy(ComponentName, OldComponent);
 
-	EEntity* Entity = GetEntity();
-	if (Entity != nullptr)
+	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(OldComponent);
+	if (TransformComponent != nullptr)
 	{
-		UComponent* RootComponent = Entity->GetRootComponent();
-		if (RootComponent != nullptr)
-		{
-			RetComponent = RootComponent;
-		}
-		else
-		{
-			LOG_ERROR("Mising RootComponent.");
-		}
+		RemoveUpdatedComponent(TransformComponent);
 	}
-	else
-	{
-		LOG_ERROR("Mising Entity. Make sure owner is correct.");
-	}
-
-	return RetComponent;
 }
+
+

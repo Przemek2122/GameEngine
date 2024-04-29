@@ -14,6 +14,7 @@ enum class EAssetType : uint8_t
 	AT_FONT,
 	AT_AUDIO,
 	AT_MAP,
+	AT_INI,
 };
 
 /**

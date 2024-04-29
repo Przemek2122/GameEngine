@@ -3,21 +3,22 @@
 #pragma once
 
 #include "BaseTransformComponent.h"
+#include "ECS/Component.h"
 
 /**
  * Component for handling transform of the entity
  */
-class URenderComponent : public UComponent, public ITransformChildInterface2D<int>
+class URenderComponent : public UComponent
 {
 public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
 	~URenderComponent() override;
 
-	/** Begin UComponent */
+	/** Begin UBaseComponent */
 	void EndPlay() override;
 
 	void Render() override;
-	/** End UComponent */
+	/** End UBaseComponent */
 
 	/** Set image from given name. It will try to find asset. If it was not created it will try to use OptionalPath to load it. */
 	void SetImage(const std::string& InImageName, const std::string& OptionalPath = "");

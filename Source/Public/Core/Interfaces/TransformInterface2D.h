@@ -17,7 +17,7 @@ template<typename TType>
 class ITransformChildInterface2D;
 
 template<typename TType>
-class ITransformInterface2D
+class IBaseTransformInterface2D
 {
 public:
 	void AddUpdatedComponent(ITransformChildInterface2D<TType>* UpdatedComponent)
@@ -59,10 +59,13 @@ protected:
  * Interface for handling transform of the entity 2d (root component)
  */
 template<typename TType>
-class ITransformChildInterface2D : public ITransformInterface2D<TType>
+class ITransformChildInterface2D : public IBaseTransformInterface2D<TType>
 {
 public:
 	ITransformChildInterface2D()
+		: ParentRotation(0)
+		, ParentRotationOffset(0)
+		, FinalRotation(0)
 	{
 	}
 	virtual ~ITransformChildInterface2D() = default;
@@ -98,7 +101,7 @@ public:
 	}
 
 	/** Update parent rotation, do not use unless you want to update parent rotation for some reason. Use SetRotationOffset instead */
-	void SetParentRotation(const TType& NewRotation) const
+	void SetParentRotation(const TType& NewRotation)
 	{
 		ParentRotation = NewRotation;
 
@@ -106,7 +109,7 @@ public:
 	}
 
 	/** Local offset from parent rotation */
-	void SetRotationOffset(const TType& NewRotation) const
+	void SetRotationOffset(const TType& NewRotation)
 	{
 		ParentRotationOffset = NewRotation;
 
@@ -128,7 +131,7 @@ protected:
 
 		OnTransformLocationChanged();
 
-		ITransformInterface2D<TType>::UpdateSubComponentsLocation();
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsLocation();
 	}
 
 	void UpdateRotation()
@@ -137,10 +140,10 @@ protected:
 
 		OnTransformRotationChanged();
 
-		ITransformInterface2D<TType>::UpdateSubComponentsRotation();
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsRotation();
 	}
 
-protected:
+private:
 	/** Location set by parent. */
 	FVector2D<TType> ParentLocation;
 
@@ -163,12 +166,14 @@ protected:
  * Interface for handling transform of the entity 2d (root component)
  */
 template<typename TType>
-class ITransformParentInterface2D : public ITransformInterface2D<TType>
+class ITransformParentInterface2D : public IBaseTransformInterface2D<TType>
 {
 public:
 	ITransformParentInterface2D()
+		: Rotation(0)
 	{
 	}
+
 	virtual ~ITransformParentInterface2D() = default;
 
 	/** Final location - User set location + Map location */
@@ -209,17 +214,24 @@ public:
 
 		UpdateLocationAfterDirectChange();
 	}
+
+	void AddLocation(const FVector2D<TType> LocationToAdd)
+	{
+		UserLocation += LocationToAdd;
+
+		UpdateLocationAfterMapOrUserChange(ELocationChangeType::LCT_User);
+	}
 	
 	TType GetRotation() const override
 	{
 		return Rotation;
 	}
 
-	void SetRotation(const TType& NewRotation) const
+	void SetRotation(const TType& NewRotation)
 	{
 		Rotation = NewRotation;
 
-		OnTransformRotationChanged();
+		UpdateRotation();
 	}
 
 	virtual void OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
@@ -237,7 +249,7 @@ protected:
 
 		OnTransformLocationChanged(LocationChangeType);
 
-		ITransformInterface2D<TType>::UpdateSubComponentsLocation();
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsLocation();
 	}
 
 	void UpdateLocationAfterDirectChange()
@@ -246,10 +258,17 @@ protected:
 
 		OnTransformLocationChanged(ELocationChangeType::LCT_User);
 
-		ITransformInterface2D<TType>::UpdateSubComponentsLocation();
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsLocation();
 	}
 
-protected:
+	void UpdateRotation()
+	{
+		OnTransformRotationChanged();
+
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsRotation();
+	}
+
+private:
 	/** Location set by user only. */
 	FVector2D<TType> UserLocation;
 

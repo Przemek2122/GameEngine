@@ -4,6 +4,6 @@
 #include "ECS/Components/TargetingComponent.h"
 
 UTargetingComponent::UTargetingComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: UComponent(InComponentManagerInterface)
+	: UBaseComponent(InComponentManagerInterface)
 {
 }

@@ -6,7 +6,7 @@
 #include "Misc/Math.h"
 
 UHealthComponent::UHealthComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: UComponent(InComponentManagerInterface)
+	: UBaseComponent(InComponentManagerInterface)
 	, CurrentHealth(100.f)
 	, StartingHealth(100.f)
 	, MaxHealth(100.f)
@@ -18,7 +18,7 @@ UHealthComponent::UHealthComponent(IComponentManagerInterface* InComponentManage
 
 void UHealthComponent::BeginPlay()
 {
-	UComponent::BeginPlay();
+	UBaseComponent::BeginPlay();
 
 	SetHealthDefaults();
 

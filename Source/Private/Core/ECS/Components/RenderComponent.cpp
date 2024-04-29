@@ -23,6 +23,7 @@ void URenderComponent::EndPlay()
 	if (TextureAsset != nullptr)
 	{
 		TextureAsset->DecrementNumberOfReferences();
+		TextureAsset = nullptr;
 	}
 }
 
@@ -43,7 +44,7 @@ void URenderComponent::SetImage(const std::string& InImageName, const std::strin
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
-		FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, InImageName, EAssetType::AT_TEXTURE, OptionalPath, GetOwnerWindow());
+		FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
 
 		if (TemporaryTexture != nullptr)
 		{

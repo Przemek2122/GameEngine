@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "ECS/Component.h"
+#include "ECS/BaseComponent.h"
 
 /**
  * Component for handling transform of the entity
  */
-class UPhysicsComponent : public UComponent
+class UPhysicsComponent : public UBaseComponent
 {
 public:
 	UPhysicsComponent(IComponentManagerInterface* InComponentManagerInterface);

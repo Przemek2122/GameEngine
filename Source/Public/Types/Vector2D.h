@@ -106,6 +106,16 @@ public:
 		X /= V.X; Y /= V.Y; return *this;
 	}
 
+
+	FVector2D& operator*=(const TType& V)
+	{
+		X *= V; Y *= V; return *this;
+	}
+	FVector2D& operator/=(const TType& V)
+	{
+		X /= V; Y /= V; return *this;
+	}
+
 	// Comparison
 	
 	friend bool operator==(const FVector2D& L, const FVector2D& R)
@@ -131,16 +141,6 @@ public:
 	friend bool operator<=(const FVector2D& L, const FVector2D& R)
 	{
 		return !(R < L);
-	}
-
-
-	FVector2D& operator*=(const TType& V)
-	{
-		X *= V; Y *= V; return *this;
-	}
-	FVector2D& operator/=(const TType& V)
-	{
-		X /= V; Y /= V; return *this;
 	}
 
 	float DistanceTo(const FVector2D& OtherVector)
@@ -175,6 +175,11 @@ public:
 	//template<class TType> Vector2d<TType> GetIntersect(const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&)
 
 	// Conversion
+	operator FVector2D<int>() const
+	{
+		return { static_cast<int>(X), static_cast<int>(Y) };
+	}
+
 	operator SDL_Point() const
 	{
 		SDL_Point Point;
@@ -182,6 +187,15 @@ public:
 		Point.y = static_cast<int>(Y);
 
 		return Point;
+	}
+
+	operator SDL_Point*() const
+	{
+		SDL_Point Point;
+		Point.x = static_cast<int>(X);
+		Point.y = static_cast<int>(Y);
+
+		return &Point;
 	}
 
 	friend std::ostream& operator<<(std::ostream& InputStream, const FVector2D& Vector)

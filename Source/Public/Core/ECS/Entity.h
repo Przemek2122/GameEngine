@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECS/Component.h"
+#include "ECS/BaseComponent.h"
 
 class FWindowAdvanced;
 class FMap;
@@ -33,8 +33,8 @@ public:
 	/** Called every frame from engine code. */
 	void ReceiveRender();
 
-	virtual void SetRootComponent(UComponent* NewComponent);
-	virtual UComponent* GetRootComponent();
+	virtual void SetRootComponent(UBaseComponent* NewComponent);
+	virtual UBaseComponent* GetRootComponent();
 
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
@@ -50,7 +50,7 @@ protected:
 	void UnRegisterInputInternal();
 
 	/** Begin IComponentManagerInterface */
-	void OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent) override;
+	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	/** End IComponentManagerInterface */
 
 protected:
@@ -58,6 +58,6 @@ protected:
 
 private:
 	/** Root component. First component added or set by user */
-	UComponent* DefaultRootComponent;
+	UBaseComponent* DefaultRootComponent;
 
 };

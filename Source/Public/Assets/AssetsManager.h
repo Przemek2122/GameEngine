@@ -7,6 +7,7 @@
 #include "Containers/Map.h"
 #include "Misc/Filesystem.h"
 
+class FIniManager;
 enum class EAssetType : Uint8;
 class FAssetBase;
 class FFontAsset;
@@ -18,7 +19,7 @@ struct FAssetsStructure
 };
 
 /**
- * Storage class. Registers assets which can be accesed anywhere.
+ * Storage class. Registers assets which can be accessed anywhere.
  * Can also help with search for assets.
  */
 class FAssetsManager
@@ -146,28 +147,36 @@ public:
 
 	CArray<std::string> GetFilesFromDirectory(const std::string& Directory) const;
 
+	/** @returns launch runtime project location */
 	std::string GetProjectLocation() const;
-
-	/** @returns 'Assets' directory name */
-	std::string GetAssetDirName() const;
 
 	char GetPlatformSlash() const;
 
+	/** @returns 'Assets' directory */
 	std::string GetAssetsPathRelative() const;
+	/** @returns 'Assets/Config' directory */
+	std::string GetConfigPathRelative() const;
 	std::string GetMapsPathRelative() const;
 	std::string GetFontsPathRelative() const;
 
-protected:
 	std::string ConvertRelativeToFullPath(const std::string& InPathRelative) const;
 
 protected:
 	/** All types of assets sorted by type */
 	CMap<EAssetType, FAssetsStructure> AssetsByType;
 
+	/** IniManager which can load, create, save and edit ini files. */
+	FIniManager* IniManager;
+
 	/** Assets generic directory */
 	std::string AssetDirName;
+
+	/** Config generic directory */
+	std::string ConfigDirName;
+
 	/** Maps directory */
 	std::string MapsDirName;
+
 	/** Fonts directory */
 	std::string FontsDirName;
 
