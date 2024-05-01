@@ -47,8 +47,6 @@ Uint32 FTimer::OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams)
 		});
 	}
 
-	SDL_RemoveTimer(OptionalTimerParams->Timer->TimerIDRaw);
-
 	return 0;
 }
 
@@ -76,6 +74,11 @@ void FTimer::StopTimer()
 	}
 }
 
+bool FTimer::IsActive() const
+{
+	return bIsTimerActive;
+}
+
 float FTimer::GetTimeLeft() const
 {
 	return TimeMsToFloat(TimeLeftRaw);
@@ -84,6 +87,11 @@ float FTimer::GetTimeLeft() const
 Uint32 FTimer::GetTimeLeftRaw() const
 {
 	return TimeLeftRaw;
+}
+
+Uint32 FTimer::GetTimeElapsedSinceStart() const
+{
+	return (SDL_GetTicks64() - TimeStartOfTimer);
 }
 
 SDL_TimerID FTimer::GetTimerId() const

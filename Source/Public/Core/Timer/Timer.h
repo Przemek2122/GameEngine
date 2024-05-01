@@ -37,11 +37,9 @@ public:
 	/** Called when timer finishes */
 	static Uint32 OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams);
 
-	/** Start timer */
 	void StartTimer();
-
-	/** Stop timer to save timer */
 	void StopTimer();
+	bool IsActive() const;
 
 	/** returns time left using conversion to float */
 	float GetTimeLeft() const;
@@ -49,6 +47,7 @@ public:
 	/** @returns time left using variable - performance efficient */
 	Uint32 GetTimeLeftRaw() const;
 
+	Uint32 GetTimeElapsedSinceStart() const;
 	SDL_TimerID GetTimerId() const;
 
 protected:

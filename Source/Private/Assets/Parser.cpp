@@ -3,6 +3,21 @@
 #include "CoreEngine.h"
 #include "Assets/Parser.h"
 
+FParserLine::FParserLine(FParserLine&& InOther) noexcept
+	: Texts(std::move(InOther.Texts))
+{
+}
+
+FParserLine::FParserLine(const FParserLine& InOther)
+	: Texts(InOther.Texts)
+{
+}
+
+FParserLine::FParserLine(CArray<FParserText> InTexts)
+	: Texts(std::move(InTexts))
+{
+}
+
 FParser::FParser(const CArray<char>& InSeparatorCharArray, const CArray<char>& InCommentCharArray, const CArray<char>& InIgnoredCharArray)
 	: SeparatorCharArray(InSeparatorCharArray)
 	, CommentCharArray(InCommentCharArray)

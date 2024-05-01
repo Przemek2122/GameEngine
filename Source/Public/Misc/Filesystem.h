@@ -22,7 +22,18 @@ public:
 	public:
 		static bool Exists(const std::string& InPath);
 		static bool Create(const std::string& InPath);
+
+		/** Remove file from disk. */
 		static bool Delete(const std::string& InPath);
+
+		/** Remove all content. */
+		static void Clear(const std::string& InPath);
+
+		/** Calls delegate with each line separately */
+		static void GetFileContentLineByLine(FDelegateSafe<void, const std::string&>& DelegateCalledForEachLine, const std::string& InPath);
+
+		static void AddFileContentLine(const std::string& Line, const std::string& InPath);
+		static void AddFileContentLines(const CArray<std::string>& Lines, const std::string& InPath);
 	};
 
 	/** Determine if file is directory */

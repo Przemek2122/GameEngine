@@ -60,13 +60,12 @@ void FIniObject::Initialize()
 
 bool FIniObject::DoesIniExist() const
 {
-	std::string AbsolutePath = IniManager->GetAssetsManager()->ConvertRelativeToFullPath(IniPath);
-
-	return FFileSystem::File::Exists(AbsolutePath);
+	return IniAssetSharedPtr->DoesFileExist();
 }
 
 void FIniObject::LoadIni()
 {
+	
 }
 
 void FIniObject::SaveIni()
