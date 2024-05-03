@@ -265,3 +265,8 @@ void FRenderer::DrawLimitedLine(int X1, int Y1, const int X2, const int Y2, cons
 		i++;
 	}
 }
+
+void FRenderer::DrawLine(const FVector2D<int> From, const FVector2D<int> To) const
+{
+	SDL_RenderDrawLine(GetSDLRenderer(), From.X, From.Y, To.X, To.Y);
+}

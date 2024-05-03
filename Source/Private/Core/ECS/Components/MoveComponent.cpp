@@ -9,7 +9,8 @@ UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInt
 	: UComponent(InComponentManagerInterface)
 	, bHasTargetMoveToLocation(false)
 	, StopDistance()
-	, MovemenetSpeedPerSecond(10.f)
+	, LinearSpeedPerSecond(40.f)
+	, AngularSpeedPerSecond(45.f)
 {
 #if _DEBUG
 	if (bShowForwardArrow)
@@ -32,20 +33,25 @@ void UMoveComponent::Tick(const float DeltaTime)
 
 	if (bHasTargetMoveToLocation && RootTransformComponent != nullptr)
 	{
-		FVector2D<int> CurrentLocation = RootTransformComponent->GetLocation();
-		const float CurrentDistance = CurrentLocation.DistanceTo(TargetLocation);
+		CurrentLocation = RootTransformComponent->GetLocation();
+		CalculatedTargetLocation = TargetLocation + RootTransformComponent->GetLocationMap();
 
-		if (CurrentDistance < StopDistance)
-		{
-			// We are close enough. Stop.
-			AbortMovement();
-		}
-		else
-		{
-			// Move to TargetLocation
-			MoveByUnits(MovemenetSpeedPerSecond * DeltaTime);
-		}
+		UpdateRotation(DeltaTime);
+
+		UpdateLocation(DeltaTime);
 	}
+}
+
+void UMoveComponent::Render()
+{
+	UComponent::Render();
+
+#if _DEBUG
+	// Draw line
+	FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
+
+	Renderer->DrawLine(CurrentLocation, CalculatedTargetLocation);
+#endif
 }
 
 void UMoveComponent::SetStoppingDistance(const float InStopDistance)
@@ -56,6 +62,7 @@ void UMoveComponent::SetStoppingDistance(const float InStopDistance)
 void UMoveComponent::SetTargetMoveLocation(const FVector2D<int> NewTargetLocation)
 {
 	PreciseLocation = RootTransformComponent->GetLocationUser();
+	PreciseRotation = static_cast<int>(RootTransformComponent->GetRotation());
 
 	TargetLocation = NewTargetLocation;
 
@@ -108,9 +115,60 @@ void UMoveComponent::MoveByUnits(const float Distance, const EMovementDirection 
 			}
 		}
 
-		const FVector2D<float> LocationToMove = CurrentVector * Distance;
-		PreciseLocation += LocationToMove;
+		if (RootTransformComponent->GetLocationUser().DistanceTo(TargetLocation) < Distance)
+		{
+			RootTransformComponent->SetLocationUser(TargetLocation);
+		}
+		else
+		{
+			const FVector2D<float> LocationToMove = CurrentVector * Distance;
+			PreciseLocation += LocationToMove;
 
-		RootTransformComponent->SetLocationUser(LocationToMove);
+			RootTransformComponent->SetLocationUser(PreciseLocation);
+		}
+	}
+}
+
+void UMoveComponent::UpdateRotation(const float DeltaTime)
+{
+	const float TargetRotation = FMath::FindLookAtRotationInDegrees(CurrentLocation, CalculatedTargetLocation) + 90;
+	const float RotationChangeInCurrentTick = AngularSpeedPerSecond * DeltaTime;
+
+	if (FMath::IsNearlyEqual(PreciseRotation, TargetRotation, RotationChangeInCurrentTick))
+	{
+		PreciseRotation = TargetRotation;
+	}
+	else
+	{
+		const float RotationDiff = TargetRotation - PreciseRotation;
+
+		LOG_INFO(PreciseRotation);
+
+		if (RotationDiff > 0)
+		{
+			PreciseRotation += RotationChangeInCurrentTick;
+		}
+		else
+		{
+			PreciseRotation -= RotationChangeInCurrentTick;
+		}
+	}
+
+	RootTransformComponent->SetRotation(static_cast<int>(PreciseRotation));
+}
+
+void UMoveComponent::UpdateLocation(const float DeltaTime)
+{
+	const float CurrentDistance = CurrentLocation.DistanceTo(TargetLocation);
+
+	if (CurrentDistance < StopDistance)
+	{
+		// We are close enough. Stop.
+		AbortMovement();
+	}
+	else
+	{
+		// Move to TargetLocation
+		MoveByUnits(LinearSpeedPerSecond * DeltaTime);
 	}
 }

@@ -28,6 +28,7 @@ public:
 	/** Begin UComponent */
 	void BeginPlay() override;
 	void Tick(const float DeltaTime) override;
+	void Render() override;
 	/** End UComponent */
 
 	/** How far owner has to be to stop when approaching TargetLocation */
@@ -45,6 +46,9 @@ protected:
 	/** Teleports owner by given distance in given direction */
 	void MoveByUnits(const float Distance, const EMovementDirection MovementDirection = EMovementDirection::Forward);
 
+	void UpdateRotation(float DeltaTime);
+	void UpdateLocation(float DeltaTime);
+
 protected:
 	/** Location desired by unit. This is the place where we want to move to. */
 	FVector2D<int> TargetLocation;
@@ -55,11 +59,16 @@ protected:
 	/** Distance to stop when moving */
 	float StopDistance;
 
-	float MovemenetSpeedPerSecond;
+	float LinearSpeedPerSecond;
+	float AngularSpeedPerSecond;
 
 	FVector2D<float> PreciseLocation;
+	float PreciseRotation;
 
 	UBaseTransformComponent* RootTransformComponent;
+
+	FVector2D<int> CurrentLocation;
+	FVector2D<int> CalculatedTargetLocation;
 
 #if _DEBUG
 	UArrowComponent* ArrowComponent = nullptr;

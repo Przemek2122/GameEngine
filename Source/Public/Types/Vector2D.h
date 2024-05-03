@@ -143,7 +143,7 @@ public:
 		return !(R < L);
 	}
 
-	float DistanceTo(const FVector2D& OtherVector)
+	float DistanceTo(const FVector2D& OtherVector) const
 	{
 		const float DiffXSquared = FMath::Power(OtherVector.X - X);
 		const float DiffYSquared = FMath::Power(OtherVector.Y - Y);

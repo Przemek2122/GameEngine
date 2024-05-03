@@ -51,8 +51,8 @@ public:
 	static float FindLookAtRotationInRadians(const FVector2D<TType>& From, const FVector2D<TType>& LookAtTarget)
 	{
 		// Calculate the difference between the two vectors 
-		float DiffX = LookAtTarget.x - From.x;
-		float DiffY = LookAtTarget.y - From.y;
+		float DiffX = LookAtTarget.X - From.X;
+		float DiffY = LookAtTarget.Y - From.Y;
 
 		// Calculate the angle using atan2 
 		const float Angle = atan2(DiffY, DiffX);
@@ -95,6 +95,10 @@ public:
 		return (Value * Value);
 	}
 
-
+	template<typename TType = float>
+	static bool IsNearlyEqual(TType A, TType B, float Tolerance = 0.0001f)
+	{
+		return (Abs(A - B) < Tolerance);
+	}
 
 };
