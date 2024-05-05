@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DelegateSafe.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
+#include "DelegateSafe.h"
+#include "Test/TestSingleRun.h"
 
-#include "Test/TestCase.h"
-
-class FTestDelegate : public FTestCase
+class FTestDelegate : public FSingleRunTest
 {
 public:
 	void DoTest() override;

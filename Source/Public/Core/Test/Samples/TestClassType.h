@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Test/TestCase.h"
+#include "Test/TestSingleRun.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
 class FTemporaryTestClass
@@ -19,7 +19,7 @@ public:
 
 };
 
-class FTestClassType : public FTestCase
+class FTestClassType : public FSingleRunTest
 {
 public:
 	void DoTest() override;

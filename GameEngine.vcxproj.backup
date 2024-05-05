@@ -98,6 +98,8 @@
     <ClInclude Include="Source\Public\Core\Test\TestDelegate.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestTypes.h" />
+    <ClInclude Include="Source\Public\Core\Timer\Timer.h" />
+    <ClInclude Include="Source\Public\Core\Timer\TimerManager.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
     <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\StringHelpers.h" />
@@ -303,6 +305,8 @@
     <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp" />
+    <ClCompile Include="Source\Private\Core\Timer\Timer.cpp" />
+    <ClCompile Include="Source\Private\Core\Timer\TimerManager.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\StringHelpers.cpp" />

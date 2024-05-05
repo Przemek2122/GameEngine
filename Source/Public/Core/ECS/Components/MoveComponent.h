@@ -34,6 +34,8 @@ public:
 	/** How far owner has to be to stop when approaching TargetLocation */
 	void SetStoppingDistance(const float InStopDistance);
 
+	void ResetStoppingDistance();
+
 	/** Set where unit should go. */
 	void SetTargetMoveLocation(const FVector2D<int> NewTargetLocation);
 
@@ -69,6 +71,8 @@ protected:
 
 	FVector2D<int> CurrentLocation;
 	FVector2D<int> CalculatedTargetLocation;
+
+	bool bHasCustomStopDistance;
 
 #if _DEBUG
 	UArrowComponent* ArrowComponent = nullptr;

@@ -13,7 +13,7 @@ FTestManager::~FTestManager()
 {
 }
 
-void FTestManager::AddTest(FTestCase* InTestCase, const bool bAutoStartTest)
+void FTestManager::AddTest(FTestBase* InTestCase, const bool bAutoStartTest)
 {
 	if (InTestCase != nullptr)
 	{
@@ -27,7 +27,7 @@ void FTestManager::AddTest(FTestCase* InTestCase, const bool bAutoStartTest)
 	}
 }
 
-void FTestManager::RemoveTest(FTestCase* InTestCase)
+void FTestManager::RemoveTest(FTestBase* InTestCase)
 {
 	RunningTests.Remove(InTestCase);
 }

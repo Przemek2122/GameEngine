@@ -12,21 +12,19 @@ class FTestManager;
  * Base class for testing.
  * Do once test.
  */
-class FTestCase
+class FTestBase
 {
 	friend FTestManager;
 	
 public:
-	FTestCase();
-	virtual ~FTestCase();
+	FTestBase();
+	virtual ~FTestBase();
 
 	_NODISCARD bool IsTestDone() const;
 	_NODISCARD bool ShouldAutoStartTest() const;
 
 	/** Called once added into manager. */
-	void StartTest();
-	/** Test should be performed in this function. */
-	virtual void DoTest() = 0;
+	virtual void StartTest();
 
 	void DestroyTest();
 	

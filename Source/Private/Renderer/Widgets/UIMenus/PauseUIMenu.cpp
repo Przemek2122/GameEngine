@@ -93,6 +93,8 @@ void FPauseUIMenu::Show()
 	if (IsInitialized())
 	{
 		VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Visible);
+
+		OnMenuShown();
 	}
 	else
 	{
@@ -104,6 +106,16 @@ void FPauseUIMenu::Show()
 void FPauseUIMenu::Hide()
 {
 	VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Collapsed);
+
+	OnMenuHidden();
+}
+
+void FPauseUIMenu::OnMenuShown()
+{
+}
+
+void FPauseUIMenu::OnMenuHidden()
+{
 }
 
 void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidget)

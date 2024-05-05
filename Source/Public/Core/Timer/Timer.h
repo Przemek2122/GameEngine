@@ -14,6 +14,33 @@ struct FOptionalTimerParams
 };
 
 /**
+ * Global registry for timers.
+ */
+class FTimerCollector
+{
+public:
+	FTimerCollector();
+
+	static FTimerCollector* Get();
+
+	void RegisterTimer(FTimer* Timer);
+	void UnRegisterTimer(FTimer* Timer);
+
+	void PauseAllTimers();
+	void ResumeAllTimers();
+
+	bool AreTimersPaused() const { return bAreTimersPaused; }
+
+protected:
+	/** All registered timers */
+	CArray<FTimer*> Timers;
+	CArray<FTimer*> PausedTimers;
+
+	bool bAreTimersPaused;
+
+};
+
+/**
  * Timer class is used for managing raw sdl timer.
  * It has FOptionalTimerParams that will be passed to delegate on timer finish. if needed you can override it and pass custom
  */
@@ -32,14 +59,19 @@ public:
 	 */
 	FTimer(FDelegateSafe<void, FOptionalTimerParams*>& InOnFinishDelegate, const Uint32 Time, std::shared_ptr<FOptionalTimerParams> InOptionalTimerParams = nullptr, bool bInRunAsyncOnFinish = true);
 
-	~FTimer();
+	virtual ~FTimer();
 
 	/** Called when timer finishes */
 	static Uint32 OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams);
 
-	void StartTimer();
-	void StopTimer();
+	/** Start timer. Use when paused or when you want to make looping timer in your InOnFinishDelegate with bRestartTimer to start it again. */
+	void StartTimer(const bool bRestartTimer = false);
+
+	/** Pause timer and save time left. When you trigger StartTimer with bRestartTimer = false it will trigger timer with time remaining */
+	void PauseTimer();
+
 	bool IsActive() const;
+	virtual bool IsPausableByTimerCollector();
 
 	/** returns time left using conversion to float */
 	float GetTimeLeft() const;
@@ -49,6 +81,8 @@ public:
 
 	Uint32 GetTimeElapsedSinceStart() const;
 	SDL_TimerID GetTimerId() const;
+
+	FOptionalTimerParams* GetOptionalTimerParams() const;
 
 protected:
 	/** Function used by constructors to run function */
@@ -72,6 +106,9 @@ private:
 
 	/** Time left of time set on begging or pause */
 	Uint32 TimeLeftRaw;
+
+	/** Initial time of timer. Set when starting timer. */
+	Uint32 InitialTimerTime;
 
 	/** Time since app start of when timer was started */
 	Uint64 TimeStartOfTimer;

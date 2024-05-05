@@ -1,5 +1,5 @@
 #include "CoreEngine.h"
-#include "Core/Test/TestClassType.h"
+#include "Test/Samples/TestClassType.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
 void FTestClassType::DoTest()

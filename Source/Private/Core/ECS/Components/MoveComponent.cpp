@@ -8,9 +8,10 @@
 UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, bHasTargetMoveToLocation(false)
-	, StopDistance()
+	, StopDistance(0.f)
 	, LinearSpeedPerSecond(40.f)
 	, AngularSpeedPerSecond(45.f)
+	, bHasCustomStopDistance(false)
 {
 #if _DEBUG
 	if (bShowForwardArrow)
@@ -57,16 +58,28 @@ void UMoveComponent::Render()
 void UMoveComponent::SetStoppingDistance(const float InStopDistance)
 {
 	StopDistance = InStopDistance;
+
+	bHasCustomStopDistance = true;
+}
+
+void UMoveComponent::ResetStoppingDistance()
+{
+	bHasCustomStopDistance = false;
 }
 
 void UMoveComponent::SetTargetMoveLocation(const FVector2D<int> NewTargetLocation)
 {
 	PreciseLocation = RootTransformComponent->GetLocationUser();
-	PreciseRotation = static_cast<int>(RootTransformComponent->GetRotation());
+	PreciseRotation = static_cast<float>(RootTransformComponent->GetRotation());
 
 	TargetLocation = NewTargetLocation;
 
 	bHasTargetMoveToLocation = true;
+
+	if (!bHasCustomStopDistance)
+	{
+		StopDistance = 0.f;
+	}
 }
 
 void UMoveComponent::AbortMovement()

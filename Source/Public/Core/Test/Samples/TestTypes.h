@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TestCase.h"
+#include "Test/TestSingleRun.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
 
-class FTestTypes : public FTestCase
+class FTestTypes : public FSingleRunTest
 {
 public:
 	void DoTest() override;
