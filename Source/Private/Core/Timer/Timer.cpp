@@ -108,13 +108,18 @@ Uint32 FTimer::OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams)
 	else
 	{
 		// @TODO May be critical if two timers happen in same time
-		GEngine->AddLambdaToCallOnStartOfNextTick([&]()
+		GEngine->AddLambdaToCallOnStartOfNextTick([OptionalTimerParams]()
 		{
-			OptionalTimerParams->Timer->OnFinishDelegate.Execute(OptionalTimerParams);
+			OptionalTimerParams->Timer->OnSynchronousTimerFinished();
 		});
 	}
 
 	return 0;
+}
+
+void FTimer::OnSynchronousTimerFinished()
+{
+	OnFinishDelegate.Execute(OptionalTimerParams.get());
 }
 
 void FTimer::StartTimer(const bool bRestartTimer)

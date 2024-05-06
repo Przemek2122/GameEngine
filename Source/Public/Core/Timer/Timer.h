@@ -64,6 +64,8 @@ public:
 	/** Called when timer finishes */
 	static Uint32 OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams);
 
+	void OnSynchronousTimerFinished();
+
 	/** Start timer. Use when paused or when you want to make looping timer in your InOnFinishDelegate with bRestartTimer to start it again. */
 	void StartTimer(const bool bRestartTimer = false);
 
