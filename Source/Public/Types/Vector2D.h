@@ -38,6 +38,29 @@ public:
 		return *this; 
 	}
 
+	float Magnitude() const
+	{
+		return std::sqrt((X * X) + (Y * Y));
+	}
+
+	// Function to get normalized vector 
+	FVector2D Normalize() const
+	{
+		FVector2D NormalizedVector;
+
+		float Len = Magnitude();
+		if (Len > 0.0f)
+		{
+			NormalizedVector = FVector2D(X / Len, Y / Len);
+		}
+		else
+		{
+			NormalizedVector = FVector2D(0.f, 0.f);
+		}
+
+		return std::move(NormalizedVector);
+	}
+
 	// Negate
 	
 	FVector2D operator-()
