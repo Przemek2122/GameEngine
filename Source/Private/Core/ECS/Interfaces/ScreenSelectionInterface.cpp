@@ -69,6 +69,18 @@ void IScreenSelectionInterface::NativeDeselect()
 	}
 }
 
+void IScreenSelectionInterface::NativeDoAction(const FVector2D<int>& ActionLocation)
+{
+	if (bIsSelected)
+	{
+		OnDoAction(ActionLocation);
+	}
+}
+
+void IScreenSelectionInterface::OnDoAction(const FVector2D<int>& ActionLocation)
+{
+}
+
 void IScreenSelectionInterface::RegisterToScreenSelectionInternal()
 {
 	ScreenSelectionEntity->RegisterScreenSelectable(this);

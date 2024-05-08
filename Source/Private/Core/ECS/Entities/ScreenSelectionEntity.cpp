@@ -6,7 +6,8 @@
 EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 	, bIsSelecting(false)
-	, ClickInsteadOfSelectionTolerance(10.f)
+	, bIsPressingRightClickAction(false)
+	, ClickInsteadOfSelectionTolerance(2.f)
 {
 }
 
@@ -32,6 +33,8 @@ void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 	if (bIsSelecting)
 	{
 		const FVector2D<int> SelectionEnd = InMousePosition;
+
+		CurrentlySelectedObjects.Clear();
 
 		for (int i = 0; i < ScreenSelectableObjects.Size(); i++)
 		{
@@ -100,6 +103,46 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 	}
 }
 
+void EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	switch (InputState)
+	{
+		case EInputState::PRESS:
+		{
+			if (!bIsPressingRightClickAction)
+			{
+				FMap* CurrentMap = GetCurrentMap();
+				if (CurrentMap != nullptr)
+				{
+					for (IScreenSelectionInterface* CurrentlySelectedObject : CurrentlySelectedObjects)
+					{
+						CurrentlySelectedObject->NativeDoAction(InMousePosition);
+					}
+				}
+
+				bIsPressingRightClickAction = true;
+			}
+
+			break;
+		}
+
+		case EInputState::RELEASE:
+		{
+			if (bIsPressingRightClickAction)
+			{
+				bIsPressingRightClickAction = false;
+			}
+
+			break;
+		}
+
+		default:
+		{
+			
+		}
+	}
+}
+
 void EScreenSelectionEntity::OnStartSelecting()
 {
 	bIsSelecting = true;
@@ -125,6 +168,7 @@ void EScreenSelectionEntity::RegisterInput(const FEventHandler* InputHandler)
 	// Bind input
 	InputHandler->MouseDelegates.Move->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.LeftButton->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
+	InputHandler->MouseDelegates.RightButton->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
 }
 
 void EScreenSelectionEntity::UnRegisterInput(const FEventHandler* InputHandler)
@@ -132,6 +176,7 @@ void EScreenSelectionEntity::UnRegisterInput(const FEventHandler* InputHandler)
 	// Input must be unregistered, otherwise it might be called after the entity is destroyed
 	InputHandler->MouseDelegates.Move->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.LeftButton->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
+	InputHandler->MouseDelegates.RightButton->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
 }
 
 void EScreenSelectionEntity::AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable)

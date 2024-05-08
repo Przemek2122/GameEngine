@@ -21,6 +21,7 @@ public:
 
 	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
 	virtual void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual void OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
 
 	/** Called when selection is started */
 	virtual void OnStartSelecting();
@@ -54,6 +55,9 @@ protected:
 
 	/** Selecting when left mouse button is pressed */
 	bool bIsSelecting;
+
+	/** True if send right click action. Should be resseted on button release */
+	bool bIsPressingRightClickAction;
 
 	/** Defines how far can it be from click to release to be click instead of selection */
 	float ClickInsteadOfSelectionTolerance;
