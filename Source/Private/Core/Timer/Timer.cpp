@@ -180,7 +180,7 @@ Uint32 FTimer::GetTimeLeftRaw() const
 
 Uint32 FTimer::GetTimeElapsedSinceStart() const
 {
-	return (SDL_GetTicks64() - TimeStartOfTimer);
+	return static_cast<Uint32>(SDL_GetTicks64() - TimeStartOfTimer);
 }
 
 SDL_TimerID FTimer::GetTimerId() const

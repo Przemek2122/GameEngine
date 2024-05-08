@@ -50,21 +50,63 @@ public:
 	template <typename TType>
 	static float FindLookAtRotationInRadians(const FVector2D<TType>& From, const FVector2D<TType>& LookAtTarget)
 	{
-		// Calculate the difference between the two vectors 
-		float DiffX = LookAtTarget.X - From.X;
-		float DiffY = LookAtTarget.Y - From.Y;
+		// Calculate the direction vector from A to B 
+		FVector2D<TType> Direction = LookAtTarget - From;
 
-		// Calculate the angle using atan2 
-		const float Angle = atan2(DiffY, DiffX);
+		// Normalize the direction vector 
+		FVector2D<float> NormalizedDirection = Direction.Normalize();
 
-		return Angle;
+		// Calculate the angle in radians 
+		float AngleRadians = std::atan2(NormalizedDirection.Y, NormalizedDirection.X);
+
+		return AngleRadians;
 	}
 
 	/** @Returns radians angle to look at LookAtTarget. Performs automatic conversion to degrees */
 	template <typename TType>
 	static float FindLookAtRotationInDegrees(const FVector2D<TType> From, const FVector2D<TType> LookAtTarget)
 	{
-		return RadiansToDegrees(FindLookAtRotationInRadians(From, LookAtTarget));
+		// @TODO HACK
+		static constexpr float RotationOffset = 90.f;
+
+		return FMath::ClampAngle(RadiansToDegrees(FindLookAtRotationInRadians(From, LookAtTarget)) + RotationOffset);
+	}
+
+	template<typename TType>
+	static int Clamp(const TType Value, const TType Min,  const TType Max)
+	{
+		if (Value < Min)
+		{
+			return Min;
+		}
+		else if (Value > Max)
+		{
+			return Max;
+		}
+		else
+		{
+			return Value;
+		}
+	}
+
+	template<typename TType>
+	static float ClampAngle(const TType Value)
+	{
+		static constexpr float AngleMin = 0.f;
+		static constexpr float AngleMax = 360.f;
+
+		float FinalValue = Value;
+
+		if (FinalValue < AngleMin)
+		{
+			FinalValue += AngleMax;
+		}
+		else if (FinalValue > AngleMax)
+		{
+			FinalValue -= AngleMax;
+		}
+
+		return FinalValue;
 	}
 
 	/** @returns bigger value of two given */

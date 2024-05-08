@@ -144,18 +144,19 @@ void UMoveComponent::MoveByUnits(const float Distance, const EMovementDirection 
 
 void UMoveComponent::UpdateRotation(const float DeltaTime)
 {
-	const float TargetRotation = FMath::FindLookAtRotationInDegrees(CurrentLocation, CalculatedTargetLocation) + 90;
+	// This property is used to never encounter 250 and 4 from next rotation, so we have 360 + 250 and 360 + 4
+	static constexpr float FullRotation = 360.f;
+
+	const float TargetRotation = FMath::FindLookAtRotationInDegrees(CurrentLocation, CalculatedTargetLocation);
 	const float RotationChangeInCurrentTick = AngularSpeedPerSecond * DeltaTime;
 
-	if (FMath::IsNearlyEqual(PreciseRotation, TargetRotation, RotationChangeInCurrentTick))
+	if (FMath::IsNearlyEqual(FullRotation + PreciseRotation, FullRotation + TargetRotation, RotationChangeInCurrentTick))
 	{
 		PreciseRotation = TargetRotation;
 	}
 	else
 	{
-		const float RotationDiff = TargetRotation - PreciseRotation;
-
-		if (RotationDiff > 0)
+		if (FMath::IsNearlyEqual(FullRotation + PreciseRotation + 90.f, FullRotation + TargetRotation, 90.f))
 		{
 			PreciseRotation += RotationChangeInCurrentTick;
 		}
@@ -165,12 +166,14 @@ void UMoveComponent::UpdateRotation(const float DeltaTime)
 		}
 	}
 
+	PreciseRotation = FMath::ClampAngle(PreciseRotation);
+
 	RootTransformComponent->SetRotation(static_cast<int>(PreciseRotation));
 }
 
 void UMoveComponent::UpdateLocation(const float DeltaTime)
 {
-	const float CurrentDistance = CurrentLocation.DistanceTo(TargetLocation);
+	const float CurrentDistance = static_cast<float>(CurrentLocation.DistanceTo(TargetLocation));
 
 	if (CurrentDistance < StopDistance)
 	{

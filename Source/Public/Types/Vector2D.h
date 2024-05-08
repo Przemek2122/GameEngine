@@ -44,21 +44,26 @@ public:
 	}
 
 	// Function to get normalized vector 
-	FVector2D Normalize() const
+	FVector2D<float> Normalize() const
 	{
-		FVector2D NormalizedVector;
+		FVector2D<float> NormalizedVector;
 
 		float Len = Magnitude();
 		if (Len > 0.0f)
 		{
-			NormalizedVector = FVector2D(X / Len, Y / Len);
+			NormalizedVector = FVector2D<float>(X / Len, Y / Len);
 		}
 		else
 		{
-			NormalizedVector = FVector2D(0.f, 0.f);
+			NormalizedVector = FVector2D<float>(0.f, 0.f);
 		}
 
 		return std::move(NormalizedVector);
+	}
+
+	static float Dot(const FVector2D<float> A, const FVector2D<float> B)
+	{
+		return ((A.X * B.X) + (A.Y * B.Y));
 	}
 
 	// Negate
@@ -166,12 +171,12 @@ public:
 		return !(R < L);
 	}
 
-	float DistanceTo(const FVector2D& OtherVector) const
+	TType DistanceTo(const FVector2D& OtherVector) const
 	{
-		const float DiffXSquared = FMath::Power(OtherVector.X - X);
-		const float DiffYSquared = FMath::Power(OtherVector.Y - Y);
+		const float DiffXSquared = static_cast<float>(FMath::Power(OtherVector.X - X));
+		const float DiffYSquared = static_cast<float>(FMath::Power(OtherVector.Y - Y));
 
-		return FMath::Sqrt(DiffXSquared + DiffYSquared);
+		return static_cast<TType>(FMath::Sqrt(DiffXSquared + DiffYSquared));
 	}
 
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }

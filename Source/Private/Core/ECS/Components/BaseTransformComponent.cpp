@@ -108,7 +108,7 @@ FVector2D<float> UBaseTransformComponent::GetRightVector() const
 
 	FVector2D<int> CurrentRightVector = RightVector;
 
-	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<int>(GetRotation()), CurrentRightVector);
+	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<float>(GetRotation()), CurrentRightVector);
 
 	return RightVector;
 }
