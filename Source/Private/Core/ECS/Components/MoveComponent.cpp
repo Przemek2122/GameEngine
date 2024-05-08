@@ -10,7 +10,7 @@ UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInt
 	, bHasTargetMoveToLocation(false)
 	, StopDistance(0.f)
 	, LinearSpeedPerSecond(40.f)
-	, AngularSpeedPerSecond(45.f)
+	, AngularSpeedPerSecond(90.f)
 	, bHasCustomStopDistance(false)
 {
 #if _DEBUG
