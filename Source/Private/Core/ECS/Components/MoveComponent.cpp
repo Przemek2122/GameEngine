@@ -155,8 +155,6 @@ void UMoveComponent::UpdateRotation(const float DeltaTime)
 	{
 		const float RotationDiff = TargetRotation - PreciseRotation;
 
-		LOG_INFO(PreciseRotation);
-
 		if (RotationDiff > 0)
 		{
 			PreciseRotation += RotationChangeInCurrentTick;

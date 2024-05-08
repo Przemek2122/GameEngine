@@ -205,7 +205,7 @@ void FTimer::InitializeTimer()
 	}
 	else
 	{
-		LOG_ERROR("FOptionalTimerParams was passwed as nullptr. Timer will be inactive!");
+		LOG_ERROR("FOptionalTimerParams was passed as nullptr. Timer will be inactive!");
 	}
 }
 

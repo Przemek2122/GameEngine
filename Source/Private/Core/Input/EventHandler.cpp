@@ -646,7 +646,7 @@ void FEventHandler::InputWindowEvent()
 
 		case SDL_WINDOWEVENT_LEAVE:
 		{
-			LOG_DEBUG("Mouse left window: " << Event.window.windowID);
+			LOG_DEBUG("Window " << Event.window.windowID << " mouse left.");
 			break;
 		}
 
