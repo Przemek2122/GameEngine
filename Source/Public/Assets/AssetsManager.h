@@ -31,6 +31,8 @@ protected:
 	virtual ~FAssetsManager();
 
 public:
+	FIniManager* GetIniManager() const;
+
 	/** Create asset by template type. */
 	template<class TAssetType>
 	std::shared_ptr<TAssetType> CreateAssetFromAbsolutePath(const std::string& InAssetName, const std::string& InAssetPath)

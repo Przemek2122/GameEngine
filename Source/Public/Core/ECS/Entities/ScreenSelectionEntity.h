@@ -39,8 +39,8 @@ public:
 
 protected:
 	/** Begin EEntity */
-	void RegisterInput(const FEventHandler* InputHandler) override;
-	void UnRegisterInput(const FEventHandler* InputHandler) override;
+	void RegisterInput(FEventHandler* InputHandler) override;
+	void UnRegisterInput(FEventHandler* InputHandler) override;
 	/** End EEntity */
 
 	virtual void AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
@@ -55,9 +55,6 @@ protected:
 
 	/** Selecting when left mouse button is pressed */
 	bool bIsSelecting;
-
-	/** True if send right click action. Should be resseted on button release */
-	bool bIsPressingRightClickAction;
 
 	/** Defines how far can it be from click to release to be click instead of selection */
 	float ClickInsteadOfSelectionTolerance;

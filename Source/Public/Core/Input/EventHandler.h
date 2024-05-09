@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Assets/IniReader/IniObject.h"
 #include "Core/Input/EventHandlerMouse.h"
 #include "Core/Input/EventHandlerKeyboard.h"
 
@@ -12,20 +13,18 @@
  */
 class FMouseDelegates
 {
-public:
 	typedef FAutoDeletePointer<FMouseInputDelegateWrapper> FMouseDelegateWrapper;
 
-	/** Mouse move delegate. Called when mouse moves. */
-	FMouseDelegateWrapper Move;
+public:
+	FMouseDelegates(FEventHandler* EventHandler);
 
-	/** Called when mouse left click is detected */
-	FMouseDelegateWrapper LeftButton;
+	void AddInput(FEventHandler* EventHandler, const std::string& InputName);
 
-	/** Called when mouse middle click is detected */
-	FMouseDelegateWrapper MiddleButton;
+	FMouseInputDelegateWrapper* GetMouseDelegateByName(const std::string& InputName);
 
-	/** Called when mouse right click is detected */
-	FMouseDelegateWrapper RightButton;
+protected:
+	CMap<std::string, FAutoDeletePointer<FMouseInputDelegateWrapper>> InputNameToDelegateMap;
+
 };
 
 /**
@@ -97,7 +96,8 @@ public:
 	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
-public:
+	void InitializeInputFromConfig();
+
 	void HandleEvents();
 
 	void ResetAll();
@@ -146,5 +146,7 @@ protected:
 	SDL_Event Event;
 	
 	bool bQuitInputDetected;
+
+	std::shared_ptr<FIniObject> EngineInputIniObject;
 	
 };

@@ -40,11 +40,18 @@ bool FIniField::GetValueAsBool() const
 	return bIsTrue;
 }
 
+bool FIniField::IsValid() const
+{
+	return (!Name.empty() && !Value.empty());
+}
+
 FIniObject::FIniObject(FIniManager* InIniManager, std::string InIniPath, std::string InIniName)
 	: IniManager(InIniManager)
 	, IniPath(std::move(InIniPath))
 	, IniName(std::move(InIniName))
 {
+	// IniManager must not be nullptr
+	ENSURE_VALID(InIniManager != nullptr);
 }
 
 FIniObject::~FIniObject()
@@ -65,11 +72,46 @@ bool FIniObject::DoesIniExist() const
 
 void FIniObject::LoadIni()
 {
-	
+	// Load disk data
+	IniAssetSharedPtr->Load(IniManager->GetIniParser());
+
+	const CArray<FParserLine>& Lines = IniAssetSharedPtr->GetLines();
+	for (const FParserLine& Line : Lines)
+	{
+		std::string IniKey, IniValue;
+
+		for (const FParserText& Text : Line.Texts)
+		{
+			if (Text.Type == EParserTextType::Word)
+			{
+				if (IniKey.empty())
+				{
+					IniKey = Text.Text;
+				}
+				else if (Text.Text != "=" && IniValue.empty())
+				{
+					IniValue = Text.Text;
+				}
+			}
+		}
+
+		FIniField IniField(IniKey, IniValue);
+		if (IniField.IsValid())
+		{
+			FieldsMap.Emplace(IniKey, std::make_shared<FIniField>(IniField));
+		}
+	}
+
+	// Unloaded after loading ini
+	IniAssetSharedPtr->UnLoad();
 }
 
 void FIniObject::SaveIni()
 {
+
+
+	// Save data to disk
+	IniAssetSharedPtr->Save(IniManager->GetIniParser());
 }
 
 bool FIniObject::ContainsFieldByName(const std::string& FieldName) const
@@ -94,25 +136,35 @@ bool FIniObject::ContainsFieldByValue(const std::string& FieldValue) const
 	return bHasValue;
 }
 
-std::shared_ptr<FIniField> FIniObject::FindFieldByName(const std::string& FieldName)
+FIniField FIniObject::FindFieldByName(const std::string& FieldName)
 {
-	std::shared_ptr<FIniField> Value;
+	FIniField Value;
 
-	if (ContainsFieldByName(FieldName))
+	for (const std::pair<const std::string, std::shared_ptr<FIniField>>& Field : FieldsMap)
 	{
-		Value = FieldsMap.FindValueByKey(FieldName);
+		if (Field.first == FieldName)
+		{
+			Value = *Field.second;
+
+			break;
+		}
 	}
 
 	return Value;
 }
 
-std::shared_ptr<FIniField> FIniObject::FindFieldByValue(const std::string& FieldValue)
+FIniField FIniObject::FindFieldByValue(const std::string& FieldValue)
 {
-	std::shared_ptr<FIniField> Value;
+	FIniField Value;
 
-	if (ContainsFieldByValue(FieldValue))
+	for (const std::pair<const std::string, std::shared_ptr<FIniField>>& Field : FieldsMap)
 	{
-		Value = FieldsMap.FindValueByKey(FieldValue);
+		if (Field.second->GetValueAsString() == FieldValue)
+		{
+			Value = *Field.second;
+
+			break;
+		}
 	}
 
 	return Value;

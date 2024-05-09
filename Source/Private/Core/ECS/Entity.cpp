@@ -55,11 +55,11 @@ UBaseComponent* EEntity::GetRootComponent()
 	return DefaultRootComponent;
 }
 
-void EEntity::RegisterInput(const FEventHandler* InputHandler)
+void EEntity::RegisterInput(FEventHandler* InputHandler)
 {
 }
 
-void EEntity::UnRegisterInput(const FEventHandler* InputHandler)
+void EEntity::UnRegisterInput(FEventHandler* InputHandler)
 {
 }
 
@@ -90,14 +90,14 @@ FGameModeManager* EEntity::GetGameModeManager() const
 
 void EEntity::RegisterInputInternal()
 {
-	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+	FEventHandler* InputHandler = GEngine->GetEventHandler();
 
 	RegisterInput(InputHandler);
 }
 
 void EEntity::UnRegisterInputInternal()
 {
-	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+	FEventHandler* InputHandler = GEngine->GetEventHandler();
 
 	UnRegisterInput(InputHandler);
 }

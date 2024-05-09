@@ -32,9 +32,9 @@ bool FFileSystem::Directory::Delete(const std::string& InPath, const bool bRecur
 
 bool FFileSystem::File::Exists(const std::string& InPath)
 {
-    const std::ifstream FileCheck(InPath.c_str());
+    struct stat buffer;
 
-    return FileCheck.good();
+    return (stat(InPath.c_str(), &buffer) == 0);
 }
 
 bool FFileSystem::File::Create(const std::string& InPath)

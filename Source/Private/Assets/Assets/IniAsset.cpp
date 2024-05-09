@@ -4,6 +4,7 @@
 #include "Assets/Assets/IniAsset.h"
 
 #include "Assets/Parser.h"
+#include "Assets/IniReader/IniManager.h"
 
 FIniAsset::FIniAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
@@ -26,26 +27,22 @@ std::string FIniAsset::GetAbsolutePath() const
 
 bool FIniAsset::DoesFileExist() const
 {
-	std::string AbsolutePath = GetAbsolutePath();
-
-	return FFileSystem::File::Exists(AbsolutePath);
+	return FFileSystem::File::Exists(AssetPath);
 }
 
 void FIniAsset::Load(FParser* IniParser)
 {
 	if (IniParser != nullptr && DoesFileExist())
 	{
-		std::string AbsolutePath = GetAbsolutePath();
-
 		FDelegateSafe<void, const std::string&> FileReaderDelegate;
 		FileReaderDelegate.BindLambda([&](const std::string& Line)
 		{
-			CArray<FParserLine> ParserLines = IniParser->ParseStringIntoLines(Line);
+			FParserLine ParserLines = IniParser->AdvancedParseStringIntoLines(Line);
 
-			Lines += ParserLines;
+			Lines.Push(ParserLines);
 		});
 
-		FFileSystem::File::GetFileContentLineByLine(FileReaderDelegate, AbsolutePath);
+		FFileSystem::File::GetFileContentLineByLine(FileReaderDelegate, AssetPath);
 	}
 }
 
@@ -59,4 +56,14 @@ void FIniAsset::Save(FParser* IniParser)
 
 void FIniAsset::UnLoad()
 {
+}
+
+const CArray<FParserLine>& FIniAsset::GetLines() const
+{
+	return Lines;
+}
+
+void FIniAsset::SetLines(const CArray<FParserLine>& NewLines)
+{
+	Lines = NewLines;
 }

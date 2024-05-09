@@ -126,6 +126,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineTickingManager = CreateEngineTickingManager();
 	EngineRenderingManager = CreateEngineRenderingManager();
 
+	EventHandler->InitializeInputFromConfig();
+
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
 #endif

@@ -8,6 +8,7 @@
 UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, bHasTargetMoveToLocation(false)
+	, bShouldRotateInstant(false)
 	, StopDistance(0.f)
 	, LinearSpeedPerSecond(40.f)
 	, AngularSpeedPerSecond(90.f)
@@ -89,6 +90,11 @@ void UMoveComponent::AbortMovement()
 	bHasTargetMoveToLocation = false;
 }
 
+void UMoveComponent::SetShouldRotateInstant(const bool bInShouldRotateInstant)
+{
+	bShouldRotateInstant = bInShouldRotateInstant;
+}
+
 bool UMoveComponent::IsMoving() const
 {
 	return bHasTargetMoveToLocation;
@@ -116,13 +122,13 @@ void UMoveComponent::MoveByUnits(const float Distance, const EMovementDirection 
 			}
 			case EMovementDirection::Right:
 			{
-
+				CurrentVector = RootTransformComponent->GetRightVector();
 
 				break;
 			}
 			case EMovementDirection::Left:
 			{
-
+				CurrentVector = -RootTransformComponent->GetRightVector();
 
 				break;
 			}
@@ -150,19 +156,27 @@ void UMoveComponent::UpdateRotation(const float DeltaTime)
 	const float TargetRotation = FMath::FindLookAtRotationInDegrees(CurrentLocation, CalculatedTargetLocation);
 	const float RotationChangeInCurrentTick = AngularSpeedPerSecond * DeltaTime;
 
-	if (FMath::IsNearlyEqual(FullRotation + PreciseRotation, FullRotation + TargetRotation, RotationChangeInCurrentTick))
+	if (bShouldRotateInstant)
 	{
+		// Instant rotation to target
 		PreciseRotation = TargetRotation;
 	}
 	else
 	{
-		if (FMath::IsNearlyEqual(FullRotation + PreciseRotation + 90.f, FullRotation + TargetRotation, 90.f))
+		if (FMath::IsNearlyEqual(FullRotation + PreciseRotation, FullRotation + TargetRotation, RotationChangeInCurrentTick))
 		{
-			PreciseRotation += RotationChangeInCurrentTick;
+			PreciseRotation = TargetRotation;
 		}
 		else
 		{
-			PreciseRotation -= RotationChangeInCurrentTick;
+			if (FMath::IsNearlyEqual(FullRotation + PreciseRotation + 90.f, FullRotation + TargetRotation, 90.f))
+			{
+				PreciseRotation += RotationChangeInCurrentTick;
+			}
+			else
+			{
+				PreciseRotation -= RotationChangeInCurrentTick;
+			}
 		}
 	}
 

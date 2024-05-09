@@ -28,6 +28,10 @@ public:
 	/** Clear content without saving */
 	void UnLoad();
 
+	const CArray<FParserLine>& GetLines() const;
+
+	void SetLines(const CArray<FParserLine>& NewLines);
+
 protected:
 	CArray<FParserLine> Lines;
 

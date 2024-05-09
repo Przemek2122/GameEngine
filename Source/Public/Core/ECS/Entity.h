@@ -44,8 +44,8 @@ public:
 
 protected:
 	/** Register input to FEventHandler. Remember to unregister input in UnRegisterInput! */
-	virtual void RegisterInput(const FEventHandler* InputHandler);
-	virtual void UnRegisterInput(const FEventHandler* InputHandler);
+	virtual void RegisterInput(FEventHandler* InputHandler);
+	virtual void UnRegisterInput(FEventHandler* InputHandler);
 
 	void RegisterInputInternal();
 	void UnRegisterInputInternal();

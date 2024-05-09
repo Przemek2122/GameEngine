@@ -56,6 +56,8 @@ struct FParserLine
 
 	FParserLine(CArray<FParserText> InTexts);
 
+	void operator=(const FParserLine& InOther);
+
 	CArray<FParserText> Texts;
 };
 
@@ -94,14 +96,14 @@ public:
 	 * It's more complex and it returns comments
 	 * Takes given string and splits it into lines by Separators set in constructor
 	 */
-	CArray<FParserLine> ParseStringIntoLines(const std::string& Line);
+	FParserLine AdvancedParseStringIntoLines(const std::string& Line);
 
 	/**
-	 * Reverse of ParseStringIntoLines, for saving purposes
+	 * Reverse of AdvancedParseStringIntoLines, for saving purposes
 	 * It's more complex and it adds comments
 	 * Takes given lines and merges them into one string with separators
 	 */
-	std::string ParseLinesIntoString(const CArray<FParserLine>& Lines);
+	std::string AdvancedParseLinesIntoString(const CArray<FParserLine>& Lines);
 
 	/** Splits given string by given  */
 	static CArray<std::string> SplitString(const std::string& InString, const CArray<char>& InSeparatorCharArray);

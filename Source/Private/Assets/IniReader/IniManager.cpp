@@ -5,10 +5,11 @@
 #include "Assets/IniReader/IniObject.h"
 
 FIniManager::FIniManager(FAssetsManager* InAssetsManager)
-	: InSeparatorCharArray({ '\n' })
+	: InSeparatorCharArray({ '=' })
 	, InCommentCharArray({ ';', '#' })
 	, InIgnoredCharArray({ ' ', '	' })
 	, AssetsManager(InAssetsManager)
+	, IniSuffix(".ini")
 {
 	IniParser = std::make_shared<FParser>(InSeparatorCharArray, InCommentCharArray, InIgnoredCharArray);
 }
@@ -34,6 +35,14 @@ FParser* FIniManager::GetIniParser() const
 	return IniParser.get();
 }
 
+void FIniManager::RemoveIniObject(const std::string& IniName)
+{
+	if (IniNameToObjectMap.ContainsKey(IniName))
+	{
+		IniNameToObjectMap.Remove(IniName);
+	}
+}
+
 FAssetsManager* FIniManager::GetAssetsManager() const
 {
 	return AssetsManager;
@@ -41,7 +50,7 @@ FAssetsManager* FIniManager::GetAssetsManager() const
 
 std::shared_ptr<FIniObject> FIniManager::CreateIniObject(const std::string& IniName)
 {
-	std::string IniFullPath = ConvertIniNameToRelativeFullPath(IniName);
+	std::string IniFullPath = ConvertIniNameToRelativeFullPath(IniName) + IniSuffix;
 
 	std::shared_ptr<FIniObject> SharedPtr = std::make_shared<FIniObject>(this, IniFullPath, IniName);
 
@@ -57,6 +66,7 @@ std::string FIniManager::ConvertIniNameToRelativeFullPath(const std::string& Ini
 	std::string FullPath;
 
 	FullPath += AssetsManager->GetConfigPathRelative();
+	FullPath += FFileSystem::GetPlatformSlash();
 	FullPath += IniName;
 
 	return FullPath;

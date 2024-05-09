@@ -42,6 +42,8 @@ public:
 	/** Cancel moving to TargetLocation */
 	void AbortMovement();
 
+	void SetShouldRotateInstant(const bool bInShouldRotateInstant);
+
 	bool IsMoving() const;
 
 protected:
@@ -57,6 +59,9 @@ protected:
 
 	/** If true, component owner is moving */
 	bool bHasTargetMoveToLocation;
+
+	/** if true we will not make smooth rotation but instant rotation */
+	bool bShouldRotateInstant;
 
 	/** Distance to stop when moving */
 	float StopDistance;

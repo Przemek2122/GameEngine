@@ -22,6 +22,12 @@ public:
 	/** Shared ini parser for FIniObject */
 	FParser* GetIniParser() const;
 
+	/**
+	 * In case where ini is huge or you know for sure you do not want it to exist anymore.
+	 * You can remove it from the array so if it do not have other references it will be removed.
+	 */
+	void RemoveIniObject(const std::string& IniName);
+
 	FAssetsManager* GetAssetsManager() const;
 
 protected:
@@ -43,5 +49,7 @@ protected:
 	CArray<char> InIgnoredCharArray;
 
 	FAssetsManager* AssetsManager;
+
+	std::string IniSuffix;
 
 };

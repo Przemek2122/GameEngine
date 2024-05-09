@@ -27,6 +27,8 @@ public:
 
 	/** checks if string appears to be bool or returns false. */
 	bool GetValueAsBool() const;
+
+	bool IsValid() const;
 	
 protected:
 	std::string Name;
@@ -42,6 +44,7 @@ public:
 	void Initialize();
 
 	bool DoesIniExist() const;
+
 	void LoadIni();
 	void SaveIni();
 
@@ -52,10 +55,10 @@ public:
 	[[nodiscard]] bool ContainsFieldByValue(const std::string& FieldValue) const;
 
 	/** Recommended. Find field by name in map. */
-	std::shared_ptr<FIniField> FindFieldByName(const std::string& FieldName);
+	FIniField FindFieldByName(const std::string& FieldName);
 
 	/** Avoid if possible because it will iterate all records until value is found. Find field by value in map. */
-	std::shared_ptr<FIniField> FindFieldByValue(const std::string& FieldValue);
+	FIniField FindFieldByValue(const std::string& FieldValue);
 
 	/** Add or update field using given struct. */
 	void AddOrUpdateField(const FIniField& IniField);

@@ -275,7 +275,7 @@ void FMapAsset::SaveMapFile(FParser& Parser)
 		}
 
 		// Convert array into string (@TODO This might be big - and is todo)
-		const std::string StringToWrite = Parser.ParseLinesIntoString(ParserLines);
+		const std::string StringToWrite = Parser.AdvancedParseLinesIntoString(ParserLines);
 
 		// Write string to file
 		MapNameFileOfStream.write(StringToWrite.c_str(), StringToWrite.size());
@@ -317,7 +317,7 @@ void FMapAsset::SaveMapDataFile(FParser& Parser)
 			ParserLines.Push(ParserLine);
 		}
 
-		const std::string StringToSave = Parser.ParseLinesIntoString(ParserLines);
+		const std::string StringToSave = Parser.AdvancedParseLinesIntoString(ParserLines);
 
 		MapDataFileOfStream.write(StringToSave.c_str(), StringToSave.size());
 	}

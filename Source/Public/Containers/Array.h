@@ -51,6 +51,11 @@ public:
 		}
 	}
 
+	void operator=(const CArray<TType, TSizeType>& Other)
+	{
+		Vector = Other.Vector;
+	}
+
 	void operator+=(const CArray<TType, TSizeType>& Other)
 	{
 		for (auto& Value : Other.Vector)

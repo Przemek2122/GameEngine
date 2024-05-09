@@ -3,8 +3,57 @@
 #include "CoreEngine.h"
 #include "Input/EventHandler.h"
 
+#include "Assets/IniReader/IniManager.h"
+#include "Assets/IniReader/IniObject.h"
+
+FMouseDelegates::FMouseDelegates(FEventHandler* EventHandler)
+{
+	AddInput(EventHandler, "Default");
+	AddInput(EventHandler, "Move");
+	AddInput(EventHandler, "LeftButton");
+	AddInput(EventHandler, "MiddleButton");
+	AddInput(EventHandler, "RightButton");
+}
+
+void FMouseDelegates::AddInput(FEventHandler* EventHandler, const std::string& InputName)
+{
+#if _DEBUG
+	if (EventHandler != nullptr)
+	{
+#endif
+
+		InputNameToDelegateMap.Emplace(InputName, FAutoDeletePointer<FMouseInputDelegateWrapper>(EventHandler));
+
+#if _DEBUG
+	}
+	else
+	{
+		LOG_ERROR("EventHandler can not be nullptr!");
+	}
+#endif
+}
+
+FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByName(const std::string& InputName)
+{
+	return InputNameToDelegateMap[InputName].Get();
+
+	/*
+	if (InputNameToDelegateMap.ContainsKey(InputName))
+	{
+		return InputNameToDelegateMap[InputName].Get();
+	}
+	else
+	{
+		LOG_ERROR("FMouseDelegates::GetMouseDelegateByName returns default input mapping. It will not work.");
+
+		return InputNameToDelegateMap["Default"].Get();
+	}
+	*/
+}
+
 FEventHandler::FEventHandler(const SDL_Event& InEvent)
-	: Event(InEvent)
+	: MouseDelegates(this)
+	, Event(InEvent)
 	, bQuitInputDetected(false)
 {
 	SetMouseDelegates();
@@ -15,6 +64,20 @@ FEventHandler::~FEventHandler()
 {
 	MouseInputDelegateResetQueue.Clear();
 	KeyboardInputDelegateResetQueue.Clear();
+}
+
+void FEventHandler::InitializeInputFromConfig()
+{
+	FIniManager* IniManager = GEngine->GetAssetsManager()->GetIniManager();
+	EngineInputIniObject = IniManager->GetIniObject("EngineInput");
+	if (EngineInputIniObject->DoesIniExist())
+	{
+		EngineInputIniObject->LoadIni();
+
+		FIniField IniField = EngineInputIniObject->FindFieldByName("InputA");
+
+		LOG_INFO("IniField key: " << IniField.GetName() << ", value: " << IniField.GetValueAsString());
+	}
 }
 
 void FEventHandler::HandleEvents()
@@ -80,10 +143,6 @@ void FEventHandler::AddKeyboardInputDelegateToReset(FInputDelegateWrapper* Keybo
 
 void FEventHandler::SetMouseDelegates()
 {
-	MouseDelegates.Move = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
-	MouseDelegates.LeftButton = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
-	MouseDelegates.RightButton = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
-	MouseDelegates.MiddleButton = FAutoDeletePointer<FMouseInputDelegateWrapper>(this);
 }
 
 void FEventHandler::SetKeyBoardDelegates()
@@ -502,7 +561,7 @@ void FEventHandler::MouseMotion()
 	{
 		MouseLocationLast = MouseLocationCurrent;
 
-		MouseDelegates.Move->Execute(MouseLocationCurrent, EInputState::PRESS);
+		MouseDelegates.GetMouseDelegateByName("Move")->Execute(MouseLocationCurrent, EInputState::PRESS);
 	}
 
 	MouseLocationCurrent.X = Event.motion.x;
@@ -515,21 +574,21 @@ void FEventHandler::InputMouseDown()
 	{
 		case SDL_BUTTON_LEFT:
 		{
-			MouseDelegates.LeftButton->Execute(MouseLocationCurrent, EInputState::PRESS);
+			MouseDelegates.GetMouseDelegateByName("LeftButton")->Execute(MouseLocationCurrent, EInputState::PRESS);
 
 			break;
 		}
 
 		case SDL_BUTTON_MIDDLE:
 		{
-			MouseDelegates.MiddleButton->Execute(MouseLocationCurrent, EInputState::PRESS);
+			MouseDelegates.GetMouseDelegateByName("MiddleButton")->Execute(MouseLocationCurrent, EInputState::PRESS);
 
 			break;
 		}
 
 		case SDL_BUTTON_RIGHT:
 		{
-			MouseDelegates.RightButton->Execute(MouseLocationCurrent, EInputState::PRESS);
+			MouseDelegates.GetMouseDelegateByName("RightButton")->Execute(MouseLocationCurrent, EInputState::PRESS);
 
 			break;
 		}
@@ -547,21 +606,21 @@ void FEventHandler::InputMouseUp()
 	{
 		case SDL_BUTTON_LEFT:
 		{
-			MouseDelegates.LeftButton->Execute(MouseLocationCurrent, EInputState::RELEASE);
+			MouseDelegates.GetMouseDelegateByName("LeftButton")->Execute(MouseLocationCurrent, EInputState::RELEASE);
 
 			break;
 		}
 
 		case SDL_BUTTON_MIDDLE:
 		{
-			MouseDelegates.MiddleButton->Execute(MouseLocationCurrent, EInputState::RELEASE);
+			MouseDelegates.GetMouseDelegateByName("MiddleButton")->Execute(MouseLocationCurrent, EInputState::RELEASE);
 
 			break;
 		}
 
 		case SDL_BUTTON_RIGHT:
 		{
-			MouseDelegates.RightButton->Execute(MouseLocationCurrent, EInputState::RELEASE);
+			MouseDelegates.GetMouseDelegateByName("RightButton")->Execute(MouseLocationCurrent, EInputState::RELEASE);
 
 			break;
 		}

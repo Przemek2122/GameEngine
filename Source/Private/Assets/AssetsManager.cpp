@@ -24,6 +24,11 @@ FAssetsManager::~FAssetsManager()
 	AssetsByType.Clear();
 }
 
+FIniManager* FAssetsManager::GetIniManager() const
+{
+	return IniManager;
+}
+
 void FAssetsManager::RemoveAsset(const std::string& InAssetName, const EAssetType OptionalAssetType)
 {
 	if (OptionalAssetType == EAssetType::AT_NONE)

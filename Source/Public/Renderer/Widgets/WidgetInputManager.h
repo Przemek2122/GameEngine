@@ -135,11 +135,11 @@ public:
 	FKeyboardInputCollection KeyboardInputCollection;
 
 protected:
-	void SetupMouseDelegates(const FEventHandler* EventHandler);
-	void SetupKeyboardDelegates(const FEventHandler* EventHandler);
+	void SetupMouseDelegates(FEventHandler* EventHandler);
+	void SetupKeyboardDelegates(FEventHandler* EventHandler);
 
-	void ClearMouseDelegates(const FEventHandler* EventHandler);
-	void ClearKeyboardDelegates(const FEventHandler* EventHandler);
+	void ClearMouseDelegates(FEventHandler* EventHandler);
+	void ClearKeyboardDelegates(FEventHandler* EventHandler);
 
 protected:
 	/** Widgets which should be asked about input */
