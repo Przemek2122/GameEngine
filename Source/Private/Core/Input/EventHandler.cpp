@@ -35,9 +35,6 @@ void FMouseDelegates::AddInput(FEventHandler* EventHandler, const std::string& I
 
 FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByName(const std::string& InputName)
 {
-	return InputNameToDelegateMap[InputName].Get();
-
-	/*
 	if (InputNameToDelegateMap.ContainsKey(InputName))
 	{
 		return InputNameToDelegateMap[InputName].Get();
@@ -48,7 +45,10 @@ FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByName(const std::s
 
 		return InputNameToDelegateMap["Default"].Get();
 	}
-	*/
+}
+
+FKeyBoardDelegates::FKeyBoardDelegates()
+{
 }
 
 FEventHandler::FEventHandler(const SDL_Event& InEvent)

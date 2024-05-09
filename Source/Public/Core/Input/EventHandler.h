@@ -13,8 +13,6 @@
  */
 class FMouseDelegates
 {
-	typedef FAutoDeletePointer<FMouseInputDelegateWrapper> FMouseDelegateWrapper;
-
 public:
 	FMouseDelegates(FEventHandler* EventHandler);
 
@@ -33,8 +31,11 @@ protected:
  */
 class FKeyBoardDelegates
 {
-public:
 	typedef FAutoDeletePointer<FInputDelegateWrapper> FKeyBoardButtonDelegate;
+
+public:
+	FKeyBoardDelegates();
+
 
 	/** Called when escape is used */
 	FKeyBoardButtonDelegate ButtonEscape;
