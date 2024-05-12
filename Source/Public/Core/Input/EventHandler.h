@@ -34,8 +34,13 @@ class FKeyBoardDelegates
 	typedef FAutoDeletePointer<FInputDelegateWrapper> FKeyBoardButtonDelegate;
 
 public:
-	FKeyBoardDelegates();
+	FKeyBoardDelegates(FEventHandler* EventHandler);
 
+	void AddInput(FEventHandler* EventHandler, const std::string& InputName);
+
+	FInputDelegateWrapper* GetMouseDelegateByName(const std::string& InputName);
+
+	CMap<std::string, FAutoDeletePointer<FInputDelegateWrapper>> InputNameToDelegateMap;
 
 	/** Called when escape is used */
 	FKeyBoardButtonDelegate ButtonEscape;

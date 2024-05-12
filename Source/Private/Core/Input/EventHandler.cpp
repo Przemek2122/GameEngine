@@ -9,6 +9,7 @@
 FMouseDelegates::FMouseDelegates(FEventHandler* EventHandler)
 {
 	AddInput(EventHandler, "Default");
+
 	AddInput(EventHandler, "Move");
 	AddInput(EventHandler, "LeftButton");
 	AddInput(EventHandler, "MiddleButton");
@@ -47,12 +48,48 @@ FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByName(const std::s
 	}
 }
 
-FKeyBoardDelegates::FKeyBoardDelegates()
+FKeyBoardDelegates::FKeyBoardDelegates(FEventHandler* EventHandler)
 {
+	AddInput(EventHandler, "Default");
+
+
+}
+
+void FKeyBoardDelegates::AddInput(FEventHandler* EventHandler, const std::string& InputName)
+{
+#if _DEBUG
+	if (EventHandler != nullptr)
+	{
+#endif
+
+		InputNameToDelegateMap.Emplace(InputName, FAutoDeletePointer<FInputDelegateWrapper>(EventHandler));
+
+#if _DEBUG
+	}
+	else
+	{
+		LOG_ERROR("EventHandler can not be nullptr!");
+	}
+#endif
+}
+
+FInputDelegateWrapper* FKeyBoardDelegates::GetMouseDelegateByName(const std::string& InputName)
+{
+	if (InputNameToDelegateMap.ContainsKey(InputName))
+	{
+		return InputNameToDelegateMap[InputName].Get();
+	}
+	else
+	{
+		LOG_ERROR("FKeyBoardDelegates::GetMouseDelegateByName returns default input mapping. It will not work.");
+
+		return InputNameToDelegateMap["Default"].Get();
+	}
 }
 
 FEventHandler::FEventHandler(const SDL_Event& InEvent)
 	: MouseDelegates(this)
+	, KeyBoardDelegates(this)
 	, Event(InEvent)
 	, bQuitInputDetected(false)
 {
