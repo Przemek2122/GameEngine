@@ -67,7 +67,7 @@ void FIniObject::Initialize()
 
 bool FIniObject::DoesIniExist() const
 {
-	return IniAssetSharedPtr->DoesFileExist();
+	return (IniAssetSharedPtr != nullptr && IniAssetSharedPtr->DoesFileExist());
 }
 
 void FIniObject::LoadIni()

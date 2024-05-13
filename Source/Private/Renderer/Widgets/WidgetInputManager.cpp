@@ -123,11 +123,11 @@ void FWidgetInputManager::ChangeOrder(FWidget* Widget)
 void FWidgetInputManager::SetupMouseDelegates(FEventHandler* EventHandler)
 {
 	MouseInputCollection.OnMouseMove = CreateMouseWidgetInputWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.GetMouseDelegateByName("Move")
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")
 	);
 
 	MouseInputCollection.OnMouseLeftButtonUsed = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.GetMouseDelegateByName("LeftButton"),
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT"),
 		WIDGET_CONSUME_INPUT_ALLOW
 	);
 }
@@ -144,11 +144,11 @@ void FWidgetInputManager::SetupKeyboardDelegates(FEventHandler* EventHandler)
 void FWidgetInputManager::ClearMouseDelegates(FEventHandler* EventHandler)
 {
 	RemoveMouseWidgetInputWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.GetMouseDelegateByName("Move"), MouseInputCollection.OnMouseMove.Get()
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE"), MouseInputCollection.OnMouseMove.Get()
 	);
 
 	RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
-		EventHandler->MouseDelegates.GetMouseDelegateByName("LeftButton"), MouseInputCollection.OnMouseLeftButtonUsed.Get()
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT"), MouseInputCollection.OnMouseLeftButtonUsed.Get()
 	);
 }
 

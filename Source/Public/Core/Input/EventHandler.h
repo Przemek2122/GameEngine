@@ -16,12 +16,17 @@ class FMouseDelegates
 public:
 	FMouseDelegates(FEventHandler* EventHandler);
 
-	void AddInput(FEventHandler* EventHandler, const std::string& InputName);
+	/** Add input. RawInputName is for SDL codes while InputName is for our code use. */
+	void AddInput(FEventHandler* EventHandler, FIniObject* InIniObject, const std::string& RawInputName);
+
+	/** Raw engine internal use name */
+	FMouseInputDelegateWrapper* GetMouseDelegateByNameRaw(const std::string& InputName);
 
 	FMouseInputDelegateWrapper* GetMouseDelegateByName(const std::string& InputName);
 
 protected:
-	CMap<std::string, FAutoDeletePointer<FMouseInputDelegateWrapper>> InputNameToDelegateMap;
+	CMap<std::string, std::shared_ptr<FMouseInputDelegateWrapper>> RawInputNameToDelegateMap;
+	CMap<std::string, std::shared_ptr<FMouseInputDelegateWrapper>> InputNameToDelegateMap;
 
 };
 
@@ -36,11 +41,9 @@ class FKeyBoardDelegates
 public:
 	FKeyBoardDelegates(FEventHandler* EventHandler);
 
-	void AddInput(FEventHandler* EventHandler, const std::string& InputName);
+	void AddInput(FEventHandler* EventHandler, const std::string& RawInputName, const std::string& InputName);
 
 	FInputDelegateWrapper* GetMouseDelegateByName(const std::string& InputName);
-
-	CMap<std::string, FAutoDeletePointer<FInputDelegateWrapper>> InputNameToDelegateMap;
 
 	/** Called when escape is used */
 	FKeyBoardButtonDelegate ButtonEscape;
@@ -94,6 +97,10 @@ public:
 	/** Called when 'Delete' key is used */
 	FKeyBoardButtonDelegate ButtonDELETE;
 
+protected:
+	CMap<std::string, std::shared_ptr<FInputDelegateWrapper>> RawInputNameToDelegateMap;
+	CMap<std::string, std::shared_ptr<FInputDelegateWrapper>> InputNameToDelegateMap;
+
 };
 
 class FEventHandler
@@ -102,11 +109,11 @@ public:
 	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
-	void InitializeInputFromConfig();
-
 	void HandleEvents();
 
 	void ResetAll();
+
+	void InitializeInputFromConfig();
 
 	_NODISCARD bool QuitInputDetected() const;
 
@@ -126,10 +133,8 @@ public:
 	 */
 
 protected:
-	/** Initializer, helper for constructor - Set mouse delegates. */
-	void SetMouseDelegates();
-	/** Initializer, helper for constructor - Set keyboard delegates. */
-	void SetKeyBoardDelegates();
+	void InitializeMouseDelegates();
+	void InitializeKeyBoardDelegates();
 
 	virtual void SwitchOnInput(Uint32 EventType);
 

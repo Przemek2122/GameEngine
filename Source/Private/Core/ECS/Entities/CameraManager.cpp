@@ -43,9 +43,9 @@ void ECameraManager::RegisterInput()
 
 	if (EventHandler != nullptr)
 	{
-		EventHandler->MouseDelegates.GetMouseDelegateByName("Move")->Delegate.BindObject(this, &ECameraManager::OnMouseMove);
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.BindObject(this, &ECameraManager::OnMouseMove);
 
-		EventHandler->MouseDelegates.GetMouseDelegateByName("RightButton")->Delegate.BindObject(this, &ECameraManager::OnMouseRightClick);
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.BindObject(this, &ECameraManager::OnMouseRightClick);
 	}
 }
 
@@ -55,9 +55,9 @@ void ECameraManager::UnregisterInput()
 
 	if (EventHandler != nullptr)
 	{
-		EventHandler->MouseDelegates.GetMouseDelegateByName("Move")->Delegate.UnBindObject(this, &ECameraManager::OnMouseMove);
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.UnBindObject(this, &ECameraManager::OnMouseMove);
 
-		EventHandler->MouseDelegates.GetMouseDelegateByName("RightButton")->Delegate.UnBindObject(this, &ECameraManager::OnMouseRightClick);
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &ECameraManager::OnMouseRightClick);
 	}
 }
 
