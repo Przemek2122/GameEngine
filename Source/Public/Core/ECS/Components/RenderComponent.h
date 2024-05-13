@@ -12,7 +12,6 @@ class URenderComponent : public UComponent
 {
 public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
-	~URenderComponent() override;
 
 	/** Begin UBaseComponent */
 	void EndPlay() override;

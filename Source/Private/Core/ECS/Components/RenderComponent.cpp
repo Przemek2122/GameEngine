@@ -12,10 +12,6 @@ URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManage
 {
 }
 
-URenderComponent::~URenderComponent()
-{
-}
-
 void URenderComponent::EndPlay()
 {
 	Super::EndPlay();
@@ -39,8 +35,6 @@ void URenderComponent::Render()
 
 void URenderComponent::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
-	bool bHasTexture = false;
-
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
@@ -61,10 +55,10 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 {
 	if (InAsset != nullptr)
 	{
-		// Decrement old one - potentialy freeing memory
 		if (TextureAsset != nullptr)
 		{
 			TextureAsset->DecrementNumberOfReferences();
+			TextureAsset = nullptr; 
 		}
 
 		// Set new one

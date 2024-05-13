@@ -10,6 +10,10 @@ FAssetBase::FAssetBase(std::string InAssetName, std::basic_string<char> InAssetP
 {
 }
 
+FAssetBase::~FAssetBase()
+{
+}
+
 EAssetType FAssetBase::GetAssetType() const
 {
 	return EAssetType::AT_BASE;
@@ -25,6 +29,11 @@ std::string FAssetBase::GetAssetPath() const
 	return AssetPath;
 }
 
+int FAssetBase::GetNumberOfReferences() const
+{
+	return NumberOfReferences;
+}
+
 void FAssetBase::IncrementNumberOfReferences()
 {
 	NumberOfReferences++;
@@ -37,20 +46,21 @@ void FAssetBase::DecrementNumberOfReferences()
 	OnNumberOfReferencesLowered();
 }
 
-int FAssetBase::GetNumberOfReferences() const
-{
-	return NumberOfReferences;
-}
-
 void FAssetBase::OnNumberOfReferencesLowered()
 {
-	if (NumberOfReferences <= 0)
+	if (NumberOfReferences == 0)
 	{
-		ReleaseTexture();
+		ReleaseAsset();
 	}
+#if _DEBUG
+	else if (NumberOfReferences < 0)
+	{
+		LOG_ERROR("Losing references, got: " << NumberOfReferences);
+	}
+#endif
 }
 
-void FAssetBase::ReleaseTexture()
+void FAssetBase::ReleaseAsset()
 {
 	GEngine->GetAssetsManager()->RemoveAsset(AssetName, GetAssetType());
 }

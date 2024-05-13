@@ -126,7 +126,7 @@ void FMap::Render()
 							Destination.x = MapRenderOffset.X + HorizontalIndex * MapData.AssetsTileSize.X;
 							Destination.y = MapRenderOffset.Y + VerticalIndex * MapData.AssetsTileSize.Y;
 
-							CurrentAssetSettings.TextureAssetPtr->GetTexture()->Draw(WindowRenderer, Source, Destination);
+							CurrentAssetSettings.GetTextureAsset()->GetTexture()->Draw(WindowRenderer, Source, Destination);
 						}
 						else
 						{

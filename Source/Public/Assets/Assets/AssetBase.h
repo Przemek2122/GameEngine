@@ -26,12 +26,15 @@ class FAssetBase
 	
 public:
 	FAssetBase(std::string InAssetName, std::string InAssetPath);
-	virtual ~FAssetBase() = default;
+	virtual ~FAssetBase();
 
 	virtual EAssetType GetAssetType() const;
 
 	_NODISCARD virtual std::string GetAssetName() const;
 	_NODISCARD virtual std::string GetAssetPath() const;
+
+	/** @returns number of  */
+	int GetNumberOfReferences() const;
 
 	/** Adds one to number of referenced asset, use for automatic release */
 	void IncrementNumberOfReferences();
@@ -39,12 +42,12 @@ public:
 	/** Removes one to number of referenced asset, use for automatic release */
 	void DecrementNumberOfReferences();
 
-	/** @returns number of  */
-	int GetNumberOfReferences() const;
-
 protected:
+	/** Called when number of referenced changed to lower one */
 	virtual void OnNumberOfReferencesLowered();
-	virtual void ReleaseTexture();
+
+	/** Called when there are no references */
+	virtual void ReleaseAsset();
 
 protected:
 	std::string AssetName;

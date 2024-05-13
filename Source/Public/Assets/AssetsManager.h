@@ -107,6 +107,23 @@ public:
 
 		return nullptr;
 	}
+
+	template<class TAssetType>
+	void AddAssetExternal(std::shared_ptr<TAssetType> AssetPtr)
+	{
+		if (FFileSystem::File::Exists(AssetPtr.get()->GetAssetPath()))
+		{
+			EAssetType AssetTypeKey = AssetPtr.get()->GetAssetType();
+
+			// Add type if does not exists
+			if (!AssetsByType.HasKey(AssetTypeKey))
+			{
+				AssetsByType.Emplace(AssetTypeKey, FAssetsStructure());
+			}
+
+			AssetsByType[AssetTypeKey].AssetsMap.Emplace(AssetPtr.get()->GetAssetName(), AssetPtr);
+		}		
+	}
 	
 	/** Delete asset by name. */
 	void RemoveAsset(const std::string& InAssetName, const EAssetType OptionalAssetType = EAssetType::AT_NONE);

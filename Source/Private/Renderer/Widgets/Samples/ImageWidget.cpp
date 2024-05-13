@@ -22,13 +22,13 @@ void FImageWidget::Init()
 
 void FImageWidget::PreDeInit()
 {
+	FWidget::PreDeInit();
+
 	if (TextureAsset != nullptr)
 	{
 		TextureAsset->DecrementNumberOfReferences();
 		TextureAsset = nullptr;
 	}
-
-	Super::PreDeInit();
 }
 
 void FImageWidget::Render()
@@ -77,10 +77,11 @@ void FImageWidget::SetImage(FTextureAsset* NewTexture)
 		{
 			OptionalTexturePtr = nullptr;
 		}
-		else if (TextureAsset != nullptr)
+
+		if (TextureAsset != nullptr)
 		{
-			// Decrement old one - potentialy freeing memory
 			TextureAsset->DecrementNumberOfReferences();
+			TextureAsset = nullptr;
 		}
 
 		// Set new one
