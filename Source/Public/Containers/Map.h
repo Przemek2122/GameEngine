@@ -14,6 +14,10 @@ template<typename TKey, typename TValue, typename TSizeType = int>
 class CMap : public CContainerBase<TValue, TSizeType>
 {
 public:
+	CMap()
+	{
+	}
+
 	/** Begin CContainerBase interface */
 	_NODISCARD SDL_FORCE_INLINE TSizeType Size() const override
 	{
