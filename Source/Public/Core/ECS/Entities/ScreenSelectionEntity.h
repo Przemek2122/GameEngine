@@ -30,7 +30,7 @@ public:
 	virtual void OnEndSelecting();
 
 	/** Called when should select but it was in place - click */
-	virtual void OnClickInsteadOfSelection();
+	virtual void OnClickInsteadOfSelection(const FVector2D<int>& InMousePosition);
 
 	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
 
@@ -42,6 +42,8 @@ protected:
 	void RegisterInput(FEventHandler* InputHandler) override;
 	void UnRegisterInput(FEventHandler* InputHandler) override;
 	/** End EEntity */
+
+	void CheckScreenSelection(const FVector2D<int>& InMousePosition);
 
 	virtual void AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
 	virtual void RemoveFromCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);

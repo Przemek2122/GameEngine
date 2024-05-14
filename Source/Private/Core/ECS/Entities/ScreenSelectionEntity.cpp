@@ -32,42 +32,7 @@ void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 {
 	if (bIsSelecting)
 	{
-		const FVector2D<int> SelectionEnd = InMousePosition;
-
-		CurrentlySelectedObjects.Clear();
-
-		for (int i = 0; i < ScreenSelectableObjects.Size(); i++)
-		{
-			IScreenSelectionInterface* ScreenSelectable = ScreenSelectableObjects[i]; 
-
-			const FVector2D<int> ScreenSelectableLocation = ScreenSelectable->GetLocation();
-			const FVector2D<int> ScreenSelectableSize = ScreenSelectable->GetSize();
-
-			const bool bIsSelectedHorizontalToRight =	SelectionStart.X >= ScreenSelectableLocation.X &&
-														SelectionEnd.X <= ScreenSelectableLocation.X + ScreenSelectableSize.X;
-
-			const bool bIsSelectedHorizontalToLeft =	SelectionEnd.X >= ScreenSelectableLocation.X &&
-														SelectionStart.X <= ScreenSelectableLocation.X + ScreenSelectableSize.X;
-
-			const bool bIsSelectedVerticalToDown =		SelectionEnd.Y >= ScreenSelectableLocation.Y &&
-														SelectionStart.Y <= ScreenSelectableLocation.Y + ScreenSelectableSize.Y;
-
-			const bool bIsSelectedVerticalToUp =		SelectionStart.Y >= ScreenSelectableLocation.Y &&
-														SelectionEnd.Y <= ScreenSelectableLocation.Y + ScreenSelectableSize.Y;
-
-			if ((bIsSelectedHorizontalToRight || bIsSelectedHorizontalToLeft) && (bIsSelectedVerticalToDown || bIsSelectedVerticalToUp))
-			{
-				ScreenSelectable->NativeSelect();
-
-				AddToCurrentlySelectedObjects(ScreenSelectable);
-			}
-			else
-			{
-				ScreenSelectable->NativeDeselect();
-
-				RemoveFromCurrentlySelectedObjects(ScreenSelectable);
-			}
-		}
+		CheckScreenSelection(InMousePosition);
 	}
 }
 
@@ -90,7 +55,7 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 
 			if (SelectionStart.DistanceTo(InMousePosition) < ClickInsteadOfSelectionTolerance)
 			{
-				OnClickInsteadOfSelection();
+				OnClickInsteadOfSelection(InMousePosition);
 			}
 
 			break;
@@ -140,9 +105,12 @@ void EScreenSelectionEntity::OnEndSelecting()
 	bIsSelecting = false;
 }
 
-void EScreenSelectionEntity::OnClickInsteadOfSelection()
+void EScreenSelectionEntity::OnClickInsteadOfSelection(const FVector2D<int>& InMousePosition)
 {
-	LOG_INFO("Click instead of selection");
+	// Update position as 
+	SelectionStart = InMousePosition;
+
+	CheckScreenSelection(InMousePosition);
 }
 
 const CArray<IScreenSelectionInterface*>& EScreenSelectionEntity::GetCurrentlySelectedObjects() const
@@ -164,6 +132,46 @@ void EScreenSelectionEntity::UnRegisterInput(FEventHandler* InputHandler)
 	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseMove);
 	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
 	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
+}
+
+void EScreenSelectionEntity::CheckScreenSelection(const FVector2D<int>& InMousePosition)
+{
+	const FVector2D<int> SelectionEnd = InMousePosition;
+
+	CurrentlySelectedObjects.Clear();
+
+	for (int i = 0; i < ScreenSelectableObjects.Size(); i++)
+	{
+		IScreenSelectionInterface* ScreenSelectable = ScreenSelectableObjects[i];
+
+		const FVector2D<int> ScreenSelectableLocation = ScreenSelectable->GetLocation();
+		const FVector2D<int> ScreenSelectableSize = ScreenSelectable->GetSize();
+
+		const bool bIsSelectedHorizontalToRight = SelectionStart.X >= ScreenSelectableLocation.X &&
+			SelectionEnd.X <= ScreenSelectableLocation.X + ScreenSelectableSize.X;
+
+		const bool bIsSelectedHorizontalToLeft = SelectionEnd.X >= ScreenSelectableLocation.X &&
+			SelectionStart.X <= ScreenSelectableLocation.X + ScreenSelectableSize.X;
+
+		const bool bIsSelectedVerticalToDown = SelectionEnd.Y >= ScreenSelectableLocation.Y &&
+			SelectionStart.Y <= ScreenSelectableLocation.Y + ScreenSelectableSize.Y;
+
+		const bool bIsSelectedVerticalToUp = SelectionStart.Y >= ScreenSelectableLocation.Y &&
+			SelectionEnd.Y <= ScreenSelectableLocation.Y + ScreenSelectableSize.Y;
+
+		if ((bIsSelectedHorizontalToRight || bIsSelectedHorizontalToLeft) && (bIsSelectedVerticalToDown || bIsSelectedVerticalToUp))
+		{
+			ScreenSelectable->NativeSelect();
+
+			AddToCurrentlySelectedObjects(ScreenSelectable);
+		}
+		else
+		{
+			ScreenSelectable->NativeDeselect();
+
+			RemoveFromCurrentlySelectedObjects(ScreenSelectable);
+		}
+	}
 }
 
 void EScreenSelectionEntity::AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable)
