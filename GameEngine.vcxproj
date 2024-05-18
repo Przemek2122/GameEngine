@@ -49,6 +49,9 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h" />
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h" />
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AiActionBase.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AiTree.h" />
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
@@ -251,6 +254,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">CoreEngine.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Source\Private\AI\AiActionBase.cpp" />
+    <ClCompile Include="Source\Private\AI\AIActionMove.cpp" />
+    <ClCompile Include="Source\Private\AI\AiTree.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\AssetBase.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\FontAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\IniAsset.cpp" />
@@ -592,7 +598,7 @@
     </Lib>
     <Lib>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;$(ProjectDir)Libs\tensorflow\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -675,7 +681,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;$(ProjectDir)Libs\tensorflow\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
