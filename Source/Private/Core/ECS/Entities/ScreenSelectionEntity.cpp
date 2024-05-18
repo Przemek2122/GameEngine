@@ -87,11 +87,6 @@ void EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, E
 
 			break;
 		}
-
-		default:
-		{
-			LOG_WARN("Got default case.");
-		}
 	}
 }
 

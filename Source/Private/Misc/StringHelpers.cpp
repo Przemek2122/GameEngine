@@ -12,3 +12,22 @@ bool FStringHelpers::CompareCharsCaseInsensitive(const char A, const char B)
 {
     return ( std::tolower(static_cast<unsigned char>(A)) == std::tolower(static_cast<unsigned char>(B)) );
 }
+
+std::string FStringHelpers::ReplaceCharInString(const std::string& BaseString, const char ReplaceFrom, const char ReplaceTo)
+{
+    std::string OutputString;
+
+    for (const char& Char : BaseString)
+    {
+	    if (Char == ReplaceFrom)
+	    {
+            OutputString += ReplaceTo;
+	    }
+        else
+        {
+            OutputString += Char;
+        }
+    }
+
+    return OutputString;
+}
