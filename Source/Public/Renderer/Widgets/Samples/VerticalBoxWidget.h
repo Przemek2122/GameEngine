@@ -27,6 +27,7 @@ public:
 	/** Begin IWidgetManagementInterface interface */
 	void RegisterWidgetPostInit(FWidget* Widget) override;
 	void UnRegisterWidget(FWidget* Widget) override;
+	void OnChildSizeChanged() override;
 	/** End IWidgetManagementInterface interface */
 
 	void SetScaleToContent(const bool bNewScaleToContent);

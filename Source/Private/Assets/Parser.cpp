@@ -3,6 +3,26 @@
 #include "CoreEngine.h"
 #include "Assets/Parser.h"
 
+FParserLine::FParserLine(FParserLine&& InOther) noexcept
+	: Texts(std::move(InOther.Texts))
+{
+}
+
+FParserLine::FParserLine(const FParserLine& InOther)
+	: Texts(InOther.Texts)
+{
+}
+
+FParserLine::FParserLine(CArray<FParserText> InTexts)
+	: Texts(std::move(InTexts))
+{
+}
+
+void FParserLine::operator=(const FParserLine& InOther)
+{
+	Texts = InOther.Texts;
+}
+
 FParser::FParser(const CArray<char>& InSeparatorCharArray, const CArray<char>& InCommentCharArray, const CArray<char>& InIgnoredCharArray)
 	: SeparatorCharArray(InSeparatorCharArray)
 	, CommentCharArray(InCommentCharArray)
@@ -89,65 +109,56 @@ std::string FParser::SimpleParseStringsIntoLine(const CArray<std::string>& Strin
 	return ParsedLine;
 }
 
-CArray<FParserLine> FParser::ParseStringIntoLines(const std::string& Line)
+FParserLine FParser::AdvancedParseStringIntoLines(const std::string& Line)
 {
-	CArray<std::string> AllLines = SplitString(Line, { NewLineChar });
+	std::string CurrentWord;
 
-	CArray<FParserLine> OutParsedLines;
+	FParserLine ParserLine;
 
-	for (std::string& SingleLine : AllLines)
+	EParserTextType ParserType = EParserTextType::Word;
+
+	for (const char& CurrentChar : Line)
 	{
-		FParserLine ParserLine;
-
-		std::string CurrentWord;
-
-		bool bIsComment = false;
-
-		for (const char& Char : SingleLine)
+		if (IsComment(CurrentChar) || ParserType == EParserTextType::Comment)
 		{
-			if (IsComment(Char))
+			if (ParserType != EParserTextType::Comment)
 			{
-				bIsComment = true;
-			}
+				ParserType = EParserTextType::Comment;
 
-			if (bIsComment)
-			{
-				CurrentWord += Char;
-			}
-			else
-			{
-				if (IsSeparator(Char))
+				// We got comment to end of the line - always
+				if (!CurrentWord.empty())
 				{
-					ParserLine.Texts.Push(FParserText(CurrentWord, EParserTextType::Word));
+					ParserLine.Texts.Push(FParserText(CurrentWord, ParserType));
 
 					CurrentWord.clear();
 				}
-
-				if (IsIgnored(Char))
-				{
-					ParserLine.Texts.Push(FParserText(std::to_string(Char), EParserTextType::Word));
-				}
-				else
-				{
-					CurrentWord += Char;
-				}
 			}
-		}
 
-		if (CurrentWord.length() > 0)
+			CurrentWord += CurrentChar;
+		}
+		else if (IsIgnored(CurrentChar))
 		{
-			const EParserTextType Type = bIsComment ? EParserTextType::Comment : EParserTextType::Word;
+			if (!CurrentWord.empty())
+			{
+				ParserLine.Texts.Push(FParserText(CurrentWord, ParserType));
 
-			ParserLine.Texts.Push(FParserText(CurrentWord, Type));
+				CurrentWord.clear();
+			}
+
+			ParserLine.Texts.Push(FParserText(TEXT_ADV(CurrentChar), EParserTextType::Ignored));
 		}
-
-		OutParsedLines.Push(ParserLine);
+		else
+		{
+			CurrentWord += CurrentChar;
+		}
 	}
 
-	return OutParsedLines;
+	ParserLine.Texts.Push(FParserText(CurrentWord, ParserType));
+
+	return std::move(ParserLine);
 }
 
-std::string FParser::ParseLinesIntoString(const CArray<FParserLine>& Lines)
+std::string FParser::AdvancedParseLinesIntoString(const CArray<FParserLine>& Lines)
 {
 	std::string Comment, Separator, Ignored;
 

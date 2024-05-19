@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECS/Component.h"
+#include "ECS/BaseComponent.h"
 
 class URenderComponent;
 
@@ -10,15 +10,15 @@ class URenderComponent;
  * Component for managing health
  * + Damage, healing, death with delegate
  */
-class UHealthComponent : public UComponent
+class UHealthComponent : public UBaseComponent
 {
 public:
 	UHealthComponent(IComponentManagerInterface* InComponentManagerInterface);
 	virtual ~UHealthComponent() override = default;
 
-	/** Begin UComponent */
+	/** Begin UBaseComponent */
 	void BeginPlay() override;
-	/** End UComponent */
+	/** End UBaseComponent */
 
 	virtual void TakeDamage(const float Damage);
 	virtual void Heal(const float HealthToAdd);
@@ -26,6 +26,12 @@ public:
 	void SetStartingHealth(const float NewHealth);
 
 	bool IsDead() const;
+
+	/** Called when receiving damage - each time with damage taken */
+	FDelegate<void, float> OnHealthLowered;
+
+	/** Called when healing */
+	FDelegate<void, float> OnHealthGained;
 
 	/** Called when health drops below 0 */
 	FDelegate<> OnDeathDelegate;

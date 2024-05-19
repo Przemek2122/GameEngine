@@ -23,7 +23,7 @@ void FVerticalBoxWidget::Render()
 	Super::Render();
 
 #if _DEBUG
-	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorPink());
+	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorOrange());
 #endif
 }
 
@@ -46,6 +46,13 @@ void FVerticalBoxWidget::UnRegisterWidget(FWidget* Widget)
 	Super::UnRegisterWidget(Widget);
 
 	AlignWidgets();
+}
+
+void FVerticalBoxWidget::OnChildSizeChanged()
+{
+	Super::OnChildSizeChanged();
+
+	AlignWidgets(true);
 }
 
 void FVerticalBoxWidget::SetScaleToContent(const bool bNewScaleToContent)

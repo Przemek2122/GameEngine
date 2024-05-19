@@ -14,65 +14,224 @@ enum class ELocationChangeType
 };
 
 template<typename TType>
-class ITransformInterface2D
+class ITransformChildInterface2D;
+
+template<typename TType>
+class IBaseTransformInterface2D
 {
 public:
-	ITransformInterface2D()
+	void AddUpdatedComponent(ITransformChildInterface2D<TType>* UpdatedComponent)
+	{
+		UpdatedComponents.Push(UpdatedComponent);
+	}
+
+	void RemoveUpdatedComponent(ITransformChildInterface2D<TType>* UpdatedComponent)
+	{
+		UpdatedComponents.Remove(UpdatedComponent);
+	}
+
+	void UpdateSubComponentsLocation()
+	{
+		for (ITransformChildInterface2D<TType>* Component : UpdatedComponents)
+		{
+			Component->SetLocationFromParent(GetLocation());
+		}
+	}
+
+	void UpdateSubComponentsRotation()
+	{
+		for (ITransformChildInterface2D<TType>* Component : UpdatedComponents)
+		{
+			Component->SetParentRotation(GetRotation());
+		}
+	}
+
+	virtual const FVector2D<TType>& GetLocation() const = 0;
+	virtual TType GetRotation() const = 0;
+
+protected:
+	/** Children */
+	CArray<ITransformChildInterface2D<TType>*> UpdatedComponents;
+	
+};
+
+/**
+ * Interface for handling transform of the entity 2d (root component)
+ */
+template<typename TType>
+class ITransformChildInterface2D : public IBaseTransformInterface2D<TType>
+{
+public:
+	ITransformChildInterface2D()
+		: ParentRotation(0)
+		, ParentRotationOffset(0)
+		, FinalRotation(0)
+	{
+	}
+	virtual ~ITransformChildInterface2D() = default;
+
+	/** User location */
+	const FVector2D<TType>& GetLocation() const override
+	{
+		return FinalLocation;
+	}
+
+	void SetLocationFromParent(const FVector2D<TType>& NewLocation)
+	{
+		ParentLocation = NewLocation;
+
+		UpdateLocation();
+	}
+
+	void SetLocationOffset(const FVector2D<TType>& NewLocation)
+	{
+		ParentLocationOffset = NewLocation;
+
+		UpdateLocation();
+	}
+
+	TType GetRotation() const override
+	{
+		return FinalRotation;
+	}
+
+	TType GetRotationOffsetFromParent() const
+	{
+		return ParentRotationOffset;
+	}
+
+	/** Update parent rotation, do not use unless you want to update parent rotation for some reason. Use SetRotationOffset instead */
+	void SetParentRotation(const TType& NewRotation)
+	{
+		ParentRotation = NewRotation;
+
+		UpdateRotation();
+	}
+
+	/** Local offset from parent rotation */
+	void SetRotationOffset(const TType& NewRotation)
+	{
+		ParentRotationOffset = NewRotation;
+
+		UpdateRotation();
+	}
+
+	virtual void OnTransformLocationChanged()
+	{
+	}
+
+	virtual void OnTransformRotationChanged()
+	{
+	}
+
+protected:
+	void UpdateLocation()
+	{
+		FinalLocation = ParentLocation + ParentLocationOffset;
+
+		OnTransformLocationChanged();
+
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsLocation();
+	}
+
+	void UpdateRotation()
+	{
+		FinalRotation = ParentRotation + ParentRotationOffset;
+
+		OnTransformRotationChanged();
+
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsRotation();
+	}
+
+private:
+	/** Location set by parent. */
+	FVector2D<TType> ParentLocation;
+
+	/** Location offset from parent - final location */
+	FVector2D<TType> ParentLocationOffset;
+
+	FVector2D<TType> FinalLocation;
+
+	/** Rotation of Parent */
+	TType ParentRotation;
+
+	/** Rotation offset of Parent - final rotation */
+	TType ParentRotationOffset;
+
+	TType FinalRotation;
+
+};
+
+/**
+ * Interface for handling transform of the entity 2d (root component)
+ */
+template<typename TType>
+class ITransformParentInterface2D : public IBaseTransformInterface2D<TType>
+{
+public:
+	ITransformParentInterface2D()
 		: Rotation(0)
 	{
 	}
 
+	virtual ~ITransformParentInterface2D() = default;
+
+	/** Final location - User set location + Map location */
+	const FVector2D<TType>& GetLocation() const override
+	{
+		return FinalLocation;
+	}
+
 	/** User location */
-	FVector2D<TType> GetLocationUser() const
+	const FVector2D<TType>& GetLocationUser() const
 	{
 		return UserLocation;
 	}
 
 	/** Map location */
-	FVector2D<TType> GetLocationMap() const
+	const FVector2D<TType>& GetLocationMap() const
 	{
 		return MapLocationOffset;
 	}
-
-	/** Final location - User set location + Map location */
-	FVector2D<TType> GetLocationFinal() const
-	{
-		return FinalLocation;
-	}
-
 
 	void SetLocationUser(const FVector2D<TType>& NewLocation)
 	{
 		UserLocation = NewLocation;
 
-		UpdateFinalLocation(ELocationChangeType::LCT_User);
+		UpdateLocationAfterMapOrUserChange(ELocationChangeType::LCT_User);
 	}
 
 	void SetLocationMap(const FVector2D<TType>& NewLocation)
 	{
 		MapLocationOffset = NewLocation;
 
-		UpdateFinalLocation(ELocationChangeType::LCT_Map);
+		UpdateLocationAfterMapOrUserChange(ELocationChangeType::LCT_Map);
 	}
 
 	void SetLocationFinal(const FVector2D<TType>& NewLocation)
 	{
 		FinalLocation = NewLocation;
 
-		UpdateFinalLocationItself();
+		UpdateLocationAfterDirectChange();
 	}
 
+	void AddLocation(const FVector2D<TType> LocationToAdd)
+	{
+		UserLocation += LocationToAdd;
+
+		UpdateLocationAfterMapOrUserChange(ELocationChangeType::LCT_User);
+	}
 	
-	TType GetRotation() const
+	TType GetRotation() const override
 	{
 		return Rotation;
 	}
 
-	void SetRotation(const TType& NewRotation) const
+	void SetRotation(const TType& NewRotation)
 	{
 		Rotation = NewRotation;
 
-		OnTransformRotationChanged();
+		UpdateRotation();
 	}
 
 	virtual void OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
@@ -84,21 +243,32 @@ public:
 	}
 
 protected:
-	void UpdateFinalLocation(const ELocationChangeType LocationChangeType)
+	void UpdateLocationAfterMapOrUserChange(const ELocationChangeType LocationChangeType)
 	{
 		FinalLocation = UserLocation + MapLocationOffset;
 
 		OnTransformLocationChanged(LocationChangeType);
+
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsLocation();
 	}
 
-	void UpdateFinalLocationItself()
+	void UpdateLocationAfterDirectChange()
 	{
 		UserLocation = FinalLocation - MapLocationOffset;
 
 		OnTransformLocationChanged(ELocationChangeType::LCT_User);
+
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsLocation();
 	}
 
-protected:
+	void UpdateRotation()
+	{
+		OnTransformRotationChanged();
+
+		IBaseTransformInterface2D<TType>::UpdateSubComponentsRotation();
+	}
+
+private:
 	/** Location set by user only. */
 	FVector2D<TType> UserLocation;
 

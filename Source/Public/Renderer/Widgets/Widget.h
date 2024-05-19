@@ -19,7 +19,7 @@ class FInteractionBaseWidget;
  * Widget is destroying in same interface using DestroyWidget or DestroyWidget on widget you would like to destroy.
  * @Note It's worth mentioning that after destroying it's kept for one frame to ensure proper destruction of all children.
  */
-class FWidget : public UObject, public IWidgetPositionInterface
+class FWidget : public FObject, public IWidgetPositionInterface
 {
 	friend IWidgetManagementInterface;
 
@@ -63,7 +63,7 @@ public:
 	bool IsPendingDelete() const { return bIsPendingDelete; }
 
 	/** Full widget refresh. Performance heavy. */
-	virtual void RefreshWidget(const bool bRefreshChilds = true);
+	virtual void RefreshWidget(const bool bRefreshChildren = true);
 
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;

@@ -139,13 +139,13 @@ void FWidget::DestroyWidgetImmediate()
 	}
 }
 
-void FWidget::RefreshWidget(const bool bRefreshChilds)
+void FWidget::RefreshWidget(const bool bRefreshChildren)
 {
 	RefreshWidgetSize();
 	RefreshWidgetLocation();
 	RefreshAnchor();
 
-	if (bRefreshChilds)
+	if (bRefreshChildren)
 	{
 		for (auto i = 0; i < ManagedWidgets.Size(); i++)
 		{
@@ -207,6 +207,8 @@ void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 	{
 		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
 	}
+
+	ReCalculate();
 }
 
 EWidgetVisibility FWidget::GetWidgetVisibility() const

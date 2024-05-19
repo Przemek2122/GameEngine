@@ -2,6 +2,9 @@
 
 #include "CoreEngine.h"
 #include "Misc/Filesystem.h"
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 namespace fs = std::filesystem;
 
@@ -29,9 +32,9 @@ bool FFileSystem::Directory::Delete(const std::string& InPath, const bool bRecur
 
 bool FFileSystem::File::Exists(const std::string& InPath)
 {
-    const std::ifstream FileCheck(InPath.c_str());
+    struct stat buffer;
 
-    return FileCheck.good();
+    return (stat(InPath.c_str(), &buffer) == 0);
 }
 
 bool FFileSystem::File::Create(const std::string& InPath)
@@ -44,6 +47,60 @@ bool FFileSystem::File::Create(const std::string& InPath)
 bool FFileSystem::File::Delete(const std::string& InPath)
 {
 	return fs::remove(InPath);
+}
+
+void FFileSystem::File::Clear(const std::string& InPath)
+{
+    std::ifstream File;
+
+    File.open(InPath.c_str(), std::ifstream::out | std::ifstream::trunc);
+    if (!File.is_open() || File.fail())
+    {
+        File.close();
+
+        LOG_ERROR("Failed to clear file.");
+    }
+
+    File.close();
+}
+
+void FFileSystem::File::GetFileContentLineByLine(FDelegateSafe<void, const std::string&>& DelegateCalledForEachLine, const std::string& InPath)
+{
+    // Create a text string, which is used to output the text file
+    std::string CurrentLine;
+
+    // Read from the text file
+    std::ifstream MyReadFile(InPath);
+
+    // Use a while loop together with the getline() function to read the file line by line
+    while (getline(MyReadFile, CurrentLine))
+    {
+        DelegateCalledForEachLine.Execute(CurrentLine);
+    }
+
+    // Close the file
+    MyReadFile.close();
+}
+
+void FFileSystem::File::AddFileContentLine(const std::string& Line, const std::string& InPath)
+{
+    std::ofstream MyFile(InPath);
+
+    MyFile << Line;
+
+    MyFile.close();
+}
+
+void FFileSystem::File::AddFileContentLines(const CArray<std::string>& Lines, const std::string& InPath)
+{
+    std::ofstream MyFile(InPath);
+
+    for (const std::string& Line : Lines)
+    {
+        MyFile << Line;
+    }
+
+    MyFile.close();
 }
 
 bool FFileSystem::IsDirectory(const std::string& InPath)

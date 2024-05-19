@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/WidgetManager.h"
 
+class FMapManager;
 class FEntityManager;
 class FWidgetInputManager;
 class FWidgetManager;

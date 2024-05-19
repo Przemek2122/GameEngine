@@ -2,6 +2,8 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/ImageWidget.h"
+
+#include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
 
 FImageWidget::FImageWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
@@ -13,9 +15,20 @@ FImageWidget::FImageWidget(IWidgetManagementInterface* InWidgetManagementInterfa
 
 void FImageWidget::Init()
 {
-	FWidget::Init();
+	Super::Init();
 
 	SetWidgetSize({ 40, 40 });
+}
+
+void FImageWidget::PreDeInit()
+{
+	FWidget::PreDeInit();
+
+	if (TextureAsset != nullptr)
+	{
+		TextureAsset->DecrementNumberOfReferences();
+		TextureAsset = nullptr;
+	}
 }
 
 void FImageWidget::Render()
@@ -30,47 +43,19 @@ void FImageWidget::Render()
 
 void FImageWidget::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
-	bool bHasTexture = false;
-
 	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
 	if (AssetsManager != nullptr)
 	{
-		if (AssetsManager->HasAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE))
+		FTextureAsset* TemporaryTextureAsset = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
+
+		if (TemporaryTextureAsset != nullptr)
 		{
-			TextureAsset = AssetsManager->GetAsset<FTextureAsset>(InImageName, EAssetType::AT_TEXTURE);
-
-			if (TextureAsset != nullptr)
-			{
-				bHasTexture = true;
-			}
-		}
-		else if (!OptionalPath.empty())
-		{
-			TextureAsset = AssetsManager->AddAsset<FTextureAsset>(InImageName, OptionalPath);
-
-			if (TextureAsset != nullptr)
-			{
-				TextureAsset->PrepareTexture(GetOwnerWindow()->GetRenderer()->GetSDLRenderer());
-
-				bHasTexture = true;
-			}
+			SetImage(TemporaryTextureAsset);
 		}
 		else
 		{
-			LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in FImageWidget::SetImage");
+			LOG_ERROR("Unable to find texture asset: " << InImageName);
 		}
-	}
-
-	if (bHasTexture)
-	{
-		if (bScaleWidgetToImage)
-		{
-			ScaleWidgetToTextureSize();
-		}
-	}
-	else
-	{
-		LOG_ERROR("Unable to find texture asset: " << InImageName);
 	}
 }
 
@@ -78,12 +63,39 @@ void FImageWidget::SetImage(const std::shared_ptr<FTextureAsset>& TexturePtr)
 {
 	if (TexturePtr != nullptr)
 	{
-		TextureAsset = TexturePtr.get();
+		SetImage(TexturePtr.get());
+
+		OptionalTexturePtr = TexturePtr;
+	}
+}
+
+void FImageWidget::SetImage(FTextureAsset* NewTexture)
+{
+	if (NewTexture != nullptr)
+	{
+		if (OptionalTexturePtr != nullptr)
+		{
+			OptionalTexturePtr = nullptr;
+		}
+
+		if (TextureAsset != nullptr)
+		{
+			TextureAsset->DecrementNumberOfReferences();
+			TextureAsset = nullptr;
+		}
+
+		// Set new one
+		TextureAsset = NewTexture;
+		TextureAsset->IncrementNumberOfReferences();
 
 		if (bScaleWidgetToImage)
 		{
 			ScaleWidgetToTextureSize();
 		}
+	}
+	else
+	{
+		LOG_ERROR("Texture 'InAsset' is nullptr.");
 	}
 }
 
@@ -102,4 +114,9 @@ void FImageWidget::ScaleWidgetToTextureSize()
 	const FVector2D<int> TextureSize = TextureAsset->GetSize();
 
 	SetWidgetSize(TextureSize);
+}
+
+void FImageWidget::ClearPreviousImage()
+{
+	OptionalTexturePtr = nullptr;
 }

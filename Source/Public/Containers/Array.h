@@ -36,7 +36,9 @@ public:
 		Vector.reserve(Number);
 	}
 
-	CArray() = default;
+	CArray()
+	{
+	}
 
 	/** Bracket list constructor */
 	CArray(std::initializer_list<TType> List)
@@ -48,7 +50,20 @@ public:
 			Vector.push_back(ListItem);
 		}
 	}
-	
+
+	void operator=(const CArray<TType, TSizeType>& Other)
+	{
+		Vector = Other.Vector;
+	}
+
+	void operator+=(const CArray<TType, TSizeType>& Other)
+	{
+		for (auto& Value : Other.Vector)
+		{
+			Push(Value);
+		}
+	}
+
 	SDL_FORCE_INLINE void Push(TType Value)
 	{
 		Vector.push_back(Value);

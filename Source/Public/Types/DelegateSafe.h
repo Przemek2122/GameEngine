@@ -121,7 +121,7 @@ public:
 	}
 
 	template<class TClass>
-	void BindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	void BindObject(FFunctorObject<TClass, TReturnType, TInParams...>& Functor)
 	{
 		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
 
@@ -144,9 +144,11 @@ public:
 	}
 
 	template<class TClass>
-	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>* Functor)
+	void UnBindObject(FFunctorObject<TClass, TReturnType, TInParams...>& Functor)
 	{
 		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
+
+		//std::shared_ptr<FunctorObjectType> TemporaryFunctor = std::make_shared<FunctorObjectType>(Functor);
 
 		int Index = FindIndexOfObjectFunctor(Functor);
 

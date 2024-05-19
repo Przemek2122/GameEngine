@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TestCase.h"
+#include "TestBase.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
 
@@ -36,7 +36,7 @@ public:
 		{
 			if (typeid(RunningTests[i]) == typeid(FTestCaseClass))
 			{
-				FTestCase* Test = RunningTests[i];
+				FTestBase* Test = RunningTests[i];
 				
 				RemoveTest(Test);
 
@@ -45,14 +45,14 @@ public:
 		}
 	}
 
-	virtual void AddTest(FTestCase* InTestCase, const bool bAutoStartTest = true);
-	virtual void RemoveTest(FTestCase* InTestCase);
+	virtual void AddTest(FTestBase* InTestCase, const bool bAutoStartTest = true);
+	virtual void RemoveTest(FTestBase* InTestCase);
 	
 	virtual void Tick();
 	virtual void Render();
 
 protected:
-	CArray<FTestCase*> RunningTests;
+	CArray<FTestBase*> RunningTests;
 	
 };
 

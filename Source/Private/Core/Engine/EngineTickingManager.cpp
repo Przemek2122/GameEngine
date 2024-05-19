@@ -1,6 +1,8 @@
 #include "CoreEngine.h"
 #include "Engine/EngineTickingManager.h"
 
+#include <memory>
+
 #include "Interfaces/CoreLoop/ITickInterface.h"
 
 FEngineTickingManager::FEngineTickingManager()
@@ -18,7 +20,7 @@ void FEngineTickingManager::RegisterInterface(FFunctorObject<ITickInterface, voi
 	{
 		EnsureDelegateAtIndexExists(TickInterfacePhase);
 
-		TickDelegateToIndex[TickInterfacePhase]->BindObject(&TickFunctor);
+		TickDelegateToIndex[TickInterfacePhase]->BindObject(TickFunctor);
 	}
 	else
 	{
@@ -32,7 +34,7 @@ void FEngineTickingManager::UnRegisterInterface(FFunctorObject<ITickInterface, v
 	{
 		if (TickDelegateToIndex.ContainsKey(TickInterfacePhase))
 		{
-			TickDelegateToIndex[TickInterfacePhase]->UnBindObject(&TickFunctor);
+			TickDelegateToIndex[TickInterfacePhase]->UnBindObject(TickFunctor);
 		}
 		else
 		{
@@ -81,7 +83,7 @@ void FEngineTickingManager::EnsureDelegateAtIndexExists(const ETickPhase Index)
 	if (!HasDelegateIndex(Index))
 	{
 		// This has issue
-		TickDelegateToIndex.Emplace(Index, new FDelegate<void, float>());
+		TickDelegateToIndex.Emplace(Index, std::make_shared<FDelegateSafe<void, float>>());
 
 		// Might need to sort to make sure it will be executed in the correct order
 		//TickDelegateToIndex.Sort()

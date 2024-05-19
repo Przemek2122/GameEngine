@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Misc/Math.h"
 
 /* Two dimensional vector. */
 template<class TType>
@@ -35,6 +36,34 @@ public:
 		X = static_cast<TType>(OldVector.X); 
 		Y = static_cast<TType>(OldVector.Y); 
 		return *this; 
+	}
+
+	float Magnitude() const
+	{
+		return std::sqrt((X * X) + (Y * Y));
+	}
+
+	// Function to get normalized vector 
+	FVector2D<float> Normalize() const
+	{
+		FVector2D<float> NormalizedVector;
+
+		float Len = Magnitude();
+		if (Len > 0.0f)
+		{
+			NormalizedVector = FVector2D<float>(X / Len, Y / Len);
+		}
+		else
+		{
+			NormalizedVector = FVector2D<float>(0.f, 0.f);
+		}
+
+		return std::move(NormalizedVector);
+	}
+
+	static float Dot(const FVector2D<float> A, const FVector2D<float> B)
+	{
+		return ((A.X * B.X) + (A.Y * B.Y));
 	}
 
 	// Negate
@@ -105,6 +134,16 @@ public:
 		X /= V.X; Y /= V.Y; return *this;
 	}
 
+
+	FVector2D& operator*=(const TType& V)
+	{
+		X *= V; Y *= V; return *this;
+	}
+	FVector2D& operator/=(const TType& V)
+	{
+		X /= V; Y /= V; return *this;
+	}
+
 	// Comparison
 	
 	friend bool operator==(const FVector2D& L, const FVector2D& R)
@@ -132,17 +171,13 @@ public:
 		return !(R < L);
 	}
 
-
-	FVector2D& operator*=(const TType& V)
+	TType DistanceTo(const FVector2D& OtherVector) const
 	{
-		X *= V; Y *= V; return *this;
-	}
-	FVector2D& operator/=(const TType& V)
-	{
-		X /= V; Y /= V; return *this;
-	}
+		const float DiffXSquared = static_cast<float>(FMath::Power(OtherVector.X - X));
+		const float DiffYSquared = static_cast<float>(FMath::Power(OtherVector.Y - Y));
 
-
+		return static_cast<TType>(FMath::Sqrt(DiffXSquared + DiffYSquared));
+	}
 
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }
 	//FVector2D operator*(const FVector2D<TType>& V, const TType& S) { return FVector2D<TType>(V) *= S; }
@@ -168,6 +203,11 @@ public:
 	//template<class TType> Vector2d<TType> GetIntersect(const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&, const Vector2d<TType>&)
 
 	// Conversion
+	operator FVector2D<int>() const
+	{
+		return { static_cast<int>(X), static_cast<int>(Y) };
+	}
+
 	operator SDL_Point() const
 	{
 		SDL_Point Point;
@@ -175,6 +215,15 @@ public:
 		Point.y = static_cast<int>(Y);
 
 		return Point;
+	}
+
+	operator SDL_Point*() const
+	{
+		SDL_Point Point;
+		Point.x = static_cast<int>(X);
+		Point.y = static_cast<int>(Y);
+
+		return &Point;
 	}
 
 	friend std::ostream& operator<<(std::ostream& InputStream, const FVector2D& Vector)

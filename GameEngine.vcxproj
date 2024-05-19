@@ -29,9 +29,16 @@
   <ItemGroup>
     <ClInclude Include="Source\Public\Assets\Assets\AssetBase.h" />
     <ClInclude Include="Source\Public\Assets\Assets\FontAsset.h" />
+    <ClInclude Include="Source\Public\Assets\Assets\IniAsset.h" />
     <ClInclude Include="Source\Public\Assets\Assets\MapAsset.h" />
     <ClInclude Include="Source\Public\Assets\Assets\TextureAsset.h" />
     <ClInclude Include="Source\Public\Assets\AssetsManager.h" />
+    <ClInclude Include="Source\Public\Assets\AssetsManagerHelpers.h" />
+    <ClInclude Include="Source\Public\Assets\Collection\AssetCollectionItem.h" />
+    <ClInclude Include="Source\Public\Assets\Collection\BaseAssetsCollection.h" />
+    <ClInclude Include="Source\Public\Assets\Collection\EngineAssetsCollection.h" />
+    <ClInclude Include="Source\Public\Assets\IniReader\IniManager.h" />
+    <ClInclude Include="Source\Public\Assets\IniReader\IniObject.h" />
     <ClInclude Include="Source\Public\Assets\Parser.h" />
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Font.h" />
     <ClInclude Include="Source\Public\Assets\TypesForAssets\Texture.h" />
@@ -42,12 +49,19 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h" />
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h" />
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AiActionBase.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AiTree.h" />
+    <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h" />
-    <ClInclude Include="Source\Public\Core\ECS\Components\TransformComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\CameraManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\Character.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\NPCCharacter.h" />
@@ -82,13 +96,19 @@
     <ClInclude Include="Source\Public\Core\Memory\AutoUIMenu.h" />
     <ClInclude Include="Source\Public\Core\Memory\Class.h" />
     <ClInclude Include="Source\Public\Core\Object.h" />
-    <ClInclude Include="Source\Public\Core\Test\TestCase.h" />
-    <ClInclude Include="Source\Public\Core\Test\TestClassType.h" />
-    <ClInclude Include="Source\Public\Core\Test\TestDelegate.h" />
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestClassType.h" />
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestDelegate.h" />
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestTimers.h" />
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestTypes.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestBase.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestLongRun.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
-    <ClInclude Include="Source\Public\Core\Test\TestTypes.h" />
+    <ClInclude Include="Source\Public\Core\Test\TestSingleRun.h" />
+    <ClInclude Include="Source\Public\Core\Timer\Timer.h" />
+    <ClInclude Include="Source\Public\Core\Timer\TimerManager.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
     <ClInclude Include="Source\Public\Misc\Math.h" />
+    <ClInclude Include="Source\Public\Misc\StringHelpers.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
     <ClInclude Include="Source\Public\Renderer\Map\Map.h" />
     <ClInclude Include="Source\Public\Renderer\Map\MapEditor.h" />
@@ -234,22 +254,35 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">CoreEngine.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Source\Private\AI\AiActionBase.cpp" />
+    <ClCompile Include="Source\Private\AI\AIActionMove.cpp" />
+    <ClCompile Include="Source\Private\AI\AiTree.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\AssetBase.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\FontAsset.cpp" />
+    <ClCompile Include="Source\Private\Assets\Assets\IniAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\MapAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\TextureAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\AssetsManager.cpp" />
+    <ClCompile Include="Source\Private\Assets\Collection\AssetCollectionItem.cpp" />
+    <ClCompile Include="Source\Private\Assets\Collection\BaseAssetsCollection.cpp" />
+    <ClCompile Include="Source\Private\Assets\Collection\EngineAssetsCollection.cpp" />
+    <ClCompile Include="Source\Private\Assets\IniReader\IniManager.cpp" />
+    <ClCompile Include="Source\Private\Assets\IniReader\IniObject.cpp" />
     <ClCompile Include="Source\Private\Assets\Parser.cpp" />
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Font.cpp" />
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\Components\TransformComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\CameraManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\Character.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\NPCCharacter.cpp" />
@@ -276,13 +309,19 @@
     <ClCompile Include="Source\Private\Core\Memory\AutoUserUI.cpp" />
     <ClCompile Include="Source\Private\Core\Memory\Class.cpp" />
     <ClCompile Include="Source\Private\Core\Object.cpp" />
-    <ClCompile Include="Source\Private\Core\Test\TestCase.cpp" />
-    <ClCompile Include="Source\Private\Core\Test\TestClassType.cpp" />
-    <ClCompile Include="Source\Private\Core\Test\TestDelegate.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestClassType.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestDelegate.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestTimers.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestTypes.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestBase.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestLongRun.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
-    <ClCompile Include="Source\Private\Core\Test\TestTypes.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\TestSingleRun.cpp" />
+    <ClCompile Include="Source\Private\Core\Timer\Timer.cpp" />
+    <ClCompile Include="Source\Private\Core\Timer\TimerManager.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
+    <ClCompile Include="Source\Private\Misc\StringHelpers.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\Map.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\MapEditor.cpp" />
@@ -559,7 +598,7 @@
     </Lib>
     <Lib>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;$(ProjectDir)Libs\tensorflow\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -642,7 +681,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;$(ProjectDir)Libs\tensorflow\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>

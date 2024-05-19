@@ -80,6 +80,8 @@ public:
 	_NODISCARD float GetDeltaTime() const;
 	_NODISCARD double GetDeltaTimeDouble() const;
 
+	void UpdateFrameTime();
+
 	/** @Returns engine render class (used for managing windows) */
 	_NODISCARD FEngineRender* GetEngineRender() const;
 
@@ -130,6 +132,8 @@ protected:
 #if ENGINE_TESTS_ALLOW_ANY
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;
 #endif
+
+	static bool GetDisplaySettings(int DisplayIndex, int ModeIndex, SDL_DisplayMode& DisplayMode);
 
 protected:
 	bool bFrameRateLimited;

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/BaseTransformComponent.h"
 #include "ECS/Entity.h"
 
 class FMap;
@@ -25,6 +26,20 @@ public:
 		NewEntity->BeginPlay();
 
 		OnEntityCreated(NewEntity);
+
+		return NewEntity;
+	}
+
+	template<typename TEntityClass, typename... TInParams>
+	TEntityClass* CreateEntityAt(const FVector2D<int> Location, TInParams... InParams)
+	{
+		TEntityClass* NewEntity = CreateEntity<TEntityClass>();
+
+		UBaseTransformComponent* TransformComponent = dynamic_cast<UBaseTransformComponent*>(NewEntity->GetRootComponent());
+		if (TransformComponent != nullptr)
+		{
+			TransformComponent->SetLocationUser(Location);
+		}
 
 		return NewEntity;
 	}

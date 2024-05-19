@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AssetBase.h"
+#include "TextureAsset.h"
 #include "Assets/Parser.h"
 
 class FTextureAsset;
@@ -36,16 +37,13 @@ namespace FMapGlobalSettings
 
 struct FMapSubAssetSettings
 {
-	FMapSubAssetSettings()
-		: AssetIndex(INDEX_INCORRECT)
-		, Collision(INDEX_INCORRECT)
-	{
-	}
+	FMapSubAssetSettings();
 
-	bool IsValid() const
-	{
-		return (AssetIndex != INDEX_INCORRECT && Collision != INDEX_INCORRECT);
-	}
+	bool IsValid() const;
+
+	void SetTextureAsset(FTextureAsset* InTextureAsset);
+
+	FTextureAsset* GetTextureAsset() const;
 
 	/** Index to match texture to map */
 	int AssetIndex;
@@ -53,8 +51,10 @@ struct FMapSubAssetSettings
 	/** Collision index, currently 0 and 1 supported */
 	int Collision;
 
+private:
 	/** Asset pointer */
-	std::shared_ptr<FTextureAsset> TextureAssetPtr;
+	FTextureAsset* TextureAsset;
+
 };
 
 struct FMapRow
@@ -99,7 +99,7 @@ public:
 	/** Clear all arrays from loaded files from FMapAsset::LoadMap */
 	void ClearMapData();
 
-	/** OVERRIDE file map source. This will removed old map. Be carefull when calling */
+	/** OVERRIDE file map source. This will remove old map. Be carefull when calling */
 	void SaveMapData();
 
 	bool IsMapDataValid() const;

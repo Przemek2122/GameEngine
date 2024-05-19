@@ -2,7 +2,7 @@
 #include "Renderer/Widgets/UIMenu.h"
 
 FUIMenu::FUIMenu(FWindow* InOwnerWindow)
-	: bIsInitialized(false)
+	: bIsInitializedUIMenu(false)
 	, OwnerWindow(InOwnerWindow)
 {
 #if _DEBUG
@@ -25,9 +25,9 @@ FWindow* FUIMenu::GetOwnerWindow() const
 
 void FUIMenu::InitializePublic()
 {
-	if (!bIsInitialized)
+	if (!bIsInitializedUIMenu)
 	{
-		bIsInitialized = true;
+		bIsInitializedUIMenu = true;
 
 		Initialize();
 	}
@@ -35,9 +35,9 @@ void FUIMenu::InitializePublic()
 
 void FUIMenu::DeInitializePublic()
 {
-	if (bIsInitialized)
+	if (bIsInitializedUIMenu)
 	{
-		bIsInitialized = false;
+		bIsInitializedUIMenu = false;
 
 		DeInitialize();
 	}
@@ -45,7 +45,7 @@ void FUIMenu::DeInitializePublic()
 
 bool FUIMenu::IsInitialized() const
 {
-	return bIsInitialized;
+	return bIsInitializedUIMenu;
 }
 
 void FUIMenu::Initialize()

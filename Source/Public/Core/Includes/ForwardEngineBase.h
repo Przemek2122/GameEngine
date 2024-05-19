@@ -20,9 +20,11 @@ class FWidgetManager;
 class IWidgetManagementInterface;
 class IWidgetInteraction;
 
+class FTimer;
+
 class FEntityManager;
 class EEntity;
-class UComponent;
+class UBaseComponent;
 
 template<class TType = float>
 class FVector2D;

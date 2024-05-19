@@ -3,15 +3,21 @@
 #include "CoreEngine.h"
 #include "ECS/Entity.h"
 
+#include "Renderer/WindowAdvanced.h"
+#include "Renderer/Map/MapManager.h"
+
 EEntity::EEntity(FEntityManager* InEntityManager)
 	: IComponentManagerInterface(nullptr, InEntityManager->GetOwnerWindow())
 	, EntityManagerOwner(InEntityManager)
+	, DefaultRootComponent(nullptr)
 {
 }
 
 void EEntity::BeginPlay()
 {
 	RegisterInputInternal();
+
+	SetupAiActions();
 }
 
 void EEntity::EndPlay()
@@ -21,13 +27,17 @@ void EEntity::EndPlay()
 
 void EEntity::Tick(float DeltaTime)
 {
+	for (const std::shared_ptr<FAiTree>& TreeArray : AiTreeArray)
+	{
+		TreeArray->TickInternal();
+	}
 }
 
 void EEntity::ReceiveTick(const float DeltaTime)
 {
 	Tick(DeltaTime);
 
-	TickComponents();
+	TickComponents(DeltaTime);
 }
 
 void EEntity::Render()
@@ -41,11 +51,21 @@ void EEntity::ReceiveRender()
 	RenderComponents();
 }
 
-void EEntity::RegisterInput(const FEventHandler* InputHandler)
+void EEntity::SetRootComponent(UBaseComponent* NewComponent)
+{
+	DefaultRootComponent = NewComponent;
+}
+
+UBaseComponent* EEntity::GetRootComponent()
+{
+	return DefaultRootComponent;
+}
+
+void EEntity::RegisterInput(FEventHandler* InputHandler)
 {
 }
 
-void EEntity::UnRegisterInput(const FEventHandler* InputHandler)
+void EEntity::UnRegisterInput(FEventHandler* InputHandler)
 {
 }
 
@@ -59,16 +79,45 @@ FWindow* EEntity::GetWindow() const
 	return EntityManagerOwner->GetOwnerWindow();
 }
 
+FWindowAdvanced* EEntity::GetWindowAdvanced() const
+{
+	return reinterpret_cast<FWindowAdvanced*>(GetWindow());
+}
+
+FMap* EEntity::GetCurrentMap() const
+{
+	return GetWindow()->GetMapManager()->GetCurrentMap();
+}
+
+FGameModeManager* EEntity::GetGameModeManager() const
+{
+	return GetWindowAdvanced()->GetGameModeManager();
+}
+
 void EEntity::RegisterInputInternal()
 {
-	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+	FEventHandler* InputHandler = GEngine->GetEventHandler();
 
 	RegisterInput(InputHandler);
 }
 
 void EEntity::UnRegisterInputInternal()
 {
-	const FEventHandler* InputHandler = GEngine->GetEventHandler();
+	FEventHandler* InputHandler = GEngine->GetEventHandler();
 
 	UnRegisterInput(InputHandler);
+}
+
+void EEntity::SetupAiActions()
+{
+}
+
+void EEntity::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
+{
+	IComponentManagerInterface::OnComponentCreated(ComponentName, NewComponent);
+
+	if (DefaultRootComponent == nullptr)
+	{
+		DefaultRootComponent = NewComponent;
+	}
 }

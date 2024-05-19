@@ -19,21 +19,31 @@ public:
 	virtual void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 	virtual void UnRegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 
-	void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
-	void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
+	virtual void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual void OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
 
+	/** Called when selection is started */
 	virtual void OnStartSelecting();
+
+	/** Called when selection is finished */
 	virtual void OnEndSelecting();
+
+	/** Called when should select but it was in place - click */
+	virtual void OnClickInsteadOfSelection(const FVector2D<int>& InMousePosition);
 
 	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
 
+	/** Delegate called on EndPlay (destroy this entity) - Used in IScreenSelectionInterface */
 	FDelegate<> OnEndPlay;
 
 protected:
 	/** Begin EEntity */
-	void RegisterInput(const FEventHandler* InputHandler) override;
-	void UnRegisterInput(const FEventHandler* InputHandler) override;
+	void RegisterInput(FEventHandler* InputHandler) override;
+	void UnRegisterInput(FEventHandler* InputHandler) override;
 	/** End EEntity */
+
+	void CheckScreenSelection(const FVector2D<int>& InMousePosition);
 
 	virtual void AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
 	virtual void RemoveFromCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
@@ -47,6 +57,9 @@ protected:
 
 	/** Selecting when left mouse button is pressed */
 	bool bIsSelecting;
+
+	/** Defines how far can it be from click to release to be click instead of selection */
+	float ClickInsteadOfSelectionTolerance;
 
 	/** Start of the selection */
 	FVector2D<int> SelectionStart;

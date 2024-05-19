@@ -3,10 +3,12 @@
 #include "CoreEngine.h"
 #include "Assets/AssetsManager.h"
 #include "Assets/Assets/AssetBase.h"
-#include <memory>
+#include "Assets/IniReader/IniManager.h"
 
 FAssetsManager::FAssetsManager()
-	: AssetDirName("Assets")
+	: IniManager(new FIniManager(this))
+	, AssetDirName("Assets")
+	, ConfigDirName("Config")
 	, MapsDirName("Maps")
 	, FontsDirName("Fonts")
 {
@@ -22,11 +24,16 @@ FAssetsManager::~FAssetsManager()
 	AssetsByType.Clear();
 }
 
+FIniManager* FAssetsManager::GetIniManager() const
+{
+	return IniManager;
+}
+
 void FAssetsManager::RemoveAsset(const std::string& InAssetName, const EAssetType OptionalAssetType)
 {
 	if (OptionalAssetType == EAssetType::AT_NONE)
 	{
-		for (std::pair<const EAssetType, FAssetsColection>& ByType : AssetsByType)
+		for (std::pair<const EAssetType, FAssetsStructure>& ByType : AssetsByType)
 		{
 			ByType.second.AssetsMap.Remove(InAssetName);
 		}
@@ -42,7 +49,7 @@ std::shared_ptr<FAssetBase> FAssetsManager::GetAsset(const std::string& InAssetN
 	// Search all assets
 	if (OptionalAssetType == EAssetType::AT_NONE)
 	{
-		for (const std::pair<const EAssetType, FAssetsColection>& ByType : AssetsByType)
+		for (const std::pair<const EAssetType, FAssetsStructure>& ByType : AssetsByType)
 		{
 			if (ByType.second.AssetsMap.ContainsKey(InAssetName))
 			{
@@ -72,11 +79,6 @@ std::string FAssetsManager::GetProjectLocation() const
 	return GEngine->GetLaunchRelativePath();
 }
 
-std::string FAssetsManager::GetAssetDirName() const
-{
-	return AssetDirName;
-}
-
 char FAssetsManager::GetPlatformSlash() const
 {
 	return FFileSystem::GetPlatformSlash();
@@ -84,7 +86,14 @@ char FAssetsManager::GetPlatformSlash() const
 
 std::string FAssetsManager::GetAssetsPathRelative() const
 {
-	return GetAssetDirName();
+	return AssetDirName;
+}
+
+std::string FAssetsManager::GetConfigPathRelative() const
+{
+	const char Slash = FFileSystem::GetPlatformSlash();
+
+	return AssetDirName + Slash + ConfigDirName;
 }
 
 std::string FAssetsManager::GetMapsPathRelative() const

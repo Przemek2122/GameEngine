@@ -128,6 +128,34 @@ void FRenderer::DrawTexture(SDL_Texture* Texture, const FVector2D<int> Location,
 	SDL_RenderCopy(Renderer, Texture, nullptr, &Rect);
 }
 
+void FRenderer::DrawTextureAdvanced(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation, SDL_RendererFlip Flip) const
+{
+	DrawTextureAdvanced(Texture->GetTexture()->GetSDLTexture(), Location, Size, Rotation, CenterOfRotation, Flip);
+}
+
+void FRenderer::DrawTextureAdvanced(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation, SDL_RendererFlip Flip) const
+{
+	SDL_Rect Rect;
+	Rect.x = Location.X;
+	Rect.y = Location.Y;
+	Rect.w = Size.X;
+	Rect.h = Size.Y;
+
+	SDL_RenderCopyEx(Renderer, Texture, nullptr, &Rect, Rotation, CenterOfRotation, Flip);
+}
+
+void FRenderer::OverrideTextureColor(SDL_Texture* Texture, const FColorRGBA& Color)
+{
+	SDL_SetTextureColorMod(Texture, Color.R, Color.G, Color.B);
+}
+
+void FRenderer::OverrideTextureColorReset(SDL_Texture* Texture)
+{
+	static FColorRGBA Color = FColorRGBA::ColorWhite();
+
+	SDL_SetTextureColorMod(Texture, Color.R, Color.G, Color.B);
+}
+
 void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const
 {
 	SDL_SetRenderDrawColor(Renderer, ColorPoint.Color.R, ColorPoint.Color.G, ColorPoint.Color.B, ColorPoint.Color.A);
@@ -236,4 +264,9 @@ void FRenderer::DrawLimitedLine(int X1, int Y1, const int X2, const int Y2, cons
 		if (e2 < dy) { err += dx; Y1 += sy; }
 		i++;
 	}
+}
+
+void FRenderer::DrawLine(const FVector2D<int> From, const FVector2D<int> To) const
+{
+	SDL_RenderDrawLine(GetSDLRenderer(), From.X, From.Y, To.X, To.Y);
 }

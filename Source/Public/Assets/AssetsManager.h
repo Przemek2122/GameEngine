@@ -7,18 +7,19 @@
 #include "Containers/Map.h"
 #include "Misc/Filesystem.h"
 
+class FIniManager;
 enum class EAssetType : Uint8;
 class FAssetBase;
 class FFontAsset;
 class FFont;
 
-struct FAssetsColection
+struct FAssetsStructure
 {
 	CMap<std::string, std::shared_ptr<FAssetBase>> AssetsMap;
 };
 
 /**
- * Storage class. Registers assets which can be accesed anywhere.
+ * Storage class. Registers assets which can be accessed anywhere.
  * Can also help with search for assets.
  */
 class FAssetsManager
@@ -30,6 +31,8 @@ protected:
 	virtual ~FAssetsManager();
 
 public:
+	FIniManager* GetIniManager() const;
+
 	/** Create asset by template type. */
 	template<class TAssetType>
 	std::shared_ptr<TAssetType> CreateAssetFromAbsolutePath(const std::string& InAssetName, const std::string& InAssetPath)
@@ -85,7 +88,7 @@ public:
 				// Add type if does not exists
 				if (!AssetsByType.HasKey(AssetTypeKey))
 				{
-					AssetsByType.Emplace(AssetTypeKey, FAssetsColection());
+					AssetsByType.Emplace(AssetTypeKey, FAssetsStructure());
 				}
 
 				AssetsByType[AssetTypeKey].AssetsMap.Emplace(InAssetName, Asset);
@@ -103,6 +106,23 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	template<class TAssetType>
+	void AddAssetExternal(std::shared_ptr<TAssetType> AssetPtr)
+	{
+		if (FFileSystem::File::Exists(AssetPtr.get()->GetAssetPath()))
+		{
+			EAssetType AssetTypeKey = AssetPtr.get()->GetAssetType();
+
+			// Add type if does not exists
+			if (!AssetsByType.HasKey(AssetTypeKey))
+			{
+				AssetsByType.Emplace(AssetTypeKey, FAssetsStructure());
+			}
+
+			AssetsByType[AssetTypeKey].AssetsMap.Emplace(AssetPtr.get()->GetAssetName(), AssetPtr);
+		}		
 	}
 	
 	/** Delete asset by name. */
@@ -125,7 +145,7 @@ public:
 		{
 			LOG_WARN("Using FAssetsManager::HasAsset with all assets. Do you really do not know what type of asset you want. This is inefficient.");
 
-			for (const std::pair<const EAssetType, FAssetsColection>& AssetsColection : AssetsByType)
+			for (const std::pair<const EAssetType, FAssetsStructure>& AssetsColection : AssetsByType)
 			{
 				if (AssetsColection.second.AssetsMap.ContainsKey(InAssetName))
 				{
@@ -146,28 +166,36 @@ public:
 
 	CArray<std::string> GetFilesFromDirectory(const std::string& Directory) const;
 
+	/** @returns launch runtime project location */
 	std::string GetProjectLocation() const;
-
-	/** @returns 'Assets' directory name */
-	std::string GetAssetDirName() const;
 
 	char GetPlatformSlash() const;
 
+	/** @returns 'Assets' directory */
 	std::string GetAssetsPathRelative() const;
+	/** @returns 'Assets/Config' directory */
+	std::string GetConfigPathRelative() const;
 	std::string GetMapsPathRelative() const;
 	std::string GetFontsPathRelative() const;
 
-protected:
 	std::string ConvertRelativeToFullPath(const std::string& InPathRelative) const;
 
 protected:
 	/** All types of assets sorted by type */
-	CMap<EAssetType, FAssetsColection> AssetsByType;
+	CMap<EAssetType, FAssetsStructure> AssetsByType;
+
+	/** IniManager which can load, create, save and edit ini files. */
+	FIniManager* IniManager;
 
 	/** Assets generic directory */
 	std::string AssetDirName;
+
+	/** Config generic directory */
+	std::string ConfigDirName;
+
 	/** Maps directory */
 	std::string MapsDirName;
+
 	/** Fonts directory */
 	std::string FontsDirName;
 

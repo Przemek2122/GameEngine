@@ -3,11 +3,11 @@
 #pragma once
 #include <string>
 
-class UObject
+class FObject
 {
 public:
-	UObject();
-	virtual ~UObject();
+	FObject();
+	virtual ~FObject();
 
 	virtual void Init();
 	

@@ -4,40 +4,34 @@
 #include "ECS/Component.h"
 
 UComponent::UComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: IComponentManagerInterface(InComponentManagerInterface, InComponentManagerInterface->GetOwnerWindow())
-	, bIsComponentActive(true)
+	: UBaseComponent(InComponentManagerInterface)
 {
 }
 
-void UComponent::BeginPlay()
+void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
-	ActivateComponent();
+	UBaseComponent::OnComponentCreated(ComponentName, NewComponent);
+
+	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(NewComponent);
+	if (TransformComponent != nullptr)
+	{
+		AddUpdatedComponent(TransformComponent);
+
+		// Update location of new component
+		TransformComponent->SetLocationFromParent(GetLocation());
+		TransformComponent->SetParentRotation(GetRotation());
+	}
 }
 
-void UComponent::EndPlay()
+void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
 {
-	DeactivateComponent();
+	UBaseComponent::OnComponentDestroy(ComponentName, OldComponent);
+
+	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(OldComponent);
+	if (TransformComponent != nullptr)
+	{
+		RemoveUpdatedComponent(TransformComponent);
+	}
 }
 
-void UComponent::Tick()
-{
-}
 
-void UComponent::Render()
-{
-}
-
-void UComponent::ActivateComponent()
-{
-	bIsComponentActive = true;
-}
-
-void UComponent::DeactivateComponent()
-{
-	bIsComponentActive = false;
-}
-
-bool UComponent::IsComponentActive() const
-{
-	return bIsComponentActive;
-}

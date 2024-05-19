@@ -27,6 +27,6 @@ protected:
 	void EnsureDelegateAtIndexExists(const ETickPhase Index);
 
 protected:
-	CMap<ETickPhase, FAutoDeletePointer<FDelegate<void, float>>> TickDelegateToIndex;
+	CMap<ETickPhase, std::shared_ptr<FDelegateSafe<void, float>>> TickDelegateToIndex;
 
 };

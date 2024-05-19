@@ -7,7 +7,8 @@
 #include "Assets/TypesForAssets/Texture.h"
 
 /**
- * For loading storing and using font.
+ * Texture asset for reference to texture.
+ * Without reference texture will be released.
  */
 class FTextureAsset : public FAssetBase
 {

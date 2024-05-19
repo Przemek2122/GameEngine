@@ -14,6 +14,10 @@ template<typename TKey, typename TValue, typename TSizeType = int>
 class CMap : public CContainerBase<TValue, TSizeType>
 {
 public:
+	CMap()
+	{
+	}
+
 	/** Begin CContainerBase interface */
 	_NODISCARD SDL_FORCE_INLINE TSizeType Size() const override
 	{
@@ -32,7 +36,7 @@ public:
 	}
 	
 	template<typename TAutoType>
-	_NODISCARD SDL_FORCE_INLINE void IsValidKey(const TAutoType Key) const
+	_NODISCARD SDL_FORCE_INLINE bool IsValidKey(const TAutoType Key) const
 	{
 		return HasKey(Key);
 	}
@@ -155,6 +159,23 @@ public:
 		}
 
 		return false;
+	}
+
+	_NODISCARD SDL_FORCE_INLINE bool ContainsByPredicate(FFunctorLambda<bool, TKey, TValue> Delegate) const
+	{
+		bool bContains = false;
+
+		for (auto it = Map.begin(); it != Map.end(); ++it)
+		{
+			if (Delegate(it->first, it->second))
+			{
+				bContains = true;
+
+				continue;
+			}
+		}
+
+		return bContains;
 	}
 	
 	template<typename TAutoType>

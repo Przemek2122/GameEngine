@@ -1,7 +1,7 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "Test/TestDelegate.h"
+#include "Test/Samples/TestDelegate.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
 void FTestDelegate::DoTest()

@@ -2,11 +2,15 @@
 
 #pragma once
 
-#include "ECS/Component.h"
+#include "AI/AiTree.h"
+#include "ECS/BaseComponent.h"
 
+class FWindowAdvanced;
+class FMap;
+class FGameModeManager;
 class FEntityManager;
 
-class EEntity : public UObject, public IComponentManagerInterface
+class EEntity : public FObject, public IComponentManagerInterface
 {
 public:
 	EEntity(FEntityManager* InEntityManager);
@@ -30,16 +34,47 @@ public:
 	/** Called every frame from engine code. */
 	void ReceiveRender();
 
+	virtual void SetRootComponent(UBaseComponent* NewComponent);
+	virtual UBaseComponent* GetRootComponent();
+
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
+	FWindowAdvanced* GetWindowAdvanced() const;
+	FGameModeManager* GetGameModeManager() const;
+	FMap* GetCurrentMap() const;
 
 protected:
-	virtual void RegisterInput(const FEventHandler* InputHandler);
-	virtual void UnRegisterInput(const FEventHandler* InputHandler);
+	/** Register input to FEventHandler. Remember to unregister input in UnRegisterInput! */
+	virtual void RegisterInput(FEventHandler* InputHandler);
+	virtual void UnRegisterInput(FEventHandler* InputHandler);
 
 	void RegisterInputInternal();
 	void UnRegisterInputInternal();
 
-protected:
+	virtual void SetupAiActions();
+
+	template<typename TAiTreeClass>
+	TAiTreeClass* CreateAiTree()
+	{
+		std::shared_ptr<TAiTreeClass> AiTreePtr = std::make_shared<TAiTreeClass>(this);
+
+		AiTreeArray.Push(AiTreePtr);
+
+		return AiTreePtr.get();
+	}
+
+	/** Begin IComponentManagerInterface */
+	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
+	/** End IComponentManagerInterface */
+
+private:
+	/** Entity manager */
 	FEntityManager* EntityManagerOwner;
+
+	/** Root component. First component added or set by user */
+	UBaseComponent* DefaultRootComponent;
+
+	/** Ai tree array */
+	CArray<std::shared_ptr<FAiTree>> AiTreeArray;
+
 };

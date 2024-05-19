@@ -43,6 +43,9 @@ protected:
 	void Show();
 	void Hide();
 
+	virtual void OnMenuShown();
+	virtual void OnMenuHidden();
+
 	/** Binding button - Call for custom behaviour on enabling Menu - Default is on ESCAPE button, here you can change it */
 	virtual void OnBindDelegateRequested();
 

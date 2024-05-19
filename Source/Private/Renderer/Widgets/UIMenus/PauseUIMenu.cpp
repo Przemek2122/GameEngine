@@ -36,13 +36,6 @@ void FPauseUIMenu::DeInitialize()
 	VerticalBoxWidget->DestroyWidget();
 }
 
-void FPauseUIMenu::OnUnbindDelegateRequested()
-{
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
-
-	EscapeDelegate->Delegate.UnBindObject(this, &FPauseUIMenu::OnExitButtonPressed);
-}
-
 void FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
 {
 	if (InputState == EInputState::RELEASE)
@@ -100,6 +93,8 @@ void FPauseUIMenu::Show()
 	if (IsInitialized())
 	{
 		VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Visible);
+
+		OnMenuShown();
 	}
 	else
 	{
@@ -111,6 +106,16 @@ void FPauseUIMenu::Show()
 void FPauseUIMenu::Hide()
 {
 	VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Collapsed);
+
+	OnMenuHidden();
+}
+
+void FPauseUIMenu::OnMenuShown()
+{
+}
+
+void FPauseUIMenu::OnMenuHidden()
+{
 }
 
 void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidget)
@@ -126,4 +131,11 @@ void FPauseUIMenu::OnBindDelegateRequested()
 	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
 
 	EscapeDelegate->Delegate.BindObject(this, &FPauseUIMenu::OnExitButtonPressed);
+}
+
+void FPauseUIMenu::OnUnbindDelegateRequested()
+{
+	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
+
+	EscapeDelegate->Delegate.UnBindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }

@@ -4,6 +4,6 @@
 #include "ECS/Components/PhysicsComponent.h"
 
 UPhysicsComponent::UPhysicsComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: UComponent(InComponentManagerInterface)
+	: UBaseComponent(InComponentManagerInterface)
 {
 }

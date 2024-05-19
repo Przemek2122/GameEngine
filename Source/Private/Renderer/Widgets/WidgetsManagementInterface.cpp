@@ -151,6 +151,8 @@ bool IWidgetManagementInterface::HasWidget(FWidget* InWidget)
 
 void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 {
+	NewWidget->Init();
+
 	AddChild(NewWidget);
 }
 

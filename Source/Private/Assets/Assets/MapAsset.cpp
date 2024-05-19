@@ -6,6 +6,28 @@
 #include "Assets/Parser.h"
 #include "Renderer/Map/MapManager.h"
 
+FMapSubAssetSettings::FMapSubAssetSettings()
+	: AssetIndex(INDEX_INCORRECT)
+	, Collision(INDEX_INCORRECT)
+	, TextureAsset(nullptr)
+{
+}
+
+bool FMapSubAssetSettings::IsValid() const
+{
+	return (AssetIndex != INDEX_INCORRECT && Collision != INDEX_INCORRECT);
+}
+
+void FMapSubAssetSettings::SetTextureAsset(FTextureAsset* InTextureAsset)
+{
+	TextureAsset = InTextureAsset;
+}
+
+FTextureAsset* FMapSubAssetSettings::GetTextureAsset() const
+{
+	return TextureAsset;
+}
+
 void FMapData::Clear()
 {
 	MapArray.Clear();
@@ -14,6 +36,7 @@ void FMapData::Clear()
 
 FMapAsset::FMapAsset(const std::string& InAssetName, const std::string& InAssetPath)
 	: FAssetBase(InAssetName, InAssetPath)
+	, MapManager(nullptr)
 	, bIsLoaded(false)
 {
 }
@@ -73,6 +96,11 @@ void FMapAsset::ClearMapData()
 	MapDataFilePath.clear();
 	MapAssetsDirPath.clear();
 	MapLines.Clear();
+
+	for (FMapSubAssetSettings& MapSubAssetSettings : MapData.MapSubAssetSettingsArray)
+	{
+		MapSubAssetSettings.GetTextureAsset()->DecrementNumberOfReferences();
+	}
 
 	MapData.Clear();
 
@@ -163,10 +191,6 @@ void FMapAsset::LoadMapAssets(FParser& Parser, FAssetsManager* AssetsManager, SD
 		CArray<std::string> StringArray = Parser.SimpleParseLineIntoStrings(Line);
 		if (StringArray.Size() == 3)
 		{
-			FMapSubAssetSettings MapSubAssetSettings;
-			MapSubAssetSettings.AssetIndex = atoi(StringArray[0].c_str());
-			MapSubAssetSettings.Collision = atoi(StringArray[1].c_str());
-
 			std::string SubAsset = StringArray[2];
 			std::string SubAssetName = AssetName + SubAsset;
 
@@ -174,14 +198,19 @@ void FMapAsset::LoadMapAssets(FParser& Parser, FAssetsManager* AssetsManager, SD
 			std::string SubAssetAbsolutePath = MapAssetsDirPath + Slash + SubAsset;
 
 			std::shared_ptr<FTextureAsset> Asset = AssetsManager->CreateAssetFromAbsolutePath<FTextureAsset>(SubAssetName, SubAssetAbsolutePath);
+			AssetsManager->AddAssetExternal(Asset);
 
 			if (Asset != nullptr)
 			{
+				MapData.MapSubAssetSettingsArray.Push(FMapSubAssetSettings());
+				FMapSubAssetSettings& MapSubAssetSettings = MapData.MapSubAssetSettingsArray[MapData.MapSubAssetSettingsArray.Size() - 1];
+
+				MapSubAssetSettings.SetTextureAsset(Asset.get());
+				MapSubAssetSettings.AssetIndex = atoi(StringArray[0].c_str());
+				MapSubAssetSettings.Collision = atoi(StringArray[1].c_str());
+
 				Asset->PrepareTexture(WindowRenderer);
-
-				MapSubAssetSettings.TextureAssetPtr = Asset;
-
-				MapData.MapSubAssetSettingsArray.Push(MapSubAssetSettings);
+				Asset.get()->IncrementNumberOfReferences();
 			}
 			else
 			{
@@ -274,7 +303,7 @@ void FMapAsset::SaveMapFile(FParser& Parser)
 		}
 
 		// Convert array into string (@TODO This might be big - and is todo)
-		const std::string StringToWrite = Parser.ParseLinesIntoString(ParserLines);
+		const std::string StringToWrite = Parser.AdvancedParseLinesIntoString(ParserLines);
 
 		// Write string to file
 		MapNameFileOfStream.write(StringToWrite.c_str(), StringToWrite.size());
@@ -307,7 +336,7 @@ void FMapAsset::SaveMapDataFile(FParser& Parser)
 		{
 			FParserLine ParserLine;
 
-			std::string AssetNameWithoutMapName = MapSubAssetSettingsArray.TextureAssetPtr->GetAssetName().substr(AssetName.size());
+			std::string AssetNameWithoutMapName = MapSubAssetSettingsArray.GetTextureAsset()->GetAssetName().substr(AssetName.size());
 
 			ParserLine.Texts.Push(FParserText(std::to_string(MapSubAssetSettingsArray.AssetIndex), EParserTextType::Word));
 			ParserLine.Texts.Push(FParserText(std::to_string(MapSubAssetSettingsArray.Collision), EParserTextType::Word));
@@ -316,7 +345,7 @@ void FMapAsset::SaveMapDataFile(FParser& Parser)
 			ParserLines.Push(ParserLine);
 		}
 
-		const std::string StringToSave = Parser.ParseLinesIntoString(ParserLines);
+		const std::string StringToSave = Parser.AdvancedParseLinesIntoString(ParserLines);
 
 		MapDataFileOfStream.write(StringToSave.c_str(), StringToSave.size());
 	}

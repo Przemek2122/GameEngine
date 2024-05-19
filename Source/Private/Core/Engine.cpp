@@ -6,14 +6,15 @@
 #if ENGINE_TESTS_ALLOW_ANY
 #include "Test/TestManager.h"
 
-#include "Test/TestDelegate.h"
-#include "Test/TestTypes.h"
-#include "Test/TestClassType.h"
+#include "Test/Samples/TestDelegate.h"
+#include "Test/Samples/TestTypes.h"
+#include "Test/Samples/TestClassType.h"
 #endif
 
 #include "Assets/Assets/FontAsset.h"
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
+#include "Test/Samples/TestTimers.h"
 
 FEngine::FEngine()
 	: bFrameRateLimited(true)
@@ -57,8 +58,6 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 #else
 	LOG_INFO("GEngine init start.");
 #endif
-
-	SetFrameRate(60);
 	
 	// Read command line flags.
 	while (Argc--)
@@ -127,6 +126,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	EngineTickingManager = CreateEngineTickingManager();
 	EngineRenderingManager = CreateEngineRenderingManager();
 
+	EventHandler->InitializeInputFromConfig();
+
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
 #endif
@@ -135,9 +136,12 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	TestManager->SpawnTestCaseByClass<FTestTypes>();
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 	TestManager->SpawnTestCaseByClass<FTestClassType>();
+	TestManager->SpawnTestCaseByClass<FTimersLongRunTest>();
 #endif
 
 	AssetsManager->AddAsset<FFontAsset>("OpenSans", R"(Assets\Fonts\OpenSans\OpenSans-Regular.ttf)");
+
+	UpdateFrameTime();
 
 	LOG_INFO("GEngine init End");
 
@@ -329,6 +333,28 @@ double FEngine::GetDeltaTimeDouble() const
 	return DeltaTimeDouble;
 }
 
+void FEngine::UpdateFrameTime()
+{
+	// Default used in case where there is issue with screen settings
+	const int DefaultTargetFrameRate = 60;
+
+	int TargetFrameRate;
+	SDL_DisplayMode DisplayMode;
+	if (GetDisplaySettings(0, 0, DisplayMode))
+	{
+		// Take refresh rate from display
+		TargetFrameRate = DisplayMode.refresh_rate;
+	}
+	else
+	{
+		TargetFrameRate = DefaultTargetFrameRate;
+
+		LOG_ERROR("Unable to get target framerate. Default of " << DefaultTargetFrameRate << "Will be used instead.");
+	}
+
+	SetFrameRate(TargetFrameRate);
+}
+
 FEngineRender* FEngine::CreateEngineRenderer() const
 {
 	return new FEngineRender();
@@ -412,4 +438,21 @@ FEngineRender* FEngine::GetEngineRender() const
 #endif
 	
 	return EngineRender;
+}
+
+bool FEngine::GetDisplaySettings(const int DisplayIndex, const int ModeIndex, SDL_DisplayMode& DisplayMode)
+{
+	bool bIsSuccessful = false;
+
+	int NumberOfDisplays = SDL_GetNumVideoDisplays();
+
+	if (NumberOfDisplays > DisplayIndex)
+	{
+		if (SDL_GetDisplayMode(DisplayIndex, ModeIndex, &DisplayMode) == 0)
+		{
+			bIsSuccessful = true;
+		}
+	}
+
+	return bIsSuccessful;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Assets/IniReader/IniObject.h"
 #include "Core/Input/EventHandlerMouse.h"
 #include "Core/Input/EventHandlerKeyboard.h"
 
@@ -13,19 +14,20 @@
 class FMouseDelegates
 {
 public:
-	typedef FAutoDeletePointer<FMouseInputDelegateWrapper> FMouseDelegateWrapper;
+	FMouseDelegates(FEventHandler* EventHandler);
 
-	/** Mouse move delegate. Called when mouse moves. */
-	FMouseDelegateWrapper Move;
+	/** Add input. RawInputName is for SDL codes while InputName is for our code use. */
+	void AddInput(FEventHandler* EventHandler, FIniObject* InIniObject, const std::string& RawInputName);
 
-	/** Called when mouse left click is detected */
-	FMouseDelegateWrapper LeftButton;
+	/** Raw engine internal use name */
+	FMouseInputDelegateWrapper* GetMouseDelegateByNameRaw(const std::string& InputName);
 
-	/** Called when mouse middle click is detected */
-	FMouseDelegateWrapper MiddleButton;
+	FMouseInputDelegateWrapper* GetMouseDelegateByName(const std::string& InputName);
 
-	/** Called when mouse right click is detected */
-	FMouseDelegateWrapper RightButton;
+protected:
+	CMap<std::string, std::shared_ptr<FMouseInputDelegateWrapper>> RawInputNameToDelegateMap;
+	CMap<std::string, std::shared_ptr<FMouseInputDelegateWrapper>> InputNameToDelegateMap;
+
 };
 
 /**
@@ -34,8 +36,14 @@ public:
  */
 class FKeyBoardDelegates
 {
-public:
 	typedef FAutoDeletePointer<FInputDelegateWrapper> FKeyBoardButtonDelegate;
+
+public:
+	FKeyBoardDelegates(FEventHandler* EventHandler);
+
+	void AddInput(FEventHandler* EventHandler, const std::string& RawInputName, const std::string& InputName);
+
+	FInputDelegateWrapper* GetMouseDelegateByName(const std::string& InputName);
 
 	/** Called when escape is used */
 	FKeyBoardButtonDelegate ButtonEscape;
@@ -89,6 +97,10 @@ public:
 	/** Called when 'Delete' key is used */
 	FKeyBoardButtonDelegate ButtonDELETE;
 
+protected:
+	CMap<std::string, std::shared_ptr<FInputDelegateWrapper>> RawInputNameToDelegateMap;
+	CMap<std::string, std::shared_ptr<FInputDelegateWrapper>> InputNameToDelegateMap;
+
 };
 
 class FEventHandler
@@ -97,10 +109,11 @@ public:
 	FEventHandler(const SDL_Event& InEvent);
 	virtual ~FEventHandler();
 
-public:
 	void HandleEvents();
 
 	void ResetAll();
+
+	void InitializeInputFromConfig();
 
 	_NODISCARD bool QuitInputDetected() const;
 
@@ -120,10 +133,8 @@ public:
 	 */
 
 protected:
-	/** Initializer, helper for constructor - Set mouse delegates. */
-	void SetMouseDelegates();
-	/** Initializer, helper for constructor - Set keyboard delegates. */
-	void SetKeyBoardDelegates();
+	void InitializeMouseDelegates();
+	void InitializeKeyBoardDelegates();
 
 	virtual void SwitchOnInput(Uint32 EventType);
 
@@ -146,5 +157,7 @@ protected:
 	SDL_Event Event;
 	
 	bool bQuitInputDetected;
+
+	std::shared_ptr<FIniObject> EngineInputIniObject;
 	
 };

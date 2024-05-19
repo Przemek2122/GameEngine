@@ -33,9 +33,9 @@ bool IComponentManagerInterface::DestroyComponent(const std::string& ComponentNa
 	return false;
 }
 
-bool IComponentManagerInterface::DestroyComponentByInstance(const UComponent* Component)
+bool IComponentManagerInterface::DestroyComponentByInstance(const UBaseComponent* Component)
 {
-	for (std::pair<const std::string, std::shared_ptr<UComponent>>& ComponentPair : ComponentsMap)
+	for (std::pair<const std::string, std::shared_ptr<UBaseComponent>>& ComponentPair : ComponentsMap)
 	{
 		if (ComponentPair.second.get() == Component)
 		{
@@ -54,11 +54,11 @@ bool IComponentManagerInterface::DestroyComponentByInstance(const UComponent* Co
 	return false;
 }
 
-void IComponentManagerInterface::OnComponentCreated(const std::string& ComponentName, UComponent* NewComponent)
+void IComponentManagerInterface::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 }
 
-void IComponentManagerInterface::OnComponentDestroy(const std::string& ComponentName, UComponent* OldComponent)
+void IComponentManagerInterface::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
 {
 }
 
@@ -73,7 +73,7 @@ IComponentManagerInterface* IComponentManagerInterface::GetOwnerTop() const
 
 	if (CurrentChainElement->HasOwner())
 	{
-		CurrentChainElement = CurrentChainElement->GetOwner();
+		CurrentChainElement = CurrentChainElement->GetOwnerTop();
 	}
 
 	return CurrentChainElement;
@@ -84,13 +84,13 @@ FWindow* IComponentManagerInterface::GetOwnerWindow() const
 	return OwnerWindow;
 }
 
-void IComponentManagerInterface::TickComponents()
+void IComponentManagerInterface::TickComponents(const float DeltaTime)
 {
 	for (const auto& [ComponentName, Component] : ComponentsMap)
 	{
 		if (Component->IsComponentActive())
 		{
-			Component->Tick();
+			Component->Tick(DeltaTime);
 		}
 	}
 }

@@ -71,8 +71,6 @@ public:
 		
 		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName, InWidgetOrder);
 
-		CreatedWidget->Init();
-
 		OnChildWidgetCreated(CreatedWidget);
 
 		return CreatedWidget;
