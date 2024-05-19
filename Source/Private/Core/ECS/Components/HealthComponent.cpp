@@ -37,6 +37,8 @@ void UHealthComponent::TakeDamage(const float Damage)
 {
 	CurrentHealth -= FMath::Abs(Damage);
 
+	OnHealthLowered.Execute(Damage);
+
 	if (CurrentHealth <= 0.f)
 	{
 		OnDie();
@@ -46,6 +48,8 @@ void UHealthComponent::TakeDamage(const float Damage)
 void UHealthComponent::Heal(const float HealthToAdd)
 {
 	CurrentHealth += FMath::Abs(HealthToAdd);
+
+	OnHealthGained.Execute(HealthToAdd);
 
 	if (CurrentHealth > MaxHealth)
 	{

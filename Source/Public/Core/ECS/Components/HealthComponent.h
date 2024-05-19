@@ -27,6 +27,12 @@ public:
 
 	bool IsDead() const;
 
+	/** Called when receiving damage - each time with damage taken */
+	FDelegate<void, float> OnHealthLowered;
+
+	/** Called when healing */
+	FDelegate<void, float> OnHealthGained;
+
 	/** Called when health drops below 0 */
 	FDelegate<> OnDeathDelegate;
 
