@@ -3,19 +3,19 @@
 #include "CoreEngine.h"
 #include "Object.h"
 
-UObject::UObject()
+FObject::FObject()
 {
 }
 
-UObject::~UObject()
+FObject::~FObject()
 {
 }
 
-void UObject::Init()
+void FObject::Init()
 {
 }
 
-std::string UObject::GetCppClassName() const
+std::string FObject::GetCppClassName() const
 {
 	return typeid(this).name();
 }
