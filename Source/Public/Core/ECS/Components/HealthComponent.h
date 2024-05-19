@@ -14,7 +14,6 @@ class UHealthComponent : public UBaseComponent
 {
 public:
 	UHealthComponent(IComponentManagerInterface* InComponentManagerInterface);
-	virtual ~UHealthComponent() override = default;
 
 	/** Begin UBaseComponent */
 	void BeginPlay() override;
@@ -24,6 +23,8 @@ public:
 	virtual void Heal(const float HealthToAdd);
 
 	void SetStartingHealth(const float NewHealth);
+	void SetMaxHealthOverride(const float NewMaxHealth);
+	void ResetMaxHealthToDefault();
 
 	bool IsDead() const;
 
@@ -43,14 +44,14 @@ protected:
 	virtual void OnDie();
 
 protected:
-	/** Current health */
-	float CurrentHealth;
-
 	/** Health which was set before start */
 	float StartingHealth;
 
 	/** Max health - Used when healing */
 	float MaxHealth;
+
+	/** Current health */
+	float CurrentHealth;
 
 	/** Is currently dead? */
 	bool bIsDead;

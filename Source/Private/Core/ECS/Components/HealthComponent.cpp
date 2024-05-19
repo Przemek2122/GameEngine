@@ -7,9 +7,9 @@
 
 UHealthComponent::UHealthComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UBaseComponent(InComponentManagerInterface)
-	, CurrentHealth(100.f)
 	, StartingHealth(100.f)
-	, MaxHealth(100.f)
+	, MaxHealth(StartingHealth)
+	, CurrentHealth(StartingHealth)
 	, bIsDead(false)
 	, bUseHealthBarComponent(false)
 	, HealthBarRenderComponent(nullptr)
@@ -61,6 +61,16 @@ void UHealthComponent::SetStartingHealth(const float NewHealth)
 {
 	StartingHealth = NewHealth;
 	CurrentHealth = NewHealth;
+}
+
+void UHealthComponent::SetMaxHealthOverride(const float NewMaxHealth)
+{
+	MaxHealth = NewMaxHealth;
+}
+
+void UHealthComponent::ResetMaxHealthToDefault()
+{
+	MaxHealth = StartingHealth;
 }
 
 bool UHealthComponent::IsDead() const
