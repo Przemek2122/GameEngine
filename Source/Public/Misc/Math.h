@@ -32,7 +32,9 @@ public:
 	static int CeilToInt(const float Value);
 	static int CeilToInt(const double Value);
 
-	static float GetRandomFloat(float A, float B);
+	/** NOT THREAD SAFE. @return random float value in given range */
+	static float RandRange(const float Min, const float Max);
+	static int RandRange(const int Min, const int Max);
 
 	static float RadiansToDegrees(float Value);
 	static double RadiansToDegreesDouble(double Value);

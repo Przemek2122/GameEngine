@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "AI/AiTree.h"
 #include "ECS/BaseComponent.h"
 
 class FWindowAdvanced;
@@ -9,7 +10,7 @@ class FMap;
 class FGameModeManager;
 class FEntityManager;
 
-class EEntity : public UObject, public IComponentManagerInterface
+class EEntity : public FObject, public IComponentManagerInterface
 {
 public:
 	EEntity(FEntityManager* InEntityManager);
@@ -50,15 +51,30 @@ protected:
 	void RegisterInputInternal();
 	void UnRegisterInputInternal();
 
+	virtual void SetupAiActions();
+
+	template<typename TAiTreeClass>
+	TAiTreeClass* CreateAiTree()
+	{
+		std::shared_ptr<TAiTreeClass> AiTreePtr = std::make_shared<TAiTreeClass>(this);
+
+		AiTreeArray.Push(AiTreePtr);
+
+		return AiTreePtr.get();
+	}
+
 	/** Begin IComponentManagerInterface */
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	/** End IComponentManagerInterface */
 
-protected:
+private:
+	/** Entity manager */
 	FEntityManager* EntityManagerOwner;
 
-private:
 	/** Root component. First component added or set by user */
 	UBaseComponent* DefaultRootComponent;
+
+	/** Ai tree array */
+	CArray<std::shared_ptr<FAiTree>> AiTreeArray;
 
 };

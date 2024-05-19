@@ -16,6 +16,8 @@ EEntity::EEntity(FEntityManager* InEntityManager)
 void EEntity::BeginPlay()
 {
 	RegisterInputInternal();
+
+	SetupAiActions();
 }
 
 void EEntity::EndPlay()
@@ -25,6 +27,10 @@ void EEntity::EndPlay()
 
 void EEntity::Tick(float DeltaTime)
 {
+	for (const std::shared_ptr<FAiTree>& TreeArray : AiTreeArray)
+	{
+		TreeArray->TickInternal();
+	}
 }
 
 void EEntity::ReceiveTick(const float DeltaTime)
@@ -100,6 +106,10 @@ void EEntity::UnRegisterInputInternal()
 	FEventHandler* InputHandler = GEngine->GetEventHandler();
 
 	UnRegisterInput(InputHandler);
+}
+
+void EEntity::SetupAiActions()
+{
 }
 
 void EEntity::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)

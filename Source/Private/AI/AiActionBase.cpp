@@ -8,7 +8,29 @@ FAiActionBase::FAiActionBase(FAiTree* InAiTree)
 {
 }
 
+void FAiActionBase::Tick()
+{
+}
+
+void FAiActionBase::StartAction()
+{
+}
+
+void FAiActionBase::EndAction()
+{
+}
+
 FAiTree* FAiActionBase::GetTree() const
 {
 	return AiTree;
+}
+
+bool FAiActionBase::IsActionReady() const
+{
+	return true;
+}
+
+int32_t FAiActionBase::GetActionPriority() const
+{
+	return 0;
 }

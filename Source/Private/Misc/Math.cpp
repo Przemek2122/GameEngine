@@ -31,12 +31,22 @@ int FMath::CeilToInt(const double Value)
 	return static_cast<int>(std::ceil(Value));
 }
 
-float FMath::GetRandomFloat(float A, float B)
+float FMath::RandRange(const float Min, const float Max)
 {
-	float random = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-	float diff = B - A;
-	float r = random * diff;
-	return A + r;
+	const float RawRandomFloat = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	const float MinMaxDiff = Max - Min;
+	const float Result = RawRandomFloat * MinMaxDiff;
+
+	return Min + Result;
+}
+
+int FMath::RandRange(const int Min, const int Max)
+{
+	const int RawRandomInt = rand(); // Generates a random integer 
+	const int MinMaxDiff = Max - Min;
+	const int Result = RawRandomInt % (MinMaxDiff + 1); // Use modulo to constrain range 
+
+	return Min + Result;
 }
 
 float FMath::RadiansToDegrees(float Value)
