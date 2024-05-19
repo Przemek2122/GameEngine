@@ -51,7 +51,16 @@ void FAiTree::Tick()
 	}
 	else
 	{
-		CurrentAction->Tick();
+		if (CurrentAction->ShouldFinishAction())
+		{
+			CurrentAction->End();
+
+			CurrentAction = nullptr;
+		}
+		else
+		{
+			CurrentAction->Tick();
+		}
 	}
 }
 
@@ -77,7 +86,7 @@ void FAiTree::ChooseActionCustom()
 void FAiTree::OnActionChosen(FAiActionBase* AiAction)
 {
 	CurrentAction = AiAction;
-	CurrentAction->StartAction();
+	CurrentAction->Start();
 }
 
 void FAiTree::ChooseActionInternal()

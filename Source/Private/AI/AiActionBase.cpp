@@ -12,17 +12,19 @@ void FAiActionBase::Tick()
 {
 }
 
-void FAiActionBase::StartAction()
+void FAiActionBase::Start()
 {
+	StartAction();
 }
 
-void FAiActionBase::EndAction()
+void FAiActionBase::End()
 {
+	EndAction();
 }
 
-FAiTree* FAiActionBase::GetTree() const
+bool FAiActionBase::ShouldFinishAction() const
 {
-	return AiTree;
+	return false;
 }
 
 bool FAiActionBase::IsActionReady() const
@@ -33,4 +35,22 @@ bool FAiActionBase::IsActionReady() const
 int32_t FAiActionBase::GetActionPriority() const
 {
 	return 0;
+}
+
+FAiTree* FAiActionBase::GetTree() const
+{
+	return AiTree;
+}
+
+EEntity* FAiActionBase::GetEntity() const
+{
+	return AiTree->GetOwnerEntity();
+}
+
+void FAiActionBase::StartAction()
+{
+}
+
+void FAiActionBase::EndAction()
+{
 }
