@@ -53,10 +53,14 @@
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AiTree.h" />
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Collision\AABB.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Collision\BoundingCircles.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\CollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h" />
@@ -254,9 +258,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">CoreEngine.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Source\Private\AI\AiActionBase.cpp" />
-    <ClCompile Include="Source\Private\AI\AIActionMove.cpp" />
-    <ClCompile Include="Source\Private\AI\AiTree.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\AssetBase.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\FontAsset.cpp" />
     <ClCompile Include="Source\Private\Assets\Assets\IniAsset.cpp" />
@@ -273,11 +274,18 @@
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\AI\AiActionBase.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\AI\AiTree.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Collision\AABB.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Collision\BoundingCircles.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\CollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp" />

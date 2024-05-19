@@ -138,7 +138,6 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsPositionInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
-    <ClInclude Include="Source\Public\ThirdParty\CppFlow.h" />
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
     <ClInclude Include="Source\Public\Types\Delegate.h" />
     <ClInclude Include="Source\Public\Types\DelegateBase.h" />
@@ -149,14 +148,6 @@
     <ClInclude Include="Source\Public\Types\FunctorStatic.h" />
     <ClInclude Include="Source\Public\Types\SmartPointer\SmartSharedPointer.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\context.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\cppflow.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\datatype.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\defer.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\model.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\ops.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\raw_ops.h" />
-    <ClInclude Include="Source\ThirdParty\CppFlow\tensor.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\close_code.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL.h" />
@@ -247,26 +238,6 @@
     <ClInclude Include="Source\ThirdParty\SDL\SDL_version.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_video.h" />
     <ClInclude Include="Source\ThirdParty\SDL\SDL_vulkan.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\c_api.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\c_api_experimental.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\c_api_macros.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\eager\c_api.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\eager\c_api_experimental.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\eager\dlpack.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tensor_interface.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_attrtype.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_buffer.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_datatype.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_file_statistics.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_status.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_tensor.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_tensor_helper.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\c\tf_tstring.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\core\platform\ctstring.h" />
-    <ClInclude Include="Source\ThirdParty\tensorflow\core\platform\ctstring_internal.h" />
-    <ClInclude Include="Source\ThirdParty\tsl\c\tsl_status.h" />
-    <ClInclude Include="Source\ThirdParty\tsl\platform\ctstring.h" />
-    <ClInclude Include="Source\ThirdParty\tsl\platform\ctstring_internal.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Core\CoreEngine.cpp">
@@ -379,7 +350,6 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetsPositionInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
-    <ClCompile Include="Source\Private\ThirdParty\CppFlow.cpp" />
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
     <ClCompile Include="Source\Private\Types\Delegate.cpp" />
     <ClCompile Include="Source\Private\Types\DelegateBase.cpp" />
@@ -629,7 +599,7 @@
     <Lib>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;$(ProjectDir)Libs\tensorflow\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;tensorflow.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
@@ -712,7 +682,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)Libs\SDL_TTF\x64;$(ProjectDir)Libs\SDL_Mixer\x64;$(ProjectDir)Libs\SDL_Image\x64;$(ProjectDir)Libs\SDL\x64;$(ProjectDir)Libs\tensorflow\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;tensorflow.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
