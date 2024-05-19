@@ -21,8 +21,8 @@ If GameEngine project fails to load Click it in solution and change it's project
 	GameEngineDir = '../GameEngine'
 
 # Currently supported futures
- - Entity with components
- - 'Widgets' for UI
- - Simple map rendering
- - Ini files
+ - Entity with components	- https://github.com/Przemek2122/GameEngine/tree/main/Source/Public/Core/ECS
+ - 'Widgets' for UI			- https://github.com/Przemek2122/GameEngine/tree/main/Source/Public/Renderer/Widgets
+ - Simple map with editor	- https://github.com/Przemek2122/GameEngine/tree/main/Source/Public/Renderer/Map
+ - Ini files				- https://github.com/Przemek2122/GameEngine/blob/main/Assets/Config/EngineInput.ini
 
