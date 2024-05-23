@@ -4,8 +4,7 @@
 #include "ECS/EntityManager.h"
 
 FEntityManager::FEntityManager(FWindow* InOwnerWindow)
-	: Entities()
-	, OwnerWindow(InOwnerWindow)
+	: OwnerWindow(InOwnerWindow)
 {
 }
 
