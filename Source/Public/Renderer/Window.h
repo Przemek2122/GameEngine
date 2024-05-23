@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ECS/SubSystems/SubSystemParentInterface.h"
 #include "Widgets/WidgetManager.h"
 
 class FMapManager;
@@ -16,7 +17,7 @@ class FWidget;
 /**
  * Window class. Has SDL_Window and FRender.
  */
-class FWindow
+class FWindow : public ISubSystemParentInterface
 {
 	friend FEngineRender;
 

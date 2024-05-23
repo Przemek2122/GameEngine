@@ -74,6 +74,8 @@ void FWindow::ReceiveTick()
 	{
 		Tick();
 	}
+
+	TickSubSystems();
 }
 
 FWidgetManager* FWindow::CreateWidgetManager()
