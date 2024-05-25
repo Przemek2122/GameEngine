@@ -40,7 +40,7 @@ public:
 
 	float Magnitude() const
 	{
-		return std::sqrt((X * X) + (Y * Y));
+		return static_cast<float>(std::sqrt((X * X) + (Y * Y)));
 	}
 
 	// Function to get normalized vector 
@@ -217,6 +217,8 @@ public:
 		return Point;
 	}
 
+	// @TODO Fix warning
+	// C4172 returning address of local variable or temporary
 	operator SDL_Point*() const
 	{
 		SDL_Point Point;
