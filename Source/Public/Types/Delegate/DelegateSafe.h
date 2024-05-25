@@ -5,7 +5,7 @@
 #include "DelegateBase.h"
 #include "Types/Functors/FunctorLambda.h"
 #include "Types/Functors/FunctorObject.h"
-#include "GlobalDefines.h"
+#include "Core/Includes/GlobalDefines.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
