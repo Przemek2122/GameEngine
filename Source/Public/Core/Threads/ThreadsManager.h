@@ -17,6 +17,8 @@ protected:
 	FThreadInputData* ThreadInputData;
 	FThread* Thread;
 
+	int ThreadNumber;
+
 };
 
 struct FAsyncWorkStructure
@@ -90,6 +92,8 @@ protected:
 
 	/** Callbacks from finishes async jobs */
 	CQueueSafe<FMainThreadCallbackStructure> MainThreadCallbacks;
+
+	int StartingNumberOfThreads;
 
 private:
 	/** Array with created threads */

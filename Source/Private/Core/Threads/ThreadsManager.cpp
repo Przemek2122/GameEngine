@@ -19,7 +19,8 @@ FThreadData::~FThreadData()
 }
 
 FThreadsManager::FThreadsManager()
-	: DefaultThreadName("DefaultThread_")
+	: StartingNumberOfThreads(2)
+	, DefaultThreadName("DefaultThread_")
 {
 }
 
@@ -33,8 +34,8 @@ FThreadsManager::~FThreadsManager()
 
 void FThreadsManager::Initialize()
 {
-	// Calculate number of cores - Remove one because of main thread
-	int NumberOfCores = SDL_GetCPUCount() - 1;
+	// Calculate number of cores
+	int NumberOfCores = SDL_GetCPUCount();
 
 	// Ensure we always have at least one thread.
 	if (NumberOfCores <= 0)
@@ -42,12 +43,17 @@ void FThreadsManager::Initialize()
 		NumberOfCores = 1;
 	}
 
+	// Create available slots for threads
 	for (int ThreadIndex = 0; ThreadIndex < NumberOfCores; ThreadIndex++)
 	{
 		AvailableThreadsNumbers.Push(ThreadIndex);
 	}
 
-	StartNewThread();
+	// Create default number of threads
+	for (int i = 0; i < StartingNumberOfThreads; i++)
+	{
+		StartNewThread();
+	}
 }
 
 void FThreadsManager::TickThreadCallbacks()
@@ -114,10 +120,12 @@ void FThreadsManager::StartNewThread()
 		const int NewThreadIndex = AvailableThreadsNumbers[0];
 		AvailableThreadsNumbers.RemoveAt(0);
 
-		// Thread name visible for example in debugger
 		const std::string NewThreadName = DefaultThreadName + std::to_string(NewThreadIndex + 1);
 
-		AllThreadArray.Push(CreateThread(NewThreadName));
+		FThreadData* ThreadData = CreateThread(NewThreadName);
+		ThreadData->ThreadNumber = NewThreadIndex;
+
+		AllThreadArray.Push(ThreadData);
 	}
 }
 
@@ -127,6 +135,10 @@ void FThreadsManager::StopThread()
 
 	FThreadData* LastThread = AllThreadArray[ThreadIndex];
 	LastThread->ThreadInputData->bThreadAlive = false;
+
+	AvailableThreadsNumbers.Push(LastThread->ThreadNumber);
+
+	delete LastThread;
 
 	AllThreadArray.RemoveAt(ThreadIndex);
 }
@@ -138,6 +150,8 @@ int FThreadsManager::GetNumberOfCores()
 
 FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 {
+	// @TODO Remove mutex and find and smart way of distributing tasks
+
 	while (!AsyncJobQueueMutex.try_lock())
 	{
 		SDL_Delay(1);
@@ -145,8 +159,6 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 
 	if (AsyncJobQueue.Size() == 0)
 	{
-		LOG_ERROR("AsyncJobQueue is empty. We should never try to get new async job when there is no any");
-
 		FAsyncWorkStructure AsyncWorkStructure;
 		AsyncWorkStructure.DelegateToRunAsync = std::make_shared<FDelegateSafe<>>();
 		AsyncWorkStructure.AsyncCallback = std::make_shared<FDelegateSafe<>>();

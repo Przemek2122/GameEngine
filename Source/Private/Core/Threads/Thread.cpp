@@ -69,7 +69,5 @@ int FThread::ThreadFunction(void* InputData)
 		Thread->TickThread();
 	}
 
-
-
 	return 0;
 }
