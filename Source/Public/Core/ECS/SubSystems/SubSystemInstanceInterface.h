@@ -4,18 +4,25 @@
 
 #include "CoreMinimal.h"
 
+class ISubSystemManagerInterface;
+
 /**
  * Interface for any object which should be subsystem
  */
 class ISubSystemInstanceInterface
 {
 public:
-	ISubSystemInstanceInterface(ISubSystemParentInterface* InSubSystemParentInterface);
+	ISubSystemInstanceInterface();
 	virtual ~ISubSystemInstanceInterface();
 
-	void TickSubSystem();
+	void SetSubSystemManager(ISubSystemManagerInterface* InSubSystemParentInterface, const bool bAutoInit = true);
 
-protected:
-	ISubSystemParentInterface* SubSystemParentInterface;
+	virtual void InitializeSubSystem();
+	virtual void TickSubSystem();
+
+	ISubSystemManagerInterface* GetSubSystemParentInterface() const { return SubSystemParentInterface; }
+
+private:
+	ISubSystemManagerInterface* SubSystemParentInterface;
 
 };

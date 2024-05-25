@@ -129,7 +129,7 @@ public:
 	template<typename TType>
 	static TType Sqrt(const TType Value)
 	{
-		return (sqrt(Value));
+		return static_cast<TType>(sqrt(Value));
 	}
 
 	/** Returns power of given value */

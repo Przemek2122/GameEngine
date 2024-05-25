@@ -27,6 +27,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Private\Types\Functors\FunctorBase.h" />
+    <ClInclude Include="Source\Private\Types\Functors\FunctorLambda.h" />
+    <ClInclude Include="Source\Private\Types\Functors\FunctorObject.h" />
+    <ClInclude Include="Source\Private\Types\Functors\FunctorStatic.h" />
+    <ClInclude Include="Source\Private\Types\Registry\RegistryBase.h" />
     <ClInclude Include="Source\Public\Assets\Assets\AssetBase.h" />
     <ClInclude Include="Source\Public\Assets\Assets\FontAsset.h" />
     <ClInclude Include="Source\Public\Assets\Assets\IniAsset.h" />
@@ -75,7 +80,7 @@
     <ClInclude Include="Source\Public\Core\ECS\EntityManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Interfaces\ScreenSelectionInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemInstanceInterface.h" />
-    <ClInclude Include="Source\Public\Core\ECS\SubSystems\FSubSystemParentInterface.h" />
+    <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemManagerInterface.h" />
     <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h" />
@@ -145,13 +150,14 @@
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />
-    <ClInclude Include="Source\Public\Types\Delegate.h" />
-    <ClInclude Include="Source\Public\Types\DelegateBase.h" />
-    <ClInclude Include="Source\Public\Types\DelegateSafe.h" />
-    <ClInclude Include="Source\Public\Types\FunctorBase.h" />
-    <ClInclude Include="Source\Public\Types\FunctorLambda.h" />
-    <ClInclude Include="Source\Public\Types\FunctorObject.h" />
-    <ClInclude Include="Source\Public\Types\FunctorStatic.h" />
+    <ClInclude Include="Source\Public\Types\Delegate\Delegate.h" />
+    <ClInclude Include="Source\Public\Types\Delegate\DelegateBase.h" />
+    <ClInclude Include="Source\Public\Types\Delegate\DelegateSafe.h" />
+    <ClInclude Include="Source\Public\Types\Functors\FunctorBase.h" />
+    <ClInclude Include="Source\Public\Types\Functors\FunctorLambda.h" />
+    <ClInclude Include="Source\Public\Types\Functors\FunctorObject.h" />
+    <ClInclude Include="Source\Public\Types\Functors\FunctorStatic.h" />
+    <ClInclude Include="Source\Public\Types\Registry\RegistryBase.h" />
     <ClInclude Include="Source\Public\Types\SmartPointer\SmartSharedPointer.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
     <ClInclude Include="Source\ThirdParty\SDL\begin_code.h" />
@@ -302,7 +308,7 @@
     <ClCompile Include="Source\Private\Core\ECS\EntityManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Interfaces\ScreenSelectionInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemInstanceInterface.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\SubSystems\FSubSystemParentInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemManagerInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp" />
@@ -363,13 +369,13 @@
     <ClCompile Include="Source\Private\Renderer\Window.cpp" />
     <ClCompile Include="Source\Private\Renderer\WindowAdvanced.cpp" />
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp" />
-    <ClCompile Include="Source\Private\Types\Delegate.cpp" />
-    <ClCompile Include="Source\Private\Types\DelegateBase.cpp" />
-    <ClCompile Include="Source\Private\Types\DelegateSafe.cpp" />
-    <ClCompile Include="Source\Private\Types\FunctorBase.cpp" />
-    <ClCompile Include="Source\Private\Types\FunctorLambda.cpp" />
-    <ClCompile Include="Source\Private\Types\FunctorObject.cpp" />
-    <ClCompile Include="Source\Private\Types\FunctorStatic.cpp" />
+    <ClCompile Include="Source\Private\Types\Delegate\Delegate.cpp" />
+    <ClCompile Include="Source\Private\Types\Delegate\DelegateBase.cpp" />
+    <ClCompile Include="Source\Private\Types\Delegate\DelegateSafe.cpp" />
+    <ClCompile Include="Source\Private\Types\Functors\FunctorBase.cpp" />
+    <ClCompile Include="Source\Private\Types\Functors\FunctorLambda.cpp" />
+    <ClCompile Include="Source\Private\Types\Functors\FunctorObject.cpp" />
+    <ClCompile Include="Source\Private\Types\Functors\FunctorStatic.cpp" />
     <ClCompile Include="Source\Private\Types\SmartPointer\SmartSharedPointer.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>

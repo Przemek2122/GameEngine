@@ -3,9 +3,7 @@
 #pragma once
 
 #include <functional>
-#include <iostream>
-
-#include "FunctorBase.h"
+#include "Types/Functors/FunctorBase.h"
 
 /**
  * Function storage class. Supports:

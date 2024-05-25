@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -97,149 +96,182 @@
     <Filter Include="Private\Types">
       <UniqueIdentifier>{ttoc12ok-63u0n-8dchy-n0y53-m1g2osczdkz8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types\SmartPointer">
+    <Filter Include="Private\Types\Delegate">
       <UniqueIdentifier>{k2ktgucx-nb59j-2i0xm-h4s2d-3074uj6srlws}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public">
+    <Filter Include="Private\Types\Functors">
       <UniqueIdentifier>{wmmf13zj-isfci-gcdng-n0ar2-g03wcs1fd1xz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets">
+    <Filter Include="Private\Types\Registry">
       <UniqueIdentifier>{7d8as1ow-52lgj-usd4r-yxwmt-tehe0a31t0ek}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\Assets">
+    <Filter Include="Private\Types\SmartPointer">
       <UniqueIdentifier>{bg8c5knx-7ddw4-zg92k-n86es-65eu5rcibg5o}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\Collection">
+    <Filter Include="Public">
       <UniqueIdentifier>{galm3g0a-nz1iz-6zwh6-wwgbt-yisg21zpwd02}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\IniReader">
+    <Filter Include="Public\Assets">
       <UniqueIdentifier>{3878jr3x-adltd-ylm51-53kcd-w7g21b3d9fcg}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\TypesForAssets">
+    <Filter Include="Public\Assets\Assets">
       <UniqueIdentifier>{4rntjf8y-rx8s3-9pdhp-g66ie-be0hofalcyit}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Containers">
+    <Filter Include="Public\Assets\Collection">
       <UniqueIdentifier>{yg3mbjl0-ljewa-ajuo9-ohxhn-e2n6cewozgab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core">
+    <Filter Include="Public\Assets\IniReader">
       <UniqueIdentifier>{yff6ytkn-8ameu-0paa5-xhspu-t0od54ffa843}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS">
+    <Filter Include="Public\Assets\TypesForAssets">
       <UniqueIdentifier>{z8clgizp-ss6mf-8x60e-n79yd-36tsys75f7yj}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\AI">
+    <Filter Include="Public\Containers">
       <UniqueIdentifier>{y6cwmhtd-zpe4k-muish-cbtew-7n7geuzoiwx0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Collision">
+    <Filter Include="Public\Core">
       <UniqueIdentifier>{ng20l0pi-ytcfm-8pgad-mxxcb-h3wyemnada97}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Components">
+    <Filter Include="Public\Core\ECS">
       <UniqueIdentifier>{jd22jzw3-9itzj-aczfz-orhec-017j62p96w1n}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Entities">
+    <Filter Include="Public\Core\ECS\AI">
       <UniqueIdentifier>{zx7ci8sb-okz56-ypfb7-n88o6-xx7ax185b3mk}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Interfaces">
+    <Filter Include="Public\Core\ECS\Collision">
       <UniqueIdentifier>{l4yn6ww5-zlhu7-kd9a0-gx720-wxya8nna1p1m}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\SubSystems">
+    <Filter Include="Public\Core\ECS\Components">
       <UniqueIdentifier>{lugol09l-jb22z-wghie-fw3ly-3gxtci0lfxnn}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Engine">
+    <Filter Include="Public\Core\ECS\Entities">
       <UniqueIdentifier>{e9jznwwj-1dnyl-z8nue-m5u6l-9eklel5cfc0r}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Engine\Logic">
+    <Filter Include="Public\Core\ECS\Interfaces">
       <UniqueIdentifier>{6fk6dm61-8u8bk-3damy-yw3am-bxczkendl9mk}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Includes">
+    <Filter Include="Public\Core\ECS\SubSystems">
       <UniqueIdentifier>{f1zo8zil-0nmla-b5772-58rw9-c83rcl53ud2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Input">
+    <Filter Include="Public\Core\Engine">
       <UniqueIdentifier>{s1zpgd1j-eyx35-wxkot-lsr8k-1l0xrjegnnn1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Interfaces">
+    <Filter Include="Public\Core\Engine\Logic">
       <UniqueIdentifier>{u7yxxicj-ka3n1-y3k2r-sc7gd-8aau0crcgojy}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Interfaces\CoreLoop">
+    <Filter Include="Public\Core\Includes">
       <UniqueIdentifier>{mgxzglyi-3f432-d83rh-zoo74-u4xe8ai8u0e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Memory">
+    <Filter Include="Public\Core\Input">
       <UniqueIdentifier>{djh996p1-bf5lo-p5bhe-fz6ek-exxo4jglb69r}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test">
+    <Filter Include="Public\Core\Interfaces">
       <UniqueIdentifier>{mfm5wr27-3pmx3-uo3ic-h367o-p1nag3u7jusg}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test\Samples">
+    <Filter Include="Public\Core\Interfaces\CoreLoop">
       <UniqueIdentifier>{75kj7g8w-45r0d-b2ypu-l4s73-1d5numun4yn7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Timer">
+    <Filter Include="Public\Core\Memory">
       <UniqueIdentifier>{73an2kgo-9dmiw-1ay9z-t8xts-d02kzbdoexc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Misc">
+    <Filter Include="Public\Core\Test">
       <UniqueIdentifier>{sjlgcen4-4c1nc-ho80d-2jjca-5f158umxizh3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer">
+    <Filter Include="Public\Core\Test\Samples">
       <UniqueIdentifier>{pwpmfx84-0s1c0-p8iuu-9e0wx-slgjb35f5jcs}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Map">
+    <Filter Include="Public\Core\Timer">
       <UniqueIdentifier>{5u80djdn-froei-bxc1d-po7fr-daplrnxukcce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets">
+    <Filter Include="Public\Misc">
       <UniqueIdentifier>{3y6x2mzp-clr70-gw011-pzh7c-h1edx9y12fga}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\Samples">
+    <Filter Include="Public\Renderer">
       <UniqueIdentifier>{g10xfi3u-rslw1-lylel-ruhbh-2hicipndjtf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\UIMenus">
+    <Filter Include="Public\Renderer\Map">
       <UniqueIdentifier>{5m53tksc-hgcdg-jtg6c-7pyuo-2bar6jflz14x}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\ThirdParty">
+    <Filter Include="Public\Renderer\Widgets">
       <UniqueIdentifier>{egbxn8k5-tuw3a-mh0a8-3i3nc-jipp7xr27rjd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types">
+    <Filter Include="Public\Renderer\Widgets\Samples">
       <UniqueIdentifier>{xem940y8-pghwh-i0ct5-kgpp3-368igrr1beyh}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\SmartPointer">
+    <Filter Include="Public\Renderer\Widgets\UIMenus">
       <UniqueIdentifier>{5y6nu7u6-s972g-9d886-ipx69-4y75i9fk1h1w}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty">
+    <Filter Include="Public\ThirdParty">
       <UniqueIdentifier>{kftfu4kd-uh5rz-kh0x7-pxwlz-skfbpkezfp5h}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\CppFlow">
+    <Filter Include="Public\Types">
       <UniqueIdentifier>{ds2z60wn-ob22n-4rwap-jos7c-u48wcy95s8gy}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\CppFlow\ops_generator">
+    <Filter Include="Public\Types\Delegate">
       <UniqueIdentifier>{7z5mxijz-rf0jn-nbt12-txtdr-du71zd6ses5p}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\SDL">
+    <Filter Include="Public\Types\Functors">
       <UniqueIdentifier>{78nob7ed-konod-tyzt9-0h2ix-lg1tx60l87fz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow">
+    <Filter Include="Public\Types\Registry">
       <UniqueIdentifier>{gkoz27xk-4g0y7-n8f53-zf8ew-51kcb0g56rnm}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\c">
+    <Filter Include="Public\Types\SmartPointer">
       <UniqueIdentifier>{rntddpon-ehseh-xis7i-ozs40-i0stxpkzthwp}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\c\eager">
+    <Filter Include="ThirdParty">
       <UniqueIdentifier>{alysyz78-5fjzt-x3453-25akd-8tdg43xfghay}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\core">
+    <Filter Include="ThirdParty\CppFlow">
       <UniqueIdentifier>{h6gx0xkx-lu2f0-f6ywd-emhxu-aw9fw3ybsfzs}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\core\platform">
+    <Filter Include="ThirdParty\CppFlow\ops_generator">
       <UniqueIdentifier>{c1nol1zd-07pwy-397e1-agyal-dk84ztjwxx0g}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tsl">
+    <Filter Include="ThirdParty\SDL">
       <UniqueIdentifier>{pu4zxfbo-0ailj-706gm-w0p4x-0mxwhp0i00wh}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tsl\c">
+    <Filter Include="ThirdParty\tensorflow">
       <UniqueIdentifier>{em0ugci0-ys706-per5c-i6bog-tnp4hfoobkgy}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tsl\platform">
+    <Filter Include="ThirdParty\tensorflow\c">
       <UniqueIdentifier>{3a107lhb-tpkly-x19ei-m9sgd-pfcfynr7oxge}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tensorflow\c\eager">
+      <UniqueIdentifier>{cl5kjjgy-s59xf-mdbc4-x0pwu-rsrznti7ur3y}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tensorflow\core">
+      <UniqueIdentifier>{fnnadgk0-b4yha-jx3by-9fi5n-o2w2cbr15gse}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tensorflow\core\platform">
+      <UniqueIdentifier>{tea7dni8-wf3mh-zcs14-tapir-3aym6f6jmgwd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tsl">
+      <UniqueIdentifier>{kx53px5k-kop5w-2wkuc-ze449-jyzgn01b1l4g}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tsl\c">
+      <UniqueIdentifier>{5ucblf07-nwf0d-595lp-rndnm-4xu5o6pnj9yr}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tsl\platform">
+      <UniqueIdentifier>{5hdcjslu-7k4yh-ktpr4-obn40-yt1blzb1ekkz}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Private\Types\Functors\FunctorBase.h">
+      <Filter>Private\Types\Functors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Types\Functors\FunctorLambda.h">
+      <Filter>Private\Types\Functors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Types\Functors\FunctorObject.h">
+      <Filter>Private\Types\Functors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Types\Functors\FunctorStatic.h">
+      <Filter>Private\Types\Functors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Types\Registry\RegistryBase.h">
+      <Filter>Private\Types\Registry</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Assets\Assets\AssetBase.h">
       <Filter>Public\Assets\Assets</Filter>
     </ClInclude>
@@ -302,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreEngine.h">
+      <Filter>Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
@@ -384,7 +419,7 @@
     <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemInstanceInterface.h">
       <Filter>Public\Core\ECS\SubSystems</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\ECS\SubSystems\FSubSystemParentInterface.h">
+    <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemManagerInterface.h">
       <Filter>Public\Core\ECS\SubSystems</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h">
@@ -594,26 +629,29 @@
     <ClInclude Include="Source\Public\Types\ColorRGBA.h">
       <Filter>Public\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\Delegate.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Delegate\Delegate.h">
+      <Filter>Public\Types\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\DelegateBase.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Delegate\DelegateBase.h">
+      <Filter>Public\Types\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\DelegateSafe.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Delegate\DelegateSafe.h">
+      <Filter>Public\Types\Delegate</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorBase.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Functors\FunctorBase.h">
+      <Filter>Public\Types\Functors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorLambda.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Functors\FunctorLambda.h">
+      <Filter>Public\Types\Functors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorObject.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Functors\FunctorObject.h">
+      <Filter>Public\Types\Functors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Types\FunctorStatic.h">
-      <Filter>Public\Types</Filter>
+    <ClInclude Include="Source\Public\Types\Functors\FunctorStatic.h">
+      <Filter>Public\Types\Functors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\Registry\RegistryBase.h">
+      <Filter>Public\Types\Registry</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\SmartPointer\SmartSharedPointer.h">
       <Filter>Public\Types\SmartPointer</Filter>
@@ -1022,7 +1060,7 @@
     <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemInstanceInterface.cpp">
       <Filter>Private\Core\ECS\SubSystems</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\ECS\SubSystems\FSubSystemParentInterface.cpp">
+    <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemManagerInterface.cpp">
       <Filter>Private\Core\ECS\SubSystems</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp">
@@ -1205,26 +1243,26 @@
     <ClCompile Include="Source\Private\Types\ColorRGBA.cpp">
       <Filter>Private\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\Delegate.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Delegate\Delegate.cpp">
+      <Filter>Private\Types\Delegate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\DelegateBase.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Delegate\DelegateBase.cpp">
+      <Filter>Private\Types\Delegate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\DelegateSafe.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Delegate\DelegateSafe.cpp">
+      <Filter>Private\Types\Delegate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorBase.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Functors\FunctorBase.cpp">
+      <Filter>Private\Types\Functors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorLambda.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Functors\FunctorLambda.cpp">
+      <Filter>Private\Types\Functors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorObject.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Functors\FunctorObject.cpp">
+      <Filter>Private\Types\Functors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Types\FunctorStatic.cpp">
-      <Filter>Private\Types</Filter>
+    <ClCompile Include="Source\Private\Types\Functors\FunctorStatic.cpp">
+      <Filter>Private\Types\Functors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\SmartPointer\SmartSharedPointer.cpp">
       <Filter>Private\Types\SmartPointer</Filter>
@@ -1234,13 +1272,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Scripts\BuildActions\README.txt" />
-  </ItemGroup>
-</Project>
+    <None Include="cpp.hint" /> 
+  </ItemGroup> 
+</Project> 

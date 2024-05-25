@@ -2,20 +2,17 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Window.h"
-#include "ECS/EntityManager.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Map/MapManager.h"
 #include "Renderer/Widgets/WidgetInputManager.h"
 
-FWindow::FWindow(char* InTitle, const int InPositionX, const int InPositionY, const int InWidth, const int InHeight, const Uint32 InFlags)
-	: Window(SDL_CreateWindow(InTitle, InPositionX, InPositionY, InWidth, InHeight, InFlags))
+FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, const Uint32 InWindowFlags)
+	: Window(SDL_CreateWindow(InTitle.c_str(), InLocation.X, InLocation.Y, InSize.X, InSize.Y, InWindowFlags))
 	, Renderer(nullptr)
 	, WindowTitle(InTitle)
-	, WindowPositionX(InPositionX)
-	, WindowPositionY(InPositionY)
-	, WindowWidth(InWidth)
-	, WindowHeight(InHeight)
-	, WindowFlags(InFlags)
+	, Location(InLocation)
+	, Size(InSize)
+	, WindowFlags(InWindowFlags)
 	, bIsWindowFocused(false)
 	, bIsWindowVisible(true)
 	, WidgetManager(nullptr)
@@ -122,8 +119,8 @@ void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 		SDL_SetWindowSize(Window, X, Y);
 	}
 
-	WindowWidth = X;
-	WindowHeight = Y;
+	Size.X = X;
+	Size.Y = Y;
 
 	CArray<FWidget*> Widgets = WidgetManager->GetManagedWidgets();
 	for (FWidget* Widget : Widgets)
@@ -139,8 +136,8 @@ void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)
 		SDL_SetWindowPosition(Window, X, Y);
 	}
 
-	WindowPositionX = X;
-	WindowPositionY = Y;
+	Location.X = X;
+	Location.Y = Y;
 }
 
 FRenderer* FWindow::GetRenderer() const

@@ -31,8 +31,8 @@ class FVector2D;
 class FColorRGBA;
 template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
-#include "Types/Delegate.h"
-#include "Types/DelegateSafe.h"
+#include "Types/Delegate/Delegate.h"
+#include "Types/Delegate/DelegateSafe.h"
 
 /** Begin of containers */
 template<typename TType, typename TSizeType>

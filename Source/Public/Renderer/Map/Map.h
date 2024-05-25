@@ -9,8 +9,9 @@ class ECameraManager;
 
 /**
  * Class for map management
+ * This class have ISubSystemManagerInterface for implementing subsystems
  */
-class FMap
+class FMap : public ISubSystemManagerInterface
 {
 public:
 	FMap(FMapAsset* InMapAsset, FMapManager* InMapManager);

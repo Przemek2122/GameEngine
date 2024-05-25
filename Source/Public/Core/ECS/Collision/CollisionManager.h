@@ -3,14 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ECS/SubSystems/SubSystemInstanceInterface.h"
 
 class FSquareCollision;
 class FCircleCollision;
 
-class FCollisionManager
+class FCollisionManager : public ISubSystemInstanceInterface
 {
 public:
 	FCollisionManager();
+
+	/** Begin ISubSystemInstanceInterface */
+	void InitializeSubSystem() override;
+	void TickSubSystem() override;
+	/** End ISubSystemInstanceInterface */
 
 	void RegisterCircleCollision(FCircleCollision* InCircleCollision);
 	void UnRegisterCircleCollision(FCircleCollision* InCircleCollision);
@@ -22,7 +28,10 @@ public:
 	void CheckSquareCollision();
 
 protected:
+	/** Circle collision array */
 	CArray<FCircleCollision*> CircleCollisionArray;
-	CArray<FCircleCollision*> SquareCollisionArray;
+
+	/** Square collision array */
+	CArray<FSquareCollision*> SquareCollisionArray;
 	
 };

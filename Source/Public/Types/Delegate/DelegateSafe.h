@@ -3,9 +3,9 @@
 #pragma once
 
 #include "DelegateBase.h"
-#include "FunctorLambda.h"
-#include "FunctorObject.h"
-#include "Includes/GlobalDefines.h"
+#include "Types/Functors/FunctorLambda.h"
+#include "Types/Functors/FunctorObject.h"
+#include "GlobalDefines.h"
 
 /**
  * Delegate extending base with bind and unbind and UnBindAll.
