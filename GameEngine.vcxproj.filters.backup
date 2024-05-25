@@ -257,18 +257,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Private\Types\Functors\FunctorBase.h">
-      <Filter>Private\Types\Functors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Private\Types\Functors\FunctorLambda.h">
-      <Filter>Private\Types\Functors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Private\Types\Functors\FunctorObject.h">
-      <Filter>Private\Types\Functors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Private\Types\Functors\FunctorStatic.h">
-      <Filter>Private\Types\Functors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Private\Types\Registry\RegistryBase.h">
       <Filter>Private\Types\Registry</Filter>
     </ClInclude>
@@ -352,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h">
       <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Collision\BaseCollision.h">
+      <Filter>Public\Core\ECS\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Collision\CircleCollision.h">
       <Filter>Public\Core\ECS\Collision</Filter>
@@ -993,6 +984,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp">
       <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Collision\BaseCollision.cpp">
+      <Filter>Private\Core\ECS\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Collision\CircleCollision.cpp">
       <Filter>Private\Core\ECS\Collision</Filter>

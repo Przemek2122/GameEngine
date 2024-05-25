@@ -15,6 +15,7 @@
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
 #include "Test/Samples/TestTimers.h"
+#include "Threads/ThreadsManager.h"
 
 FEngine::FEngine()
 	: bFrameRateLimited(true)
@@ -33,6 +34,7 @@ FEngine::FEngine()
 	, AssetsManager(nullptr)
 	, EngineTickingManager(nullptr)
 	, EngineRenderingManager(nullptr)
+	, ThreadsManager(nullptr)
 	, TestManager(nullptr)
 	, bContinueMainLoop(true)
 	, TicksThisSecond(0)
@@ -125,8 +127,11 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	AssetsManager = CreateAssetsManager();
 	EngineTickingManager = CreateEngineTickingManager();
 	EngineRenderingManager = CreateEngineRenderingManager();
+	ThreadsManager = CreateThreadsManager();
 
 	EventHandler->InitializeInputFromConfig();
+
+	ThreadsManager->Initialize();
 
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
@@ -182,6 +187,8 @@ void FEngine::EngineTick()
 	}
 
 	EngineRender->Tick();
+
+	ThreadsManager->TickThreadCallbacks();
 
 	EngineRenderingManager->EngineRender();
 }
@@ -239,6 +246,7 @@ void FEngine::Clean()
 	delete AssetsManager;
 	delete EngineTickingManager;
 	delete EngineRenderingManager;
+	delete ThreadsManager;
 
 #if ENGINE_TESTS_ALLOW_ANY
 	delete TestManager;
@@ -380,6 +388,11 @@ FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
 	return new FEngineRenderingManager;
 }
 
+FThreadsManager* FEngine::CreateThreadsManager() const
+{
+	return new FThreadsManager();
+}
+
 const std::string& FEngine::GetLaunchFullPath() const
 {
 	return LaunchFullPath;
@@ -422,6 +435,11 @@ FEngineTickingManager* FEngine::GetEngineTickingManager() const
 FEngineRenderingManager* FEngine::GetEngineRenderingManager() const
 {
 	return EngineRenderingManager;
+}
+
+FThreadsManager* FEngine::GetThreadsManager() const
+{
+	return ThreadsManager;
 }
 
 #if ENGINE_TESTS_ALLOW_ANY

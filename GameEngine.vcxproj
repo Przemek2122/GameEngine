@@ -54,6 +54,7 @@
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AiTree.h" />
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Collision\BaseCollision.h" />
     <ClInclude Include="Source\Public\Core\ECS\Collision\CircleCollision.h" />
     <ClInclude Include="Source\Public\Core\ECS\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Collision\SquareCollision.h" />
@@ -111,6 +112,8 @@
     <ClInclude Include="Source\Public\Core\Test\TestLongRun.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestSingleRun.h" />
+    <ClInclude Include="Source\Public\Core\Threads\Thread.h" />
+    <ClInclude Include="Source\Public\Core\Threads\ThreadsManager.h" />
     <ClInclude Include="Source\Public\Core\Timer\Timer.h" />
     <ClInclude Include="Source\Public\Core\Timer\TimerManager.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
@@ -282,6 +285,7 @@
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AiTree.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Collision\BaseCollision.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Collision\CircleCollision.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Collision\SquareCollision.cpp" />
@@ -331,6 +335,8 @@
     <ClCompile Include="Source\Private\Core\Test\TestLongRun.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestSingleRun.cpp" />
+    <ClCompile Include="Source\Private\Core\Threads\Thread.cpp" />
+    <ClCompile Include="Source\Private\Core\Threads\ThreadsManager.cpp" />
     <ClCompile Include="Source\Private\Core\Timer\Timer.cpp" />
     <ClCompile Include="Source\Private\Core\Timer\TimerManager.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+class FThreadsManager;
 class FEngineRenderingManager;
 class FEngineTickingManager;
 class ITickInterface;
@@ -119,6 +120,7 @@ public:
 
 	_NODISCARD FEngineTickingManager* GetEngineTickingManager() const;
 	_NODISCARD FEngineRenderingManager* GetEngineRenderingManager() const;
+	_NODISCARD FThreadsManager* GetThreadsManager() const;
 
 protected:
 	void UpdateFrameRateCounter();
@@ -128,6 +130,7 @@ protected:
 	_NODISCARD virtual FAssetsManager* CreateAssetsManager() const;
 	_NODISCARD virtual FEngineTickingManager* CreateEngineTickingManager() const;
 	_NODISCARD virtual FEngineRenderingManager* CreateEngineRenderingManager() const;
+	_NODISCARD virtual FThreadsManager* CreateThreadsManager() const;
 
 #if ENGINE_TESTS_ALLOW_ANY
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;
@@ -172,6 +175,7 @@ protected:
 
 	FEngineTickingManager* EngineTickingManager;
 	FEngineRenderingManager* EngineRenderingManager;
+	FThreadsManager* ThreadsManager;
 
 	FDelegate<> FunctionsToCallOnStartOfNextTick;
 	FDelegate<void, float> TickingObjectsDelegate;

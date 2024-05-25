@@ -44,7 +44,7 @@ public:
 	{
 		return Deque.back();
 	}
-	
+
 	template<typename TTypeAuto>
 	SDL_FORCE_INLINE TType GetPositionOf(TTypeAuto Value) const
 	{
