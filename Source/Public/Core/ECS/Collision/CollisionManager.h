@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECS/SubSystems/SubSystemInstanceInterface.h"
 
+class FCollisionBase;
 class FSquareCollision;
 class FCircleCollision;
 
@@ -12,6 +13,9 @@ struct FCollisionTile
 {
 	FVector2D<int> TileLocation;
 	FVector2D<int> TileSize;
+
+	/** Array with collision objects inside of tile */
+	CArray<FCollisionBase*> CollisionObjects;
 };
 
 struct FCollisionTilesRow

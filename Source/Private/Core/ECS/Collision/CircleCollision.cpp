@@ -7,3 +7,8 @@ FCircleCollision::FCircleCollision(const int InCircleRadius)
 	: CircleRadius(InCircleRadius)
 {
 }
+
+int FCircleCollision::GetBaseExtentRadius()
+{
+	return GetCircleRadius();
+}

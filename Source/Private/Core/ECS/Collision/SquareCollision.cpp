@@ -28,6 +28,11 @@ FSquareCollision::FSquareCollision(const FVector2D<int> InLocation, const FVecto
 {
 }
 
+int FSquareCollision::GetBaseExtentRadius()
+{
+	return (SquareData.GetDiagonalSize() / 2);
+}
+
 const FSquareData& FSquareCollision::GetSquareData() const
 {
 	return SquareData;

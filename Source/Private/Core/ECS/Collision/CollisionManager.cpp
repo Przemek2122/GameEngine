@@ -118,8 +118,29 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 
 void FCollisionManager::UpdateLocationOfCollisionInTiles()
 {
+	for (FCollisionTilesRow* CollisionRow : CollisionRows)
+	{
+		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+		{
+			
+		}
+	}
 }
 
 void FCollisionManager::CheckCollisionInTiles()
 {
+	for (FCollisionTilesRow* CollisionRow : CollisionRows)
+	{
+		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+		{
+			if (CollisionTile->CollisionObjects.Size() > 1)
+			{
+				for (FCollisionBase* CollisionObject : CollisionTile->CollisionObjects)
+				{
+					
+					
+				}
+			}
+		}
+	}
 }
