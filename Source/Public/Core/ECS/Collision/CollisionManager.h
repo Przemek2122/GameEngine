@@ -42,6 +42,7 @@ public:
 	void UnRegisterSquareCollision(FSquareCollision* SquareCollision);
 
 protected:
+	void BuildCollision();
 	void CreateCollisionTiles(const FMap* CurrentMap);
 
 	void UpdateLocationOfCollisionInTiles();

@@ -28,28 +28,7 @@ void FCollisionManager::InitializeSubSystem()
 {
 	ISubSystemInstanceInterface::InitializeSubSystem();
 
-	FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface());
-	if (CurrentMap != nullptr)
-	{
-		FDelegateSafe<> AsyncWork;
-		AsyncWork.BindLambda([&, CurrentMap]()
-		{
-			LOG_INFO("Creating collision map...");
-
-			// If map is present create collision
-			CreateCollisionTiles(CurrentMap);
-
-			LOG_INFO("Collision map created.");
-		});
-
-		FDelegateSafe<> ThreadCallback;
-		ThreadCallback.BindLambda([&]()
-		{
-			LOG_INFO("Mainthread call after Collision map created.");
-		});
-
-		GEngine->GetThreadsManager()->AddAsyncDelegate(AsyncWork, ThreadCallback);
-	}
+	BuildCollision();
 }
 
 void FCollisionManager::TickSubSystem()
@@ -77,6 +56,34 @@ void FCollisionManager::UnRegisterSquareCollision(FSquareCollision* SquareCollis
 	SquareCollisionArray.Remove(SquareCollision);
 }
 
+void FCollisionManager::BuildCollision()
+{
+	FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface());
+	if (CurrentMap != nullptr)
+	{
+		FDelegateSafe<> AsyncWork;
+		AsyncWork.BindLambda([&, CurrentMap]()
+			{
+				LOG_INFO("Creating collision map...");
+
+				// If map is present create collision
+				CreateCollisionTiles(CurrentMap);
+
+				LOG_INFO("Collision map created.");
+			});
+
+		FDelegateSafe<> MainThreadCallback;
+		MainThreadCallback.BindLambda([&]()
+			{
+				OnCollisionTilesCreated.Execute();
+
+				LOG_INFO("Mainthread call after Collision map created.");
+			});
+
+		GEngine->GetThreadsManager()->AddAsyncDelegate(AsyncWork, MainThreadCallback);
+	}
+}
+
 void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 {
 	const FVector2D<int> MapSizeInPixels = CurrentMap->GetMapSizeInPixels();
@@ -88,6 +95,9 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 	{
 		// Create row for new tiles
 		FCollisionTilesRow* CollisionTilesRow = new FCollisionTilesRow();
+
+		// Reset on each loop iteration
+		CurrentTileIndex.X = 0;
 
 		// Horizontal tiles
 		for (; CurrentTileIndex.X < TargetNumberOfTiles.X; CurrentTileIndex.X++)
@@ -103,7 +113,7 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 		CollisionRows.Push(CollisionTilesRow);
 	}
 
-	OnCollisionTilesCreated.Execute();
+	LOG_INFO("Created " << TargetNumberOfTiles.X * TargetNumberOfTiles.Y << " tiles.");
 }
 
 void FCollisionManager::UpdateLocationOfCollisionInTiles()

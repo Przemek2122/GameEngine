@@ -1,23 +1,6 @@
 #include "CoreEngine.h"
 #include "Threads/ThreadsManager.h"
 
-FThreadData::FThreadData(FThreadsManager* InThreadsManager, const std::string& InNewThreadName)
-	: ThreadInputData(new FThreadInputData(InThreadsManager, InNewThreadName))
-	, Thread(nullptr)
-{
-	// Create thread
-	Thread = new FThread(ThreadInputData);
-
-	// Set thread references
-	ThreadInputData->Thread = Thread;
-}
-
-FThreadData::~FThreadData()
-{
-	delete Thread;
-	delete ThreadInputData;
-}
-
 FThreadsManager::FThreadsManager()
 	: StartingNumberOfThreads(2)
 	, DefaultThreadName("DefaultThread_")
@@ -26,9 +9,9 @@ FThreadsManager::FThreadsManager()
 
 FThreadsManager::~FThreadsManager()
 {
-	for (FThreadData* ThreadData : AllThreadArray)
+	for (int i = 0; i < GetNumberOfWorkerThreads(); i++)
 	{
-		delete ThreadData;
+		StopThread();
 	}
 }
 
@@ -97,20 +80,9 @@ void FThreadsManager::AddAsyncWork(const FAsyncWorkStructure& AsyncRunWithCallba
 	AsyncJobQueueMutex.unlock();
 }
 
-FThreadData* FThreadsManager::CreateThread(const std::string& NewThreadName)
+FThreadWorkerData* FThreadsManager::CreateThreadWorker(const std::string& NewThreadName)
 {
-	// Create thread
-	FThreadData* ThreadData = new FThreadData(this, NewThreadName);
-
-	// Start thread
-	ThreadData->Thread->StartThread();
-
-	return ThreadData;
-}
-
-const CArray<FThreadData*>& FThreadsManager::GetThreadArray() const
-{
-	return AllThreadArray;
+	return CreateThread<FThreadWorker, FThreadWorkerData>(NewThreadName);
 }
 
 void FThreadsManager::StartNewThread()
@@ -122,25 +94,27 @@ void FThreadsManager::StartNewThread()
 
 		const std::string NewThreadName = DefaultThreadName + std::to_string(NewThreadIndex + 1);
 
-		FThreadData* ThreadData = CreateThread(NewThreadName);
+		FThreadWorkerData* ThreadData = CreateThreadWorker(NewThreadName);
 		ThreadData->ThreadNumber = NewThreadIndex;
 
-		AllThreadArray.Push(ThreadData);
+		WorkerThreadsArray.Push(ThreadData);
 	}
 }
 
 void FThreadsManager::StopThread()
 {
-	const int ThreadIndex = AllThreadArray.Size() - 1;
+	const int ThreadIndex = WorkerThreadsArray.Size() - 1;
 
-	FThreadData* LastThread = AllThreadArray[ThreadIndex];
-	LastThread->ThreadInputData->bThreadAlive = false;
+	FThreadWorkerData* LastThread = WorkerThreadsArray[ThreadIndex];
 
 	AvailableThreadsNumbers.Push(LastThread->ThreadNumber);
 
-	delete LastThread;
+	LastThread->ThreadInputData->bThreadAlive = false;
+}
 
-	AllThreadArray.RemoveAt(ThreadIndex);
+int FThreadsManager::GetNumberOfWorkerThreads() const
+{
+	return WorkerThreadsArray.Size();
 }
 
 int FThreadsManager::GetNumberOfCores()
@@ -182,4 +156,10 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 bool FThreadsManager::HasAnyJobLeft() const
 {
 	return (AsyncJobQueue.Size() > 0);
+}
+
+void FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
+{
+	// Remove thread data from array
+	WorkerThreadsArray.Remove(InThread->GetThreadData());
 }

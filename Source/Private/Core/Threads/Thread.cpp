@@ -1,6 +1,7 @@
 #include "CoreEngine.h"
 #include "Threads/Thread.h"
 
+#include "Threads/ThreadData.h"
 #include "Threads/ThreadsManager.h"
 
 FThreadInputData::FThreadInputData(FThreadsManager* InThreadsManager, const std::string& InThreadName)
@@ -22,26 +23,12 @@ bool FThreadInputData::IsThreadAlive() const
 
 void FThread::TickThread()
 {
-	FThreadsManager* ThreadsManager = ThreadData->GetThreadsManager();
-	while(ThreadData->IsThreadAlive() && ThreadsManager->HasAnyJobLeft())
-	{
-		FAsyncWorkStructure AsyncWorkStructure = ThreadsManager->GetFirstAvailableJob();
-
-		// Run job to be done async
-		AsyncWorkStructure.DelegateToRunAsync->Execute();
-
-		if (AsyncWorkStructure.AsyncCallback)
-		{
-			// Enqueue sync callback on main thread
-			ThreadsManager->MainThreadCallbacks.PushBackSafe(FMainThreadCallbackStructure(AsyncWorkStructure.AsyncCallback));
-		}
-	}
-
 	SDL_Delay(1);
 }
 
-FThread::FThread(FThreadInputData* InThreadData)
-	: ThreadData(InThreadData)
+FThread::FThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData)
+	: ThreadInputData(InThreadInputData)
+	, ThreadData(InThreadData)
 	, SDLThread(nullptr)
 {
 }
@@ -52,11 +39,20 @@ FThread::~FThread()
 	{
 		SDL_DetachThread(SDLThread);
 	}
+
+	delete ThreadInputData;
+	delete ThreadData;
+	delete this;
 }
 
 void FThread::StartThread()
 {
-	SDL_CreateThread(FThread::ThreadFunction, ThreadData->GetThreadName().c_str(), ThreadData);
+	SDL_CreateThread(FThread::ThreadFunction, ThreadInputData->GetThreadName().c_str(), ThreadInputData);
+}
+
+void FThread::StopThread()
+{
+	ThreadInputData->bThreadAlive = false;
 }
 
 int FThread::ThreadFunction(void* InputData)
@@ -70,4 +66,34 @@ int FThread::ThreadFunction(void* InputData)
 	}
 
 	return 0;
+}
+
+FThreadWorker::FThreadWorker(FThreadInputData* InThreadInputData, FThreadData* InThreadData)
+	: FThread(InThreadInputData, InThreadData)
+{
+}
+
+FThreadWorker::~FThreadWorker()
+{
+	GetThreadInputData()->GetThreadsManager()->InternalRemoveWorkerThread(this);
+}
+
+void FThreadWorker::TickThread()
+{
+	FThreadsManager* ThreadsManager = GetThreadInputData()->GetThreadsManager();
+	while (GetThreadInputData()->IsThreadAlive() && ThreadsManager->HasAnyJobLeft())
+	{
+		FAsyncWorkStructure AsyncWorkStructure = ThreadsManager->GetFirstAvailableJob();
+
+		// Run job to be done async
+		AsyncWorkStructure.DelegateToRunAsync->Execute();
+
+		if (AsyncWorkStructure.AsyncCallback)
+		{
+			// Enqueue sync callback on main thread
+			ThreadsManager->MainThreadCallbacks.PushBackSafe(FMainThreadCallbackStructure(AsyncWorkStructure.AsyncCallback));
+		}
+	}
+
+	FThread::TickThread();
 }

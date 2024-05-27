@@ -5,12 +5,15 @@
 #include "CoreMinimal.h"
 
 class FThreadData;
+class FThreadWorkerData;
 class FThread;
 class FThreadsManager;
 
 struct FThreadInputData
 {
+	friend FThread;
 	friend FThreadData;
+	friend FThreadWorkerData;
 	friend FThreadsManager;
 
 public:
@@ -41,21 +44,43 @@ class FThread
 	friend FThreadData;
 
 protected:
-	FThread(FThreadInputData* InThreadData);
+	FThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData);
 	virtual ~FThread();
 
 	void StartThread();
+	void StopThread();
 
+	/** It will tick until FThreadInputData has bThreadAlive set to false */
+	virtual void TickThread();
+
+	FThreadInputData* GetThreadInputData() const { return ThreadInputData; }
+	FThreadData* GetThreadData() const { return ThreadData; }
+
+private:
 	/** Thread function used by SDL */
 	static int ThreadFunction(void* InputData);
 
-	virtual void TickThread();
-
-	FThreadInputData* GetThreadData() const { return ThreadData; }
-
 private:
-	FThreadInputData* ThreadData;
+	FThreadInputData* ThreadInputData;
+	FThreadData* ThreadData;
 
 	SDL_Thread* SDLThread;
+
+};
+
+/**
+ * Thread class for ThreadManager
+ * Takes and executes jobs from ThreadManager
+ */
+class FThreadWorker : public FThread
+{
+	friend FThreadData;
+	friend FThreadWorkerData;
+
+protected:
+	FThreadWorker(FThreadInputData* InThreadInputData, FThreadData* InThreadData);
+	~FThreadWorker() override;
+
+	virtual void TickThread() override;
 
 };

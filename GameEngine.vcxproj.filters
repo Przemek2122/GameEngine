@@ -524,7 +524,13 @@
     <ClInclude Include="Source\Public\Core\Threads\Thread.h">
       <Filter>Public\Core\Threads</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Threads\ThreadData.h">
+      <Filter>Public\Core\Threads</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Threads\ThreadsManager.h">
+      <Filter>Public\Core\Threads</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Threads\ThreadStructure.h">
       <Filter>Public\Core\Threads</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Timer\Timer.h">
@@ -1150,7 +1156,13 @@
     <ClCompile Include="Source\Private\Core\Threads\Thread.cpp">
       <Filter>Private\Core\Threads</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Threads\ThreadData.cpp">
+      <Filter>Private\Core\Threads</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Threads\ThreadsManager.cpp">
+      <Filter>Private\Core\Threads</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Threads\ThreadStructure.cpp">
       <Filter>Private\Core\Threads</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Timer\Timer.cpp">

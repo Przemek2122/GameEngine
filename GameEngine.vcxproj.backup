@@ -112,6 +112,8 @@
     <ClInclude Include="Source\Public\Core\Test\TestLongRun.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestSingleRun.h" />
+    <ClInclude Include="Source\Public\Core\Threads\Thread.h" />
+    <ClInclude Include="Source\Public\Core\Threads\ThreadsManager.h" />
     <ClInclude Include="Source\Public\Core\Timer\Timer.h" />
     <ClInclude Include="Source\Public\Core\Timer\TimerManager.h" />
     <ClInclude Include="Source\Public\Misc\Filesystem.h" />
@@ -333,6 +335,8 @@
     <ClCompile Include="Source\Private\Core\Test\TestLongRun.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestSingleRun.cpp" />
+    <ClCompile Include="Source\Private\Core\Threads\Thread.cpp" />
+    <ClCompile Include="Source\Private\Core\Threads\ThreadsManager.cpp" />
     <ClCompile Include="Source\Private\Core\Timer\Timer.cpp" />
     <ClCompile Include="Source\Private\Core\Timer\TimerManager.cpp" />
     <ClCompile Include="Source\Private\Misc\FileSystem.cpp" />

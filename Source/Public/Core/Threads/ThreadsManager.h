@@ -4,38 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Thread.h"
-
-class FThreadData
-{
-	friend FThreadsManager;
-
-public:
-	FThreadData(FThreadsManager* InThreadsManager, const std::string& InNewThreadName);
-	~FThreadData();
-
-protected:
-	FThreadInputData* ThreadInputData;
-	FThread* Thread;
-
-	int ThreadNumber;
-
-};
-
-struct FAsyncWorkStructure
-{
-	std::shared_ptr<FDelegateSafe<>> DelegateToRunAsync;
-	std::shared_ptr<FDelegateSafe<>> AsyncCallback;
-};
-
-struct FMainThreadCallbackStructure
-{
-	FMainThreadCallbackStructure(const std::shared_ptr<FDelegateSafe<>>& InAsyncCallback)
-		: AsyncCallback(InAsyncCallback)
-	{
-	}
-
-	std::shared_ptr<FDelegateSafe<>> AsyncCallback;
-};
+#include "ThreadStructure.h"
+#include "ThreadData.h"
 
 /**
  * Class for managing threads using SDL2.
@@ -43,13 +13,14 @@ struct FMainThreadCallbackStructure
 class FThreadsManager
 {
 	friend FThread;
+	friend FThreadWorker;
 
 public:
 	FThreadsManager();
-	~FThreadsManager();
+	virtual ~FThreadsManager();
 
 	/** Should be called when class is set up to setup available threads */
-	void Initialize();
+	virtual void Initialize();
 
 	/** Runs callbacks on main thread */
 	void TickThreadCallbacks();
@@ -57,24 +28,39 @@ public:
 	/** Add delegate which will be run on first available async thread */
 	void AddAsyncDelegate(FDelegateSafe<>& DelegateToRunAsync);
 
-	/** Add delegate which will be run on first available async thread */
+	/** Add delegate which will be run on first available async thread with main thread AsyncCallback */
 	void AddAsyncDelegate(FDelegateSafe<>& DelegateToRunAsync, FDelegateSafe<>& AsyncCallback);
 
-	/** Add delegate which will be run on first available async thread */
+	/** Add delegate which will be run on first available async thread by passing structure */
 	void AddAsyncWork(const FAsyncWorkStructure& AsyncRunWithCallback);
 
-protected:
-	/** Creates thread for use */
-	FThreadData* CreateThread(const std::string& NewThreadName);
+	/** Creates thread for use, use StopThread to disable and automatically delete thread */
+	template<typename TThreadClass, typename TThreadDataClass>
+	TThreadDataClass* CreateThread(const std::string& NewThreadName)
+	{
+		// Create thread
+		TThreadDataClass* ThreadData = new TThreadDataClass(this, NewThreadName);
 
-	/** Get an array with created threads */
-	const CArray<FThreadData*>& GetThreadArray() const;
+		ThreadData->Create<TThreadClass>();
+
+		// Start thread
+		ThreadData->Thread->StartThread();
+
+		return ThreadData;
+	}
+
+protected:
+	/** Creates thread for use, use StopThread to disable and automatically delete thread */
+	FThreadWorkerData* CreateThreadWorker(const std::string& NewThreadName);
 
 	/** Starts a new thread if there is free number in pool available, see param AvailableThreadsNumbers */
 	void StartNewThread();
 
 	/** Stops one thread */
 	void StopThread();
+
+	/** Returns number of threads managed by this class */
+	int GetNumberOfWorkerThreads() const;
 
 	/** @returuns number of system available cores */
 	static int GetNumberOfCores();
@@ -96,8 +82,10 @@ protected:
 	int StartingNumberOfThreads;
 
 private:
+	void InternalRemoveWorkerThread(const FThread* InThread);
+
 	/** Array with created threads */
-	CArray<FThreadData*> AllThreadArray;
+	CArray<FThreadWorkerData*> WorkerThreadsArray;
 
 	/** Number with thread Id for naming */
 	CArray<int> AvailableThreadsNumbers;
