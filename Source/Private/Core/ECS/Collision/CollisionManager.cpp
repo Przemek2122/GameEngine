@@ -36,24 +36,18 @@ void FCollisionManager::TickSubSystem()
 	Super::TickSubSystem();
 }
 
-void FCollisionManager::RegisterCircleCollision(FCircleCollision* InCircleCollision)
+void FCollisionManager::RegisterCollision(FCollisionBase* InCollision)
 {
-	CircleCollisionArray.Push(InCircleCollision);
+	AllCollisionArray.Push(InCollision);
 }
 
-void FCollisionManager::UnRegisterCircleCollision(FCircleCollision* InCircleCollision)
+void FCollisionManager::UnRegisterCollision(FCollisionBase* InCollision)
 {
-	CircleCollisionArray.Remove(InCircleCollision);
+	AllCollisionArray.Remove(InCollision);
 }
 
-void FCollisionManager::RegisterSquareCollision(FSquareCollision* SquareCollision)
+void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollision)
 {
-	SquareCollisionArray.Push(SquareCollision);
-}
-
-void FCollisionManager::UnRegisterSquareCollision(FSquareCollision* SquareCollision)
-{
-	SquareCollisionArray.Remove(SquareCollision);
 }
 
 void FCollisionManager::BuildCollision()

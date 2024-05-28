@@ -39,11 +39,9 @@ public:
 	void TickSubSystem() override;
 	/** End ISubSystemInstanceInterface */
 
-	void RegisterCircleCollision(FCircleCollision* InCircleCollision);
-	void UnRegisterCircleCollision(FCircleCollision* InCircleCollision);
-
-	void RegisterSquareCollision(FSquareCollision* SquareCollision);
-	void UnRegisterSquareCollision(FSquareCollision* SquareCollision);
+	void RegisterCollision(FCollisionBase* InCollision);
+	void UnRegisterCollision(FCollisionBase* InCollision);
+	void OnCollisionObjectMoved(FCollisionBase* InCollision);
 
 protected:
 	void BuildCollision();
@@ -54,10 +52,7 @@ protected:
 
 private:
 	/** Circle collision array */
-	CArray<FCircleCollision*> CircleCollisionArray;
-
-	/** Square collision array */
-	CArray<FSquareCollision*> SquareCollisionArray;
+	CArray<FCollisionBase*> AllCollisionArray;
 
 	/** Collision tiles */
 	CArray<FCollisionTilesRow*> CollisionRows;
