@@ -17,10 +17,10 @@ public:
 	void UpdateDiagonalSize();
 
 	/** Location of left top corner */
-	FVector2D<int> GetLocation() const;
+	const FVector2D<int>& GetLocation() const;
 
 	/** Size in width and height */
-	FVector2D<int> GetSize() const;
+	const FVector2D<int>& GetSize() const;
 
 	/** Calculated diagonal of square */
 	int GetDiagonalSize() const;

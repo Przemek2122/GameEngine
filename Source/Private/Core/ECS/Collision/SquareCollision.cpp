@@ -8,12 +8,12 @@ void FSquareData::UpdateDiagonalSize()
 	DiagonalSize = FMath::Sqrt(FMath::Power(Size.X) + FMath::Power(Size.Y));
 }
 
-FVector2D<int> FSquareData::GetLocation() const
+const FVector2D<int>& FSquareData::GetLocation() const
 {
 	return Location;
 }
 
-FVector2D<int> FSquareData::GetSize() const
+const FVector2D<int>& FSquareData::GetSize() const
 {
 	return Size;
 }

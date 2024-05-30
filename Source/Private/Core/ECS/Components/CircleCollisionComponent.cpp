@@ -13,13 +13,14 @@ UCircleCollisionComponent::UCircleCollisionComponent(IComponentManagerInterface*
 
 UCircleCollisionComponent::~UCircleCollisionComponent()
 {
+	delete CircleCollision;
 }
 
 void UCircleCollisionComponent::Init()
 {
 	UCollisionComponent::Init();
 
-	CircleCollision = new FCircleCollision(GetCircleRadius());
+	CircleCollision = new FCircleCollision(GetLocationUser(), GetCircleRadius());
 }
 
 void UCircleCollisionComponent::Tick(const float DeltaTime)
@@ -27,9 +28,13 @@ void UCircleCollisionComponent::Tick(const float DeltaTime)
 	UCollisionComponent::Tick(DeltaTime);
 
 #if _DEBUG
+	// Draw collision
 	if (CircleCollision != nullptr)
 	{
-		
+		FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
+		const FCircleCollisionData& CircleData = CircleCollision->GetCircleCollisionData();
+
+		Renderer->DrawCircle(CircleData.GetLocation(), CircleData.GetRadius());
 	}
 #endif
 }
