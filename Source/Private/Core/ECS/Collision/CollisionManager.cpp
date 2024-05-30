@@ -8,12 +8,13 @@
 
 FCollisionManager::FCollisionManager()
 	: CollisionTileSize(64, 64)
+	, bIsCollisionReady(false)
 {
 }
 
 FCollisionManager::~FCollisionManager()
 {
-	for (FCollisionTilesRow* CollisionRow : CollisionRows)
+	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
 		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
 		{
@@ -34,21 +35,36 @@ void FCollisionManager::InitializeSubSystem()
 void FCollisionManager::TickSubSystem()
 {
 	Super::TickSubSystem();
+
+	if (bIsCollisionReady)
+	{
+		
+	}
 }
 
 void FCollisionManager::RegisterCollision(FCollisionBase* NewCollision)
 {
 	AllCollisionArray.Push(NewCollision);
+
+	if (bIsCollisionReady)
+	{
+		
+	}
 }
 
 void FCollisionManager::UnRegisterCollision(FCollisionBase* NewCollision)
 {
 	AllCollisionArray.Remove(NewCollision);
+
+	if (bIsCollisionReady)
+	{
+
+	}
 }
 
 void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject)
 {
-	for (FCollisionTilesRow* CollisionRow : CollisionRows)
+	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
 		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
 		{
@@ -57,6 +73,7 @@ void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject
 				if (CollisionObject == InCollisionObject)
 				{
 					// Handle object moved
+
 				}
 			}
 		}
@@ -70,22 +87,26 @@ void FCollisionManager::BuildCollision()
 	{
 		FDelegateSafe<> AsyncWork;
 		AsyncWork.BindLambda([&, CurrentMap]()
-			{
-				LOG_INFO("Creating collision map...");
+		{
+			LOG_INFO("Creating collision map...");
 
-				// If map is present create collision
-				CreateCollisionTiles(CurrentMap);
+			bIsCollisionReady = false;
 
-				LOG_INFO("Collision map created.");
-			});
+			// If map is present create collision
+			CreateCollisionTiles(CurrentMap);
+
+			LOG_INFO("Collision map created.");
+		});
 
 		FDelegateSafe<> MainThreadCallback;
 		MainThreadCallback.BindLambda([&]()
-			{
-				OnCollisionTilesCreated.Execute();
+		{
+			OnCollisionTilesCreated.Execute();
 
-				LOG_INFO("Mainthread call after Collision map created.");
-			});
+			bIsCollisionReady = true;
+
+			LOG_INFO("Mainthread call after Collision map created.");
+		});
 
 		GEngine->GetThreadsManager()->AddAsyncDelegate(AsyncWork, MainThreadCallback);
 	}
@@ -101,7 +122,7 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 	for (; CurrentTileIndex.Y < TargetNumberOfTiles.Y; CurrentTileIndex.Y++)
 	{
 		// Create row for new tiles
-		FCollisionTilesRow* CollisionTilesRow = new FCollisionTilesRow();
+		FCollisionMeshRow* CollisionTilesRow = new FCollisionMeshRow();
 
 		// Reset on each loop iteration
 		CurrentTileIndex.X = 0;
@@ -125,7 +146,7 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 
 void FCollisionManager::UpdateLocationOfCollisionInTiles()
 {
-	for (FCollisionTilesRow* CollisionRow : CollisionRows)
+	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
 		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
 		{
@@ -136,7 +157,7 @@ void FCollisionManager::UpdateLocationOfCollisionInTiles()
 
 void FCollisionManager::CheckCollisionInTiles()
 {
-	for (FCollisionTilesRow* CollisionRow : CollisionRows)
+	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
 		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
 		{

@@ -9,6 +9,7 @@ class FCollisionBase;
 class FSquareCollision;
 class FCircleCollision;
 
+/** Single tile of specified size in specified location */
 struct FCollisionTile
 {
 	FVector2D<int> TileLocation;
@@ -18,7 +19,8 @@ struct FCollisionTile
 	CArray<FCollisionBase*> CollisionObjects;
 };
 
-struct FCollisionTilesRow
+/** Row of tiles */
+struct FCollisionMeshRow
 {
 	/** Array of collision in single horizontal row. */
 	CArray<FCollisionTile*> CollisionTiles;
@@ -55,12 +57,15 @@ private:
 	CArray<FCollisionBase*> AllCollisionArray;
 
 	/** Collision tiles */
-	CArray<FCollisionTilesRow*> CollisionRows;
+	CArray<FCollisionMeshRow*> CollisionRows;
 
 	/** Collision of single tile */
 	FVector2D<int> CollisionTileSize;
 
 	/** Called when collision is created */
 	FDelegateSafe<void> OnCollisionTilesCreated;
+
+	/** True if collision tiles are ready */
+	bool bIsCollisionReady;
 	
 };
