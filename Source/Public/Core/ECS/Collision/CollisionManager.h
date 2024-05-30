@@ -39,9 +39,9 @@ public:
 	void TickSubSystem() override;
 	/** End ISubSystemInstanceInterface */
 
-	void RegisterCollision(FCollisionBase* InCollision);
-	void UnRegisterCollision(FCollisionBase* InCollision);
-	void OnCollisionObjectMoved(FCollisionBase* InCollision);
+	void RegisterCollision(FCollisionBase* NewCollision);
+	void UnRegisterCollision(FCollisionBase* NewCollision);
+	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject);
 
 protected:
 	void BuildCollision();

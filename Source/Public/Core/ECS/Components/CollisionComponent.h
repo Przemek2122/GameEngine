@@ -23,9 +23,17 @@ public:
 	/** Notify manager about changed collision */
 	void OnTransformLocationChanged(const ELocationChangeType LocationChangeType) override;
 
+	const CArray<FCollisionBase*>& GetCollisionObjectsArray() const;
+
+	//void OnCollision();
+	
 protected:
 	/** @returns collision subsystem. Might be expensive. Try avoid use */
 	FCollisionManager* GetCollisionManager() const;
+
+#if _DEBUG
+	static FColorRGBA GetCollisionDebugColor();
+#endif
 
 private:
 	/** Array with collision objects */

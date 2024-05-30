@@ -64,7 +64,21 @@ void UCollisionComponent::OnTransformLocationChanged(const ELocationChangeType L
 	}
 }
 
+const CArray<FCollisionBase*>& UCollisionComponent::GetCollisionObjectsArray() const
+{
+	return CollisionObjectsArray;
+}
+
 FCollisionManager* UCollisionComponent::GetCollisionManager() const
 {
 	return GetOwnerWindow()->GetSubSystemByClass<FCollisionManager>();
 }
+
+#if _DEBUG
+FColorRGBA UCollisionComponent::GetCollisionDebugColor()
+{
+	static FColorRGBA CollisionDebugColor = FColorRGBA::ColorLightGreen();
+
+	return CollisionDebugColor;
+}
+#endif

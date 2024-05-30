@@ -371,6 +371,9 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\CircleCollisionComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\CollisionComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
@@ -384,6 +387,9 @@
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\SquareCollisionComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h">
@@ -1027,6 +1033,9 @@
     <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\CircleCollisionComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\CollisionComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
@@ -1040,6 +1049,9 @@
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\SquareCollisionComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp">
