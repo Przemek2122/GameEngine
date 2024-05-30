@@ -38,6 +38,9 @@ private:
 
 };
 
+/**
+ * Note: this thread by defaut does not remove itself
+ */
 class FThread
 {
 	friend FThreadsManager;
@@ -47,11 +50,16 @@ protected:
 	FThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData);
 	virtual ~FThread();
 
-	void StartThread();
-	void StopThread();
+	/** Called on main thread */
+	virtual void StartThread();
+
+	/** Called on main thread */
+	virtual void StopThread();
 
 	/** It will tick until FThreadInputData has bThreadAlive set to false */
 	virtual void TickThread();
+
+	virtual void ThreadManagerFunction();
 
 	FThreadInputData* GetThreadInputData() const { return ThreadInputData; }
 	FThreadData* GetThreadData() const { return ThreadData; }
@@ -71,6 +79,7 @@ private:
 /**
  * Thread class for ThreadManager
  * Takes and executes jobs from ThreadManager
+ * This thread class removes itself on stop
  */
 class FThreadWorker : public FThread
 {
@@ -81,6 +90,7 @@ protected:
 	FThreadWorker(FThreadInputData* InThreadInputData, FThreadData* InThreadData);
 	~FThreadWorker() override;
 
-	virtual void TickThread() override;
+	void TickThread() override;
+	void ThreadManagerFunction() override;
 
 };

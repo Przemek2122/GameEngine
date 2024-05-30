@@ -21,11 +21,6 @@ bool FThreadInputData::IsThreadAlive() const
 	return bThreadAlive;
 }
 
-void FThread::TickThread()
-{
-	SDL_Delay(1);
-}
-
 FThread::FThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData)
 	: ThreadInputData(InThreadInputData)
 	, ThreadData(InThreadData)
@@ -42,7 +37,6 @@ FThread::~FThread()
 
 	delete ThreadInputData;
 	delete ThreadData;
-	delete this;
 }
 
 void FThread::StartThread()
@@ -55,15 +49,25 @@ void FThread::StopThread()
 	ThreadInputData->bThreadAlive = false;
 }
 
+void FThread::TickThread()
+{
+	SDL_Delay(1);
+}
+
+void FThread::ThreadManagerFunction()
+{
+	while (ThreadInputData->IsThreadAlive())
+	{
+		TickThread();
+	}
+}
+
 int FThread::ThreadFunction(void* InputData)
 {
 	FThreadInputData* ThreadData = static_cast<FThreadInputData*>(InputData);
 	FThread* Thread = ThreadData->GetThread();
 
-	while (ThreadData->IsThreadAlive())
-	{
-		Thread->TickThread();
-	}
+	Thread->ThreadManagerFunction();
 
 	return 0;
 }
@@ -96,4 +100,11 @@ void FThreadWorker::TickThread()
 	}
 
 	FThread::TickThread();
+}
+
+void FThreadWorker::ThreadManagerFunction()
+{
+	FThread::ThreadManagerFunction();
+
+	delete this;
 }

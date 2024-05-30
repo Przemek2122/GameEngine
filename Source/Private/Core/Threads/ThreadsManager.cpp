@@ -9,10 +9,23 @@ FThreadsManager::FThreadsManager()
 
 FThreadsManager::~FThreadsManager()
 {
+	// Stop created threads
 	for (int i = 0; i < GetNumberOfWorkerThreads(); i++)
 	{
 		StopThread();
 	}
+
+	int TimeToStopThreads = 0;
+
+	// Wait for all threads to finish
+	while (WorkerThreadsArray.Size() > 0)
+	{
+		SDL_Delay(1);
+
+		TimeToStopThreads++;
+	}
+
+	LOG_INFO("Stopping threads took: " << TimeToStopThreads << "ms");
 }
 
 void FThreadsManager::Initialize()
@@ -103,13 +116,25 @@ void FThreadsManager::StartNewThread()
 
 void FThreadsManager::StopThread()
 {
-	const int ThreadIndex = WorkerThreadsArray.Size() - 1;
+	int ThreadIndex = WorkerThreadsArray.Size() - 1;
 
-	FThreadWorkerData* LastThread = WorkerThreadsArray[ThreadIndex];
+	FThreadWorkerData* LastAliveThread = WorkerThreadsArray[ThreadIndex];
 
-	AvailableThreadsNumbers.Push(LastThread->ThreadNumber);
+	// Find last still alive thread
+	while (ThreadIndex >= 0 && !LastAliveThread->ThreadInputData->IsThreadAlive())
+	{
+		ThreadIndex--;
 
-	LastThread->ThreadInputData->bThreadAlive = false;
+		LastAliveThread = WorkerThreadsArray[ThreadIndex];
+	}
+
+	AvailableThreadsNumbers.Push(LastAliveThread->ThreadNumber);
+
+	// Stop thread
+	if (LastAliveThread->ThreadInputData->IsThreadAlive())
+	{
+		LastAliveThread->Thread->StopThread();
+	}
 }
 
 int FThreadsManager::GetNumberOfWorkerThreads() const
