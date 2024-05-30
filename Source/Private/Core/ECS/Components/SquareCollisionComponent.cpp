@@ -18,7 +18,7 @@ USquareCollisionComponent::~USquareCollisionComponent()
 
 void USquareCollisionComponent::Tick(const float DeltaTime)
 {
-	UCollisionComponent::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
 
 #if _DEBUG
 	// Draw collision
@@ -35,7 +35,7 @@ void USquareCollisionComponent::Tick(const float DeltaTime)
 
 void USquareCollisionComponent::Init()
 {
-	UCollisionComponent::Init();
+	Super::Init();
 
 	SquareCollision = new FSquareCollision(GetLocationUser(), GetSize());
 
