@@ -35,7 +35,7 @@ protected:
 	virtual void ReceiveRender();
 
 	/** Called right after construction\n Usage: Set default size, bind delegates etc...*/
-	virtual void Init() override;
+	virtual void Init();
 
 	/** Called before DestroyWidget */
 	virtual void PreDeInit();

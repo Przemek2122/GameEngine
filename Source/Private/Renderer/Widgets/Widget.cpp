@@ -46,8 +46,6 @@ void FWidget::ReceiveRender()
 
 void FWidget::Init()
 {
-	Super::Init();
-
 	WidgetManagementInterface->RegisterWidget(this);
 
 	SetAnchor(DefaultAnchorInterface);

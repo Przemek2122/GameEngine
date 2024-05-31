@@ -8,8 +8,6 @@ class FObject
 public:
 	FObject();
 	virtual ~FObject();
-
-	virtual void Init();
 	
 	_NODISCARD std::string GetCppClassName() const;
 	

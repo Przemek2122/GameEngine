@@ -11,10 +11,6 @@ FObject::~FObject()
 {
 }
 
-void FObject::Init()
-{
-}
-
 std::string FObject::GetCppClassName() const
 {
 	return typeid(this).name();
