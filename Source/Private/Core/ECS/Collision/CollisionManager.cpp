@@ -9,6 +9,7 @@
 FCollisionManager::FCollisionManager()
 	: CollisionTileSize(64, 64)
 	, bIsCollisionReady(false)
+	, bIsDebugEnabled(true)
 {
 }
 
@@ -54,6 +55,21 @@ void FCollisionManager::TickSubSystem()
 			}
 		}
 	}
+
+#if _DEBUG
+	if (bIsDebugEnabled)
+	{
+
+
+		for (FCollisionMeshRow* CollisionRow : CollisionRows)
+		{
+			for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+			{
+				
+			}
+		}
+	}
+#endif
 }
 
 void FCollisionManager::RegisterCollision(FCollisionBase* InCollision)
@@ -84,24 +100,11 @@ void FCollisionManager::UnRegisterCollision(FCollisionBase* InCollision)
 	}
 }
 
-void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject)
+void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation)
 {
 	if (bIsCollisionReady)
 	{
-		for (FCollisionMeshRow* CollisionRow : CollisionRows)
-		{
-			for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
-			{
-				for (FCollisionBase* CollisionObject : CollisionTile->CollisionObjects)
-				{
-					if (CollisionObject == InCollisionObject)
-					{
-						// Handle object moved
-
-					}
-				}
-			}
-		}
+		UpdateCollisionOnMesh(InCollisionObject, LastLocation, CurrentLocation);
 	}
 }
 
@@ -110,13 +113,15 @@ void FCollisionManager::BuildCollision()
 	FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface());
 	if (CurrentMap != nullptr)
 	{
+		MapSizeInPixelsCache = CurrentMap->GetMapSizeInPixels();
+
 		FDelegateSafe<> AsyncWork;
 		AsyncWork.BindLambda([&, CurrentMap]()
 		{
 			LOG_INFO("Creating collision map...");
 
 			// If map is present create collision
-			CreateCollisionTiles(CurrentMap);
+			CreateCollisionTiles();
 
 			LOG_INFO("Collision map created.");
 		});
@@ -137,10 +142,9 @@ void FCollisionManager::BuildCollision()
 	}
 }
 
-void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
+void FCollisionManager::CreateCollisionTiles()
 {
-	const FVector2D<int> MapSizeInPixels = CurrentMap->GetMapSizeInPixels();
-	const FVector2D<int> TargetNumberOfTiles = MapSizeInPixels / CollisionTileSize;
+	const FVector2D<int> TargetNumberOfTiles = MapSizeInPixelsCache / CollisionTileSize;
 
 	FVector2D<int> CurrentTileIndex;
 	// Vertical tiles
@@ -169,16 +173,23 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 	LOG_INFO("Created " << TargetNumberOfTiles.X * TargetNumberOfTiles.Y << " tiles.");
 }
 
-void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* Base)
+void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
 {
+
+
+
 }
 
-void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* Base)
+void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
 {
+
+
 }
 
-void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* Base)
+void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation)
 {
+
+
 }
 
 void FCollisionManager::CheckCollisionInTiles()

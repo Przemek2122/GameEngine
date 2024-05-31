@@ -43,16 +43,18 @@ public:
 
 	void RegisterCollision(FCollisionBase* InCollision);
 	void UnRegisterCollision(FCollisionBase* InCollision);
-	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject);
+	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocatio);
+
+	bool IsDebugEnabled() const { return bIsDebugEnabled; }
 
 protected:
 	void BuildCollision();
-	void CreateCollisionTiles(const FMap* CurrentMap);
+	void CreateCollisionTiles();
 
-	void PutCollisionIntoMesh(FCollisionBase* Base);
-	void RemoveCollisionFromMesh(FCollisionBase* Base);
+	void PutCollisionIntoMesh(FCollisionBase* InCollision);
+	void RemoveCollisionFromMesh(FCollisionBase* InCollision);
+	void UpdateCollisionOnMesh(FCollisionBase* InCollision, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation);
 
-	void UpdateLocationOfCollisionInTiles();
 	void CheckCollisionInTiles();
 
 private:
@@ -71,10 +73,16 @@ private:
 	/** Collision of single tile */
 	FVector2D<int> CollisionTileSize;
 
+	/** Size of map in pixels for async work */
+	FVector2D<int> MapSizeInPixelsCache;
+
 	/** Called when collision is created */
 	FDelegateSafe<void> OnCollisionTilesCreated;
 
 	/** True if collision tiles are ready */
 	bool bIsCollisionReady;
-	
+
+	/** If true debug will be enabled on manager and components */
+	bool bIsDebugEnabled;
+
 };

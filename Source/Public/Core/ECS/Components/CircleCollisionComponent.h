@@ -25,6 +25,7 @@ public:
 
 protected:
 	virtual int GetCircleRadius() const;
+	FVector2D<int> GetLocationForCollision() const override;
 
 private:
 	FCircleCollision* CircleCollision;

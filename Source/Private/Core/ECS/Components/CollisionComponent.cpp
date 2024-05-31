@@ -18,6 +18,8 @@ void UCollisionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionManagerCached = GetCollisionManager();
+
+	LastLocationCache = GetLocationForCollision();
 }
 
 void UCollisionComponent::AddCollision(FCollisionBase* CollisionObject)
@@ -57,8 +59,10 @@ void UCollisionComponent::OnTransformLocationChanged()
 		// Send notification about changed collision to CollisionManager
 		for (FCollisionBase* CollisionObjects : CollisionObjectsArray)
 		{
-			CollisionManagerCached->OnCollisionObjectMoved(CollisionObjects);
+			CollisionManagerCached->OnCollisionObjectMoved(CollisionObjects, LastLocationCache, GetLocationForCollision());
 		}
+
+		LastLocationCache = GetLocationForCollision();
 	}
 	else
 	{
@@ -86,6 +90,11 @@ FCollisionManager* UCollisionComponent::GetCollisionManager() const
 	}
 
 	return FoundCollisionManager;
+}
+
+FVector2D<int> UCollisionComponent::GetLocationForCollision() const
+{
+	return GetLocation();
 }
 
 #if _DEBUG

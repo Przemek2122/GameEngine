@@ -32,15 +32,20 @@ protected:
 	/** @returns collision subsystem. Might be expensive. Try avoid use */
 	FCollisionManager* GetCollisionManager() const;
 
+	virtual FVector2D<int> GetLocationForCollision() const;
+
 #if _DEBUG
 	static FColorRGBA GetCollisionDebugColor();
 #endif
+
+	/** Collision manager cached reference */
+	FCollisionManager* CollisionManagerCached;
 
 private:
 	/** Array with collision objects */
 	CArray<FCollisionBase*> CollisionObjectsArray;
 
-	/** Collision manager cached reference */
-	FCollisionManager* CollisionManagerCached;
+	/** Last location cache */
+	FVector2D<int> LastLocationCache;
 
 };
