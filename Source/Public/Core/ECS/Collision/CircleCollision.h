@@ -13,9 +13,11 @@ public:
 	{
 	}
 
-
 	const FVector2D<int>& GetLocation() const { return Location; }
 	int GetRadius() const { return CircleRadius; }
+
+	void UpdateLocation(const FVector2D<int>& InLocation);
+	void UpdateRadius(const int InCircleRadius);
 
 protected:
 	FVector2D<int> Location;
@@ -34,6 +36,7 @@ public:
 	int GetBaseExtentRadius() override;
 
 	const FCircleCollisionData& GetCircleCollisionData() const;
+	FCircleCollisionData& GetCircleCollisionDataForEdit();
 
 protected:
 	FCircleCollisionData CircleCollisionData;

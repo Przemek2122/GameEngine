@@ -39,6 +39,14 @@ void UCircleCollisionComponent::Render()
 #endif
 }
 
+void UCircleCollisionComponent::OnTransformLocationChanged()
+{
+	UCollisionComponent::OnTransformLocationChanged();
+
+	FCircleCollisionData& CircleCollisionDataForEdit = CircleCollision->GetCircleCollisionDataForEdit();
+	CircleCollisionDataForEdit.UpdateLocation(GetLocation());
+}
+
 int UCircleCollisionComponent::GetCircleRadius() const
 {
 	FVector2D<int> Size = GetSize();
