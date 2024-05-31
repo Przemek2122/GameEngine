@@ -14,8 +14,8 @@ public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
 
 	/** Begin UBaseComponent */
+	void BeginPlay() override;
 	void EndPlay() override;
-
 	void Render() override;
 	/** End UBaseComponent */
 

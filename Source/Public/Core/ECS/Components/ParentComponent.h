@@ -29,6 +29,7 @@ public:
 	/** Final location - returns location in center of object */
 	FVector2D<int> GetLocationCenter() const;
 
+	void SetSize(const FVector2D<int> NewSize);
 	FVector2D<int> GetSize() const;
 
 	/** Called from map using delegate each time map location (camera position) is changed */

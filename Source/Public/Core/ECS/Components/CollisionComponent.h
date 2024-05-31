@@ -32,8 +32,6 @@ protected:
 	/** @returns collision subsystem. Might be expensive. Try avoid use */
 	FCollisionManager* GetCollisionManager() const;
 
-	FVector2D<int> GetSize() const;
-
 #if _DEBUG
 	static FColorRGBA GetCollisionDebugColor();
 #endif

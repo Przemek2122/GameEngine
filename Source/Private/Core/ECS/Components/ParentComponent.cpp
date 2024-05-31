@@ -118,6 +118,11 @@ FVector2D<int> UParentComponent::GetLocationCenter() const
 	return (GetLocation() + (Size / 2));
 }
 
+void UParentComponent::SetSize(const FVector2D<int> NewSize)
+{
+	Size = NewSize;
+}
+
 FVector2D<int> UParentComponent::GetSize() const
 {
 	return Size;

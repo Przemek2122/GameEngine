@@ -34,4 +34,15 @@ void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseCompo
 	}
 }
 
+FVector2D<int> UComponent::GetSize() const
+{
+	FVector2D<int> FinalSize;
 
+	UBaseComponent* RootComponent = GetRootComponentOfEntity();
+	if (UParentComponent* ParentRootComponent = dynamic_cast<UParentComponent*>(RootComponent))
+	{
+		FinalSize = ParentRootComponent->GetSize();
+	}
+
+	return FinalSize;
+}

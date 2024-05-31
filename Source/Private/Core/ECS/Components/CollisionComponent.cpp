@@ -88,19 +88,6 @@ FCollisionManager* UCollisionComponent::GetCollisionManager() const
 	return FoundCollisionManager;
 }
 
-FVector2D<int> UCollisionComponent::GetSize() const
-{
-	FVector2D<int> FinalSize;
-
-	UBaseComponent* RootComponent = GetRootComponentOfEntity();
-	if (UParentComponent* ParentRootComponent = dynamic_cast<UParentComponent*>(RootComponent))
-	{
-		FinalSize = ParentRootComponent->GetSize();
-	}
-
-	return FinalSize;
-}
-
 #if _DEBUG
 FColorRGBA UCollisionComponent::GetCollisionDebugColor()
 {
