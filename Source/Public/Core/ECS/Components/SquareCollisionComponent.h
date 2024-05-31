@@ -21,7 +21,7 @@ public:
 	void BeginPlay() override;
 	void Render() override;
 
-	void OnTransformLocationChanged(const ELocationChangeType LocationChangeType) override;
+	void OnTransformLocationChanged() override;
 	void OnTransformRotationChanged() override;
 
 protected:

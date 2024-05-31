@@ -48,9 +48,9 @@ void UCollisionComponent::RemoveCollision(FCollisionBase* CollisionObject)
 	}
 }
 
-void UCollisionComponent::OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
+void UCollisionComponent::OnTransformLocationChanged()
 {
-	Super::OnTransformLocationChanged(LocationChangeType);
+	Super::OnTransformLocationChanged();
 
 	if (CollisionManagerCached != nullptr)
 	{
@@ -86,6 +86,19 @@ FCollisionManager* UCollisionComponent::GetCollisionManager() const
 	}
 
 	return FoundCollisionManager;
+}
+
+FVector2D<int> UCollisionComponent::GetSize() const
+{
+	FVector2D<int> FinalSize;
+
+	UBaseComponent* RootComponent = GetRootComponentOfEntity();
+	if (UParentComponent* ParentRootComponent = dynamic_cast<UParentComponent*>(RootComponent))
+	{
+		FinalSize = ParentRootComponent->GetSize();
+	}
+
+	return FinalSize;
 }
 
 #if _DEBUG

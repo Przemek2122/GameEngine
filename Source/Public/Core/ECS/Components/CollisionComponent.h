@@ -22,7 +22,7 @@ public:
 	void RemoveCollision(FCollisionBase* CollisionObject);
 
 	/** Notify manager about changed collision */
-	void OnTransformLocationChanged(const ELocationChangeType LocationChangeType) override;
+	void OnTransformLocationChanged() override;
 
 	const CArray<FCollisionBase*>& GetCollisionObjectsArray() const;
 
@@ -31,6 +31,8 @@ public:
 protected:
 	/** @returns collision subsystem. Might be expensive. Try avoid use */
 	FCollisionManager* GetCollisionManager() const;
+
+	FVector2D<int> GetSize() const;
 
 #if _DEBUG
 	static FColorRGBA GetCollisionDebugColor();

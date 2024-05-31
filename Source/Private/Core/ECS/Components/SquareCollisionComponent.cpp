@@ -42,9 +42,9 @@ void USquareCollisionComponent::Render()
 #endif
 }
 
-void USquareCollisionComponent::OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
+void USquareCollisionComponent::OnTransformLocationChanged()
 {
-	Super::OnTransformLocationChanged(LocationChangeType);
+	Super::OnTransformLocationChanged();
 
 	// Update location
 	FSquareData& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
