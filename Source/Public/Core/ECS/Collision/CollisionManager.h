@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECS/SubSystems/SubSystemInstanceInterface.h"
 
+struct FRectangleWithDiagonal;
 class FCollisionBase;
 class FSquareCollision;
 class FCircleCollision;
@@ -57,6 +58,8 @@ protected:
 
 	void CheckCollisionInTiles();
 
+	CArray<FCollisionTile*> GetTilesIntersectingRect(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const;
+
 private:
 	/** Circle collision array */
 	CArray<FCollisionBase*> AllCollisionArray;
@@ -84,5 +87,12 @@ private:
 
 	/** If true debug will be enabled on manager and components */
 	bool bIsDebugEnabled;
+
+};
+
+class FCollisionGlobals
+{
+public:
+	static bool RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB);
 
 };

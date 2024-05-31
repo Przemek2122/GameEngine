@@ -3,36 +3,53 @@
 #include "CoreEngine.h"
 #include "ECS/Collision/SquareCollision.h"
 
-void FSquareData::UpdateDiagonalSize()
+void FRectangle::SetLocationTopLeftCorner(const FVector2D<int>& InPositionTopLeft)
 {
-	DiagonalSize = FMath::Sqrt(FMath::Power(Size.X) + FMath::Power(Size.Y));
+	PositionTopLeft = InPositionTopLeft;
+
+	UpdatePositionBottomRight();
 }
 
-const FVector2D<int>& FSquareData::GetLocation() const
+void FRectangle::SetSize(const FVector2D<int>& InSize)
 {
-	return Location;
+	Size = InSize;
 }
 
-const FVector2D<int>& FSquareData::GetSize() const
+const FVector2D<int>& FRectangle::GetPositionTopLeft() const
+{
+	return PositionTopLeft;
+}
+
+const FVector2D<int>& FRectangle::GetPositionBottomRight() const
+{
+	return PositionBottomRight;
+}
+
+const FVector2D<int>& FRectangle::GetSize() const
 {
 	return Size;
 }
 
-int FSquareData::GetDiagonalSize() const
+void FRectangle::UpdatePositionBottomRight()
+{
+	PositionBottomRight = PositionTopLeft + Size;
+}
+
+void FRectangleWithDiagonal::SetSize(const FVector2D<int>& InSize)
+{
+	Super::SetSize(InSize);
+
+	UpdateDiagonalSize();
+}
+
+int FRectangleWithDiagonal::GetDiagonalSize() const
 {
 	return DiagonalSize;
 }
 
-void FSquareData::UpdateLocation(const FVector2D<int>& InLocation)
+void FRectangleWithDiagonal::UpdateDiagonalSize()
 {
-	Location = InLocation;
-}
-
-void FSquareData::UpdateSize(const FVector2D<int>& InSize)
-{
-	Size = InSize;
-
-	UpdateDiagonalSize();
+	DiagonalSize = FMath::Sqrt(FMath::Power(Size.X) + FMath::Power(Size.Y));
 }
 
 FSquareCollision::FSquareCollision(const FVector2D<int> InLocation, const FVector2D<int> InSize)
@@ -45,12 +62,12 @@ int FSquareCollision::GetBaseExtentRadius()
 	return (SquareData.GetDiagonalSize() / 2);
 }
 
-const FSquareData& FSquareCollision::GetSquareData() const
+const FRectangleWithDiagonal& FSquareCollision::GetSquareData() const
 {
 	return SquareData;
 }
 
-FSquareData& FSquareCollision::GetSquareDataForEdit()
+FRectangleWithDiagonal& FSquareCollision::GetSquareDataForEdit()
 {
 	return SquareData;
 }

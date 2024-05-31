@@ -36,9 +36,9 @@ void USquareCollisionComponent::Render()
 	{
 		FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
 
-		const FSquareData& SquareData = SquareCollision->GetSquareData();
+		const FRectangleWithDiagonal& SquareData = SquareCollision->GetSquareData();
 
-		Renderer->DrawRectangleOutline(SquareData.GetLocation(), SquareData.GetSize(), GetCollisionDebugColor());
+		Renderer->DrawRectangleOutline(SquareData.GetPositionTopLeft(), SquareData.GetSize(), GetCollisionDebugColor());
 	}
 #endif
 }
@@ -48,8 +48,8 @@ void USquareCollisionComponent::OnTransformLocationChanged()
 	Super::OnTransformLocationChanged();
 
 	// Update location
-	FSquareData& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
-	SquareDataForEdit.UpdateLocation(GetLocation());
+	FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
+	SquareDataForEdit.SetLocationTopLeftCorner(GetLocation());
 }
 
 void USquareCollisionComponent::OnTransformRotationChanged()

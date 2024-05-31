@@ -4,37 +4,50 @@
 
 #include "BaseCollision.h"
 
-struct FSquareData
+/**
+ * Base rectangle class
+ */
+struct FRectangle
+{
+	FRectangle(const FVector2D<int> InPosition = FVector2D(), const FVector2D<int> InSize = FVector2D())
+		: PositionTopLeft(InPosition), Size(InSize)
+	{
+		UpdatePositionBottomRight();
+	}
+	virtual ~FRectangle() = default;
+
+	virtual void SetLocationTopLeftCorner(const FVector2D<int>& InPositionTopLeft);
+	virtual void SetSize(const FVector2D<int>& InSize);
+
+	const FVector2D<int>& GetPositionTopLeft() const;
+	const FVector2D<int>& GetPositionBottomRight() const;
+	const FVector2D<int>& GetSize() const;
+
+protected:
+	void UpdatePositionBottomRight();
+
+	FVector2D<int> PositionTopLeft;			// Top-left corner of the rectangle 
+	FVector2D<int> PositionBottomRight;		// Top-left corner of the rectangle 
+	FVector2D<int> Size;					// Width (X) and Height (Y)
+};
+
+struct FRectangleWithDiagonal : public FRectangle
 {
 public:
-	FSquareData(const FVector2D<int>& InLocation, const FVector2D<int>& InSize)
-		: Location(InLocation)
-		, Size(InSize)
+	FRectangleWithDiagonal(const FVector2D<int>& InLocation, const FVector2D<int>& InSize)
+		: FRectangle(InLocation, InSize)
 	{
 		UpdateDiagonalSize();
 	}
 
-	void UpdateDiagonalSize();
-
-	/** Location of left top corner */
-	const FVector2D<int>& GetLocation() const;
-
-	/** Size in width and height */
-	const FVector2D<int>& GetSize() const;
+	void SetSize(const FVector2D<int>& InSize) override;
 
 	/** Calculated diagonal of square */
 	int GetDiagonalSize() const;
 
-	void UpdateLocation(const FVector2D<int>& InLocation);
-	void UpdateSize(const FVector2D<int>& InSize);
+	void UpdateDiagonalSize();
 
 protected:
-	/** Location of left top corner */
-	FVector2D<int> Location;
-
-	/** Size in width and height */
-	FVector2D<int> Size;
-
 	/** Calculated diagonal of square  */
 	int DiagonalSize;
 };
@@ -49,12 +62,12 @@ public:
 
 	int GetBaseExtentRadius() override;
 
-	const FSquareData& GetSquareData() const;
-	FSquareData& GetSquareDataForEdit();
+	const FRectangleWithDiagonal& GetSquareData() const;
+	FRectangleWithDiagonal& GetSquareDataForEdit();
 
 	int GetDiagonalSize() const;
 
 protected:
-	FSquareData SquareData;
+	FRectangleWithDiagonal SquareData;
 
 };

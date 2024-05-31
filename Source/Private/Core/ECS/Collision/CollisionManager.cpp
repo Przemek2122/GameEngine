@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "ECS/Collision/CollisionManager.h"
 
+#include "ECS/Collision/CircleCollision.h"
+#include "ECS/Collision/SquareCollision.h"
 #include "Renderer/Map/Map.h"
 #include "Threads/ThreadsManager.h"
 
@@ -168,13 +170,34 @@ void FCollisionManager::CreateCollisionTiles()
 
 void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
 {
+	if (FCircleCollision* CircleCollision = dynamic_cast<FCircleCollision*>(InCollision))
+	{
+		
+	}
+	else if (FSquareCollision* SquareCollision = dynamic_cast<FSquareCollision*>(InCollision))
+	{
 
-
-
+	}
+	else
+	{
+		LOG_WARN("Found unsupported collision type");
+	}
 }
 
 void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
 {
+	if (FCircleCollision* CircleCollision = dynamic_cast<FCircleCollision*>(InCollision))
+	{
+
+	}
+	else if (FSquareCollision* SquareCollision = dynamic_cast<FSquareCollision*>(InCollision))
+	{
+
+	}
+	else
+	{
+		LOG_WARN("Found unsupported collision type");
+	}
 
 
 }
@@ -201,4 +224,21 @@ void FCollisionManager::CheckCollisionInTiles()
 			}
 		}
 	}
+}
+
+CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRect(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const
+{
+	CArray<FCollisionTile*> Tiles;
+
+
+
+	return Tiles;
+}
+
+bool FCollisionGlobals::RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)
+{
+	return !(RectangleA.GetPositionBottomRight().X <= RectangleB.GetPositionTopLeft().X ||	// RectangleA is left of RectangleB 
+		RectangleB.GetPositionBottomRight().X <= RectangleA.GetPositionTopLeft().X ||		// RectangleB is left of RectangleA 
+		RectangleA.GetPositionBottomRight().Y <= RectangleB.GetPositionTopLeft().Y ||		// RectangleA is above RectangleB 
+		RectangleB.GetPositionBottomRight().Y <= RectangleA.GetPositionTopLeft().Y);		// RectangleB is above RectangleA 
 }
