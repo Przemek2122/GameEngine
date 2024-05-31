@@ -38,27 +38,49 @@ void FCollisionManager::TickSubSystem()
 
 	if (bIsCollisionReady)
 	{
-		
+		if (!CollisionWaitingForAddArray.IsEmpty())
+		{
+			for (FCollisionBase* Collision : CollisionWaitingForAddArray)
+			{
+				PutCollisionIntoMesh(Collision);
+			}
+		}
+
+		if (!CollisionWaitingForRemovalArray.IsEmpty())
+		{
+			for (FCollisionBase* Collision : CollisionWaitingForRemovalArray)
+			{
+				RemoveCollisionFromMesh(Collision);
+			}
+		}
 	}
 }
 
-void FCollisionManager::RegisterCollision(FCollisionBase* NewCollision)
+void FCollisionManager::RegisterCollision(FCollisionBase* InCollision)
 {
-	AllCollisionArray.Push(NewCollision);
+	AllCollisionArray.Push(InCollision);
 
 	if (bIsCollisionReady)
 	{
-		
+		PutCollisionIntoMesh(InCollision);
+	}
+	else
+	{
+		CollisionWaitingForAddArray.Push(InCollision);
 	}
 }
 
-void FCollisionManager::UnRegisterCollision(FCollisionBase* NewCollision)
+void FCollisionManager::UnRegisterCollision(FCollisionBase* InCollision)
 {
-	AllCollisionArray.Remove(NewCollision);
+	AllCollisionArray.Remove(InCollision);
 
 	if (bIsCollisionReady)
 	{
-
+		RemoveCollisionFromMesh(InCollision);
+	}
+	else
+	{
+		CollisionWaitingForRemovalArray.Push(InCollision);
 	}
 }
 
@@ -147,15 +169,16 @@ void FCollisionManager::CreateCollisionTiles(const FMap* CurrentMap)
 	LOG_INFO("Created " << TargetNumberOfTiles.X * TargetNumberOfTiles.Y << " tiles.");
 }
 
-void FCollisionManager::UpdateLocationOfCollisionInTiles()
+void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* Base)
 {
-	for (FCollisionMeshRow* CollisionRow : CollisionRows)
-	{
-		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
-		{
-			
-		}
-	}
+}
+
+void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* Base)
+{
+}
+
+void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* Base)
+{
 }
 
 void FCollisionManager::CheckCollisionInTiles()

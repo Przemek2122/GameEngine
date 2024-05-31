@@ -41,13 +41,16 @@ public:
 	void TickSubSystem() override;
 	/** End ISubSystemInstanceInterface */
 
-	void RegisterCollision(FCollisionBase* NewCollision);
-	void UnRegisterCollision(FCollisionBase* NewCollision);
+	void RegisterCollision(FCollisionBase* InCollision);
+	void UnRegisterCollision(FCollisionBase* InCollision);
 	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject);
 
 protected:
 	void BuildCollision();
 	void CreateCollisionTiles(const FMap* CurrentMap);
+
+	void PutCollisionIntoMesh(FCollisionBase* Base);
+	void RemoveCollisionFromMesh(FCollisionBase* Base);
 
 	void UpdateLocationOfCollisionInTiles();
 	void CheckCollisionInTiles();
@@ -58,6 +61,12 @@ private:
 
 	/** Collision tiles */
 	CArray<FCollisionMeshRow*> CollisionRows;
+
+	/** Collision waiting for collision mesh to be built */
+	CArray<FCollisionBase*> CollisionWaitingForAddArray;
+
+	/** Collision waiting for collision mesh to be built */
+	CArray<FCollisionBase*> CollisionWaitingForRemovalArray;
 
 	/** Collision of single tile */
 	FVector2D<int> CollisionTileSize;
