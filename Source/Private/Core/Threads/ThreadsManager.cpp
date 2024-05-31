@@ -154,6 +154,7 @@ int FThreadsManager::GetNumberOfCores()
 FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 {
 	// @TODO Remove mutex and find and smart way of distributing tasks
+	// In worse case update to SDL3 and use SDL_DelayNS
 
 	while (!AsyncJobQueueMutex.TryLock())
 	{

@@ -15,7 +15,7 @@ class UCollisionComponent : public UBaseTransformComponent
 public:
 	UCollisionComponent(IComponentManagerInterface* InComponentManagerInterface);
 
-	void Init() override;
+	void BeginPlay() override;
 
 	void AddCollision(FCollisionBase* CollisionObject);
 	void RemoveCollision(FCollisionBase* CollisionObject);

@@ -18,9 +18,11 @@ public:
 	USquareCollisionComponent(IComponentManagerInterface* InComponentManagerInterface);
 	~USquareCollisionComponent() override;
 
-	void Tick(const float DeltaTime) override;
+	void BeginPlay() override;
+	void Render() override;
 
-	void Init() override;
+	void OnTransformLocationChanged(const ELocationChangeType LocationChangeType) override;
+	void OnTransformRotationChanged() override;
 
 protected:
 	FSquareCollision* SquareCollision;

@@ -4,6 +4,8 @@
 #include "ECS/Components/CollisionComponent.h"
 
 #include "ECS/Collision/CollisionManager.h"
+#include "Renderer/Map/Map.h"
+#include "Renderer/Map/MapManager.h"
 
 UCollisionComponent::UCollisionComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UBaseTransformComponent(InComponentManagerInterface)
@@ -11,9 +13,9 @@ UCollisionComponent::UCollisionComponent(IComponentManagerInterface* InComponent
 {
 }
 
-void UCollisionComponent::Init()
+void UCollisionComponent::BeginPlay()
 {
-	UBaseTransformComponent::Init();
+	Super::BeginPlay();
 
 	CollisionManagerCached = GetCollisionManager();
 }
@@ -71,7 +73,19 @@ const CArray<FCollisionBase*>& UCollisionComponent::GetCollisionObjectsArray() c
 
 FCollisionManager* UCollisionComponent::GetCollisionManager() const
 {
-	return GetOwnerWindow()->GetSubSystemByClass<FCollisionManager>();
+	FCollisionManager* FoundCollisionManager = nullptr;
+
+	FMapManager* MapManager = GetOwnerWindow()->GetMapManager();
+	if (MapManager != nullptr)
+	{
+		FMap* CurrentMap = MapManager->GetCurrentMap();
+		if (CurrentMap != nullptr)
+		{
+			FoundCollisionManager = CurrentMap->GetSubSystemByClass<FCollisionManager>();
+		}
+	}
+
+	return FoundCollisionManager;
 }
 
 #if _DEBUG

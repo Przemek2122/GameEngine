@@ -16,16 +16,16 @@ UCircleCollisionComponent::~UCircleCollisionComponent()
 	delete CircleCollision;
 }
 
-void UCircleCollisionComponent::Init()
+void UCircleCollisionComponent::BeginPlay()
 {
-	UCollisionComponent::Init();
+	Super::BeginPlay();
 
-	CircleCollision = new FCircleCollision(GetLocationUser(), GetCircleRadius());
+	CircleCollision = new FCircleCollision(GetLocation(), GetCircleRadius());
 }
 
-void UCircleCollisionComponent::Tick(const float DeltaTime)
+void UCircleCollisionComponent::Render()
 {
-	UCollisionComponent::Tick(DeltaTime);
+	Super::Render();
 
 #if _DEBUG
 	// Draw collision

@@ -18,8 +18,8 @@ public:
 	UCircleCollisionComponent(IComponentManagerInterface* InComponentManagerInterface);
 	~UCircleCollisionComponent() override;
 
-	void Init() override;
-	void Tick(const float DeltaTime) override;
+	void BeginPlay() override;
+	void Render() override;
 
 protected:
 	virtual int GetCircleRadius() const;

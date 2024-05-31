@@ -25,6 +25,9 @@ public:
 	/** Calculated diagonal of square */
 	int GetDiagonalSize() const;
 
+	void UpdateLocation(const FVector2D<int>& InLocation);
+	void UpdateSize(const FVector2D<int>& InSize);
+
 protected:
 	/** Location of left top corner */
 	FVector2D<int> Location;
@@ -47,6 +50,7 @@ public:
 	int GetBaseExtentRadius() override;
 
 	const FSquareData& GetSquareData() const;
+	FSquareData& GetSquareDataForEdit();
 
 	int GetDiagonalSize() const;
 

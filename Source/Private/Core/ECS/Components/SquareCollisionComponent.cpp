@@ -16,9 +16,18 @@ USquareCollisionComponent::~USquareCollisionComponent()
 	delete SquareCollision;
 }
 
-void USquareCollisionComponent::Tick(const float DeltaTime)
+void USquareCollisionComponent::BeginPlay()
 {
-	Super::Tick(DeltaTime);
+	Super::BeginPlay();
+
+	SquareCollision = new FSquareCollision(GetLocation(), GetSize());
+
+	AddCollision(SquareCollision);
+}
+
+void USquareCollisionComponent::Render()
+{
+	Super::Render();
 
 #if _DEBUG
 	// Draw collision
@@ -33,11 +42,18 @@ void USquareCollisionComponent::Tick(const float DeltaTime)
 #endif
 }
 
-void USquareCollisionComponent::Init()
+void USquareCollisionComponent::OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
 {
-	Super::Init();
+	Super::OnTransformLocationChanged(LocationChangeType);
 
-	SquareCollision = new FSquareCollision(GetLocationUser(), GetSize());
+	// Update location
+	FSquareData& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
+	SquareDataForEdit.UpdateLocation(GetLocation());
+}
 
-	AddCollision(SquareCollision);
+void USquareCollisionComponent::OnTransformRotationChanged()
+{
+	Super::OnTransformRotationChanged();
+
+	// @TODO Rotation of square collision
 }

@@ -66,6 +66,6 @@ private:
 	FDelegateSafe<void> OnCollisionTilesCreated;
 
 	/** True if collision tiles are ready */
-	bool bIsCollisionReady;
+	std::atomic_bool bIsCollisionReady;
 	
 };

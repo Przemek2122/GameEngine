@@ -23,6 +23,18 @@ int FSquareData::GetDiagonalSize() const
 	return DiagonalSize;
 }
 
+void FSquareData::UpdateLocation(const FVector2D<int>& InLocation)
+{
+	Location = InLocation;
+}
+
+void FSquareData::UpdateSize(const FVector2D<int>& InSize)
+{
+	Size = InSize;
+
+	UpdateDiagonalSize();
+}
+
 FSquareCollision::FSquareCollision(const FVector2D<int> InLocation, const FVector2D<int> InSize)
 	: SquareData(InLocation, InSize)
 {
@@ -34,6 +46,11 @@ int FSquareCollision::GetBaseExtentRadius()
 }
 
 const FSquareData& FSquareCollision::GetSquareData() const
+{
+	return SquareData;
+}
+
+FSquareData& FSquareCollision::GetSquareDataForEdit()
 {
 	return SquareData;
 }
