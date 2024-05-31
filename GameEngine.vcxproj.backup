@@ -62,11 +62,13 @@
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\CircleCollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\CollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\SquareCollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\CameraManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\Character.h" />
@@ -295,11 +297,13 @@
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\CircleCollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\CollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\SquareCollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\CameraManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\Character.cpp" />

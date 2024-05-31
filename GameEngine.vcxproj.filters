@@ -105,161 +105,167 @@
     <Filter Include="Private\Types\Functors">
       <UniqueIdentifier>{7d8as1ow-52lgj-usd4r-yxwmt-tehe0a31t0ek}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types\Registry">
+    <Filter Include="Private\Types\Mutex">
       <UniqueIdentifier>{bg8c5knx-7ddw4-zg92k-n86es-65eu5rcibg5o}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Types\SmartPointer">
+    <Filter Include="Private\Types\Registry">
       <UniqueIdentifier>{galm3g0a-nz1iz-6zwh6-wwgbt-yisg21zpwd02}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public">
+    <Filter Include="Private\Types\SmartPointer">
       <UniqueIdentifier>{3878jr3x-adltd-ylm51-53kcd-w7g21b3d9fcg}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets">
+    <Filter Include="Public">
       <UniqueIdentifier>{4rntjf8y-rx8s3-9pdhp-g66ie-be0hofalcyit}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\Assets">
+    <Filter Include="Public\Assets">
       <UniqueIdentifier>{yg3mbjl0-ljewa-ajuo9-ohxhn-e2n6cewozgab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\Collection">
+    <Filter Include="Public\Assets\Assets">
       <UniqueIdentifier>{yff6ytkn-8ameu-0paa5-xhspu-t0od54ffa843}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\IniReader">
+    <Filter Include="Public\Assets\Collection">
       <UniqueIdentifier>{z8clgizp-ss6mf-8x60e-n79yd-36tsys75f7yj}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Assets\TypesForAssets">
+    <Filter Include="Public\Assets\IniReader">
       <UniqueIdentifier>{y6cwmhtd-zpe4k-muish-cbtew-7n7geuzoiwx0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Containers">
+    <Filter Include="Public\Assets\TypesForAssets">
       <UniqueIdentifier>{ng20l0pi-ytcfm-8pgad-mxxcb-h3wyemnada97}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core">
+    <Filter Include="Public\Containers">
       <UniqueIdentifier>{jd22jzw3-9itzj-aczfz-orhec-017j62p96w1n}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS">
+    <Filter Include="Public\Core">
       <UniqueIdentifier>{zx7ci8sb-okz56-ypfb7-n88o6-xx7ax185b3mk}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\AI">
+    <Filter Include="Public\Core\ECS">
       <UniqueIdentifier>{l4yn6ww5-zlhu7-kd9a0-gx720-wxya8nna1p1m}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Collision">
+    <Filter Include="Public\Core\ECS\AI">
       <UniqueIdentifier>{lugol09l-jb22z-wghie-fw3ly-3gxtci0lfxnn}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Components">
+    <Filter Include="Public\Core\ECS\Collision">
       <UniqueIdentifier>{e9jznwwj-1dnyl-z8nue-m5u6l-9eklel5cfc0r}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Entities">
+    <Filter Include="Public\Core\ECS\Components">
       <UniqueIdentifier>{6fk6dm61-8u8bk-3damy-yw3am-bxczkendl9mk}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\Interfaces">
+    <Filter Include="Public\Core\ECS\Entities">
       <UniqueIdentifier>{f1zo8zil-0nmla-b5772-58rw9-c83rcl53ud2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\ECS\SubSystems">
+    <Filter Include="Public\Core\ECS\Interfaces">
       <UniqueIdentifier>{s1zpgd1j-eyx35-wxkot-lsr8k-1l0xrjegnnn1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Engine">
+    <Filter Include="Public\Core\ECS\SubSystems">
       <UniqueIdentifier>{u7yxxicj-ka3n1-y3k2r-sc7gd-8aau0crcgojy}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Engine\Logic">
+    <Filter Include="Public\Core\Engine">
       <UniqueIdentifier>{mgxzglyi-3f432-d83rh-zoo74-u4xe8ai8u0e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Includes">
+    <Filter Include="Public\Core\Engine\Logic">
       <UniqueIdentifier>{djh996p1-bf5lo-p5bhe-fz6ek-exxo4jglb69r}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Input">
+    <Filter Include="Public\Core\Includes">
       <UniqueIdentifier>{mfm5wr27-3pmx3-uo3ic-h367o-p1nag3u7jusg}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Interfaces">
+    <Filter Include="Public\Core\Input">
       <UniqueIdentifier>{75kj7g8w-45r0d-b2ypu-l4s73-1d5numun4yn7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Interfaces\CoreLoop">
+    <Filter Include="Public\Core\Interfaces">
       <UniqueIdentifier>{73an2kgo-9dmiw-1ay9z-t8xts-d02kzbdoexc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Memory">
+    <Filter Include="Public\Core\Interfaces\CoreLoop">
       <UniqueIdentifier>{sjlgcen4-4c1nc-ho80d-2jjca-5f158umxizh3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test">
+    <Filter Include="Public\Core\Memory">
       <UniqueIdentifier>{pwpmfx84-0s1c0-p8iuu-9e0wx-slgjb35f5jcs}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Test\Samples">
+    <Filter Include="Public\Core\Test">
       <UniqueIdentifier>{5u80djdn-froei-bxc1d-po7fr-daplrnxukcce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Threads">
+    <Filter Include="Public\Core\Test\Samples">
       <UniqueIdentifier>{3y6x2mzp-clr70-gw011-pzh7c-h1edx9y12fga}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Core\Timer">
+    <Filter Include="Public\Core\Threads">
       <UniqueIdentifier>{g10xfi3u-rslw1-lylel-ruhbh-2hicipndjtf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Misc">
+    <Filter Include="Public\Core\Timer">
       <UniqueIdentifier>{5m53tksc-hgcdg-jtg6c-7pyuo-2bar6jflz14x}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer">
+    <Filter Include="Public\Misc">
       <UniqueIdentifier>{egbxn8k5-tuw3a-mh0a8-3i3nc-jipp7xr27rjd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Map">
+    <Filter Include="Public\Renderer">
       <UniqueIdentifier>{xem940y8-pghwh-i0ct5-kgpp3-368igrr1beyh}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets">
+    <Filter Include="Public\Renderer\Map">
       <UniqueIdentifier>{5y6nu7u6-s972g-9d886-ipx69-4y75i9fk1h1w}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\Samples">
+    <Filter Include="Public\Renderer\Widgets">
       <UniqueIdentifier>{kftfu4kd-uh5rz-kh0x7-pxwlz-skfbpkezfp5h}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Renderer\Widgets\UIMenus">
+    <Filter Include="Public\Renderer\Widgets\Samples">
       <UniqueIdentifier>{ds2z60wn-ob22n-4rwap-jos7c-u48wcy95s8gy}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\ThirdParty">
+    <Filter Include="Public\Renderer\Widgets\UIMenus">
       <UniqueIdentifier>{7z5mxijz-rf0jn-nbt12-txtdr-du71zd6ses5p}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types">
+    <Filter Include="Public\ThirdParty">
       <UniqueIdentifier>{78nob7ed-konod-tyzt9-0h2ix-lg1tx60l87fz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\Delegate">
+    <Filter Include="Public\Types">
       <UniqueIdentifier>{gkoz27xk-4g0y7-n8f53-zf8ew-51kcb0g56rnm}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\Functors">
+    <Filter Include="Public\Types\Delegate">
       <UniqueIdentifier>{rntddpon-ehseh-xis7i-ozs40-i0stxpkzthwp}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\Registry">
+    <Filter Include="Public\Types\Functors">
       <UniqueIdentifier>{alysyz78-5fjzt-x3453-25akd-8tdg43xfghay}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\Types\SmartPointer">
+    <Filter Include="Public\Types\Mutex">
       <UniqueIdentifier>{h6gx0xkx-lu2f0-f6ywd-emhxu-aw9fw3ybsfzs}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty">
+    <Filter Include="Public\Types\Registry">
       <UniqueIdentifier>{c1nol1zd-07pwy-397e1-agyal-dk84ztjwxx0g}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\CppFlow">
+    <Filter Include="Public\Types\SmartPointer">
       <UniqueIdentifier>{pu4zxfbo-0ailj-706gm-w0p4x-0mxwhp0i00wh}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\CppFlow\ops_generator">
+    <Filter Include="ThirdParty">
       <UniqueIdentifier>{em0ugci0-ys706-per5c-i6bog-tnp4hfoobkgy}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\SDL">
+    <Filter Include="ThirdParty\CppFlow">
       <UniqueIdentifier>{3a107lhb-tpkly-x19ei-m9sgd-pfcfynr7oxge}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow">
+    <Filter Include="ThirdParty\CppFlow\ops_generator">
       <UniqueIdentifier>{cl5kjjgy-s59xf-mdbc4-x0pwu-rsrznti7ur3y}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\c">
+    <Filter Include="ThirdParty\SDL">
       <UniqueIdentifier>{fnnadgk0-b4yha-jx3by-9fi5n-o2w2cbr15gse}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\c\eager">
+    <Filter Include="ThirdParty\tensorflow">
       <UniqueIdentifier>{tea7dni8-wf3mh-zcs14-tapir-3aym6f6jmgwd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\core">
+    <Filter Include="ThirdParty\tensorflow\c">
       <UniqueIdentifier>{kx53px5k-kop5w-2wkuc-ze449-jyzgn01b1l4g}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tensorflow\core\platform">
+    <Filter Include="ThirdParty\tensorflow\c\eager">
       <UniqueIdentifier>{5ucblf07-nwf0d-595lp-rndnm-4xu5o6pnj9yr}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tsl">
+    <Filter Include="ThirdParty\tensorflow\core">
       <UniqueIdentifier>{5hdcjslu-7k4yh-ktpr4-obn40-yt1blzb1ekkz}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tsl\c">
+    <Filter Include="ThirdParty\tensorflow\core\platform">
       <UniqueIdentifier>{aylc766o-wtskn-90ufl-km752-95m8g4ckl39k}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\tsl\platform">
+    <Filter Include="ThirdParty\tsl">
       <UniqueIdentifier>{un6p0blj-fy1nt-j3bkb-tksg6-l7jz8ih0batx}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tsl\c">
+      <UniqueIdentifier>{t5yyeyja-zcccp-pcb1h-j5mz3-o9tz4icd8ufn}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\tsl\platform">
+      <UniqueIdentifier>{w27ds4ke-k6y2x-islbs-ednu3-0wn5dlif2pxy}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -664,6 +670,12 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Types\Functors\FunctorStatic.h">
       <Filter>Public\Types\Functors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\Mutex\Mutex.h">
+      <Filter>Public\Types\Mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Types\Mutex\MutexScopeLock.h">
+      <Filter>Public\Types\Mutex</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Types\Registry\RegistryBase.h">
       <Filter>Public\Types\Registry</Filter>
@@ -1299,6 +1311,12 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Types\Functors\FunctorStatic.cpp">
       <Filter>Private\Types\Functors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\Mutex\Mutex.cpp">
+      <Filter>Private\Types\Mutex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Types\Mutex\MutexScopeLock.cpp">
+      <Filter>Private\Types\Mutex</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Types\SmartPointer\SmartSharedPointer.cpp">
       <Filter>Private\Types\SmartPointer</Filter>

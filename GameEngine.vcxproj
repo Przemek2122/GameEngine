@@ -160,6 +160,8 @@
     <ClInclude Include="Source\Public\Types\Functors\FunctorLambda.h" />
     <ClInclude Include="Source\Public\Types\Functors\FunctorObject.h" />
     <ClInclude Include="Source\Public\Types\Functors\FunctorStatic.h" />
+    <ClInclude Include="Source\Public\Types\Mutex\Mutex.h" />
+    <ClInclude Include="Source\Public\Types\Mutex\MutexScopeLock.h" />
     <ClInclude Include="Source\Public\Types\Registry\RegistryBase.h" />
     <ClInclude Include="Source\Public\Types\SmartPointer\SmartSharedPointer.h" />
     <ClInclude Include="Source\Public\Types\Vector2D.h" />
@@ -386,6 +388,8 @@
     <ClCompile Include="Source\Private\Types\Functors\FunctorLambda.cpp" />
     <ClCompile Include="Source\Private\Types\Functors\FunctorObject.cpp" />
     <ClCompile Include="Source\Private\Types\Functors\FunctorStatic.cpp" />
+    <ClCompile Include="Source\Private\Types\Mutex\Mutex.cpp" />
+    <ClCompile Include="Source\Private\Types\Mutex\MutexScopeLock.cpp" />
     <ClCompile Include="Source\Private\Types\SmartPointer\SmartSharedPointer.cpp" />
     <ClCompile Include="Source\Private\Types\Vector2D.cpp" />
   </ItemGroup>

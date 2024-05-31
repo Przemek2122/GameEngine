@@ -18,7 +18,7 @@ FThreadsManager::~FThreadsManager()
 	int TimeToStopThreads = 0;
 
 	// Wait for all threads to finish
-	while (WorkerThreadsArray.Size() > 0)
+	while (WorkerThreadsArray.Size())
 	{
 		SDL_Delay(1);
 
@@ -83,14 +83,14 @@ void FThreadsManager::AddAsyncDelegate(FDelegateSafe<void>& DelegateToRunAsync, 
 
 void FThreadsManager::AddAsyncWork(const FAsyncWorkStructure& AsyncRunWithCallback)
 {
-	while (!AsyncJobQueueMutex.try_lock())
+	while (!AsyncJobQueueMutex.TryLock())
 	{
 		SDL_Delay(1);
 	}
 
 	AsyncJobQueue.PushBack(AsyncRunWithCallback);
 
-	AsyncJobQueueMutex.unlock();
+	AsyncJobQueueMutex.Unlock();
 }
 
 FThreadWorkerData* FThreadsManager::CreateThreadWorker(const std::string& NewThreadName)
@@ -135,6 +135,10 @@ void FThreadsManager::StopThread()
 	{
 		LastAliveThread->Thread->StopThread();
 	}
+	else
+	{
+		LOG_WARN("Stopping thread failed. Already stopped.");
+	}
 }
 
 int FThreadsManager::GetNumberOfWorkerThreads() const
@@ -151,7 +155,7 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 {
 	// @TODO Remove mutex and find and smart way of distributing tasks
 
-	while (!AsyncJobQueueMutex.try_lock())
+	while (!AsyncJobQueueMutex.TryLock())
 	{
 		SDL_Delay(1);
 	}
@@ -172,7 +176,7 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 		// Remove first element from list
 		AsyncJobQueue.DequeFront();
 
-		AsyncJobQueueMutex.unlock();
+		AsyncJobQueueMutex.Unlock();
 
 		return std::move(AsyncWorkStructure);
 	}
