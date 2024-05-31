@@ -48,6 +48,8 @@ public:
 	/* Expects radians not degree */
 	static void RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Angle, FVector2D<int>& Point);
 
+	static FVector2D<int> GetLocationCenter(const FVector2D<int>& InLocation, const FVector2D<int>& InSize);
+
 	/** @Returns radians angle to look at @To */
 	template <typename TType>
 	static float FindLookAtRotationInRadians(const FVector2D<TType>& From, const FVector2D<TType>& LookAtTarget)

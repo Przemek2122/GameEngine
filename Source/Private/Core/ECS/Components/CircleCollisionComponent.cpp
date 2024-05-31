@@ -20,7 +20,7 @@ void UCircleCollisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CircleCollision = new FCircleCollision(GetLocation(), GetCircleRadius());
+	CircleCollision = new FCircleCollision(GetLocationCenter(), GetCircleRadius());
 }
 
 void UCircleCollisionComponent::Render()
@@ -44,7 +44,7 @@ void UCircleCollisionComponent::OnTransformLocationChanged()
 	UCollisionComponent::OnTransformLocationChanged();
 
 	FCircleCollisionData& CircleCollisionDataForEdit = CircleCollision->GetCircleCollisionDataForEdit();
-	CircleCollisionDataForEdit.UpdateLocation(GetLocation());
+	CircleCollisionDataForEdit.UpdateLocation(GetLocationCenter());
 }
 
 int UCircleCollisionComponent::GetCircleRadius() const

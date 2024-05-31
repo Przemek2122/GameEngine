@@ -21,4 +21,6 @@ public:
 	/** @returns size of root component */
 	FVector2D<int> GetSize() const;
 
+	FVector2D<int> GetLocationCenter() const;
+
 };

@@ -46,3 +46,8 @@ FVector2D<int> UComponent::GetSize() const
 
 	return FinalSize;
 }
+
+FVector2D<int> UComponent::GetLocationCenter() const
+{
+	return FMath::GetLocationCenter(GetLocation(), GetSize());
+}

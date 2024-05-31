@@ -64,16 +64,19 @@ void FCollisionManager::UnRegisterCollision(FCollisionBase* NewCollision)
 
 void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject)
 {
-	for (FCollisionMeshRow* CollisionRow : CollisionRows)
+	if (bIsCollisionReady)
 	{
-		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+		for (FCollisionMeshRow* CollisionRow : CollisionRows)
 		{
-			for (FCollisionBase* CollisionObject : CollisionTile->CollisionObjects)
+			for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
 			{
-				if (CollisionObject == InCollisionObject)
+				for (FCollisionBase* CollisionObject : CollisionTile->CollisionObjects)
 				{
-					// Handle object moved
+					if (CollisionObject == InCollisionObject)
+					{
+						// Handle object moved
 
+					}
 				}
 			}
 		}
