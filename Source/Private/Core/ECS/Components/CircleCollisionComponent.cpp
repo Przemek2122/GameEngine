@@ -33,7 +33,7 @@ void UCircleCollisionComponent::Render()
 	if (CircleCollision != nullptr && CollisionManagerCached != nullptr && CollisionManagerCached->IsDebugEnabled())
 	{
 		FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
-		const FCircleCollisionData& CircleData = CircleCollision->GetCircleCollisionData();
+		const FCircle& CircleData = CircleCollision->GetCircleCollisionData();
 
 		Renderer->DrawCircle(CircleData.GetLocation(), CircleData.GetRadius());
 	}
@@ -44,7 +44,7 @@ void UCircleCollisionComponent::OnTransformLocationChanged()
 {
 	UCollisionComponent::OnTransformLocationChanged();
 
-	FCircleCollisionData& CircleCollisionDataForEdit = CircleCollision->GetCircleCollisionDataForEdit();
+	FCircle& CircleCollisionDataForEdit = CircleCollision->GetCircleCollisionDataForEdit();
 	CircleCollisionDataForEdit.UpdateLocation(GetLocationCenter());
 }
 

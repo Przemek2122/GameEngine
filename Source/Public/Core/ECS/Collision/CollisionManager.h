@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECS/SubSystems/SubSystemInstanceInterface.h"
 
+struct FCircle;
 struct FRectangleWithDiagonal;
 class FCollisionBase;
 class FSquareCollision;
@@ -94,5 +95,7 @@ class FCollisionGlobals
 {
 public:
 	static bool RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB);
+	static bool CirclesIntersect(const FCircle& CircleA, const FCircle& CircleB);
+	static bool CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle);
 
 };

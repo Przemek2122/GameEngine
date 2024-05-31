@@ -115,9 +115,16 @@ public:
 
 	/** @returns bigger value of two given */
 	template<typename TType>
-	static int Max(const TType A, const TType B)
+	static TType Max(const TType A, const TType B)
 	{
 		return (A > B) ? A : B;
+	}
+
+	/** @returns lower value of two given */
+	template<typename TType>
+	static TType Min(const TType A, const TType B)
+	{
+		return (A < B) ? A : B;
 	}
 
 	/** @returns absolute value (non negative) */

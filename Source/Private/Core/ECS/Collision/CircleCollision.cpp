@@ -3,12 +3,12 @@
 #include "CoreEngine.h"
 #include "ECS/Collision/CircleCollision.h"
 
-void FCircleCollisionData::UpdateLocation(const FVector2D<int>& InLocation)
+void FCircle::UpdateLocation(const FVector2D<int>& InLocation)
 {
 	Location = InLocation;
 }
 
-void FCircleCollisionData::UpdateRadius(const int InCircleRadius)
+void FCircle::UpdateRadius(const int InCircleRadius)
 {
 	CircleRadius = InCircleRadius;
 }
@@ -23,12 +23,12 @@ int FCircleCollision::GetBaseExtentRadius()
 	return CircleCollisionData.GetRadius();
 }
 
-const FCircleCollisionData& FCircleCollision::GetCircleCollisionData() const
+const FCircle& FCircleCollision::GetCircleCollisionData() const
 {
 	return CircleCollisionData;
 }
 
-FCircleCollisionData& FCircleCollision::GetCircleCollisionDataForEdit()
+FCircle& FCircleCollision::GetCircleCollisionDataForEdit()
 {
 	return CircleCollisionData;
 }

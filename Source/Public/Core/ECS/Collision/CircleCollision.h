@@ -4,10 +4,10 @@
 
 #include "BaseCollision.h"
 
-struct FCircleCollisionData
+struct FCircle
 {
 public:
-	FCircleCollisionData(const FVector2D<int>& InLocation, const int InCircleRadius)
+	FCircle(const FVector2D<int>& InLocation, const int InCircleRadius)
 		: Location(InLocation)
 		, CircleRadius(InCircleRadius)
 	{
@@ -35,10 +35,10 @@ public:
 
 	int GetBaseExtentRadius() override;
 
-	const FCircleCollisionData& GetCircleCollisionData() const;
-	FCircleCollisionData& GetCircleCollisionDataForEdit();
+	const FCircle& GetCircleCollisionData() const;
+	FCircle& GetCircleCollisionDataForEdit();
 
 protected:
-	FCircleCollisionData CircleCollisionData;
+	FCircle CircleCollisionData;
 
 };

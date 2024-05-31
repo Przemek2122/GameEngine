@@ -198,8 +198,6 @@ void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
 	{
 		LOG_WARN("Found unsupported collision type");
 	}
-
-
 }
 
 void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation)
@@ -241,4 +239,46 @@ bool FCollisionGlobals::RectanglesIntersect(const FRectangleWithDiagonal& Rectan
 		RectangleB.GetPositionBottomRight().X <= RectangleA.GetPositionTopLeft().X ||		// RectangleB is left of RectangleA 
 		RectangleA.GetPositionBottomRight().Y <= RectangleB.GetPositionTopLeft().Y ||		// RectangleA is above RectangleB 
 		RectangleB.GetPositionBottomRight().Y <= RectangleA.GetPositionTopLeft().Y);		// RectangleB is above RectangleA 
+}
+
+bool FCollisionGlobals::CirclesIntersect(const FCircle& CircleA, const FCircle& CircleB)
+{
+	const int Distance = CircleA.GetLocation().DistanceTo(CircleB.GetLocation());
+	const int SummaryRadius = CircleA.GetRadius() + CircleB.GetRadius();
+
+	return (SummaryRadius < Distance);
+}
+
+bool FCollisionGlobals::CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle)
+{
+	// Find the closest point on the rectangle to the circle's center 
+	const int Closest_x = FMath::Max(Rectangle.GetPositionTopLeft().X, FMath::Min(Circle.GetLocation().X, Rectangle.GetPositionTopLeft().X + Rectangle.GetSize().X));
+	const int Closest_y = FMath::Max(Rectangle.GetPositionTopLeft().Y, FMath::Min(Circle.GetLocation().Y, Rectangle.GetPositionTopLeft().Y + Rectangle.GetSize().Y));
+
+	// Calculate the distance from this closest point to the circle's center 
+	const int distance = FMath::Sqrt((Circle.GetLocation().X - Closest_x) ^ 2 + (Circle.GetLocation().Y - Closest_y) ^ 2);
+
+	// Check if the distance is less than or equal to the radius 
+	return (distance <= Circle.GetRadius());
+
+	/*
+	float RectMinX = std::min(Rectangle.Corner1.X, Rectangle.Corner2.X);
+	float RectMaxX = std::max(Rectangle.Corner1.X, Rectangle.Corner2.X);
+	float RectMinY = std::min(Rectangle.Corner1.Y, Rectangle.Corner2.Y);
+	float RectMaxY = std::max(Rectangle.Corner1.Y, Rectangle.Corner2.Y);
+
+	// Find the closest point on the rectangle to the circle's center 
+	FVector2D ClosestPoint(
+		std::max(RectMinX, std::min(Circle.Center.X, RectMaxX)),
+		std::max(RectMinY, std::min(Circle.Center.Y, RectMaxY))
+	);
+
+	// Calculate the distance between the circle's center and this closest point 
+	float DistanceX = Circle.Center.X - ClosestPoint.X;
+	float DistanceY = Circle.Center.Y - ClosestPoint.Y;
+
+	// If the distance is less than the circle's radius, an intersection occurs 
+	float DistanceSquared = DistanceX * DistanceX + DistanceY * DistanceY;
+	return DistanceSquared <= (Circle.Radius * Circle.Radius);
+	*/
 }
