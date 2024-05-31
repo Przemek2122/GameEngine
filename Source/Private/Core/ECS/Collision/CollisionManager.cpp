@@ -90,8 +90,6 @@ void FCollisionManager::BuildCollision()
 		{
 			LOG_INFO("Creating collision map...");
 
-			bIsCollisionReady = false;
-
 			// If map is present create collision
 			CreateCollisionTiles(CurrentMap);
 
@@ -107,6 +105,8 @@ void FCollisionManager::BuildCollision()
 
 			LOG_INFO("Mainthread call after Collision map created.");
 		});
+
+		bIsCollisionReady = false;
 
 		GEngine->GetThreadsManager()->AddAsyncDelegate(AsyncWork, MainThreadCallback);
 	}
