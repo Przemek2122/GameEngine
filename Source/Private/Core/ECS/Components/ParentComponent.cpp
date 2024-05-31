@@ -1,17 +1,17 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "ECS/Components/BaseTransformComponent.h"
+#include "ECS/Components/ParentComponent.h"
 #include "Renderer/Map/Map.h"
 #include "Renderer/Map/MapManager.h"
 
-UBaseTransformComponent::UBaseTransformComponent(IComponentManagerInterface* InComponentManagerInterface)
+UParentComponent::UParentComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UBaseComponent(InComponentManagerInterface)
 	, Size(32, 32)
 {
 }
 
-void UBaseTransformComponent::BeginPlay()
+void UParentComponent::BeginPlay()
 {
 	UBaseComponent::BeginPlay();
 
@@ -24,25 +24,25 @@ void UBaseTransformComponent::BeginPlay()
 			FMap* CurrentMap = MapManger->GetCurrentMap();
 			if (CurrentMap != nullptr)
 			{
-				CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &UBaseTransformComponent::OnMapLocationChanged);
+				CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &UParentComponent::OnMapLocationChanged);
 			}
 			else
 			{
-				LOG_ERROR("UBaseTransformComponent::BeginPlay: CurrentMap is nullptr");
+				LOG_ERROR("UParentComponent::BeginPlay: CurrentMap is nullptr");
 			}
 		}
 		else
 		{
-			LOG_ERROR("UBaseTransformComponent::BeginPlay: MapManager is nullptr");
+			LOG_ERROR("UParentComponent::BeginPlay: MapManager is nullptr");
 		}
 	}
 	else
 	{
-		LOG_ERROR("UBaseTransformComponent::BeginPlay: Window is nullptr");
+		LOG_ERROR("UParentComponent::BeginPlay: Window is nullptr");
 	}
 }
 
-void UBaseTransformComponent::EndPlay()
+void UParentComponent::EndPlay()
 {
 	UBaseComponent::EndPlay();
 
@@ -55,13 +55,13 @@ void UBaseTransformComponent::EndPlay()
 			FMap* CurrentMap = MapManger->GetCurrentMap();
 			if (CurrentMap != nullptr)
 			{
-				CurrentMap->GetMapLocationChangeDelegate().UnBindObject(this, &UBaseTransformComponent::OnMapLocationChanged);
+				CurrentMap->GetMapLocationChangeDelegate().UnBindObject(this, &UParentComponent::OnMapLocationChanged);
 			}
 		}
 	}
 }
 
-void UBaseTransformComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
+void UParentComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);
 
@@ -76,7 +76,7 @@ void UBaseTransformComponent::OnComponentCreated(const std::string& ComponentNam
 	}
 }
 
-void UBaseTransformComponent::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
+void UParentComponent::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
 {
 	Super::OnComponentDestroy(ComponentName, OldComponent);
 
@@ -87,7 +87,7 @@ void UBaseTransformComponent::OnComponentDestroy(const std::string& ComponentNam
 	}
 }
 
-FVector2D<float> UBaseTransformComponent::GetForwardVector() const
+FVector2D<float> UParentComponent::GetForwardVector() const
 {
 	static const FVector2D<float> ForwardVector = { 0, -1 };
 	constexpr float VectorRotation = 360;
@@ -102,7 +102,7 @@ FVector2D<float> UBaseTransformComponent::GetForwardVector() const
 	return FVector2D<float>(CurrentForwardVector) / VectorRotation;
 }
 
-FVector2D<float> UBaseTransformComponent::GetRightVector() const
+FVector2D<float> UParentComponent::GetRightVector() const
 {
 	static const FVector2D<float> RightVector = { 1, 0 };
 
@@ -113,17 +113,17 @@ FVector2D<float> UBaseTransformComponent::GetRightVector() const
 	return RightVector;
 }
 
-FVector2D<int> UBaseTransformComponent::GetLocationCenter() const
+FVector2D<int> UParentComponent::GetLocationCenter() const
 {
 	return (GetLocation() + (Size / 2));
 }
 
-FVector2D<int> UBaseTransformComponent::GetSize() const
+FVector2D<int> UParentComponent::GetSize() const
 {
 	return Size;
 }
 
-void UBaseTransformComponent::OnMapLocationChanged(const FVector2D<int> NewLocation)
+void UParentComponent::OnMapLocationChanged(const FVector2D<int> NewLocation)
 {
 	SetLocationMap(NewLocation);
 }

@@ -8,7 +8,7 @@
 #include "Renderer/Map/MapManager.h"
 
 UCollisionComponent::UCollisionComponent(IComponentManagerInterface* InComponentManagerInterface)
-	: UBaseTransformComponent(InComponentManagerInterface)
+	: UComponent(InComponentManagerInterface)
 	, CollisionManagerCached(nullptr)
 {
 }
@@ -50,7 +50,7 @@ void UCollisionComponent::RemoveCollision(FCollisionBase* CollisionObject)
 
 void UCollisionComponent::OnTransformLocationChanged(const ELocationChangeType LocationChangeType)
 {
-	UBaseTransformComponent::OnTransformLocationChanged(LocationChangeType);
+	Super::OnTransformLocationChanged(LocationChangeType);
 
 	if (CollisionManagerCached != nullptr)
 	{

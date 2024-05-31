@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "BaseTransformComponent.h"
+#include "ParentComponent.h"
 #include "ECS/Component.h"
 
 /**

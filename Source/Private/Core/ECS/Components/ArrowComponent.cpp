@@ -6,7 +6,7 @@
 #include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
 #include "Assets/Collection/EngineAssetsCollection.h"
-#include "ECS/Components/BaseTransformComponent.h"
+#include "ECS/Components/ParentComponent.h"
 
 UArrowComponent::UArrowComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
@@ -23,7 +23,7 @@ void UArrowComponent::BeginPlay()
 	UBaseComponent* RootComponentOfEntity = GetRootComponentOfEntity();
 	if (RootComponentOfEntity != nullptr)
 	{
-		UBaseTransformComponent* TemporaryComponent = dynamic_cast<UBaseTransformComponent*>(RootComponentOfEntity);
+		UParentComponent* TemporaryComponent = dynamic_cast<UParentComponent*>(RootComponentOfEntity);
 		if (TemporaryComponent != nullptr)
 		{
 			RootTransformComponent = TemporaryComponent;

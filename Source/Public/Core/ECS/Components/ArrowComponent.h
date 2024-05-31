@@ -4,7 +4,7 @@
 
 #include "ECS/Component.h"
 
-class UBaseTransformComponent;
+class UParentComponent;
 
 /**
  * Component for displaying simple arrow
@@ -34,7 +34,7 @@ protected:
 private:
 	bool bOnlyVisibleInDebug;
 
-	UBaseTransformComponent* RootTransformComponent;
+	UParentComponent* RootTransformComponent;
 
 	FTextureAsset* ArrowTextureAsset;
 

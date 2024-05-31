@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Components/BaseTransformComponent.h"
+#include "Components/ParentComponent.h"
 #include "ECS/Entity.h"
 
 class FMap;
@@ -35,7 +35,7 @@ public:
 	{
 		TEntityClass* NewEntity = CreateEntity<TEntityClass>();
 
-		UBaseTransformComponent* TransformComponent = dynamic_cast<UBaseTransformComponent*>(NewEntity->GetRootComponent());
+		UParentComponent* TransformComponent = dynamic_cast<UParentComponent*>(NewEntity->GetRootComponent());
 		if (TransformComponent != nullptr)
 		{
 			TransformComponent->SetLocationUser(Location);

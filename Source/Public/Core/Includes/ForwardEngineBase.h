@@ -25,6 +25,8 @@ class FTimer;
 class FEntityManager;
 class EEntity;
 class UBaseComponent;
+class UParentComponent;
+class UComponent;
 
 template<class TType = float>
 class FVector2D;

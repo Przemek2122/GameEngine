@@ -9,11 +9,11 @@
  * Component for handling transform of the entity
  * Every component which should have transform should inherit from this class
  */
-class UBaseTransformComponent : public UBaseComponent, public ITransformParentInterface2D<int>
+class UParentComponent : public UBaseComponent, public ITransformParentInterface2D<int>
 {
 public:
-	UBaseTransformComponent(IComponentManagerInterface* InComponentManagerInterface);
-	virtual ~UBaseTransformComponent() override = default;
+	UParentComponent(IComponentManagerInterface* InComponentManagerInterface);
+	virtual ~UParentComponent() override = default;
 
 	/** Begin UBaseComponent */
 	void BeginPlay() override;

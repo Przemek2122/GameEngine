@@ -61,7 +61,7 @@
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h" />
-    <ClInclude Include="Source\Public\Core\ECS\Components\BaseTransformComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\ParentComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\CircleCollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\CollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
@@ -298,7 +298,7 @@
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\Components\BaseTransformComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\ParentComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\CircleCollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\CollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />

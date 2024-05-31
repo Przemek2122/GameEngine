@@ -4,7 +4,7 @@
 
 #include "ECS/Component.h"
 
-class UBaseTransformComponent;
+class UParentComponent;
 
 enum class EMovementDirection
 {
@@ -72,7 +72,7 @@ protected:
 	FVector2D<float> PreciseLocation;
 	float PreciseRotation;
 
-	UBaseTransformComponent* RootTransformComponent;
+	UParentComponent* RootTransformComponent;
 
 	FVector2D<int> CurrentLocation;
 	FVector2D<int> CalculatedTargetLocation;

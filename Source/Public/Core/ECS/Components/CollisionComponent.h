@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ECS/BaseComponent.h"
+#include "ECS/Component.h"
 
 class FCollisionManager;
 class FCollisionBase;
@@ -10,7 +11,7 @@ class FCollisionBase;
 /**
  * Component for collision management
  */
-class UCollisionComponent : public UBaseTransformComponent
+class UCollisionComponent : public UComponent
 {
 public:
 	UCollisionComponent(IComponentManagerInterface* InComponentManagerInterface);

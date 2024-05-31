@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "ECS/Components/MoveComponent.h"
 #include "ECS/Components/ArrowComponent.h"
-#include "ECS/Components/BaseTransformComponent.h"
+#include "ECS/Components/ParentComponent.h"
 
 UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
@@ -26,7 +26,7 @@ void UMoveComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	RootTransformComponent = dynamic_cast<UBaseTransformComponent*>(GetRootComponentOfEntity());
+	RootTransformComponent = dynamic_cast<UParentComponent*>(GetRootComponentOfEntity());
 }
 
 void UMoveComponent::Tick(const float DeltaTime)
