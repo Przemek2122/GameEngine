@@ -88,6 +88,9 @@ private:
 	/** Array with created threads */
 	CArray<FThreadWorkerData*> WorkerThreadsArray;
 
+	/** Mutex for param WorkerThreadsArray */
+	FMutex WorkerThreadsArrayMutex;
+
 	/** Number with thread Id for naming */
 	CArray<int> AvailableThreadsNumbers;
 

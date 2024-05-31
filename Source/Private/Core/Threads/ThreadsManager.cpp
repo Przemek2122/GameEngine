@@ -4,7 +4,7 @@
 #include "Mutex/MutexScopeLock.h"
 
 FThreadsManager::FThreadsManager()
-	: StartingNumberOfThreads(2)
+	: StartingNumberOfThreads(4)
 	, DefaultThreadName("DefaultThread_")
 {
 }
@@ -18,6 +18,8 @@ FThreadsManager::~FThreadsManager()
 	}
 
 	int TimeToStopThreads = 0;
+
+	LOG_INFO("Number of threads to stop: " << WorkerThreadsArray.Size());
 
 	// Wait for all threads to finish
 	while (WorkerThreadsArray.Size())
@@ -104,6 +106,8 @@ void FThreadsManager::StartNewThread()
 {
 	if (!AvailableThreadsNumbers.IsEmpty())
 	{
+		FMutexScopeLock MutexScopeLock(WorkerThreadsArrayMutex);
+
 		const int NewThreadIndex = AvailableThreadsNumbers[0];
 		AvailableThreadsNumbers.RemoveAt(0);
 
@@ -192,6 +196,8 @@ bool FThreadsManager::HasAnyJobLeft() const
 
 void FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
 {
+	FMutexScopeLock MutexScopeLock(WorkerThreadsArrayMutex);
+
 	// Remove thread data from array
 	WorkerThreadsArray.Remove(InThread->GetThreadData());
 }
