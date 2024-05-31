@@ -163,6 +163,8 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 
 	if (AsyncJobQueue.Size() == 0)
 	{
+		AsyncJobQueueMutex.Unlock();
+
 		FAsyncWorkStructure AsyncWorkStructure;
 		AsyncWorkStructure.DelegateToRunAsync = std::make_shared<FDelegateSafe<>>();
 		AsyncWorkStructure.AsyncCallback = std::make_shared<FDelegateSafe<>>();
