@@ -59,15 +59,8 @@ void FCollisionManager::TickSubSystem()
 #if _DEBUG
 	if (bIsDebugEnabled)
 	{
-
-
-		for (FCollisionMeshRow* CollisionRow : CollisionRows)
-		{
-			for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
-			{
-				
-			}
-		}
+		// It would be nice to draw mesh but we are missing render
+		// @TODO Add render thread?
 	}
 #endif
 }

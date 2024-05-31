@@ -3,6 +3,7 @@
 #include "CoreEngine.h"
 #include "Core/ECS/Components/SquareCollisionComponent.h"
 
+#include "ECS/Collision/CollisionManager.h"
 #include "ECS/Collision/SquareCollision.h"
 
 USquareCollisionComponent::USquareCollisionComponent(IComponentManagerInterface* InComponentManagerInterface)
@@ -31,7 +32,7 @@ void USquareCollisionComponent::Render()
 
 #if _DEBUG
 	// Draw collision
-	if (SquareCollision != nullptr)
+	if (SquareCollision != nullptr && CollisionManagerCached != nullptr && CollisionManagerCached->IsDebugEnabled())
 	{
 		FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
 
