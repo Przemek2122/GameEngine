@@ -162,15 +162,15 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 	// @TODO Remove mutex and find and smart way of distributing tasks
 	// In worse case update to SDL3 and use SDL_DelayNS
 
-	while (AsyncJobQueueMutex.IsLocked())
+	while (!AsyncJobQueueMutex.TryLock())
 	{
 		SDL_Delay(1);
 	}
 
-	FMutexScopeLock MutexScopeLock(AsyncJobQueueMutex);
-
 	if (AsyncJobQueue.Size() == 0)
 	{
+		AsyncJobQueueMutex.Unlock();
+
 		FAsyncWorkStructure AsyncWorkStructure;
 		AsyncWorkStructure.DelegateToRunAsync = std::make_shared<FDelegateSafe<>>();
 		AsyncWorkStructure.AsyncCallback = std::make_shared<FDelegateSafe<>>();
@@ -184,6 +184,8 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 
 		// Remove first element from list
 		AsyncJobQueue.DequeFront();
+
+		AsyncJobQueueMutex.Unlock();
 
 		return std::move(AsyncWorkStructure);
 	}
