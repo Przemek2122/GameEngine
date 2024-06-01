@@ -170,39 +170,31 @@ void FCollisionManager::CreateCollisionTiles()
 
 void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
 {
-	if (FCircleCollision* CircleCollision = dynamic_cast<FCircleCollision*>(InCollision))
-	{
-		
-	}
-	else if (FSquareCollision* SquareCollision = dynamic_cast<FSquareCollision*>(InCollision))
-	{
+	// @TODO Optimize, find tiles by location instead of checking all of them
 
-	}
-	else
+	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
-		LOG_WARN("Found unsupported collision type");
+		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+		{
+			
+		}
 	}
+
+	// After puting it inside we should find intersections with other colliders
 }
 
 void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
 {
-	if (FCircleCollision* CircleCollision = dynamic_cast<FCircleCollision*>(InCollision))
-	{
+	// @TODO Optimize, find tiles by location instead of checking all of them
 
-	}
-	else if (FSquareCollision* SquareCollision = dynamic_cast<FSquareCollision*>(InCollision))
-	{
+	// ...
 
-	}
-	else
-	{
-		LOG_WARN("Found unsupported collision type");
-	}
+	// After removing collision we should find previous intersections and call on end of intersections?
 }
 
 void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation)
 {
-
+	
 
 }
 
@@ -222,6 +214,102 @@ void FCollisionManager::CheckCollisionInTiles()
 			}
 		}
 	}
+}
+
+bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBase* CollisionB)
+{
+	bool bIsIntersecting = false;
+
+	if (CollisionA->GetCollisionType() == ECollisionType::Other || CollisionB->GetCollisionType() == ECollisionType::Other)
+	{
+		// Handle any custom collision types
+		bIsIntersecting = IsIntersectingCustomTypes(CollisionA, CollisionB);
+	}
+	else
+	{
+		switch (CollisionA->GetCollisionType())
+		{
+			case ECollisionType::Circle:
+			{
+				switch (CollisionB->GetCollisionType())
+				{
+					case ECollisionType::Circle:
+					{
+						const FCircle& CircleDataA = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleCollisionData();
+						const FCircle& CircleDataB = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleCollisionData();
+
+						bIsIntersecting = FCollisionGlobals::CirclesIntersect(CircleDataA, CircleDataB);
+
+						break;
+					}
+					case ECollisionType::Square:
+					{
+						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleCollisionData();
+						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
+
+						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
+
+						break;
+					}
+					case ECollisionType::Other:
+					{
+						LOG_ERROR("ECollisionType::Other found (#Circle). Collision will not work in this case.");
+
+						break;
+					}
+				}
+
+				break;
+			}
+			case ECollisionType::Square:
+			{
+				switch (CollisionB->GetCollisionType())
+				{
+					case ECollisionType::Circle:
+					{
+						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
+						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleCollisionData();
+
+						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
+
+						break;
+					}
+					case ECollisionType::Square:
+					{
+						const FRectangleWithDiagonal& RectangleDataA = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
+						const FRectangleWithDiagonal& RectangleDataB = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
+
+						bIsIntersecting = FCollisionGlobals::RectanglesIntersect(RectangleDataA, RectangleDataB);
+
+						break;
+					}
+					case ECollisionType::Other:
+					{
+						LOG_ERROR("ECollisionType::Other found (#Square). Collision will not work in this case.");
+
+						break;
+					}
+				}
+
+				break;
+			}
+			case ECollisionType::Other:
+			{
+				LOG_ERROR("ECollisionType::Other found. Collision will not work in this case.");
+
+				break;
+			}
+		}
+	}
+
+	return bIsIntersecting;
+}
+
+bool FCollisionManager::IsIntersectingCustomTypes(FCollisionBase* CollisionA, FCollisionBase* CollisionB)
+{
+	LOG_WARN("Detected unsupported collision type.");
+
+	return false;
 }
 
 CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRect(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const

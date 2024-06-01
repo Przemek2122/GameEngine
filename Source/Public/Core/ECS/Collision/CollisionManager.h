@@ -59,6 +59,11 @@ protected:
 
 	void CheckCollisionInTiles();
 
+	bool IsIntersecting(FCollisionBase* CollisionA, FCollisionBase* CollisionB);
+
+	/** Handle collision custom types */
+	virtual bool IsIntersectingCustomTypes(FCollisionBase* CollisionA, FCollisionBase* CollisionB);
+
 	CArray<FCollisionTile*> GetTilesIntersectingRect(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const;
 
 private:

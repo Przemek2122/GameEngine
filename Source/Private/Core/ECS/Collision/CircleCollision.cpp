@@ -16,6 +16,7 @@ void FCircle::UpdateRadius(const int InCircleRadius)
 FCircleCollision::FCircleCollision(const FVector2D<int> InLocation, const int InCircleRadius)
 	: CircleCollisionData(InLocation, InCircleRadius)
 {
+	CollisionType = ECollisionType::Circle;
 }
 
 int FCircleCollision::GetBaseExtentRadius()
