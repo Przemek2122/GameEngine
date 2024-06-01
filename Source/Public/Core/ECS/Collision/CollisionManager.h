@@ -45,7 +45,7 @@ public:
 
 	void RegisterCollision(FCollisionBase* InCollision);
 	void UnRegisterCollision(FCollisionBase* InCollision);
-	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocatio);
+	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation);
 
 	bool IsDebugEnabled() const { return bIsDebugEnabled; }
 
