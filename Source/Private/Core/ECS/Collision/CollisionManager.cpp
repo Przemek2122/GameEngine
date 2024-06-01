@@ -312,13 +312,32 @@ bool FCollisionManager::IsIntersectingCustomTypes(FCollisionBase* CollisionA, FC
 	return false;
 }
 
-CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRect(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const
+CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRectangle(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const
 {
-	CArray<FCollisionTile*> Tiles;
+	CArray<FCollisionTile*> OutTiles;
+
+	if (InSize > CollisionTileSize)
+	{
+		LOG_WARN("Custom logic is required for Objects greater than single CollisionTile. #1");
+	}
 
 
 
-	return Tiles;
+	return std::move(OutTiles);
+}
+
+CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingCircle(const FVector2D<int>& InLocation, const int InRadius) const
+{
+	CArray<FCollisionTile*> OutTiles;
+
+	if (InRadius > static_cast<int>(CollisionTileSize.Magnitude()))
+	{
+		LOG_WARN("Custom logic is required for Objects greater than single CollisionTile. #2");
+	}
+
+	OutTiles.Push(new FCollisionTile());
+
+	return std::move(OutTiles);
 }
 
 bool FCollisionGlobals::RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)
