@@ -7,6 +7,7 @@
 FThreadInputData::FThreadInputData(FThreadsManager* InThreadsManager, const std::string& InThreadName)
 	: Thread(nullptr)
 	, ThreadsManager(InThreadsManager)
+	, ThreadName(InThreadName)
 	, bThreadAlive(true)
 {
 }
@@ -79,7 +80,6 @@ FThreadWorker::FThreadWorker(FThreadInputData* InThreadInputData, FThreadData* I
 
 FThreadWorker::~FThreadWorker()
 {
-	GetThreadInputData()->GetThreadsManager()->InternalRemoveWorkerThread(this);
 }
 
 void FThreadWorker::TickThread()
@@ -105,6 +105,12 @@ void FThreadWorker::TickThread()
 void FThreadWorker::ThreadManagerFunction()
 {
 	FThread::ThreadManagerFunction();
+
+	// Wait for deletion
+	while (!GetThreadInputData()->GetThreadsManager()->InternalRemoveWorkerThread(this))
+	{
+		SDL_Delay(1);
+	}
 
 	delete this;
 }

@@ -196,10 +196,23 @@ bool FThreadsManager::HasAnyJobLeft() const
 	return (AsyncJobQueue.Size() > 0);
 }
 
-void FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
+bool FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
 {
-	FMutexScopeLock MutexScopeLock(WorkerThreadsArrayMutex);
+	bool bWasRemoved ;
 
-	// Remove thread data from array
-	WorkerThreadsArray.Remove(InThread->GetThreadData());
+	if (WorkerThreadsArrayMutex.IsLocked())
+	{
+		bWasRemoved = false;
+	}
+	else
+	{
+		FMutexScopeLock MutexScopeLock(WorkerThreadsArrayMutex);
+
+		// Remove thread data from array
+		WorkerThreadsArray.Remove(InThread->GetThreadData());
+
+		bWasRemoved = true;
+	}
+
+	return bWasRemoved;
 }

@@ -83,7 +83,7 @@ protected:
 	int StartingNumberOfThreads;
 
 private:
-	void InternalRemoveWorkerThread(const FThread* InThread);
+	bool InternalRemoveWorkerThread(const FThread* InThread);
 
 	/** Array with created threads */
 	CArray<FThreadWorkerData*> WorkerThreadsArray;
