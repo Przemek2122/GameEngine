@@ -145,7 +145,7 @@ void FWidget::RefreshWidget(const bool bRefreshChildren)
 
 	if (bRefreshChildren)
 	{
-		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
 		{
 			ManagedWidgets[i]->RefreshWidget();
 		}

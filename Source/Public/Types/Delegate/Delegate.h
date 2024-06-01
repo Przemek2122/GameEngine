@@ -58,7 +58,7 @@ public:
 	/** Executes all bound functions. */
 	virtual void Execute(TInParams... InParams) override
 	{
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		for (ContainerInt i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			if (ENSURE_VALID(DelegateBase::Functors[i] != nullptr))
 			{
@@ -72,7 +72,7 @@ public:
 	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
 	virtual void ExecuteByLambda(ExecuteByLambdaDefinition Lambda, TInParams... InParams)
 	{
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		for (ContainerInt i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			Lambda(DelegateBase::Functors[i], InParams ...);
 		}
@@ -121,7 +121,7 @@ public:
 	template<typename TClass>
 	void UnBindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))
 	{
-		int Index;
+		ContainerInt Index;
 		const bool bIsFound = DelegateBase::Functors.FindByLambda([&](FFunctorBase<TReturnType, TInParams...>* Object)
 		{
 			if (FFunctorObject<TClass, TReturnType, TInParams...>* FunctorObject = dynamic_cast<FFunctorObject<TClass, TReturnType, TInParams...>*>(Object))

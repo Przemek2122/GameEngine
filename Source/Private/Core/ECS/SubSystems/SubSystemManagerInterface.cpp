@@ -6,7 +6,7 @@
 
 ISubSystemManagerInterface::~ISubSystemManagerInterface()
 {
-	for (int i = 0; i < SubSystemsArray.Size(); i++)
+	for (ContainerInt i = 0; i < SubSystemsArray.Size(); i++)
 	{
 		delete SubSystemsArray[i];
 	}

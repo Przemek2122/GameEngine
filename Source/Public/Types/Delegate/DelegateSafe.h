@@ -52,7 +52,7 @@ public:
 	{
 		const auto FunctorsNum = DelegateBase::Functors.Size();
 	
-		for (int i = 0; i < FunctorsNum; i++)
+		for (ContainerInt i = 0; i < FunctorsNum; i++)
 		{
 			DelegateBase::Functors[i]->operator()(InParams ...);
 		}
@@ -63,7 +63,7 @@ public:
 	using ExecuteByLambdaDefinition = FFunctorLambda<void, ExecuteByLambdaDefinitionFunctor*, TInParams...>;
 	virtual void ExecuteByLambda(ExecuteByLambdaDefinition Lambda, TInParams... InParams)
 	{
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		for (ContainerInt i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			Lambda(DelegateBase::Functors[i].get(), InParams ...);
 		}
@@ -165,11 +165,11 @@ public:
 	}
 
 protected:
-	int FindIndexOfLambdaFunctor(FunctorLambdaType& LambdaFunctor)
+	ContainerInt FindIndexOfLambdaFunctor(FunctorLambdaType& LambdaFunctor)
 	{
-		int Index = INDEX_NONE;
+		ContainerInt Index = INDEX_NONE;
 
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		for (ContainerInt i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			std::shared_ptr<FunctorType>& Functor = DelegateBase::Functors[i];
 
@@ -191,13 +191,13 @@ protected:
 	}
 
 	template<class TClass>
-	int FindIndexOfObjectFunctor(FFunctorObject<TClass, TReturnType, TInParams...>& ObjectFunctor)
+	ContainerInt FindIndexOfObjectFunctor(FFunctorObject<TClass, TReturnType, TInParams...>& ObjectFunctor)
 	{
 		using FunctorObjectType = FFunctorObject<TClass, TReturnType, TInParams...>;
 
-		int Index = INDEX_NONE;
+		ContainerInt Index = INDEX_NONE;
 
-		for (int i = 0; i < DelegateBase::Functors.Size(); i++)
+		for (ContainerInt i = 0; i < DelegateBase::Functors.Size(); i++)
 		{
 			std::shared_ptr<FunctorType>& Functor = DelegateBase::Functors[i];
 

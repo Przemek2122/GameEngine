@@ -15,7 +15,7 @@ FAiTree::FAiTree(EEntity* InOwnerEntity)
 
 void FAiTree::RemoveAction(const FAiActionBase* AiAction)
 {
-	int Index;
+	ContainerInt Index;
 
 	const bool bIsIndexFound = AiActionsArray.FindByLambda([&](const std::shared_ptr<FAiActionBase>& Item)
 	{

@@ -15,7 +15,7 @@ IWidgetManagementInterface::~IWidgetManagementInterface()
 	// Log any memory leak if encountered
 	if (!ManagedWidgets.IsEmpty())
 	{
-		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
 		{
 			FWidget* CurrentWidget = ManagedWidgets[i];
 
@@ -39,9 +39,9 @@ IWidgetManagementInterface::~IWidgetManagementInterface()
 
 void IWidgetManagementInterface::TickWidgets()
 {
-	auto Size = ManagedWidgets.Size();
+	ContainerInt Size = ManagedWidgets.Size();
 	
-	for (auto i = 0; i < Size; i++)
+	for (ContainerInt i = 0; i < Size; i++)
 	{
 		ManagedWidgets[i]->ReceiveTick();
 	}
@@ -49,9 +49,9 @@ void IWidgetManagementInterface::TickWidgets()
 
 void IWidgetManagementInterface::RenderWidgets()
 {
-	const auto Size = ManagedWidgets.Size();
+	const ContainerInt Size = ManagedWidgets.Size();
 	
-	for (auto i = 0; i < Size; i++)
+	for (ContainerInt i = 0; i < Size; i++)
 	{
 		FWidget* CurrentWidget = ManagedWidgets[i];
 
@@ -123,13 +123,16 @@ bool IWidgetManagementInterface::DestroyChildWidgetByName(const std::string& InW
 
 void IWidgetManagementInterface::ClearChildren()
 {
-	for (auto i = ManagedWidgets.Size() - 1; i >= 0; i--)
+	if (!ManagedWidgets.IsEmpty())
 	{
-		ManagedWidgets[i]->DestroyWidget();
+		for (PotentiallyNegativeContainerInt i = ManagedWidgets.Size() - 1; i >= 0; i--)
+		{
+			ManagedWidgets[static_cast<ContainerInt>(i)]->DestroyWidget();
+		}
 	}
 }
 
-int IWidgetManagementInterface::GetChildrenCount() const
+ContainerInt IWidgetManagementInterface::GetChildrenCount() const
 {
 	return ManagedWidgets.Size();
 }
@@ -166,10 +169,10 @@ void IWidgetManagementInterface::OnChildSizeChanged()
 
 void IWidgetManagementInterface::ChangeWidgetOrder(FWidget* InWidget)
 {
-	const auto ManagedWidgetsNum = ManagedWidgets.Size();
+	const ContainerInt ManagedWidgetsNum = ManagedWidgets.Size();
 	const int WidgetOrder = InWidget->GetWidgetOrder();
 
-	for (auto i = 0; i < ManagedWidgetsNum; i++)
+	for (ContainerInt i = 0; i < ManagedWidgetsNum; i++)
 	{
 		FWidget* CurrentWidget = ManagedWidgets[i];
 		

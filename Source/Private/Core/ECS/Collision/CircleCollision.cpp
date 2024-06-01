@@ -24,12 +24,12 @@ int FCircleCollision::GetBaseExtentRadius()
 	return CircleCollisionData.GetRadius();
 }
 
-const FCircle& FCircleCollision::GetCircleCollisionData() const
+const FCircle& FCircleCollision::GetCircleData() const
 {
 	return CircleCollisionData;
 }
 
-FCircle& FCircleCollision::GetCircleCollisionDataForEdit()
+FCircle& FCircleCollision::GetCircleDataForEdit()
 {
 	return CircleCollisionData;
 }

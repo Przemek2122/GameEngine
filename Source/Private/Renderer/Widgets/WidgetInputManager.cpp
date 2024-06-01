@@ -107,7 +107,7 @@ void FWidgetInputManager::ChangeOrder(FWidget* Widget)
 		const auto ManagedWidgetsNum = WidgetsArray.Size();
 		const int WidgetOrder = Widget->GetWidgetOrder();
 
-		for (auto i = 0; i < ManagedWidgetsNum; i++)
+		for (ContainerInt i = 0; i < ManagedWidgetsNum; i++)
 		{
 			FWidget* CurrentWidget = WidgetsArray[i];
 

@@ -170,17 +170,61 @@ void FCollisionManager::CreateCollisionTiles()
 
 void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
 {
-	// @TODO Optimize, find tiles by location instead of checking all of them
+	CArray<FCollisionTile*> Tiles;
 
-	for (FCollisionMeshRow* CollisionRow : CollisionRows)
+	switch (InCollision->GetCollisionType())
 	{
-		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+		case ECollisionType::Circle:
 		{
-			
+			FCircleCollision* CircleCollision = dynamic_cast<FCircleCollision*>(InCollision);
+			const FCircle& CircleCollisionData = CircleCollision->GetCircleData();
+			Tiles = GetTilesIntersectingCircle(CircleCollisionData.GetLocation(), CircleCollisionData.GetRadius());
+
+			break;
+		}
+		case ECollisionType::Square:
+		{
+			FSquareCollision* SquareCollision = dynamic_cast<FSquareCollision*>(InCollision);
+			const FRectangleWithDiagonal& FRectangleWithDiagonalData = SquareCollision->GetSquareData();
+			Tiles = GetTilesIntersectingRectangle(FRectangleWithDiagonalData.GetPositionTopLeft(), FRectangleWithDiagonalData.GetSize());
+
+			break;
+		}
+		case ECollisionType::Other:
+		{
+			Tiles = GetTilesIntersectingCustomType(InCollision);
+
+			break;
 		}
 	}
 
-	// After puting it inside we should find intersections with other colliders
+	for (FCollisionTile* Tile : Tiles)
+	{
+		Tile->CollisionObjects.Push(InCollision);
+	}
+
+	// After putting it inside we should find intersections with other colliders
+	for (FCollisionTile* Tile : Tiles)
+	{
+		// Skip single colliders
+		if (Tile->CollisionObjects.Size() > 1)
+		{
+			for (FCollisionBase* TileCollisionA : Tile->CollisionObjects)
+			{
+				for (FCollisionBase* TileCollisionB : Tile->CollisionObjects)
+				{
+					if (TileCollisionA != TileCollisionB)
+					{
+						const bool bIsIntersecting = IsIntersecting(TileCollisionA, TileCollisionB);
+						if (bIsIntersecting)
+						{
+							LOG_INFO("Found intersection :)!");
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
@@ -235,8 +279,8 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 				{
 					case ECollisionType::Circle:
 					{
-						const FCircle& CircleDataA = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleCollisionData();
-						const FCircle& CircleDataB = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleCollisionData();
+						const FCircle& CircleDataA = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleData();
+						const FCircle& CircleDataB = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleData();
 
 						bIsIntersecting = FCollisionGlobals::CirclesIntersect(CircleDataA, CircleDataB);
 
@@ -244,7 +288,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 					}
 					case ECollisionType::Square:
 					{
-						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleCollisionData();
+						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleData();
 						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
 
 						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
@@ -268,7 +312,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 					case ECollisionType::Circle:
 					{
 						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
-						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleCollisionData();
+						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleData();
 
 						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
 
@@ -305,13 +349,6 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 	return bIsIntersecting;
 }
 
-bool FCollisionManager::IsIntersectingCustomTypes(FCollisionBase* CollisionA, FCollisionBase* CollisionB)
-{
-	LOG_WARN("Detected unsupported collision type.");
-
-	return false;
-}
-
 CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRectangle(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const
 {
 	CArray<FCollisionTile*> OutTiles;
@@ -321,7 +358,19 @@ CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRectangle(const F
 		LOG_WARN("Custom logic is required for Objects greater than single CollisionTile. #1");
 	}
 
+	// Find edge locations and add to @OutTiles
+	CArray<FVector2D<int>> RectangleEdgeLocations;
+	RectangleEdgeLocations.Push({ InLocation.X, InLocation.Y });
+	RectangleEdgeLocations.Push({ InLocation.X + InSize.X, InLocation.Y });
+	RectangleEdgeLocations.Push({ InLocation.X, InLocation.Y + InSize.Y });
+	RectangleEdgeLocations.Push(InLocation + InSize);
 
+	for (const FVector2D<int>& RectangleEdgeLocation : RectangleEdgeLocations)
+	{
+		const FVector2D<int> TileLocation = RectangleEdgeLocation / CollisionTileSize;
+
+
+	}
 
 	return std::move(OutTiles);
 }
@@ -335,9 +384,21 @@ CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingCircle(const FVec
 		LOG_WARN("Custom logic is required for Objects greater than single CollisionTile. #2");
 	}
 
-	OutTiles.Push(new FCollisionTile());
+
 
 	return std::move(OutTiles);
+}
+
+bool FCollisionManager::IsIntersectingCustomTypes(FCollisionBase* CollisionA, FCollisionBase* CollisionB)
+{
+	LOG_WARN("Detected unsupported collision type.");
+
+	return false;
+}
+
+CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingCustomType(FCollisionBase* Collision)
+{
+	return CArray<FCollisionTile*>();
 }
 
 bool FCollisionGlobals::RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)

@@ -97,7 +97,7 @@ void FEngineRender::DestroyWindow(FWindow* InWindow)
 
 FWindow* FEngineRender::GetFocusedWindow() const
 {
-	for (auto i = 0; i < ManagedWindows.Size(); i++)
+	for (ContainerInt i = 0; i < ManagedWindows.Size(); i++)
 	{
 		if (ManagedWindows[i]->IsWindowFocused())
 		{

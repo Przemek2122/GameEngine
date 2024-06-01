@@ -35,8 +35,8 @@ public:
 
 	int GetBaseExtentRadius() override;
 
-	const FCircle& GetCircleCollisionData() const;
-	FCircle& GetCircleCollisionDataForEdit();
+	const FCircle& GetCircleData() const;
+	FCircle& GetCircleDataForEdit();
 
 protected:
 	FCircle CircleCollisionData;
