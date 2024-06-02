@@ -29,7 +29,7 @@ FThreadsManager::~FThreadsManager()
 
 	COUNTER_END(StopThreadsCoutnerStart, StopThreadsCoutnerEnd);
 
-	LOG_INFO("Stopping threads took: " << COUNTER_GET(StopThreadsCoutnerEnd) << "ns");
+	LOG_INFO("Stopping threads took: " << COUNTER_GET_MS(StopThreadsCoutnerEnd) << " ms");
 }
 
 void FThreadsManager::Initialize()
@@ -212,16 +212,16 @@ bool FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
 {
 	bool bWasRemoved ;
 
-	if (WorkerThreadsArrayMutex.IsLocked())
+	if (!WorkerThreadsArrayMutex.TryLock())
 	{
 		bWasRemoved = false;
 	}
 	else
 	{
-		FMutexScopeLock MutexScopeLock(WorkerThreadsArrayMutex);
-
 		// Remove thread data from array
 		WorkerThreadsArray.Remove(InThread->GetThreadData());
+
+		WorkerThreadsArrayMutex.Unlock();
 
 		bWasRemoved = true;
 	}

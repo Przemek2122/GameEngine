@@ -116,7 +116,7 @@ void FThreadWorker::ThreadManagerFunction()
 	// Wait for deletion
 	while (!GetThreadInputData()->GetThreadsManager()->InternalRemoveWorkerThread(this))
 	{
-		SDL_Delay(1);
+		THREAD_WAIT_SHORT_TIME;
 	}
 
 	delete this;
