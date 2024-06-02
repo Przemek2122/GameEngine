@@ -113,7 +113,7 @@ void FCollisionManager::BuildCollision()
 		MapSizeInPixelsCache = CurrentMap->GetMapSizeInPixels();
 
 		FDelegateSafe<> AsyncWork;
-		AsyncWork.BindLambda([&, CurrentMap]()
+		AsyncWork.BindLambda([this]()
 		{
 			LOG_INFO("Creating collision map...");
 
@@ -124,7 +124,7 @@ void FCollisionManager::BuildCollision()
 		});
 
 		FDelegateSafe<> MainThreadCallback;
-		MainThreadCallback.BindLambda([&]()
+		MainThreadCallback.BindLambda([this]()
 		{
 			OnCollisionTilesCreated.Execute();
 
