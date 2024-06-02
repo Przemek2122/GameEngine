@@ -197,9 +197,11 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 		// Remove first element from list
 		AsyncJobQueue.DequeFront();
 
+		ENSURE_VALID(AsyncJobQueueMutex.IsLocked());
+
 		AsyncJobQueueMutex.Unlock();
 
-		return std::move(AsyncWorkStructure);
+		return AsyncWorkStructure;
 	}
 }
 

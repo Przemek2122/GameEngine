@@ -17,5 +17,6 @@ public:
 	bool TryLock();
 
 protected:
-	std::atomic_bool bIsLocked;
+	bool bIsLocked;
+
 };

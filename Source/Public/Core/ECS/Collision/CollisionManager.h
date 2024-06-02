@@ -53,6 +53,8 @@ protected:
 	void BuildCollision();
 	void CreateCollisionTiles();
 
+	void OnCollisionCreated();
+
 	void PutCollisionIntoMesh(FCollisionBase* InCollision);
 	void RemoveCollisionFromMesh(FCollisionBase* InCollision);
 	void UpdateCollisionOnMesh(FCollisionBase* InCollision, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation);

@@ -30,7 +30,7 @@ bool FMutex::TryLock()
 		return false;
 	}
 
-	Lock();
+	bIsLocked = true;
 
-	return true;
+	return bIsLocked;
 }

@@ -42,7 +42,7 @@ public:
 		// Create thread
 		TThreadDataClass* ThreadData = new TThreadDataClass(this, NewThreadName);
 
-		ThreadData->Create<TThreadClass>();
+		ThreadData->template Create<TThreadClass>();
 
 		// Start thread
 		ThreadData->Thread->StartThread();
