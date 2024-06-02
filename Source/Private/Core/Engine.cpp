@@ -15,7 +15,9 @@
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
 #include "Test/Samples/TestTimers.h"
+#include "Threads/RenderThread.h"
 #include "Threads/ThreadsManager.h"
+#include "Threads/ThreadData.h"
 
 FEngine::FEngine()
 	: bFrameRateLimited(true)
@@ -35,6 +37,7 @@ FEngine::FEngine()
 	, EngineTickingManager(nullptr)
 	, EngineRenderingManager(nullptr)
 	, ThreadsManager(nullptr)
+	, RenderThreadData(nullptr)
 	, TestManager(nullptr)
 	, bContinueMainLoop(true)
 	, TicksThisSecond(0)
@@ -133,6 +136,10 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 
 	ThreadsManager->Initialize();
 
+	// Add render thread
+	RenderThreadData = ThreadsManager->CreateThread<FRenderThread, FThreadData>("RenderThreadData");
+	RenderThread = dynamic_cast<FRenderThread*>(RenderThreadData->GetThread());
+
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
 #endif
@@ -156,13 +163,6 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 void FEngine::EngineTick()
 {
 	UpdateFrameRateCounter();
-
-	// Wait for Render thread.
-	// We need to do this to avoid changing data when render is not finished
-	//while (!EngineRender->IsRenderTickFinished())
-	//{
-	//	SDL_Delay(1);
-	//}
 
 	EventHandler->HandleEvents();
 
@@ -191,6 +191,15 @@ void FEngine::EngineTick()
 	ThreadsManager->TickThreadCallbacks();
 
 	EngineRenderingManager->EngineRender();
+
+	// Wait for Render thread.
+	// We need to do this to avoid changing data when render is not finished
+	while (!RenderThread->IsRenderingFrameFinished())
+	{
+		THREAD_WAIT_SHORT_TIME;
+	}
+
+	RenderThread->RenderNextFrame();
 }
 
 void FEngine::EnginePostSecondTick()
@@ -241,6 +250,15 @@ void FEngine::PreExit()
 
 void FEngine::Clean()
 {
+	if (RenderThread != nullptr)
+	{
+		RenderThread->StopThread();
+	}
+	else
+	{
+		LOG_ERROR("Render thread does not exist before cleaning");
+	}
+
 	delete EngineRender;
 	delete EventHandler;
 	delete AssetsManager;
@@ -361,6 +379,11 @@ void FEngine::UpdateFrameTime()
 	}
 
 	SetFrameRate(TargetFrameRate);
+}
+
+FRenderDelegate* FEngine::GetRenderDelegate(const ERenderOrder RenderOrder) const
+{
+	return RenderThread->RenderCommands.FindValueByKey(RenderOrder);
 }
 
 FEngineRender* FEngine::CreateEngineRenderer() const

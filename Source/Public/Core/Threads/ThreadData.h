@@ -19,6 +19,8 @@ public:
 	FThreadData(FThreadsManager* InThreadsManager, const std::string& InNewThreadName);
 	virtual ~FThreadData() = default;
 
+	FThread* GetThread() const { return Thread; };
+
 protected:
 	template<typename TThreadClass>
 	TThreadClass* Create()

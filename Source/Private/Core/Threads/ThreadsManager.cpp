@@ -17,19 +17,19 @@ FThreadsManager::~FThreadsManager()
 		StopThread();
 	}
 
-	int TimeToStopThreads = 0;
-
 	LOG_INFO("Number of threads to stop: " << WorkerThreadsArray.Size());
+
+	COUNTER_START(StopThreadsCoutnerStart);
 
 	// Wait for all threads to finish
 	while (WorkerThreadsArray.Size())
 	{
-		SDL_Delay(1);
-
-		TimeToStopThreads++;
+		THREAD_WAIT_SHORT_TIME;
 	}
 
-	LOG_INFO("Stopping threads took: " << TimeToStopThreads << "ms");
+	COUNTER_END(StopThreadsCoutnerStart, StopThreadsCoutnerEnd);
+
+	LOG_INFO("Stopping threads took: " << COUNTER_GET(StopThreadsCoutnerEnd) << "ns");
 }
 
 void FThreadsManager::Initialize()
@@ -58,14 +58,27 @@ void FThreadsManager::Initialize()
 
 void FThreadsManager::TickThreadCallbacks()
 {
-	while(!MainThreadCallbacks.IsEmpty())
+	// Lock
+	while (MainThreadCallbacksMutex.TryLock())
 	{
-		FMainThreadCallbackStructure CurrentFirstElement = std::move(MainThreadCallbacks.PeekFirst());
-
-		MainThreadCallbacks.DequeFrontSafe();
-
-		CurrentFirstElement.AsyncCallback->Execute();
+		THREAD_WAIT_NS(100);
 	}
+
+	// Make copy
+	MainThreadCallbacksCopy = MainThreadCallbacks;
+
+	// Clear copied data
+	MainThreadCallbacks.Clear();
+
+	// Release mutex
+	MainThreadCallbacksMutex.Unlock();
+
+	for (FMainThreadCallbackStructure& ThreadCallback : MainThreadCallbacksCopy)
+	{
+		ThreadCallback.AsyncCallback->Execute();
+	}
+
+	MainThreadCallbacksCopy.Clear();
 }
 
 void FThreadsManager::AddAsyncDelegate(FDelegateSafe<void>& DelegateToRunAsync)
@@ -89,7 +102,7 @@ void FThreadsManager::AddAsyncWork(const FAsyncWorkStructure& AsyncRunWithCallba
 {
 	while (AsyncJobQueueMutex.IsLocked())
 	{
-		SDL_Delay(1);
+		THREAD_WAIT_SHORT_TIME;
 	}
 
 	FMutexScopeLock MutexScopeLock(AsyncJobQueueMutex);
@@ -160,11 +173,10 @@ int FThreadsManager::GetNumberOfCores()
 FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 {
 	// @TODO Remove mutex and find and smart way of distributing tasks
-	// In worse case update to SDL3 and use SDL_DelayNS
 
 	while (!AsyncJobQueueMutex.TryLock())
 	{
-		SDL_Delay(1);
+		THREAD_WAIT_SHORT_TIME;
 	}
 
 	if (AsyncJobQueue.Size() == 0)

@@ -12,6 +12,10 @@ struct FAsyncWorkStructure
 /** Structure for exectution when async work finishes */
 struct FMainThreadCallbackStructure
 {
+	FMainThreadCallbackStructure()
+	{
+	}
+
 	FMainThreadCallbackStructure(const std::shared_ptr<FDelegateSafe<>>& InAsyncCallback)
 		: AsyncCallback(InAsyncCallback)
 	{

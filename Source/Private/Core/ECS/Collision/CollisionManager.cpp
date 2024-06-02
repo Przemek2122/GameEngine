@@ -63,6 +63,8 @@ void FCollisionManager::TickSubSystem()
 	{
 		// It would be nice to draw mesh but we are missing render
 		// @TODO Add render thread?
+
+		FRenderDelegate* RenderDelegate = GEngine->GetRenderDelegate();
 	}
 #endif
 }

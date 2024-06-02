@@ -78,7 +78,12 @@ protected:
 	FMutex AsyncJobQueueMutex;
 
 	/** Callbacks from finishes async jobs */
-	CQueueSafe<FMainThreadCallbackStructure> MainThreadCallbacks;
+	CArray<FMainThreadCallbackStructure> MainThreadCallbacks;
+
+	/** Mutex for param MainThreadCallbacks */
+	FMutex MainThreadCallbacksMutex;
+
+	CArray<FMainThreadCallbackStructure> MainThreadCallbacksCopy;
 
 	int StartingNumberOfThreads;
 

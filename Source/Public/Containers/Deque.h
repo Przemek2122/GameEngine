@@ -23,6 +23,11 @@ public:
 	}
 	/** End CContainerBase interface */
 
+	void Clear()
+	{
+		Deque.clear();
+	}
+
 	/** @Returns first element without removing. */
 	SDL_FORCE_INLINE TType& PeekFirst()
 	{

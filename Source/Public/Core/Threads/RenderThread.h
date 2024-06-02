@@ -16,23 +16,33 @@ enum class ERenderOrder : Uint8
 
 class FRenderThread : public FThread
 {
+	friend FEngine;
+
 public:
 	FRenderThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData);
-	~FRenderThread();
+	~FRenderThread() override;
 
 	void StartThread() override;
 	void StopThread() override;
 
-	bool IsThreadFinished() const { return bIsThreadFinished; }
+	bool IsRenderingFrameFinished() const { return bIsRenderingFrameFinished; }
 
 protected:
 	void TickThread() override;
 
+	void RenderNextFrame();
+
 protected:
-	/** Render commands to execute on render thread */
+	/** Render commands collected during frame */
 	CMap<ERenderOrder, FRenderDelegate*> RenderCommands;
 
+	/** Render commands to actually render */
+	CMap<ERenderOrder, FRenderDelegate*> RenderCommandsCopy;
+
 	/** True if thread has finished work for this engine tick */
-	std::atomic_bool bIsThreadFinished;
+	std::atomic_bool bIsRenderingFrameFinished;
+
+	/** Will be set from engine when tick is finished. */
+	std::atomic_bool bIsRenderingNextFrameAllowed;
 
 };

@@ -32,18 +32,34 @@ void FRenderThread::StopThread()
 
 void FRenderThread::TickThread()
 {
-	COUNTER_START(RenderThreadTickCounterStart);
+	bIsRenderingFrameFinished = false;
 
+	// Copy data for render
+	RenderCommandsCopy = RenderCommands;
+
+	// Clear copied data
 	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommands)
+	{
+		RenderCommand.second->UnBindAll();
+	}
+
+	// Execute
+	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommandsCopy)
 	{
 		RenderCommand.second->Execute();
 	}
 
-	THREAD_WAIT_NS(100000);
+	bIsRenderingFrameFinished = true;
 
-	COUNTER_END(RenderThreadTickCounterStart, RenderThreadTickCounterEnd);
+	while (!bIsRenderingNextFrameAllowed)
+	{
+		THREAD_WAIT_SHORT_TIME;
+	}
 
-	LOG_INFO("Render thread took: " << COUNTER_GET(RenderThreadTickCounterEnd));
+	bIsRenderingNextFrameAllowed = false;
+}
 
-	FThread::TickThread();
+void FRenderThread::RenderNextFrame()
+{
+	bIsRenderingNextFrameAllowed = true;
 }

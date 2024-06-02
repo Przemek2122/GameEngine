@@ -3,14 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Threads/RenderThread.h"
 
-class FThreadsManager;
 class FEngineRenderingManager;
 class FEngineTickingManager;
 class ITickInterface;
-class FMapManager;
-class FEventHandler;
-class FEngineManager;
 
 class FEngine
 {
@@ -82,6 +79,8 @@ public:
 	_NODISCARD double GetDeltaTimeDouble() const;
 
 	void UpdateFrameTime();
+
+	FRenderDelegate* GetRenderDelegate(ERenderOrder RenderOrder = ERenderOrder::Default) const;
 
 	/** @Returns engine render class (used for managing windows) */
 	_NODISCARD FEngineRender* GetEngineRender() const;
@@ -176,6 +175,9 @@ protected:
 	FEngineTickingManager* EngineTickingManager;
 	FEngineRenderingManager* EngineRenderingManager;
 	FThreadsManager* ThreadsManager;
+
+	FRenderThread* RenderThread;
+	FThreadData* RenderThreadData;
 
 	FDelegate<> FunctionsToCallOnStartOfNextTick;
 	FDelegate<void, float> TickingObjectsDelegate;
