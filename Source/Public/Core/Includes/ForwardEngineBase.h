@@ -20,6 +20,14 @@ class FWidgetManager;
 class IWidgetManagementInterface;
 class IWidgetInteraction;
 
+class FThread;
+class FThreadData;
+class FThreadsManager;
+class FRenderThread;
+class FMapManager;
+class FEventHandler;
+class FEngineManager;
+
 class FTimer;
 
 class FEntityManager;
