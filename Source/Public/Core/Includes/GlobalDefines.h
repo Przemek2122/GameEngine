@@ -24,4 +24,9 @@
 /** Should show fonts allocation debug? */
 #define ENGINE_MEMORY_ALLOCATION_DEBUG_FONTS	1 && ENGINE_MEMORY_ALLOCATION_DEBUG
 
+#define THREAD_WAIT_MS(TimeInMS) std::this_thread::sleep_for(std::chrono::milliseconds(TimeInMS))
+#define THREAD_WAIT_NS(TimeInNS) std::this_thread::sleep_for(std::chrono::nanoseconds(TimeInNS))
 
+#define COUNTER_START(PropertyNameStart) const auto PropertyNameStart{ std::chrono::high_resolution_clock::now() }
+#define COUNTER_END(PropertyNameStart, PropertyNameEnd) std::chrono::duration<double, std::nano> PropertyNameEnd{ std::chrono::high_resolution_clock::now() - PropertyNameStart }
+#define COUNTER_GET(PropertyNameEnd) PropertyNameEnd.count()
