@@ -4,10 +4,10 @@
 #include "Threads/ThreadData.h"
 #include "Threads/ThreadsManager.h"
 
-FThreadInputData::FThreadInputData(FThreadsManager* InThreadsManager, const std::string& InThreadName)
+FThreadInputData::FThreadInputData(FThreadsManager* InThreadsManager, std::string InThreadName)
 	: Thread(nullptr)
 	, ThreadsManager(InThreadsManager)
-	, ThreadName(InThreadName)
+	, ThreadName(std::move(InThreadName))
 	, bThreadAlive(true)
 {
 }
