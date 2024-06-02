@@ -56,3 +56,14 @@ inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 
 /** Macro allowing calls to parent class. @note Constructor Super call in init list is not allowed! */
 #define Super __super
+
+#define THREAD_WAIT_MS(TimeInMS)			std::this_thread::sleep_for(std::chrono::milliseconds(TimeInMS))
+#define THREAD_WAIT_NS(TimeInNS)			std::this_thread::sleep_for(std::chrono::nanoseconds(TimeInNS))
+/** Wait for 0.00001 second (or 0.01 ms) */
+#define THREAD_WAIT_SHORT_TIME				THREAD_WAIT_NS(10000)
+#define THREAD_WAIT_FOR_MUTEX(MutexName)	while (!((MutexName).TryLock())) THREAD_WAIT_NS(100)
+
+#define COUNTER_START(PropertyNameStart)					const auto PropertyNameStart{ std::chrono::high_resolution_clock::now() }
+#define COUNTER_END(PropertyNameStart, PropertyNameEnd)		std::chrono::duration<double, std::nano> PropertyNameEnd{ std::chrono::high_resolution_clock::now() - PropertyNameStart }
+#define COUNTER_GET_NS(PropertyNameEnd)						PropertyNameEnd.count()
+#define COUNTER_GET_MS(PropertyNameEnd)						(COUNTER_GET_NS(PropertyNameEnd) / 1000000.0)
