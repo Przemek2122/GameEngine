@@ -499,27 +499,15 @@ bool FCollisionGlobals::CirclesIntersect(const FCircle& CircleA, const FCircle& 
 
 bool FCollisionGlobals::CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle)
 {
-	// Step 1: Translate circle's center to rectangle's local space 
-	FVector2D RectCenter = Rectangle.Center;
-	FVector2D CircleCenter = Circle.Center - RectCenter;
+	// Find the closest point to the circle within the rectangle 
+	int ClosestX = std::max(Rectangle.GetPositionTopLeft().X, std::min(Circle.GetLocation().X, Rectangle.GetPositionBottomRight().X));
+	int ClosestY = std::max(Rectangle.GetPositionTopLeft().Y, std::min(Circle.GetLocation().Y, Rectangle.GetPositionBottomRight().Y));
 
-	// Step 2: Rotate circle's center in opposite direction of rectangle's rotation 
-	float CosTheta = FMath::Cos(-Rectangle.Rotation);
-	float SinTheta = FMath::Sin(-Rectangle.Rotation);
-	FVector2D RotatedCircleCenter = FVector2D(
-		CircleCenter.X * CosTheta - CircleCenter.Y * SinTheta,
-		CircleCenter.X * SinTheta + CircleCenter.Y * CosTheta
-	);
+	// Calculate the distance between the circle's center and this closest point 
+	int DistanceX = Circle.GetLocation().X - ClosestX;
+	int DistanceY = Circle.GetLocation().Y - ClosestY;
 
-	// Step 3: Find the closest point on the rectangle to the circle 
-	FVector2D LocalClosestPoint = FVector2D(
-		FMath::Clamp(RotatedCircleCenter.X, -Rectangle.HalfExtents.X, Rectangle.HalfExtents.X),
-		FMath::Clamp(RotatedCircleCenter.Y, -Rectangle.HalfExtents.Y, Rectangle.HalfExtents.Y)
-	);
-
-	// Step 4: Calculate distance from the closest point to the circle's center 
-	FVector2D Distance = RotatedCircleCenter - LocalClosestPoint;
-
-	// Step 5: Check if the distance is less than the circle's radius 
-	return Distance.SizeSquared() < Circle.Radius * Circle.Radius;
+	// If the distance is less than the circle's radius, there is an intersection 
+	int DistanceSquared = (DistanceX * DistanceX) + (DistanceY * DistanceY);
+	return DistanceSquared < (Circle.GetRadius() * Circle.GetRadius());
 }
