@@ -31,4 +31,5 @@
 
 #define COUNTER_START(PropertyNameStart) const auto PropertyNameStart{ std::chrono::high_resolution_clock::now() }
 #define COUNTER_END(PropertyNameStart, PropertyNameEnd) std::chrono::duration<double, std::nano> PropertyNameEnd{ std::chrono::high_resolution_clock::now() - PropertyNameStart }
-#define COUNTER_GET(PropertyNameEnd) PropertyNameEnd.count()
+#define COUNTER_GET_NS(PropertyNameEnd) PropertyNameEnd.count()
+#define COUNTER_GET_MS(PropertyNameEnd) (COUNTER_GET_NS(PropertyNameEnd) / 1000000.0)
