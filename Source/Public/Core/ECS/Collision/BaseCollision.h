@@ -2,6 +2,10 @@
 
 #pragma once
 
+struct FCollisionTile;
+class UCollisionComponent;
+class FCollisionManager;
+
 enum class ECollisionType
 {
 	Circle,
@@ -11,8 +15,10 @@ enum class ECollisionType
 
 class FCollisionBase
 {
+	friend FCollisionManager;
+
 public:
-	FCollisionBase();
+	FCollisionBase(UCollisionComponent* InCollisionComponent);
 	virtual ~FCollisionBase() = default;
 
 	/** @returns radius for basic distance check. */
@@ -20,7 +26,15 @@ public:
 
 	ECollisionType GetCollisionType() const;
 
+	UCollisionComponent* GetCollisionComponent() const { return CollisionComponent; }
+
 protected:
 	ECollisionType CollisionType;
+
+	CArray<FCollisionBase*> OtherCollidersCurrentlyColliding;
+
+	CArray<FCollisionTile*> CurrentlyLocatedTiles;
+
+	UCollisionComponent* CollisionComponent;
 
 };

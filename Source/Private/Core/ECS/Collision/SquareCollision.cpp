@@ -52,8 +52,9 @@ void FRectangleWithDiagonal::UpdateDiagonalSize()
 	DiagonalSize = FMath::Sqrt(FMath::Power(Size.X) + FMath::Power(Size.Y));
 }
 
-FSquareCollision::FSquareCollision(const FVector2D<int> InLocation, const FVector2D<int> InSize)
-	: SquareData(InLocation, InSize)
+FSquareCollision::FSquareCollision(UCollisionComponent* InCollisionComponent, const FVector2D<int> InLocation, const FVector2D<int> InSize)
+	: FCollisionBase(InCollisionComponent)
+	, SquareData(InLocation, InSize)
 {
 	CollisionType = ECollisionType::Square;
 }

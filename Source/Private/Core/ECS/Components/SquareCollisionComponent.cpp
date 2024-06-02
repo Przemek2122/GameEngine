@@ -21,7 +21,7 @@ void USquareCollisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SquareCollision = new FSquareCollision(GetLocation(), GetSize());
+	SquareCollision = new FSquareCollision(this, GetLocation(), GetSize());
 
 	AddCollision(SquareCollision);
 }

@@ -26,7 +26,8 @@ public:
 
 	const CArray<FCollisionBase*>& GetCollisionObjectsArray() const;
 
-	//void OnCollision();
+	void OnCollisionBegin(UCollisionComponent* OtherCollision);
+	void OnCollisionEnd(UCollisionComponent* OtherCollision);
 	
 protected:
 	/** @returns collision subsystem. Might be expensive. Try avoid use */

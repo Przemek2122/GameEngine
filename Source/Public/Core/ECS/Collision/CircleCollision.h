@@ -31,7 +31,7 @@ protected:
 class FCircleCollision : public FCollisionBase
 {
 public:
-	FCircleCollision(const FVector2D<int> InLocation, const int InCircleRadius);
+	FCircleCollision(UCollisionComponent* InCollisionComponent, const FVector2D<int> InLocation, const int InCircleRadius);
 
 	int GetBaseExtentRadius() override;
 

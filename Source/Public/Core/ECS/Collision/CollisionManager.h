@@ -63,6 +63,8 @@ protected:
 
 	bool IsIntersecting(FCollisionBase* CollisionA, FCollisionBase* CollisionB);
 
+	CArray<FCollisionTile*> GetTilesFromCollision(FCollisionBase* InCollision);
+
 	CArray<FCollisionTile*> GetTilesIntersectingRectangle(const FVector2D<int>& InLocation, const FVector2D<int>& InSize) const;
 	CArray<FCollisionTile*> GetTilesIntersectingCircle(const FVector2D<int>& InLocation, const int InRadius) const;
 
@@ -71,6 +73,13 @@ protected:
 
 	/** Handle collision custom types */
 	virtual CArray<FCollisionTile*> GetTilesIntersectingCustomType(FCollisionBase* Collision);
+
+	void OnCollisionBegin(FCollisionBase* CollisionA, FCollisionBase* CollisionB);
+	void OnCollisionEnd(FCollisionBase* InCollision);
+
+#if _DEBUG
+	void DrawDebugMesh();
+#endif
 
 private:
 	/** Circle collision array */

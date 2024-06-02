@@ -174,10 +174,7 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 {
 	// @TODO Remove mutex and find and smart way of distributing tasks
 
-	while (!AsyncJobQueueMutex.TryLock())
-	{
-		THREAD_WAIT_SHORT_TIME;
-	}
+	THREAD_WAIT_FOR_MUTEX_LOCK(AsyncJobQueueMutex);
 
 	if (AsyncJobQueue.Size() == 0)
 	{

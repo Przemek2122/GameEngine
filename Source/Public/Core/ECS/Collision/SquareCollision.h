@@ -58,7 +58,7 @@ protected:
 class FSquareCollision : public FCollisionBase
 {
 public:
-	FSquareCollision(const FVector2D<int> InLocation, const FVector2D<int> InSize);
+	FSquareCollision(UCollisionComponent* InCollisionComponent, const FVector2D<int> InLocation, const FVector2D<int> InSize);
 
 	int GetBaseExtentRadius() override;
 

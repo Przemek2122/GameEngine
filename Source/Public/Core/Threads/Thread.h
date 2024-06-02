@@ -17,7 +17,7 @@ struct FThreadInputData
 	friend FThreadsManager;
 
 public:
-	FThreadInputData(FThreadsManager* InThreadsManager, const std::string& InThreadName);
+	FThreadInputData(FThreadsManager* InThreadsManager, std::string InThreadName);
 
 	FThread* GetThread() const { return Thread; }
 	FThreadsManager* GetThreadsManager() const { return ThreadsManager; }

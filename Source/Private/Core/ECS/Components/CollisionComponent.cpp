@@ -75,6 +75,16 @@ const CArray<FCollisionBase*>& UCollisionComponent::GetCollisionObjectsArray() c
 	return CollisionObjectsArray;
 }
 
+void UCollisionComponent::OnCollisionBegin(UCollisionComponent* OtherCollision)
+{
+	LOG_INFO("C Start");
+}
+
+void UCollisionComponent::OnCollisionEnd(UCollisionComponent* OtherCollision)
+{
+	LOG_INFO("C End");
+}
+
 FCollisionManager* UCollisionComponent::GetCollisionManager() const
 {
 	FCollisionManager* FoundCollisionManager = nullptr;

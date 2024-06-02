@@ -94,7 +94,7 @@ void FThreadWorker::TickThread()
 
 		if (AsyncWorkStructure.AsyncCallback)
 		{
-			THREAD_WAIT_FOR_MUTEX(ThreadsManager->MainThreadCallbacksMutex);
+			THREAD_WAIT_FOR_MUTEX_LOCK(ThreadsManager->MainThreadCallbacksMutex);
 
 			ENSURE_VALID(ThreadsManager->MainThreadCallbacksMutex.IsLocked());
 

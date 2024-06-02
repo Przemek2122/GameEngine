@@ -383,7 +383,7 @@ void FEngine::UpdateFrameTime()
 
 FRenderDelegate* FEngine::GetRenderDelegate(const ERenderOrder RenderOrder) const
 {
-	return RenderThread->RenderCommands.FindValueByKey(RenderOrder);
+	return RenderThread->RenderCommands[RenderOrder];
 }
 
 FEngineRender* FEngine::CreateEngineRenderer() const

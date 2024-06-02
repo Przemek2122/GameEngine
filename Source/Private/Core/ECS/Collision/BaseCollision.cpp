@@ -3,8 +3,9 @@
 #include "CoreEngine.h"
 #include "ECS/Collision/BaseCollision.h"
 
-FCollisionBase::FCollisionBase()
+FCollisionBase::FCollisionBase(UCollisionComponent* InCollisionComponent)
 	: CollisionType(ECollisionType::Other)
+	, CollisionComponent(InCollisionComponent)
 {
 }
 

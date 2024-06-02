@@ -64,6 +64,16 @@ public:
 		}
 	}
 
+	bool operator==(const CArray<TType, TSizeType>& Other) const
+	{
+		return Vector == Other.Vector;
+	}
+
+	bool operator!=(const CArray<TType, TSizeType>& Other) const
+	{
+		return Vector != Other.Vector;
+	}
+
 	SDL_FORCE_INLINE void Push(TType Value)
 	{
 		Vector.push_back(Value);

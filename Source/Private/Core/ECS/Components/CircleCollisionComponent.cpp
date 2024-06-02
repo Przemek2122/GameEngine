@@ -21,7 +21,9 @@ void UCircleCollisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CircleCollision = new FCircleCollision(GetLocationCenter(), GetCircleRadius());
+	CircleCollision = new FCircleCollision(this, GetLocationCenter(), GetCircleRadius());
+
+	AddCollision(CircleCollision);
 }
 
 void UCircleCollisionComponent::Render()
