@@ -1,6 +1,27 @@
 #include "CoreEngine.h"
 #include "Threads/RenderThread.h"
 
+FRenderCommandsWithScopeLock::FRenderCommandsWithScopeLock(FRenderThread* InRenderThread)
+	: RenderThread(InRenderThread)
+{
+	THREAD_WAIT_FOR_MUTEX_LOCK(RenderThread->RenderCommandsMutex);
+}
+
+FRenderCommandsWithScopeLock::~FRenderCommandsWithScopeLock()
+{
+#if _DEBUG
+	// Lock released before it should be released
+	ENSURE_VALID(RenderThread->RenderCommandsMutex.IsLocked());
+#endif
+
+	RenderThread->RenderCommandsMutex.Unlock();
+}
+
+FRenderDelegate* FRenderCommandsWithScopeLock::GetRenderDelegate(const ERenderOrder RenderOrder) const
+{
+	return RenderThread->RenderCommands[RenderOrder];
+}
+
 FRenderThread::FRenderThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData)
 	: FThread(InThreadInputData, InThreadData)
 {
@@ -18,9 +39,7 @@ FRenderThread::~FRenderThread()
 
 void FRenderThread::StartThread()
 {
-	RenderCommands.Emplace(ERenderOrder::Pre, new FRenderDelegate());
-	RenderCommands.Emplace(ERenderOrder::Default, new FRenderDelegate());
-	RenderCommands.Emplace(ERenderOrder::Post, new FRenderDelegate());
+	InitializeMapWithDelegates();
 
 	FThread::StartThread();
 }
@@ -30,18 +49,24 @@ void FRenderThread::StopThread()
 	FThread::StopThread();
 }
 
+FRenderCommandsWithScopeLock FRenderThread::GetRenderCommands()
+{
+	return FRenderCommandsWithScopeLock(this);
+}
+
 void FRenderThread::TickThread()
 {
 	bIsRenderingFrameFinished = false;
 
-	// Copy data for render
-	RenderCommandsCopy = RenderCommands;
+	// Lock RenderCommandsMutex for copy
+	THREAD_WAIT_FOR_MUTEX_LOCK(RenderCommandsMutex);
 
-	// Clear copied data
-	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommands)
-	{
-		RenderCommand.second->UnBindAll();
-	}
+	// Copy data for render
+	RenderCommandsCopy = std::move(RenderCommands);
+
+	InitializeMapWithDelegates();
+
+	RenderCommandsMutex.Unlock();
 
 	// Execute
 	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommandsCopy)
@@ -59,7 +84,14 @@ void FRenderThread::TickThread()
 	bIsRenderingNextFrameAllowed = false;
 }
 
-void FRenderThread::RenderNextFrame()
+void FRenderThread::AllowRenderNextFrame()
 {
 	bIsRenderingNextFrameAllowed = true;
+}
+
+void FRenderThread::InitializeMapWithDelegates()
+{
+	RenderCommands.Emplace(ERenderOrder::Pre, new FRenderDelegate());
+	RenderCommands.Emplace(ERenderOrder::Default, new FRenderDelegate());
+	RenderCommands.Emplace(ERenderOrder::Post, new FRenderDelegate());
 }

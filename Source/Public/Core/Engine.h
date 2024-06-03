@@ -80,7 +80,7 @@ public:
 
 	void UpdateFrameTime();
 
-	FRenderDelegate* GetRenderDelegate(ERenderOrder RenderOrder = ERenderOrder::Default) const;
+	FRenderThread* GetRenderThread() const;
 
 	/** @Returns engine render class (used for managing windows) */
 	_NODISCARD FEngineRender* GetEngineRender() const;

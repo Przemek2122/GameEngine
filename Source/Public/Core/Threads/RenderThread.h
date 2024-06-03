@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Types/Mutex/Mutex.h"
 #include "Threads/Thread.h"
 
 typedef FDelegateSafe<void> FRenderDelegate;
@@ -14,9 +15,23 @@ enum class ERenderOrder : Uint8
 	Post
 };
 
+class FRenderCommandsWithScopeLock
+{
+public:
+	FRenderCommandsWithScopeLock(FRenderThread* InRenderThread);
+	~FRenderCommandsWithScopeLock();
+
+	FRenderDelegate* GetRenderDelegate(const ERenderOrder RenderOrder = ERenderOrder::Default) const;
+
+private:
+	FRenderThread* RenderThread;
+	
+};
+
 class FRenderThread : public FThread
 {
 	friend FEngine;
+	friend FRenderCommandsWithScopeLock;
 
 public:
 	FRenderThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData);
@@ -25,12 +40,16 @@ public:
 	void StartThread() override;
 	void StopThread() override;
 
+	FRenderCommandsWithScopeLock GetRenderCommands();
+
 	bool IsRenderingFrameFinished() const { return bIsRenderingFrameFinished; }
 
 protected:
 	void TickThread() override;
 
-	void RenderNextFrame();
+	void AllowRenderNextFrame();
+
+	void InitializeMapWithDelegates();
 
 protected:
 	/** Render commands collected during frame */
@@ -44,5 +63,8 @@ protected:
 
 	/** Will be set from engine when tick is finished. */
 	std::atomic_bool bIsRenderingNextFrameAllowed;
+
+	/** Mutex for RenderCommands */
+	FMutex RenderCommandsMutex;
 
 };

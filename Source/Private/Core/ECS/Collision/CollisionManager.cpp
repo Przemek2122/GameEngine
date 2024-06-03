@@ -65,7 +65,9 @@ void FCollisionManager::TickSubSystem()
 #if _DEBUG
 		if (bIsDebugEnabled)
 		{
-			FRenderDelegate* RenderDelegate = GEngine->GetRenderDelegate();
+			FRenderCommandsWithScopeLock RenderCommandWithScopeLock = GEngine->GetRenderThread()->GetRenderCommands();
+
+			FRenderDelegate* RenderDelegate = RenderCommandWithScopeLock.GetRenderDelegate();
 			if (RenderDelegate != nullptr)
 			{
 				RenderDelegate->BindObject(this, &FCollisionManager::DrawDebugMesh);

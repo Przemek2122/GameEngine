@@ -199,7 +199,7 @@ void FEngine::EngineTick()
 		THREAD_WAIT_SHORT_TIME;
 	}
 
-	RenderThread->RenderNextFrame();
+	RenderThread->AllowRenderNextFrame();
 }
 
 void FEngine::EnginePostSecondTick()
@@ -381,9 +381,9 @@ void FEngine::UpdateFrameTime()
 	SetFrameRate(TargetFrameRate);
 }
 
-FRenderDelegate* FEngine::GetRenderDelegate(const ERenderOrder RenderOrder) const
+FRenderThread* FEngine::GetRenderThread() const
 {
-	return RenderThread->RenderCommands[RenderOrder];
+	return RenderThread;
 }
 
 FEngineRender* FEngine::CreateEngineRenderer() const
