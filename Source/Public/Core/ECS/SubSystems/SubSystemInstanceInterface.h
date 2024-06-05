@@ -19,6 +19,7 @@ public:
 
 	virtual void InitializeSubSystem();
 	virtual void TickSubSystem();
+	virtual void RenderSubSystem();
 
 	ISubSystemManagerInterface* GetSubSystemParentInterface() const { return SubSystemParentInterface; }
 

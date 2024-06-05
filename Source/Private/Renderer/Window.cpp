@@ -107,8 +107,11 @@ void FWindow::Render()
 {
 	Renderer->PreRender();
 	Renderer->Render();
+
 	MapManager->DrawMap();
 	WidgetManager->RenderWidgets();
+	RenderSubSystems();
+
 	Renderer->PostRender();
 }
 

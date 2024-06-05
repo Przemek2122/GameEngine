@@ -61,7 +61,15 @@ void FCollisionManager::TickSubSystem()
 
 			CollisionWaitingForRemovalArray.Clear();
 		}
+	}
+}
 
+void FCollisionManager::RenderSubSystem()
+{
+	ISubSystemInstanceInterface::RenderSubSystem();
+
+	if (bIsCollisionReady)
+	{
 #if _DEBUG
 		if (bIsDebugEnabled)
 		{
@@ -70,7 +78,27 @@ void FCollisionManager::TickSubSystem()
 			FRenderDelegate* RenderDelegate = RenderCommandWithScopeLock.GetRenderDelegate();
 			if (RenderDelegate != nullptr)
 			{
-				RenderDelegate->BindObject(this, &FCollisionManager::DrawDebugMesh);
+				DrawCollisionTilesRows.Clear();
+
+				for (FCollisionMeshRow* CollisionRow : CollisionRows)
+				{
+					FDrawCollisionTilesRow DrawCollisionTilesRow;
+
+					for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
+					{
+						FColorRGBA DrawColor = CollisionTile->CollisionObjects.IsEmpty() ? FColorRGBA::ColorLightGreen() : FColorRGBA::ColorGreen();
+
+						FDrawSimpleRectangle DrawSimpleRectangle(CollisionTile->TileLocation, CollisionTile->TileSize, DrawColor);
+
+						DrawCollisionTilesRow.CollisionTiles.Push(DrawSimpleRectangle);
+					}
+
+					DrawCollisionTilesRows.Push(DrawCollisionTilesRow);
+				}
+
+				DrawDebugMesh();
+
+				//RenderDelegate->BindObject(this, &FCollisionManager::DrawDebugMesh);
 			}
 		}
 #endif
@@ -479,7 +507,22 @@ void FCollisionManager::OnCollisionEnd(FCollisionBase* InCollision)
 #if _DEBUG
 void FCollisionManager::DrawDebugMesh()
 {
-	LOG_INFO("DrawDebugMesh call");
+	FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface());
+	if (CurrentMap != nullptr)
+	{
+		CArray<FDrawCollisionTilesRow> TemporaryDrawCollisionTilesRows = DrawCollisionTilesRows;
+
+		FWindow* Window = CurrentMap->GetEntityManager()->GetOwnerWindow();
+		FRenderer* Renderer = Window->GetRenderer();
+
+		for (FDrawCollisionTilesRow& DrawCollisionTilesRow : TemporaryDrawCollisionTilesRows)
+		{
+			for (FDrawSimpleRectangle& CollisionTile : DrawCollisionTilesRow.CollisionTiles)
+			{
+				Renderer->DrawRectangleOutline(CollisionTile.Location, CollisionTile.Size, CollisionTile.ColorToDraw);
+			}
+		}
+	}
 }
 #endif
 

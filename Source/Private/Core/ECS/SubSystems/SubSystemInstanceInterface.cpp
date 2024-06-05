@@ -49,3 +49,7 @@ void ISubSystemInstanceInterface::InitializeSubSystem()
 void ISubSystemInstanceInterface::TickSubSystem()
 {
 }
+
+void ISubSystemInstanceInterface::RenderSubSystem()
+{
+}

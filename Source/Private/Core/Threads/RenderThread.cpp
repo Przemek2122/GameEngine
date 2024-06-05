@@ -68,6 +68,8 @@ void FRenderThread::TickThread()
 
 	RenderCommandsMutex.Unlock();
 
+	THREAD_WAIT_MS(5);
+
 	// Execute
 	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommandsCopy)
 	{

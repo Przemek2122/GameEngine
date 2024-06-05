@@ -15,6 +15,7 @@ public:
 	virtual ~ISubSystemManagerInterface();
 
 	void TickSubSystems();
+	void RenderSubSystems();
 
 	/**
 	 * Get SubSystem by given class.

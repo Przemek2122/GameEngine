@@ -20,6 +20,14 @@ void ISubSystemManagerInterface::TickSubSystems()
 	}
 }
 
+void ISubSystemManagerInterface::RenderSubSystems()
+{
+	for (ISubSystemInstanceInterface* SubSystemInstanceInterface : SubSystemsArray)
+	{
+		SubSystemInstanceInterface->RenderSubSystem();
+	}
+}
+
 void ISubSystemManagerInterface::RegisterSubSystem(ISubSystemInstanceInterface* InSubSystemInstanceInterface)
 {
 	SubSystemsArray.Push(InSubSystemInstanceInterface);

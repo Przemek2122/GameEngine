@@ -28,6 +28,31 @@ struct FCollisionMeshRow
 	CArray<FCollisionTile*> CollisionTiles;
 };
 
+#if _DEBUG
+struct FDrawSimpleRectangle
+{
+	FDrawSimpleRectangle()
+	{
+	}
+
+	FDrawSimpleRectangle(const FVector2D<int> InLocation, const FVector2D<int> InSize, const FColorRGBA& InColorToDraw)
+		: Location(std::move(InLocation))
+		, Size(std::move(InSize))
+		, ColorToDraw(InColorToDraw)
+	{
+	}
+
+	FVector2D<int> Location;
+	FVector2D<int> Size;
+	FColorRGBA ColorToDraw;
+};
+
+struct FDrawCollisionTilesRow
+{
+	CArray<FDrawSimpleRectangle> CollisionTiles;
+};
+#endif
+
 /**
  * Collision manager
  * Collision is managed using tiles for collision detection of collidable objects in same tile.
@@ -41,6 +66,7 @@ public:
 	/** Begin ISubSystemInstanceInterface */
 	void InitializeSubSystem() override;
 	void TickSubSystem() override;
+	void RenderSubSystem() override;
 	/** End ISubSystemInstanceInterface */
 
 	void RegisterCollision(FCollisionBase* InCollision);
@@ -87,6 +113,10 @@ private:
 
 	/** Collision tiles */
 	CArray<FCollisionMeshRow*> CollisionRows;
+
+#if _DEBUG
+	CArray<FDrawCollisionTilesRow> DrawCollisionTilesRows;
+#endif
 
 	/** Collision waiting for collision mesh to be built */
 	CArray<FCollisionBase*> CollisionWaitingForAddArray;
