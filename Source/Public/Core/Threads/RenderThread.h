@@ -28,6 +28,10 @@ private:
 	
 };
 
+/**
+ * @TODO Currently abandoned implementation
+ * SDL2 does not realy support rendering from any other thread than main thread
+ */
 class FRenderThread : public FThread
 {
 	friend FEngine;
