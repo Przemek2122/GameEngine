@@ -53,6 +53,8 @@ protected:
 	void UpdateRotation(float DeltaTime);
 	void UpdateLocation(float DeltaTime);
 
+	virtual void OnRequestedLocationOutOfBounds();
+
 protected:
 	/** Location desired by unit. This is the place where we want to move to. */
 	FVector2D<int> TargetLocation;

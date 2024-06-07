@@ -46,7 +46,4 @@ private:
 	/** Array with collision objects */
 	CArray<FCollisionBase*> CollisionObjectsArray;
 
-	/** Last location cache */
-	FVector2D<int> LastLocationCache;
-
 };

@@ -177,6 +177,12 @@ public:
 
 		return RemovedElements > 0;
 	}
+
+	/** Remove duplicated elements */
+	void RemoveDuplicates()
+	{
+		Vector.erase(unique(Vector.begin(), Vector.end()), Vector.end());
+	}
 	
 	SDL_FORCE_INLINE TType& operator[](TSizeType Index)
 	{

@@ -188,13 +188,13 @@ FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()
 	}
 	else
 	{
+		ENSURE_VALID(AsyncJobQueueMutex.IsLocked());
+
 		// Get first element
 		FAsyncWorkStructure AsyncWorkStructure = AsyncJobQueue.PeekFirst();
 
 		// Remove first element from list
 		AsyncJobQueue.DequeFront();
-
-		ENSURE_VALID(AsyncJobQueueMutex.IsLocked());
 
 		AsyncJobQueueMutex.Unlock();
 

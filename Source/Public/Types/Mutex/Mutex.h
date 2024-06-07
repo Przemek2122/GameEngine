@@ -14,6 +14,7 @@ public:
 	void Lock();
 	void Unlock();
 
+	/** Will try to lock mutex, will return false if locked already, true if succesfuly locked */
 	bool TryLock();
 
 protected:

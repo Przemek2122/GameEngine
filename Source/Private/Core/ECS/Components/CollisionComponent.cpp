@@ -18,8 +18,6 @@ void UCollisionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionManagerCached = GetCollisionManager();
-
-	LastLocationCache = GetLocationForCollision();
 }
 
 void UCollisionComponent::AddCollision(FCollisionBase* CollisionObject)
@@ -59,10 +57,8 @@ void UCollisionComponent::OnTransformLocationChanged()
 		// Send notification about changed collision to CollisionManager
 		for (FCollisionBase* CollisionObjects : CollisionObjectsArray)
 		{
-			CollisionManagerCached->OnCollisionObjectMoved(CollisionObjects, LastLocationCache, GetLocationForCollision());
+			CollisionManagerCached->OnCollisionObjectMoved(CollisionObjects);
 		}
-
-		LastLocationCache = GetLocationForCollision();
 	}
 	else
 	{

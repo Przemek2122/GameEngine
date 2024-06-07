@@ -15,13 +15,29 @@ enum class ERenderOrder : Uint8
 	Post
 };
 
+/**
+ * Object for rendering data
+ * All data used by render object should be copied inside of this object
+ */
+class FRenderableObject
+{
+public:
+	virtual void Render() = 0;
+
+};
+
+struct FRenderableObjectsCollection
+{
+	CArray<std::shared_ptr<FRenderableObject>> Collection;
+};
+
 class FRenderCommandsWithScopeLock
 {
 public:
 	FRenderCommandsWithScopeLock(FRenderThread* InRenderThread);
 	~FRenderCommandsWithScopeLock();
 
-	FRenderDelegate* GetRenderDelegate(const ERenderOrder RenderOrder = ERenderOrder::Default) const;
+	void GetRenderDelegate(const std::shared_ptr<FRenderableObject>& InRenderableObject, const ERenderOrder RenderOrder = ERenderOrder::Default) const;
 
 private:
 	FRenderThread* RenderThread;
@@ -30,7 +46,7 @@ private:
 
 /**
  * @TODO Currently abandoned implementation
- * SDL2 does not realy support rendering from any other thread than main thread
+ * SDL2 does not really support rendering from any other thread than main thread
  */
 class FRenderThread : public FThread
 {
@@ -57,10 +73,10 @@ protected:
 
 protected:
 	/** Render commands collected during frame */
-	CMap<ERenderOrder, FRenderDelegate*> RenderCommands;
+	CMap<ERenderOrder, FRenderableObjectsCollection> RenderCommands;
 
 	/** Render commands to actually render */
-	CMap<ERenderOrder, FRenderDelegate*> RenderCommandsCopy;
+	CMap<ERenderOrder, FRenderableObjectsCollection> RenderCommandsCopy;
 
 	/** True if thread has finished work for this engine tick */
 	std::atomic_bool bIsRenderingFrameFinished;

@@ -17,9 +17,12 @@ FRenderCommandsWithScopeLock::~FRenderCommandsWithScopeLock()
 	RenderThread->RenderCommandsMutex.Unlock();
 }
 
-FRenderDelegate* FRenderCommandsWithScopeLock::GetRenderDelegate(const ERenderOrder RenderOrder) const
+void FRenderCommandsWithScopeLock::GetRenderDelegate(const std::shared_ptr<FRenderableObject>& InRenderableObject, const ERenderOrder RenderOrder) const
 {
-	return RenderThread->RenderCommands[RenderOrder];
+	if (RenderThread->RenderCommands.IsValidKey(RenderOrder))
+	{
+		RenderThread->RenderCommands[RenderOrder].Collection.Push(InRenderableObject);
+	}
 }
 
 FRenderThread::FRenderThread(FThreadInputData* InThreadInputData, FThreadData* InThreadData)
@@ -29,11 +32,6 @@ FRenderThread::FRenderThread(FThreadInputData* InThreadInputData, FThreadData* I
 
 FRenderThread::~FRenderThread()
 {
-	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommands)
-	{
-		delete RenderCommand.second;
-	}
-
 	RenderCommands.Clear();
 }
 
@@ -64,16 +62,18 @@ void FRenderThread::TickThread()
 	// Copy data for render
 	RenderCommandsCopy = std::move(RenderCommands);
 
+	// After move populate map with required data
 	InitializeMapWithDelegates();
 
 	RenderCommandsMutex.Unlock();
 
-	THREAD_WAIT_MS(5);
-
 	// Execute
-	for (const std::pair<const ERenderOrder, FRenderDelegate*>& RenderCommand : RenderCommandsCopy)
+	for (std::pair<const ERenderOrder, FRenderableObjectsCollection>& RenderCommand : RenderCommandsCopy)
 	{
-		RenderCommand.second->Execute();
+		for (std::shared_ptr<FRenderableObject>& RenderableObject : RenderCommand.second.Collection)
+		{
+			RenderableObject->Render();
+		}
 	}
 
 	bIsRenderingFrameFinished = true;
@@ -93,7 +93,7 @@ void FRenderThread::AllowRenderNextFrame()
 
 void FRenderThread::InitializeMapWithDelegates()
 {
-	RenderCommands.Emplace(ERenderOrder::Pre, new FRenderDelegate());
-	RenderCommands.Emplace(ERenderOrder::Default, new FRenderDelegate());
-	RenderCommands.Emplace(ERenderOrder::Post, new FRenderDelegate());
+	RenderCommands.Emplace(ERenderOrder::Pre, FRenderableObjectsCollection());
+	RenderCommands.Emplace(ERenderOrder::Default, FRenderableObjectsCollection());
+	RenderCommands.Emplace(ERenderOrder::Post, FRenderableObjectsCollection());
 }

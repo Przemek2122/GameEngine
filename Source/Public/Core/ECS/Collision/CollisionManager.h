@@ -28,31 +28,6 @@ struct FCollisionMeshRow
 	CArray<FCollisionTile*> CollisionTiles;
 };
 
-#if _DEBUG
-struct FDrawSimpleRectangle
-{
-	FDrawSimpleRectangle()
-	{
-	}
-
-	FDrawSimpleRectangle(const FVector2D<int> InLocation, const FVector2D<int> InSize, const FColorRGBA& InColorToDraw)
-		: Location(std::move(InLocation))
-		, Size(std::move(InSize))
-		, ColorToDraw(InColorToDraw)
-	{
-	}
-
-	FVector2D<int> Location;
-	FVector2D<int> Size;
-	FColorRGBA ColorToDraw;
-};
-
-struct FDrawCollisionTilesRow
-{
-	CArray<FDrawSimpleRectangle> CollisionTiles;
-};
-#endif
-
 /**
  * Collision manager
  * Collision is managed using tiles for collision detection of collidable objects in same tile.
@@ -71,11 +46,19 @@ public:
 
 	void RegisterCollision(FCollisionBase* InCollision);
 	void UnRegisterCollision(FCollisionBase* InCollision);
-	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation);
+	void OnCollisionObjectMoved(FCollisionBase* InCollisionObject);
 
 	bool IsDebugEnabled() const { return bIsDebugEnabled; }
 
+	/** Adds map location offset */
+	FVector2D<int> ConvertLocationToAbsolute(const FVector2D<int>& Relative) const;
+
+	/** Remove map location offset */
+	FVector2D<int> ConvertLocationToRelative(const FVector2D<int>& Absolute) const;
+
 protected:
+	void OnMapLocationChange(FVector2D<int> NewLocation);
+
 	void BuildCollision();
 	void CreateCollisionTiles();
 
@@ -83,9 +66,7 @@ protected:
 
 	void PutCollisionIntoMesh(FCollisionBase* InCollision);
 	void RemoveCollisionFromMesh(FCollisionBase* InCollision);
-	void UpdateCollisionOnMesh(FCollisionBase* InCollision, const FVector2D<int>& LastLocation, const FVector2D<int>& CurrentLocation);
-
-	void CheckCollisionInTiles();
+	void UpdateCollisionOnMesh(FCollisionBase* InCollision);
 
 	bool IsIntersecting(FCollisionBase* CollisionA, FCollisionBase* CollisionB);
 
@@ -103,20 +84,12 @@ protected:
 	void OnCollisionBegin(FCollisionBase* CollisionA, FCollisionBase* CollisionB);
 	void OnCollisionEnd(FCollisionBase* InCollision);
 
-#if _DEBUG
-	void DrawDebugMesh();
-#endif
-
 private:
 	/** Circle collision array */
 	CArray<FCollisionBase*> AllCollisionArray;
 
 	/** Collision tiles */
 	CArray<FCollisionMeshRow*> CollisionRows;
-
-#if _DEBUG
-	CArray<FDrawCollisionTilesRow> DrawCollisionTilesRows;
-#endif
 
 	/** Collision waiting for collision mesh to be built */
 	CArray<FCollisionBase*> CollisionWaitingForAddArray;
@@ -129,6 +102,9 @@ private:
 
 	/** Size of map in pixels for async work */
 	FVector2D<int> MapSizeInPixelsCache;
+
+	/** Map offset */
+	FVector2D<int> CurrentMapOffset;
 
 	/** Called when collision is created */
 	FDelegateSafe<void> OnCollisionTilesCreated;
@@ -144,8 +120,8 @@ private:
 class FCollisionGlobals
 {
 public:
-	static bool RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB);
-	static bool CirclesIntersect(const FCircle& CircleA, const FCircle& CircleB);
-	static bool CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle);
+	static bool RectanglesIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB);
+	static bool CirclesIntersect(const FCollisionManager* CollisionManager, const FCircle& CircleA, const FCircle& CircleB);
+	static bool CircleAndSquareIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& Rectangle, const FCircle& Circle);
 
 };
