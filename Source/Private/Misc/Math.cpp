@@ -92,6 +92,11 @@ void FMath::RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Ang
 	Point.Y = RoundToInt(NewY + static_cast<float>(Pivot.Y));
 }
 
+FVector2D<int> FMath::GetLocationCenter(const FVector2D<int>& InLocation, const FVector2D<int>& InSize)
+{
+	return InLocation + (InSize / 2);
+}
+
 int FMath::FloorToInt(const float Value)
 {
 	return static_cast<int>(std::floorf(Value));

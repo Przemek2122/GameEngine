@@ -12,6 +12,14 @@ URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManage
 {
 }
 
+void URenderComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Set default size
+	SetImageSize(GetSize());
+}
+
 void URenderComponent::EndPlay()
 {
 	Super::EndPlay();

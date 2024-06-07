@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ContainerBase.h"
-#include "FunctorLambda.h"
+#include "Types/Functors/FunctorLambda.h"
 #include "Includes/EngineMacros.h"
 
 #include <vector>
@@ -11,7 +11,7 @@
 /**
  * Dynamic array template for any type.
  */
-template<typename TType, typename TSizeType = int>
+template<typename TType, typename TSizeType = ContainerInt>
 class CArray : public CContainerBase<TType, TSizeType>
 {
 public:
@@ -62,6 +62,16 @@ public:
 		{
 			Push(Value);
 		}
+	}
+
+	bool operator==(const CArray<TType, TSizeType>& Other) const
+	{
+		return Vector == Other.Vector;
+	}
+
+	bool operator!=(const CArray<TType, TSizeType>& Other) const
+	{
+		return Vector != Other.Vector;
 	}
 
 	SDL_FORCE_INLINE void Push(TType Value)
@@ -166,6 +176,12 @@ public:
 		}
 
 		return RemovedElements > 0;
+	}
+
+	/** Remove duplicated elements */
+	void RemoveDuplicates()
+	{
+		Vector.erase(unique(Vector.begin(), Vector.end()), Vector.end());
 	}
 	
 	SDL_FORCE_INLINE TType& operator[](TSizeType Index)

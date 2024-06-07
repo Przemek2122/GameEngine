@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "BaseTransformComponent.h"
+#include "ParentComponent.h"
 #include "ECS/Component.h"
 
 /**
@@ -14,8 +14,8 @@ public:
 	URenderComponent(IComponentManagerInterface* InComponentManagerInterface);
 
 	/** Begin UBaseComponent */
+	void BeginPlay() override;
 	void EndPlay() override;
-
 	void Render() override;
 	/** End UBaseComponent */
 

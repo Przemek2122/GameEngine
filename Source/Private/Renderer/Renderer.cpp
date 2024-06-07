@@ -19,7 +19,7 @@ FColorPoint::FColorPoint(const FVector2D<int> InLocation, const FColorRGBA& InCo
 
 FRenderer::FRenderer(FWindow* InWindow)
 	: Window(InWindow)
-	, Renderer(SDL_CreateRenderer(InWindow->GetSdlWindow(), -1, 0))
+	, Renderer(SDL_CreateRenderer(InWindow->GetSdlWindow(), -1, SDL_RendererFlags::SDL_RENDERER_ACCELERATED))
 	, bNeedsRepaint(false)
 {
 	if (Renderer)

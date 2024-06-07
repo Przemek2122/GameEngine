@@ -10,11 +10,11 @@ class FGameModeBase;
 /**
  * Manages game modes used in FGameModeManager.
  */
-class FGameModeManager
+class FGameModeManager : public ISubSystemInstanceInterface
 {
 public:
 	FGameModeManager(FWindowAdvanced* InWindowAdvanced);
-	virtual ~FGameModeManager();
+	~FGameModeManager() override;
 
 	/** Create object of type FGameModeBase. @Note previous game mode gets deleted */
 	template<typename TGameModeClass>

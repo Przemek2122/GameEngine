@@ -4,7 +4,7 @@
 
 #include "ECS/Component.h"
 
-class UBaseTransformComponent;
+class UParentComponent;
 
 enum class EMovementDirection
 {
@@ -53,6 +53,8 @@ protected:
 	void UpdateRotation(float DeltaTime);
 	void UpdateLocation(float DeltaTime);
 
+	virtual void OnRequestedLocationOutOfBounds();
+
 protected:
 	/** Location desired by unit. This is the place where we want to move to. */
 	FVector2D<int> TargetLocation;
@@ -72,7 +74,7 @@ protected:
 	FVector2D<float> PreciseLocation;
 	float PreciseRotation;
 
-	UBaseTransformComponent* RootTransformComponent;
+	UParentComponent* RootTransformComponent;
 
 	FVector2D<int> CurrentLocation;
 	FVector2D<int> CalculatedTargetLocation;

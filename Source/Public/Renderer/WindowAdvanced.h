@@ -8,15 +8,12 @@ class FGameModeManager;
 
 /**
  * Advanced window
- * + GameModeManager
  */
 class FWindowAdvanced : public FWindow
 {
 public:
-	FWindowAdvanced(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = WINDOW_DEFAULT_FLAGS);
-	~FWindowAdvanced() override;
+	FWindowAdvanced(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, Uint32 InWindowFlags = WINDOW_DEFAULT_FLAGS);
 
-	/** @TODO Move to subsystem of window */
 	FGameModeManager* GetGameModeManager() const { return GameModeManager; }
 
 protected:

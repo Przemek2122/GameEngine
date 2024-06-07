@@ -15,6 +15,9 @@
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
 #include "Test/Samples/TestTimers.h"
+#include "Threads/RenderThread.h"
+#include "Threads/ThreadsManager.h"
+#include "Threads/ThreadData.h"
 
 FEngine::FEngine()
 	: bFrameRateLimited(true)
@@ -33,6 +36,8 @@ FEngine::FEngine()
 	, AssetsManager(nullptr)
 	, EngineTickingManager(nullptr)
 	, EngineRenderingManager(nullptr)
+	, ThreadsManager(nullptr)
+	, RenderThreadData(nullptr)
 	, TestManager(nullptr)
 	, bContinueMainLoop(true)
 	, TicksThisSecond(0)
@@ -125,8 +130,15 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	AssetsManager = CreateAssetsManager();
 	EngineTickingManager = CreateEngineTickingManager();
 	EngineRenderingManager = CreateEngineRenderingManager();
+	ThreadsManager = CreateThreadsManager();
 
 	EventHandler->InitializeInputFromConfig();
+
+	ThreadsManager->Initialize();
+
+	// Add render thread
+	RenderThreadData = ThreadsManager->CreateThread<FRenderThread, FThreadData>("RenderThreadData");
+	RenderThread = dynamic_cast<FRenderThread*>(RenderThreadData->GetThread());
 
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
@@ -152,13 +164,6 @@ void FEngine::EngineTick()
 {
 	UpdateFrameRateCounter();
 
-	// Wait for Render thread.
-	// We need to do this to avoid changing data when render is not finished
-	//while (!EngineRender->IsRenderTickFinished())
-	//{
-	//	SDL_Delay(1);
-	//}
-
 	EventHandler->HandleEvents();
 
 	if (EventHandler->QuitInputDetected())
@@ -183,7 +188,18 @@ void FEngine::EngineTick()
 
 	EngineRender->Tick();
 
+	ThreadsManager->TickThreadCallbacks();
+
 	EngineRenderingManager->EngineRender();
+
+	// Wait for Render thread.
+	// We need to do this to avoid changing data when render is not finished
+	while (!RenderThread->IsRenderingFrameFinished())
+	{
+		THREAD_WAIT_SHORT_TIME;
+	}
+
+	RenderThread->AllowRenderNextFrame();
 }
 
 void FEngine::EnginePostSecondTick()
@@ -234,11 +250,21 @@ void FEngine::PreExit()
 
 void FEngine::Clean()
 {
+	if (RenderThread != nullptr)
+	{
+		RenderThread->StopThread();
+	}
+	else
+	{
+		LOG_ERROR("Render thread does not exist before cleaning");
+	}
+
 	delete EngineRender;
 	delete EventHandler;
 	delete AssetsManager;
 	delete EngineTickingManager;
 	delete EngineRenderingManager;
+	delete ThreadsManager;
 
 #if ENGINE_TESTS_ALLOW_ANY
 	delete TestManager;
@@ -355,6 +381,11 @@ void FEngine::UpdateFrameTime()
 	SetFrameRate(TargetFrameRate);
 }
 
+FRenderThread* FEngine::GetRenderThread() const
+{
+	return RenderThread;
+}
+
 FEngineRender* FEngine::CreateEngineRenderer() const
 {
 	return new FEngineRender();
@@ -378,6 +409,11 @@ FEngineTickingManager* FEngine::CreateEngineTickingManager() const
 FEngineRenderingManager* FEngine::CreateEngineRenderingManager() const
 {
 	return new FEngineRenderingManager;
+}
+
+FThreadsManager* FEngine::CreateThreadsManager() const
+{
+	return new FThreadsManager();
 }
 
 const std::string& FEngine::GetLaunchFullPath() const
@@ -422,6 +458,11 @@ FEngineTickingManager* FEngine::GetEngineTickingManager() const
 FEngineRenderingManager* FEngine::GetEngineRenderingManager() const
 {
 	return EngineRenderingManager;
+}
+
+FThreadsManager* FEngine::GetThreadsManager() const
+{
+	return ThreadsManager;
 }
 
 #if ENGINE_TESTS_ALLOW_ANY

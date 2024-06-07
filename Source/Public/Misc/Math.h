@@ -48,6 +48,8 @@ public:
 	/* Expects radians not degree */
 	static void RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Angle, FVector2D<int>& Point);
 
+	static FVector2D<int> GetLocationCenter(const FVector2D<int>& InLocation, const FVector2D<int>& InSize);
+
 	/** @Returns radians angle to look at @To */
 	template <typename TType>
 	static float FindLookAtRotationInRadians(const FVector2D<TType>& From, const FVector2D<TType>& LookAtTarget)
@@ -113,9 +115,16 @@ public:
 
 	/** @returns bigger value of two given */
 	template<typename TType>
-	static int Max(const TType A, const TType B)
+	static TType Max(const TType A, const TType B)
 	{
 		return (A > B) ? A : B;
+	}
+
+	/** @returns lower value of two given */
+	template<typename TType>
+	static TType Min(const TType A, const TType B)
+	{
+		return (A < B) ? A : B;
 	}
 
 	/** @returns absolute value (non negative) */
@@ -129,7 +138,7 @@ public:
 	template<typename TType>
 	static TType Sqrt(const TType Value)
 	{
-		return (sqrt(Value));
+		return static_cast<TType>(sqrt(Value));
 	}
 
 	/** Returns power of given value */

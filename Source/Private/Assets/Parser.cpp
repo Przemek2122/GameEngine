@@ -166,13 +166,13 @@ std::string FParser::AdvancedParseLinesIntoString(const CArray<FParserLine>& Lin
 
 	std::string OutParsedString;
 
-	for (int CurrentLineIndex = 0; CurrentLineIndex < Lines.Size(); CurrentLineIndex++)
+	for (ContainerInt CurrentLineIndex = 0; CurrentLineIndex < Lines.Size(); CurrentLineIndex++)
 	{
 		const FParserLine& ParserLine = Lines[CurrentLineIndex];
 
 		std::string CurrentLine;
 
-		for (int ParserTextIndex = 0; ParserTextIndex < ParserLine.Texts.Size(); ParserTextIndex++)
+		for (ContainerInt ParserTextIndex = 0; ParserTextIndex < ParserLine.Texts.Size(); ParserTextIndex++)
 		{
 			const FParserText& FParserText = ParserLine.Texts[ParserTextIndex];
 

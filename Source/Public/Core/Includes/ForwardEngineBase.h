@@ -9,6 +9,9 @@ class FEngine;
 class FEngineRender;
 class FFileSystem;
 
+class FMutex;
+class FMutexScopeLock;
+
 class FAssetsManager;
 class FAssetBase;
 
@@ -20,19 +23,29 @@ class FWidgetManager;
 class IWidgetManagementInterface;
 class IWidgetInteraction;
 
+class FThread;
+class FThreadData;
+class FThreadsManager;
+class FRenderThread;
+class FMapManager;
+class FEventHandler;
+class FEngineManager;
+
 class FTimer;
 
 class FEntityManager;
 class EEntity;
 class UBaseComponent;
+class UParentComponent;
+class UComponent;
 
 template<class TType = float>
 class FVector2D;
 class FColorRGBA;
 template<typename TReturnType, typename... TInParams>
 class FFunctorBase;
-#include "Types/Delegate.h"
-#include "Types/DelegateSafe.h"
+#include "Types/Delegate/Delegate.h"
+#include "Types/Delegate/DelegateSafe.h"
 
 /** Begin of containers */
 template<typename TType, typename TSizeType>

@@ -135,7 +135,7 @@ void EScreenSelectionEntity::CheckScreenSelection(const FVector2D<int>& InMouseP
 
 	CurrentlySelectedObjects.Clear();
 
-	for (int i = 0; i < ScreenSelectableObjects.Size(); i++)
+	for (ContainerInt i = 0; i < ScreenSelectableObjects.Size(); i++)
 	{
 		IScreenSelectionInterface* ScreenSelectable = ScreenSelectableObjects[i];
 

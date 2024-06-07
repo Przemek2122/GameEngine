@@ -10,7 +10,7 @@ UComponent::UComponent(IComponentManagerInterface* InComponentManagerInterface)
 
 void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
-	UBaseComponent::OnComponentCreated(ComponentName, NewComponent);
+	Super::OnComponentCreated(ComponentName, NewComponent);
 
 	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(NewComponent);
 	if (TransformComponent != nullptr)
@@ -25,7 +25,7 @@ void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseCompo
 
 void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent)
 {
-	UBaseComponent::OnComponentDestroy(ComponentName, OldComponent);
+	Super::OnComponentDestroy(ComponentName, OldComponent);
 
 	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(OldComponent);
 	if (TransformComponent != nullptr)
@@ -34,4 +34,20 @@ void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseCompo
 	}
 }
 
+FVector2D<int> UComponent::GetSize() const
+{
+	FVector2D<int> FinalSize;
 
+	UBaseComponent* RootComponent = GetRootComponentOfEntity();
+	if (UParentComponent* ParentRootComponent = dynamic_cast<UParentComponent*>(RootComponent))
+	{
+		FinalSize = ParentRootComponent->GetSize();
+	}
+
+	return FinalSize;
+}
+
+FVector2D<int> UComponent::GetLocationCenter() const
+{
+	return FMath::GetLocationCenter(GetLocation(), GetSize());
+}

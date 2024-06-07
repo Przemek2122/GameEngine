@@ -15,8 +15,10 @@ protected:
 
 public:
 	void Tick();
+
 	/** Called from engine when new render Tick should be started */
 	void StartRenderTick();
+
 	/** @returns true when rendering for this frame is ended. */
 	_NODISCARD bool IsRenderTickFinished() const;
 
@@ -29,6 +31,7 @@ protected:
 
 	/** Render thread tick. */
 	void RenderTick();
+
 	/** Called when RenderTick finishes */
 	void EndRenderTick();
 
@@ -77,6 +80,7 @@ protected:
 protected:
 	/** Array of windows managed by this engine. */
 	CArray<FWindow*> ManagedWindows;
+
 	CMap<Uint32, FWindow*> WindowToIdMap;
 
 };

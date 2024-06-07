@@ -82,7 +82,7 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 		FVector2D<int> HorizontalBoxSizeCalculated = { 0, 0 };
 
 		// Calculate size for parent widget
-		for (auto i = 0; i < ManagedWidgets.Size(); i++)
+		for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
 		{
 			const FWidget* ChildWidget = ManagedWidgets[i];
 
@@ -107,7 +107,7 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 
 	FVector2D<int> AggregatedChildSizeLast = { 0, 0 };
 
-	for (auto i = 0; i < ManagedWidgets.Size(); i++)
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
 	{
 		FWidget* ChildWidget = ManagedWidgets[i];
 

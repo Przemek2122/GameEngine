@@ -68,6 +68,8 @@ void FMap::Tick(float DeltaTime)
 	if (bIsActive)
 	{
 		EntityManager->Tick(DeltaTime);
+
+		TickSubSystems();
 	}
 }
 
@@ -140,6 +142,8 @@ void FMap::Render()
 		}
 
 		EntityManager->Render();
+
+		RenderSubSystems();
 	}
 }
 

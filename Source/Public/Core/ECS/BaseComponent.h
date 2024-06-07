@@ -10,7 +10,7 @@ class EEntity;
  * Base component class.
  * Children should have one of transform interfaces included. Unless transform is not needed.s
  */
-class UBaseComponent : public FObject, public IComponentManagerInterface
+class UBaseComponent : public IComponentManagerInterface
 {
 public:
 	UBaseComponent(IComponentManagerInterface* InComponentManagerInterface);

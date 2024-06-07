@@ -4,8 +4,7 @@
 #include "ECS/EntityManager.h"
 
 FEntityManager::FEntityManager(FWindow* InOwnerWindow)
-	: Entities()
-	, OwnerWindow(InOwnerWindow)
+	: OwnerWindow(InOwnerWindow)
 {
 }
 
@@ -27,7 +26,7 @@ bool FEntityManager::DestroyEntity(const EEntity* Entity)
 {
 	bool bWasFound = false;
 
-	for (int i = 0; i < Entities.Size(); i++)
+	for (ContainerInt i = 0; i < Entities.Size(); i++)
 	{
 		EEntity* CurrentEntity = Entities[i];
 		if (CurrentEntity == Entity)

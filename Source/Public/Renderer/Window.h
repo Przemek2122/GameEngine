@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ECS/SubSystems/SubSystemManagerInterface.h"
 #include "Widgets/WidgetManager.h"
 
 class FMapManager;
@@ -15,8 +16,9 @@ class FWidget;
 
 /**
  * Window class. Has SDL_Window and FRender.
+ * This class have ISubSystemManagerInterface for implementing subsystems
  */
-class FWindow
+class FWindow : public ISubSystemManagerInterface
 {
 	friend FEngineRender;
 
@@ -25,8 +27,8 @@ protected:
 	 * Creates SDL Window.
 	 * Take a look here for available flags (or at SDL_vide.h): https://wiki.libsdl.org/SDL_WindowFlags
 	 */
-	FWindow(char* InTitle, int InPositionX, int InPositionY, int InWidth, int InHeight, Uint32 InFlags = WINDOW_DEFAULT_FLAGS);
-	virtual ~FWindow();
+	FWindow(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, Uint32 InWindowFlags = WINDOW_DEFAULT_FLAGS);
+	~FWindow() override;
 
 	virtual void Init();
 	virtual void DeInit();
@@ -36,7 +38,6 @@ protected:
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
 	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
 	_NODISCARD virtual FMapManager* CreateMapManager();
-
 	_NODISCARD virtual FRenderer* CreateRenderer();
 
 public:
@@ -98,11 +99,10 @@ public:
 protected:
 	SDL_Window* Window;
 	FRenderer* Renderer;
-	char* WindowTitle;
-	int WindowPositionX;
-	int WindowPositionY;
-	int WindowWidth;
-	int WindowHeight;
+
+	std::string WindowTitle;
+	FVector2D<int> Location;
+	FVector2D<int> Size;
 	Uint32 WindowFlags;
 	Uint32 WindowId;
 

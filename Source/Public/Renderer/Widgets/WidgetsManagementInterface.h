@@ -88,7 +88,7 @@ public:
 	void ClearChildren();
 
 	/** @returns number of children managed by this object */
-	int GetChildrenCount() const;
+	ContainerInt GetChildrenCount() const;
 
 	/** @returns widget by name SLOW */
 	_NODISCARD FWidget* GetWidgetByName(const std::string& InWidgetName);

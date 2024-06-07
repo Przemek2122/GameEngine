@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Components/BaseTransformComponent.h"
+#include "Components/ParentComponent.h"
 #include "ECS/Entity.h"
 
 class FMap;
@@ -35,13 +35,27 @@ public:
 	{
 		TEntityClass* NewEntity = CreateEntity<TEntityClass>();
 
-		UBaseTransformComponent* TransformComponent = dynamic_cast<UBaseTransformComponent*>(NewEntity->GetRootComponent());
+		UParentComponent* TransformComponent = dynamic_cast<UParentComponent*>(NewEntity->GetRootComponent());
 		if (TransformComponent != nullptr)
 		{
 			TransformComponent->SetLocationUser(Location);
 		}
 
 		return NewEntity;
+	}
+
+	/** Create multiple entities. @returns array with newly created entities */
+	template<typename TEntityClass, typename... TInParams>
+	CArray<TEntityClass*> CreateMultipleEntities(const int32_t NumberOfEntitiesToCreate, TInParams... InParams)
+	{
+		CArray<TEntityClass*> EntitiesCreated;
+
+		for (int32_t i = 0; i < NumberOfEntitiesToCreate; i++)
+		{
+			EntitiesCreated.Push(CreateEntity<TEntityClass>());
+		}
+
+		return std::move(EntitiesCreated);
 	}
 
 	bool DestroyEntity(const EEntity* Entity);

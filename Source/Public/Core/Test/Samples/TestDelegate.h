@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #if ENGINE_TESTS_ALLOW_ANY
-#include "DelegateSafe.h"
+#include "Types/Delegate/DelegateSafe.h"
 #include "Test/TestSingleRun.h"
 
 class FTestDelegate : public FSingleRunTest

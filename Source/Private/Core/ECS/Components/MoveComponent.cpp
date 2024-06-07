@@ -3,7 +3,8 @@
 #include "CoreEngine.h"
 #include "ECS/Components/MoveComponent.h"
 #include "ECS/Components/ArrowComponent.h"
-#include "ECS/Components/BaseTransformComponent.h"
+#include "ECS/Components/ParentComponent.h"
+#include "Renderer/Map/Map.h"
 
 UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
@@ -26,7 +27,7 @@ void UMoveComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	RootTransformComponent = dynamic_cast<UBaseTransformComponent*>(GetRootComponentOfEntity());
+	RootTransformComponent = dynamic_cast<UParentComponent*>(GetRootComponentOfEntity());
 }
 
 void UMoveComponent::Tick(const float DeltaTime)
@@ -70,16 +71,24 @@ void UMoveComponent::ResetStoppingDistance()
 
 void UMoveComponent::SetTargetMoveLocation(const FVector2D<int> NewTargetLocation)
 {
-	PreciseLocation = RootTransformComponent->GetLocationUser();
-	PreciseRotation = static_cast<float>(RootTransformComponent->GetRotation());
-
-	TargetLocation = NewTargetLocation;
-
-	bHasTargetMoveToLocation = true;
-
-	if (!bHasCustomStopDistance)
+	FMap* CurrentMap = GetEntity()->GetCurrentMap();
+	if (CurrentMap->IsInBounds(NewTargetLocation))
 	{
-		StopDistance = 0.f;
+		PreciseLocation = RootTransformComponent->GetLocationUser();
+		PreciseRotation = static_cast<float>(RootTransformComponent->GetRotation());
+
+		TargetLocation = NewTargetLocation;
+
+		bHasTargetMoveToLocation = true;
+
+		if (!bHasCustomStopDistance)
+		{
+			StopDistance = 0.f;
+		}
+	}
+	else
+	{
+		OnRequestedLocationOutOfBounds();
 	}
 }
 
@@ -199,4 +208,8 @@ void UMoveComponent::UpdateLocation(const float DeltaTime)
 		// Move to TargetLocation
 		MoveByUnits(LinearSpeedPerSecond * DeltaTime);
 	}
+}
+
+void UMoveComponent::OnRequestedLocationOutOfBounds()
+{
 }

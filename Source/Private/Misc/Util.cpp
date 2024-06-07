@@ -87,7 +87,7 @@ namespace FUtil
 
 					std::ofstream LogFile;
 					LogFile.open(LogFilePath, std::ios_base::app);
-					LogFile << Message.Text << std::endl;
+					LogFile << Message.Text << "\n";
 					LogFile.close();
 				}
 

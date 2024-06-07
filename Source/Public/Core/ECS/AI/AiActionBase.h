@@ -13,23 +13,35 @@ class FAiActionBase
 {
 public:
 	FAiActionBase(FAiTree* InAiTree);
+	virtual ~FAiActionBase() = default;
 
 	/** Ticks only when action is active */
-	void Tick();
+	virtual void Tick();
 
 	/** Called when parent tree chooses this action. */
-	void StartAction();
+	void Start();
 
-	void EndAction();
-		
-	/** @Returns ai tree */
-	FAiTree* GetTree() const;
+	/** Call to end action */
+	void End();
+
+	/** used by AiTree to check if action should be finished */
+	virtual bool ShouldFinishAction() const;
 
 	/** Used by AiTree to decide if this action is available. */
-	bool IsActionReady() const;
+	virtual bool IsActionReady() const;
 
 	/** Used by AiTree to found action with the highest priority if EChooseActionMethod::ByPriority is used. Bigger means higher priority. */
-	int32_t GetActionPriority() const;
+	virtual int32_t GetActionPriority() const;
+
+	/** @return owner AI tree */
+	FAiTree* GetTree() const;
+
+	/** @return Entity owner for this action */
+	EEntity* GetEntity() const;
+
+protected:
+	virtual void StartAction();
+	virtual void EndAction();
 
 private:
 	FAiTree* AiTree;
