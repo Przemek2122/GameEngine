@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -336,6 +335,9 @@
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreEngine.h">
+      <Filter>Public\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -372,9 +374,6 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\ECS\Components\ParentComponent.h">
-      <Filter>Public\Core\ECS\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\CircleCollisionComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
@@ -385,6 +384,9 @@
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\ParentComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h">
@@ -530,6 +532,9 @@
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\TestSingleRun.h">
       <Filter>Public\Core\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Threads\RenderThread.h">
+      <Filter>Public\Core\Threads</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Threads\Thread.h">
       <Filter>Public\Core\Threads</Filter>
@@ -1040,9 +1045,6 @@
     <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\ECS\Components\ParentComponent.cpp">
-      <Filter>Private\Core\ECS\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\CircleCollisionComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
@@ -1053,6 +1055,9 @@
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\ParentComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp">
@@ -1174,6 +1179,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\TestSingleRun.cpp">
       <Filter>Private\Core\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Threads\RenderThread.cpp">
+      <Filter>Private\Core\Threads</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Threads\Thread.cpp">
       <Filter>Private\Core\Threads</Filter>
@@ -1324,13 +1332,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Scripts\BuildActions\README.txt" />
-  </ItemGroup>
-</Project>
+    <None Include="cpp.hint" /> 
+  </ItemGroup> 
+</Project> 

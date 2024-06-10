@@ -209,7 +209,7 @@ bool FThreadsManager::HasAnyJobLeft() const
 
 bool FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
 {
-	bool bWasRemoved ;
+	bool bWasRemoved;
 
 	if (!WorkerThreadsArrayMutex.TryLock())
 	{

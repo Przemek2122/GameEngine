@@ -413,6 +413,9 @@
     <ClInclude Include="Source\Public\Core\ECS\Entities\PlayerCharacter.h">
       <Filter>Public\Core\ECS\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Entities\ProjectileEntity.h">
+      <Filter>Public\Core\ECS\Entities</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Entities\ScreenSelectionEntity.h">
       <Filter>Public\Core\ECS\Entities</Filter>
     </ClInclude>
@@ -1082,6 +1085,9 @@
       <Filter>Private\Core\ECS\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Entities\PlayerCharacter.cpp">
+      <Filter>Private\Core\ECS\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Entities\ProjectileEntity.cpp">
       <Filter>Private\Core\ECS\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Entities\ScreenSelectionEntity.cpp">

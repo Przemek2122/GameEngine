@@ -34,14 +34,31 @@ void UMoveComponent::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bHasTargetMoveToLocation && RootTransformComponent != nullptr)
+	switch (CurrentMovementMethod)
 	{
-		CurrentLocation = RootTransformComponent->GetLocation();
-		CalculatedTargetLocation = TargetLocation + RootTransformComponent->GetLocationMap();
+		case EMovementMethod::Default:
+		{
+			if (bHasTargetMoveToLocation && RootTransformComponent != nullptr)
+			{
+				CurrentLocation = RootTransformComponent->GetLocation();
+				CalculatedTargetLocation = TargetLocation + RootTransformComponent->GetLocationMap();
 
-		UpdateRotation(DeltaTime);
+				UpdateRotationToTarget(DeltaTime);
 
-		UpdateLocation(DeltaTime);
+				UpdateLocationToTarget(DeltaTime);
+			}
+
+			break;		
+		}
+		case EMovementMethod::Linear:
+		{
+			if (RootTransformComponent != nullptr)
+			{
+				
+			}
+
+			break;
+		}
 	}
 }
 
@@ -109,6 +126,21 @@ bool UMoveComponent::IsMoving() const
 	return bHasTargetMoveToLocation;
 }
 
+void UMoveComponent::SetMovementMethod(const EMovementMethod NewMovementMethod)
+{
+	CurrentMovementMethod = NewMovementMethod;
+}
+
+void UMoveComponent::SetLinearSpeedPerSecond(const float NewSpeed)
+{
+	LinearSpeedPerSecond = NewSpeed;
+}
+
+void UMoveComponent::SetAngularSpeedPerSecond(const float NewSpeed)
+{
+	AngularSpeedPerSecond = NewSpeed;
+}
+
 void UMoveComponent::MoveByUnits(const float Distance, const EMovementDirection MovementDirection)
 {
 	if (RootTransformComponent != nullptr)
@@ -157,7 +189,7 @@ void UMoveComponent::MoveByUnits(const float Distance, const EMovementDirection 
 	}
 }
 
-void UMoveComponent::UpdateRotation(const float DeltaTime)
+void UMoveComponent::UpdateRotationToTarget(const float DeltaTime)
 {
 	// This property is used to never encounter 250 and 4 from next rotation, so we have 360 + 250 and 360 + 4
 	static constexpr float FullRotation = 360.f;
@@ -194,7 +226,7 @@ void UMoveComponent::UpdateRotation(const float DeltaTime)
 	RootTransformComponent->SetRotation(static_cast<int>(PreciseRotation));
 }
 
-void UMoveComponent::UpdateLocation(const float DeltaTime)
+void UMoveComponent::UpdateLocationToTarget(const float DeltaTime)
 {
 	const float CurrentDistance = static_cast<float>(CurrentLocation.DistanceTo(TargetLocation));
 
@@ -208,6 +240,12 @@ void UMoveComponent::UpdateLocation(const float DeltaTime)
 		// Move to TargetLocation
 		MoveByUnits(LinearSpeedPerSecond * DeltaTime);
 	}
+}
+
+void UMoveComponent::UpdateLocationLinear(float DeltaTime)
+{
+	// Move to TargetLocation
+	MoveByUnits(LinearSpeedPerSecond * DeltaTime);
 }
 
 void UMoveComponent::OnRequestedLocationOutOfBounds()

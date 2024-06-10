@@ -5,6 +5,7 @@
 #include "ECS/Component.h"
 
 class UParentComponent;
+class UArrowComponent;
 
 enum class EMovementDirection
 {
@@ -14,7 +15,11 @@ enum class EMovementDirection
 	Left,
 };
 
-class UArrowComponent;
+enum class EMovementMethod
+{
+	Default,		
+	Linear,			// Movement in one direction
+};
 
 /**
  * Component for handling transform of the entity
@@ -34,6 +39,7 @@ public:
 	/** How far owner has to be to stop when approaching TargetLocation */
 	void SetStoppingDistance(const float InStopDistance);
 
+	/** Reset stop distance to default auto calculated value */
 	void ResetStoppingDistance();
 
 	/** Set where unit should go. */
@@ -46,12 +52,19 @@ public:
 
 	bool IsMoving() const;
 
+	virtual void SetMovementMethod(EMovementMethod NewMovementMethod);
+
+	void SetLinearSpeedPerSecond(const float NewSpeed);
+	void SetAngularSpeedPerSecond(const float NewSpeed);
+
 protected:
 	/** Teleports owner by given distance in given direction */
 	void MoveByUnits(const float Distance, const EMovementDirection MovementDirection = EMovementDirection::Forward);
 
-	void UpdateRotation(float DeltaTime);
-	void UpdateLocation(float DeltaTime);
+	void UpdateRotationToTarget(float DeltaTime);
+	void UpdateLocationToTarget(float DeltaTime);
+
+	void UpdateLocationLinear(float DeltaTime);
 
 	virtual void OnRequestedLocationOutOfBounds();
 
@@ -85,5 +98,8 @@ protected:
 	UArrowComponent* ArrowComponent = nullptr;
 	bool bShowForwardArrow = true;
 #endif
+
+private:
+	EMovementMethod CurrentMovementMethod;
 
 };

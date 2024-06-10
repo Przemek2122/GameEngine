@@ -272,8 +272,8 @@ void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
 
 void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision)
 {
-	const CArray<FCollisionTile*> NewTiles = GetTilesFromCollision(InCollision);
 	const CArray<FCollisionTile*> PreviousTiles = InCollision->CurrentlyLocatedTiles;
+	const CArray<FCollisionTile*> NewTiles = GetTilesFromCollision(InCollision);
 	
 	InCollision->CurrentlyLocatedTiles = NewTiles;
 

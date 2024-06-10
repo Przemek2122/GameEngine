@@ -61,11 +61,11 @@
     <ClInclude Include="Source\Public\Core\ECS\Component.h" />
     <ClInclude Include="Source\Public\Core\ECS\ComponentManagerInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\ArrowComponent.h" />
-    <ClInclude Include="Source\Public\Core\ECS\Components\ParentComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\CircleCollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\CollisionComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\HealthComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\MoveComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\ParentComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\SquareCollisionComponent.h" />
@@ -114,6 +114,7 @@
     <ClInclude Include="Source\Public\Core\Test\TestLongRun.h" />
     <ClInclude Include="Source\Public\Core\Test\TestManager.h" />
     <ClInclude Include="Source\Public\Core\Test\TestSingleRun.h" />
+    <ClInclude Include="Source\Public\Core\Threads\RenderThread.h" />
     <ClInclude Include="Source\Public\Core\Threads\Thread.h" />
     <ClInclude Include="Source\Public\Core\Threads\ThreadData.h" />
     <ClInclude Include="Source\Public\Core\Threads\ThreadsManager.h" />
@@ -298,11 +299,11 @@
     <ClCompile Include="Source\Private\Core\ECS\Component.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\ComponentManagerInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\ArrowComponent.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\Components\ParentComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\CircleCollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\CollisionComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\MoveComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\ParentComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\SquareCollisionComponent.cpp" />
@@ -343,6 +344,7 @@
     <ClCompile Include="Source\Private\Core\Test\TestLongRun.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestManager.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestSingleRun.cpp" />
+    <ClCompile Include="Source\Private\Core\Threads\RenderThread.cpp" />
     <ClCompile Include="Source\Private\Core\Threads\Thread.cpp" />
     <ClCompile Include="Source\Private\Core\Threads\ThreadData.cpp" />
     <ClCompile Include="Source\Private\Core\Threads\ThreadsManager.cpp" />
