@@ -112,13 +112,18 @@ void FRenderer::SetWindowSize(const int X, const int Y, const bool bUpdateSDL) c
 	Window->SetWindowSize(X, Y, bUpdateSDL);
 }
 
-void FRenderer::DrawTexture(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const
+void FRenderer::DrawTexture(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const bool bIsLocationRelative) const
 {
-	DrawTexture(Texture->GetTexture()->GetSDLTexture(), Location, Size);
+	DrawTexture(Texture->GetTexture()->GetSDLTexture(), Location, Size, bIsLocationRelative);
 }
 
-void FRenderer::DrawTexture(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const
+void FRenderer::DrawTexture(SDL_Texture* Texture, FVector2D<int> Location, const FVector2D<int> Size, const bool bIsLocationRelative) const
 {
+	if (bIsLocationRelative)
+	{
+		Location = ConvertLocationToScreenSpace(Location);
+	}
+
 	SDL_Rect Rect;
 	Rect.x = Location.X;
 	Rect.y = Location.Y;
@@ -128,13 +133,18 @@ void FRenderer::DrawTexture(SDL_Texture* Texture, const FVector2D<int> Location,
 	SDL_RenderCopy(Renderer, Texture, nullptr, &Rect);
 }
 
-void FRenderer::DrawTextureAdvanced(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation, SDL_RendererFlip Flip) const
+void FRenderer::DrawTextureAdvanced(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation, SDL_RendererFlip Flip, const bool bIsLocationRelative) const
 {
-	DrawTextureAdvanced(Texture->GetTexture()->GetSDLTexture(), Location, Size, Rotation, CenterOfRotation, Flip);
+	DrawTextureAdvanced(Texture->GetTexture()->GetSDLTexture(), Location, Size, Rotation, CenterOfRotation, Flip, bIsLocationRelative);
 }
 
-void FRenderer::DrawTextureAdvanced(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation, SDL_RendererFlip Flip) const
+void FRenderer::DrawTextureAdvanced(SDL_Texture* Texture, FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation, SDL_RendererFlip Flip, const bool bIsLocationRelative) const
 {
+	if (bIsLocationRelative)
+	{
+		Location = ConvertLocationToScreenSpace(Location);
+	}
+
 	SDL_Rect Rect;
 	Rect.x = Location.X;
 	Rect.y = Location.Y;
@@ -156,13 +166,23 @@ void FRenderer::OverrideTextureColorReset(SDL_Texture* Texture)
 	SDL_SetTextureColorMod(Texture, Color.R, Color.G, Color.B);
 }
 
-void FRenderer::DrawPointAt(const FColorPoint& ColorPoint) const
+void FRenderer::DrawPointAtRelative(const FColorPoint& ColorPoint) const
 {
 	SDL_SetRenderDrawColor(Renderer, ColorPoint.Color.R, ColorPoint.Color.G, ColorPoint.Color.B, ColorPoint.Color.A);
+
+	const FVector2D<int> DrawLocation = ConvertLocationToScreenSpace(ColorPoint.Location);
+
+	SDL_RenderDrawPoint(Renderer, DrawLocation.X, DrawLocation.Y);
+}
+
+void FRenderer::DrawPointAtAbsolute(const FColorPoint& ColorPoint) const
+{
+	SDL_SetRenderDrawColor(Renderer, ColorPoint.Color.R, ColorPoint.Color.G, ColorPoint.Color.B, ColorPoint.Color.A);
+
 	SDL_RenderDrawPoint(Renderer, ColorPoint.Location.X, ColorPoint.Location.Y);
 }
 
-void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor) const
+void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative) const
 {
 	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
 	
@@ -175,23 +195,55 @@ void FRenderer::DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorR
 	
 	std::vector<SDL_Point> PointsArray(AllPointsNum);
 
-	for (unsigned int Index = 0; Index < AllPointsNum; Index++)
+	if (bIsLocationRelative)
 	{
-		PointsArray[Index] = { Points[Index].X, Points[Index].Y };
+		for (unsigned int Index = 0; Index < AllPointsNum; Index++)
+		{
+			const FVector2D<int> DrawLocation = ConvertLocationToScreenSpace(Points[Index]);
+
+			PointsArray[Index] = { DrawLocation.X, DrawLocation.Y };
+		}
+	}
+	else
+	{
+		for (unsigned int Index = 0; Index < AllPointsNum; Index++)
+		{
+			PointsArray[Index] = { Points[Index].X, Points[Index].Y };
+		}
 	}
 	
 	SDL_RenderDrawPoints(Renderer, PointsArray.data(), static_cast<int>(PointsArray.size()));
 }
 
-void FRenderer::DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor) const
+void FRenderer::DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative) const
 {
 	SDL_SetRenderDrawColor(Renderer, AllPointsColor.R, AllPointsColor.G, AllPointsColor.B, AllPointsColor.A);
-	SDL_RenderDrawPoints(Renderer, Points.Vector.data(), static_cast<int>(Points.Size()));
+
+	if (bIsLocationRelative)
+	{
+		CArray<SDL_Point> NewPoints = Points;
+		for (SDL_Point& NewPoint : NewPoints)
+		{
+			NewPoint.x += RenderOffset.X;
+			NewPoint.y += RenderOffset.Y;
+		}
+
+		SDL_RenderDrawPoints(Renderer, NewPoints.Vector.data(), static_cast<int>(NewPoints.Size()));
+	}
+	else
+	{
+		SDL_RenderDrawPoints(Renderer, Points.Vector.data(), static_cast<int>(Points.Size()));
+	}
 }
 
-void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const
+void FRenderer::DrawRectangle(FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative) const
 {
 	SDL_SetRenderDrawColor(Renderer, InColor.R, InColor.G, InColor.B, InColor.A);
+
+	if (bIsLocationRelative)
+	{
+		RectLocation = ConvertLocationToScreenSpace(RectLocation);
+	}
 	
 	SDL_Rect Rect;
 	Rect.x = RectLocation.X;
@@ -202,9 +254,14 @@ void FRenderer::DrawRectangle(const FVector2D<int> RectLocation, const FVector2D
 	SDL_RenderFillRect(Renderer, &Rect);
 }
 
-void FRenderer::DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const
+void FRenderer::DrawRectangleOutline(FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative) const
 {
 	SDL_SetRenderDrawColor(Renderer, InColor.R, InColor.G, InColor.B, InColor.A);
+
+	if (bIsLocationRelative)
+	{
+		RectLocation = ConvertLocationToScreenSpace(RectLocation);
+	}
 	
 	SDL_Rect Rect;
 	Rect.x = RectLocation.X;
@@ -215,8 +272,13 @@ void FRenderer::DrawRectangleOutline(const FVector2D<int> RectLocation, const FV
 	SDL_RenderDrawRect(Renderer, &Rect);
 }
 
-void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius) const
+void FRenderer::DrawCircle(FVector2D<int> Location, const int Radius, const bool bIsLocationRelative) const
 {
+	if (bIsLocationRelative)
+	{
+		Location = ConvertLocationToScreenSpace(Location);
+	}
+
 	int nx = Radius - 1;
 	int ny = 0;
 	int dx = 1;
@@ -250,23 +312,23 @@ void FRenderer::DrawCircle(const FVector2D<int> Location, const int Radius) cons
 	}
 }
 
-void FRenderer::DrawLimitedLine(int X1, int Y1, const int X2, const int Y2, const int LineLength) const
+void FRenderer::DrawLine(FVector2D<int> From, FVector2D<int> To, const bool bIsLocationRelative) const
 {
-	int dx = abs(X2 - X1), sx = X1 < X2 ? 1 : -1;
-	int dy = abs(Y2 - Y1), sy = Y1 < Y2 ? 1 : -1;
-	int err = (dx > dy ? dx : -dy) / 2;
-
-	int i = 0;
-	while (SDL_RenderDrawPoint(Renderer, X1, Y1), i < LineLength)
+	if (bIsLocationRelative)
 	{
-		int e2 = err;
-		if (e2 > -dx) { err -= dy; X1 += sx; }
-		if (e2 < dy) { err += dx; Y1 += sy; }
-		i++;
+		From = ConvertLocationToScreenSpace(From);
+		To = ConvertLocationToScreenSpace(To);
 	}
+
+	SDL_RenderDrawLine(GetSDLRenderer(), From.X, From.Y, To.X, To.Y);
 }
 
-void FRenderer::DrawLine(const FVector2D<int> From, const FVector2D<int> To) const
+FVector2D<int> FRenderer::ConvertLocationToScreenSpace(const FVector2D<int>& InLocation) const
 {
-	SDL_RenderDrawLine(GetSDLRenderer(), From.X, From.Y, To.X, To.Y);
+	return (InLocation + RenderOffset);
+}
+
+void FRenderer::SetRenderOffset(const FVector2D<int>& NewRenderOffset)
+{
+	RenderOffset = NewRenderOffset;
 }

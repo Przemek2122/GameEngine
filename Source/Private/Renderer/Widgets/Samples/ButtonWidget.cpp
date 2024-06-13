@@ -23,7 +23,7 @@ void FButtonWidget::Render()
 {
 	Super::Render();
 
-	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), ButtonRenderColor);
+	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), ButtonRenderColor, false);
 }
 
 void FButtonWidget::NativeHover()

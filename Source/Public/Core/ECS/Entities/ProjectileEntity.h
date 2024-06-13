@@ -8,7 +8,7 @@ class URenderComponent;
 
 struct EInitialProjectileParams
 {
-	EInitialProjectileParams(const float InLinearSpeedPerSecond)
+	EInitialProjectileParams(const float InLinearSpeedPerSecond = 40.f)
 		: LinearSpeedPerSecond(InLinearSpeedPerSecond)
 	{
 	}
@@ -24,7 +24,7 @@ class EProjectileEntity : public EEntity
 public:
 	EProjectileEntity(FEntityManager* InEntityManager);
 
-	void SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams);
+	void SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams) const;
 
 	URenderComponent* GetRenderComponent() const;
 	UMoveComponent* GetMovementComponent() const;

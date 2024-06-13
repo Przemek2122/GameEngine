@@ -35,7 +35,7 @@ void FImageWidget::Render()
 {
 	if (TextureAsset != nullptr)
 	{
-		GetRenderer()->DrawTexture(TextureAsset, GetWidgetLocation(), GetWidgetSize());
+		GetRenderer()->DrawTexture(TextureAsset, GetWidgetLocation(), GetWidgetSize(), false);
 	}
 
 	FWidget::Render();

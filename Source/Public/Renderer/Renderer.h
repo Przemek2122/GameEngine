@@ -46,50 +46,81 @@ protected:
 	virtual void MarkNeedsRepaint();
 
 public:
-	_NODISCARD SDL_Renderer* GetSDLRenderer() const { return Renderer; }
+	/** Raw SDL Renderer */
+	_NODISCARD INLINE_DEBUGABLE SDL_Renderer* GetSDLRenderer() const { return Renderer; }
 
-	INLINE_DEBUGABLE SDL_Window* GetSdlWindow() const;
+	/** Raw SDL Window */
+	_NODISCARD INLINE_DEBUGABLE SDL_Window* GetSdlWindow() const;
 
-	INLINE_DEBUGABLE SDL_Surface* GetSdlWindowSurface() const;
+	/** Raw SDL Window surface */
+	_NODISCARD INLINE_DEBUGABLE SDL_Surface* GetSdlWindowSurface() const;
 
-	_NODISCARD FVector2D<int> GetWindowSize() const;
+	/** @returns cached window size */
+	_NODISCARD INLINE_DEBUGABLE FVector2D<int> GetWindowSize() const;
 
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true) const;
 
-	void DrawTexture(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const;
-	void DrawTexture(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size) const;
+	void DrawTexture(const FTextureAsset* Texture,	FVector2D<int> Location, const FVector2D<int> Size, const bool bIsLocationRelative = true) const;
 
-	void DrawTextureAdvanced(const FTextureAsset* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_RendererFlip::SDL_FLIP_NONE) const;
-	void DrawTextureAdvanced(SDL_Texture* Texture, const FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_RendererFlip::SDL_FLIP_NONE) const;
+	void DrawTexture(SDL_Texture* Texture,			FVector2D<int> Location, const FVector2D<int> Size, const bool bIsLocationRelative = true) const;
+
+	void DrawTextureAdvanced(const FTextureAsset* Texture,	FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, 
+		const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_FLIP_NONE, const bool bIsLocationRelative = true) const;
+
+	void DrawTextureAdvanced(SDL_Texture* Texture,			FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, 
+		const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_FLIP_NONE, const bool bIsLocationRelative = true) const;
 
 	static void OverrideTextureColor(SDL_Texture* Texture, const FColorRGBA& Color);
 	static void OverrideTextureColorReset(SDL_Texture* Texture);
 
-	/** Draw single point. */
-	void DrawPointAt(const FColorPoint& ColorPoint) const;
+	/** Draw single point. Relative means to move with map */
+	void DrawPointAtRelative(const FColorPoint& ColorPoint) const;
+
+	/** Draw single point. Absolute means never move. Example: UI */
+	void DrawPointAtAbsolute(const FColorPoint& ColorPoint) const;
 
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor) const;
+	void DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative = true) const;
 
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor) const;
+	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative = true) const;
 
 	/** Draw single rectangle */
-	void DrawRectangle(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const;
+	void DrawRectangle(FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative = true) const;
 
 	/** Draw single rectangle but without interior */
-	void DrawRectangleOutline(const FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor) const;
+	void DrawRectangleOutline(FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative = true) const;
 	
-	void DrawCircle(const FVector2D<int> Location, const int Radius) const;
+	void DrawCircle(FVector2D<int> Location, const int Radius, const bool bIsLocationRelative = true) const;
 
-	void DrawLimitedLine(int X1, int Y1, int X2, int Y2, int LineLength) const;
+	void DrawLine(FVector2D<int> From, FVector2D<int> To, const bool bIsLocationRelative = true) const;
 
-	void DrawLine(const FVector2D<int> From, const FVector2D<int> To) const;
+	/** Adds RenderOffset to rendered objects */
+	FVector2D<int> ConvertLocationToScreenSpace(const FVector2D<int>& InLocation) const;
+
+	/** Updates offset of rendering object. Usually called by map when moved. */
+	void SetRenderOffset(const FVector2D<int>& NewRenderOffset);
+
+	/** @returns render offset */
+	FVector2D<int> GetRenderOffset() const { return RenderOffset; }
 
 protected:
+	/** Owner window pointer */
 	FWindow* Window;
+
+	/** Raw SDL Renderer pointer */
 	SDL_Renderer* Renderer;
+
+	/** Que of point to draw */
 	CDeque<FColorPoint> PointsToDrawDeque;
+
 	bool bNeedsRepaint;
+
+	/**
+	 * Render offset. This offset is used to move screen.
+	 * @Note this offset only affects rendering.
+	 * All other calculations should be done on default location without offset.
+	 */
+	FVector2D<int> RenderOffset;
 
 };

@@ -2,18 +2,22 @@
 #include "ECS/Entities/ProjectileEntity.h"
 
 #include "ECS/Components/MoveComponent.h"
+#include "ECS/Components/RenderComponent.h"
 
 EProjectileEntity::EProjectileEntity(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 {
-	RenderComponent = CreateComponent<URenderComponent>("RenderComponent");
-	MovementComponent = CreateComponent<UMoveComponent>("MovementComponent");
-	MovementComponent->SetMovementMethod(EMovementMethod::Linear);
+	UParentComponent* NewRootComponent = CreateComponent<UParentComponent>("RootComponent");
+
+	RenderComponent = NewRootComponent->CreateComponent<URenderComponent>("RenderComponent");
+	MovementComponent = NewRootComponent->CreateComponent<UMoveComponent>("MovementComponent");
 }
 
-void EProjectileEntity::SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams)
+void EProjectileEntity::SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams) const
 {
+	MovementComponent->SetMovementMethod(EMovementMethod::Linear);
 
+	MovementComponent->SetLinearSpeedPerSecond(InitialProjectileParams.LinearSpeedPerSecond);
 }
 
 URenderComponent* EProjectileEntity::GetRenderComponent() const

@@ -30,7 +30,7 @@ public:
 	virtual void OnEndSelecting();
 
 	/** Called when should select but it was in place - click */
-	virtual void OnClickInsteadOfSelection(const FVector2D<int>& InMousePosition);
+	virtual void OnClickInsteadOfSelection(const FVector2D<int>& InMousePositionConverted);
 
 	const CArray<IScreenSelectionInterface*>& GetCurrentlySelectedObjects() const;
 
@@ -43,10 +43,12 @@ protected:
 	void UnRegisterInput(FEventHandler* InputHandler) override;
 	/** End EEntity */
 
-	void CheckScreenSelection(const FVector2D<int>& InMousePosition);
+	void CheckScreenSelection(const FVector2D<int>& InMousePositionConverted);
 
 	virtual void AddToCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
 	virtual void RemoveFromCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable);
+
+	FVector2D<int> ConvertLocationFromScreenSpace(const FVector2D<int>& InLocation) const;
 
 protected:
 	/** Array with screen selectable items */
@@ -59,7 +61,7 @@ protected:
 	bool bIsSelecting;
 
 	/** Defines how far can it be from click to release to be click instead of selection */
-	float ClickInsteadOfSelectionTolerance;
+	int ClickInsteadOfSelectionTolerance;
 
 	/** Start of the selection */
 	FVector2D<int> SelectionStart;

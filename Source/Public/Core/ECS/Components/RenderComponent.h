@@ -5,6 +5,7 @@
 #include "ParentComponent.h"
 #include "ECS/Component.h"
 
+struct FAssetCollectionItem;
 /**
  * Component for handling transform of the entity
  */
@@ -18,6 +19,9 @@ public:
 	void EndPlay() override;
 	void Render() override;
 	/** End UBaseComponent */
+
+	/** Set image from AssetCollectionItem. */
+	void SetImage(const FAssetCollectionItem& AssetCollectionItem);
 
 	/** Set image from given name. It will try to find asset. If it was not created it will try to use OptionalPath to load it. */
 	void SetImage(const std::string& InImageName, const std::string& OptionalPath = "");

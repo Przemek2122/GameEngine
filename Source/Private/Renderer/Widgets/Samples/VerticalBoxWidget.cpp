@@ -23,7 +23,7 @@ void FVerticalBoxWidget::Render()
 	Super::Render();
 
 #if _DEBUG
-	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorOrange());
+	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorOrange(), false);
 #endif
 }
 

@@ -38,7 +38,7 @@ public:
 		UParentComponent* TransformComponent = dynamic_cast<UParentComponent*>(NewEntity->GetRootComponent());
 		if (TransformComponent != nullptr)
 		{
-			TransformComponent->SetLocationUser(Location);
+			TransformComponent->SetLocation(Location);
 		}
 
 		return NewEntity;

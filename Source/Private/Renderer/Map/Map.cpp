@@ -192,6 +192,14 @@ FEntityManager* FMap::CreateEntityManager()
 	return new FEntityManager(MapManager->GetOwnerWindow());
 }
 
+void FMap::UpdateMapOffsetOnRenderer() const
+{
+	FWindow* Window = MapManager->GetOwnerWindow();
+	FRenderer* WindowRenderer = Window->GetRenderer();
+
+	WindowRenderer->SetRenderOffset(MapRenderOffset);
+}
+
 bool FMap::IsInBounds(const FVector2D<int>& Location) const
 {
 	const FVector2D<int> LocationMinusOffset = Location - MapRenderOffset;
@@ -233,6 +241,8 @@ void FMap::AddMapRenderOffset(const FVector2D<int>& LocationChange)
 
 	// Trigger delegate for changed location
 	MapLocationChangeDelegate.Execute(MapRenderOffset);
+
+	UpdateMapOffsetOnRenderer();
 }
 
 FVector2D<int> FMap::GetMapRenderOffset() const

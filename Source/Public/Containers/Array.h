@@ -158,20 +158,18 @@ public:
 	template<typename TTypeAuto>
 	SDL_FORCE_INLINE bool RemoveAll(TTypeAuto Value)
 	{
-		std::vector<int>::iterator Iterator = Vector.begin();
-
 		TSizeType RemovedElements = 0;
 
-		while (Iterator != Vector.end())
+		for (TSizeType i = 0; i < Size(); )
 		{
-			if (*Iterator == Value)
+			if (Vector[i] == Value)
 			{
-				Iterator = Vector.erase(Iterator);
-				++RemovedElements;
+				RemoveAt(i);
 			}
-			else 
+			else
 			{
-				++Iterator;
+				// Increment only if not removed
+				++i;
 			}
 		}
 

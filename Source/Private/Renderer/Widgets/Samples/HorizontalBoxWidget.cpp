@@ -18,7 +18,7 @@ void FHorizontalBoxWidget::Render()
 	Super::Render();
 
 #if _DEBUG
-	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorPink());
+	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorPink(), false);
 #endif
 }
 

@@ -17,7 +17,7 @@ enum class EMovementDirection
 
 enum class EMovementMethod
 {
-	Default,		
+	Default,		// Default 'ai unit' like movement
 	Linear,			// Movement in one direction
 };
 
@@ -58,14 +58,15 @@ public:
 	void SetAngularSpeedPerSecond(const float NewSpeed);
 
 protected:
-	/** Teleports owner by given distance in given direction */
-	void MoveByUnits(const float Distance, const EMovementDirection MovementDirection = EMovementDirection::Forward);
+	/** Moves internal vector. Does not move owner on it's own */
+	FVector2D<float> GetVectorForMoveInDirection(const EMovementDirection MovementDirection) const;
 
 	void UpdateRotationToTarget(float DeltaTime);
 	void UpdateLocationToTarget(float DeltaTime);
 
 	void UpdateLocationLinear(float DeltaTime);
 
+	/** Called when unit moves out of map bounds */
 	virtual void OnRequestedLocationOutOfBounds();
 
 protected:

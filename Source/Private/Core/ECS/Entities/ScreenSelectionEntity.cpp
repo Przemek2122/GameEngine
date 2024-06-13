@@ -7,7 +7,7 @@
 EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 	, bIsSelecting(false)
-	, ClickInsteadOfSelectionTolerance(2.f)
+	, ClickInsteadOfSelectionTolerance(2)
 {
 }
 
@@ -15,7 +15,7 @@ void EScreenSelectionEntity::EndPlay()
 {
 	OnEndPlay.Execute();
 
-	EEntity::EndPlay();
+	Super::EndPlay();
 }
 
 void EScreenSelectionEntity::RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable)
@@ -30,19 +30,23 @@ void EScreenSelectionEntity::UnRegisterScreenSelectable(IScreenSelectionInterfac
 
 void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputState)
 {
+	const FVector2D<int> InMousePositionConverted = ConvertLocationFromScreenSpace(InMousePosition);
+
 	if (bIsSelecting)
 	{
-		CheckScreenSelection(InMousePosition);
+		CheckScreenSelection(InMousePositionConverted);
 	}
 }
 
 void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
+	const FVector2D<int> InMousePositionConverted = ConvertLocationFromScreenSpace(InMousePosition);
+
 	switch (InputState)
 	{
 		case EInputState::PRESS:
 		{
-			SelectionStart = InMousePosition;
+			SelectionStart = InMousePositionConverted;
 
 			OnStartSelecting();
 
@@ -53,9 +57,9 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 		{
 			OnEndSelecting();
 
-			if (SelectionStart.DistanceTo(InMousePosition) < ClickInsteadOfSelectionTolerance)
+			if (SelectionStart.DistanceTo(InMousePositionConverted) < ClickInsteadOfSelectionTolerance)
 			{
-				OnClickInsteadOfSelection(InMousePosition);
+				OnClickInsteadOfSelection(InMousePositionConverted);
 			}
 
 			break;
@@ -70,6 +74,8 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 
 void EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
+	const FVector2D<int> InMousePositionConverted = ConvertLocationFromScreenSpace(InMousePosition);
+
 	switch (InputState)
 	{
 		case EInputState::PRESS:
@@ -81,7 +87,7 @@ void EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, E
 				{
 					FVector2D<int> MapRenderOffset = CurrentMap->GetMapRenderOffset();
 
-					CurrentlySelectedObject->NativeDoAction(InMousePosition - MapRenderOffset);
+					CurrentlySelectedObject->NativeDoAction(InMousePositionConverted);
 				}
 			}
 
@@ -100,12 +106,12 @@ void EScreenSelectionEntity::OnEndSelecting()
 	bIsSelecting = false;
 }
 
-void EScreenSelectionEntity::OnClickInsteadOfSelection(const FVector2D<int>& InMousePosition)
+void EScreenSelectionEntity::OnClickInsteadOfSelection(const FVector2D<int>& InMousePositionConverted)
 {
 	// Update position as 
-	SelectionStart = InMousePosition;
+	SelectionStart = InMousePositionConverted;
 
-	CheckScreenSelection(InMousePosition);
+	CheckScreenSelection(InMousePositionConverted);
 }
 
 const CArray<IScreenSelectionInterface*>& EScreenSelectionEntity::GetCurrentlySelectedObjects() const
@@ -129,9 +135,9 @@ void EScreenSelectionEntity::UnRegisterInput(FEventHandler* InputHandler)
 	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
 }
 
-void EScreenSelectionEntity::CheckScreenSelection(const FVector2D<int>& InMousePosition)
+void EScreenSelectionEntity::CheckScreenSelection(const FVector2D<int>& InMousePositionConverted)
 {
-	const FVector2D<int> SelectionEnd = InMousePosition;
+	const FVector2D<int> SelectionEnd = InMousePositionConverted;
 
 	CurrentlySelectedObjects.Clear();
 
@@ -177,4 +183,11 @@ void EScreenSelectionEntity::AddToCurrentlySelectedObjects(IScreenSelectionInter
 void EScreenSelectionEntity::RemoveFromCurrentlySelectedObjects(IScreenSelectionInterface* InScreenSelectable)
 {
 	CurrentlySelectedObjects.Remove(InScreenSelectable);
+}
+
+FVector2D<int> EScreenSelectionEntity::ConvertLocationFromScreenSpace(const FVector2D<int>& InLocation) const
+{
+	FMap* Map = GetCurrentMap();
+
+	return (InLocation - Map->GetMapRenderOffset());
 }

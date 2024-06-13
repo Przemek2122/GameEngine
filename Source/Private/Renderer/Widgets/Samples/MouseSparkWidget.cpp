@@ -87,6 +87,6 @@ void FMouseSparkWidget::Render()
 	
 	if (const FRenderer* Renderer = GetRenderer())
 	{
-		Renderer->DrawPointsAt(Points, FColorRGBA(0, 153, 154));
+		Renderer->DrawPointsAt(Points, FColorRGBA(0, 153, 154), false);
 	}
 }

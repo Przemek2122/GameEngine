@@ -46,7 +46,7 @@ protected:
 	/** Called each frame.\n Should be used for code logic. */
 	virtual void Tick();
 
-	/** Called each frame.\n Should be used To draw data only. */
+	/** Called each frame.\n Should be used To draw data only. @Note: When using Renderer calls use bIsLocationRelative=false in each function to prevent UI Moving with map */
 	virtual void Render();
 
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */

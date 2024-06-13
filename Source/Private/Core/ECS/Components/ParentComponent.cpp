@@ -11,56 +11,6 @@ UParentComponent::UParentComponent(IComponentManagerInterface* InComponentManage
 {
 }
 
-void UParentComponent::BeginPlay()
-{
-	UBaseComponent::BeginPlay();
-
-	const FWindow* Window = GetOwnerWindow();
-	if (Window != nullptr)
-	{
-		const FMapManager* MapManger = Window->GetMapManager();
-		if (MapManger != nullptr)
-		{
-			FMap* CurrentMap = MapManger->GetCurrentMap();
-			if (CurrentMap != nullptr)
-			{
-				CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &UParentComponent::OnMapLocationChanged);
-			}
-			else
-			{
-				LOG_ERROR("UParentComponent::BeginPlay: CurrentMap is nullptr");
-			}
-		}
-		else
-		{
-			LOG_ERROR("UParentComponent::BeginPlay: MapManager is nullptr");
-		}
-	}
-	else
-	{
-		LOG_ERROR("UParentComponent::BeginPlay: Window is nullptr");
-	}
-}
-
-void UParentComponent::EndPlay()
-{
-	UBaseComponent::EndPlay();
-
-	const FWindow* Window = GetOwnerWindow();
-	if (Window != nullptr)
-	{
-		const FMapManager* MapManger = Window->GetMapManager();
-		if (MapManger != nullptr)
-		{
-			FMap* CurrentMap = MapManger->GetCurrentMap();
-			if (CurrentMap != nullptr)
-			{
-				CurrentMap->GetMapLocationChangeDelegate().UnBindObject(this, &UParentComponent::OnMapLocationChanged);
-			}
-		}
-	}
-}
-
 void UParentComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);
@@ -71,7 +21,9 @@ void UParentComponent::OnComponentCreated(const std::string& ComponentName, UBas
 		AddUpdatedComponent(TransformComponent);
 
 		// Update location of new component
-		TransformComponent->SetLocationFromParent(GetLocation());
+		TransformComponent->SetParentLocation(GetLocation());
+
+		// Update rotation of new component
 		TransformComponent->SetParentRotation(GetRotation());
 	}
 }
@@ -126,9 +78,4 @@ void UParentComponent::SetSize(const FVector2D<int> NewSize)
 FVector2D<int> UParentComponent::GetSize() const
 {
 	return Size;
-}
-
-void UParentComponent::OnMapLocationChanged(const FVector2D<int> NewLocation)
-{
-	SetLocationMap(NewLocation);
 }

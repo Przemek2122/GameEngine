@@ -18,11 +18,6 @@ FCollisionManager::FCollisionManager()
 
 FCollisionManager::~FCollisionManager()
 {
-	if (FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface()))
-	{
-		CurrentMap->GetMapLocationChangeDelegate().UnBindObject(this, &FCollisionManager::OnMapLocationChange);
-	}
-
 	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
 		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
@@ -36,14 +31,7 @@ FCollisionManager::~FCollisionManager()
 
 void FCollisionManager::InitializeSubSystem()
 {
-	ISubSystemInstanceInterface::InitializeSubSystem();
-
-	if (FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface()))
-	{
-		CurrentMapOffset = CurrentMap->GetMapRenderOffset();
-
-		CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &FCollisionManager::OnMapLocationChange);
-	}
+	Super::InitializeSubSystem();
 
 	BuildCollision();
 }
@@ -97,7 +85,7 @@ void FCollisionManager::RenderSubSystem()
 					{
 						FColorRGBA DrawColor = CollisionTile->CollisionObjects.IsEmpty() ? FColorRGBA::ColorLightGreen() : FColorRGBA::ColorOrange();
 
-						Renderer->DrawRectangleOutline(ConvertLocationToAbsolute(CollisionTile->TileLocation), CollisionTile->TileSize, DrawColor);
+						Renderer->DrawRectangleOutline(CollisionTile->TileLocation, CollisionTile->TileSize, DrawColor);
 					}
 				}
 			}
@@ -140,29 +128,6 @@ void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject
 	{
 		UpdateCollisionOnMesh(InCollisionObject);
 	}
-}
-
-FVector2D<int> FCollisionManager::ConvertLocationToAbsolute(const FVector2D<int>& Relative) const
-{
-	FVector2D<int> OutLocation = Relative;
-
-	OutLocation += CurrentMapOffset;
-
-	return OutLocation;
-}
-
-FVector2D<int> FCollisionManager::ConvertLocationToRelative(const FVector2D<int>& Absolute) const
-{
-	FVector2D<int> OutLocation = Absolute;
-
-	OutLocation -= CurrentMapOffset;
-
-	return OutLocation;
-}
-
-void FCollisionManager::OnMapLocationChange(FVector2D<int> NewLocation)
-{
-	CurrentMapOffset = NewLocation;
 }
 
 void FCollisionManager::BuildCollision()
@@ -215,7 +180,7 @@ void FCollisionManager::CreateCollisionTiles()
 		TemporaryCollisionRows.Push(CollisionTilesRow);
 	}
 
-	CollisionRows = std::move(TemporaryCollisionRows);
+	CollisionRows = TemporaryCollisionRows;
 
 	LOG_INFO("Created " << TargetNumberOfTiles.X * TargetNumberOfTiles.Y << " tiles.");
 }
@@ -282,7 +247,7 @@ void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision)
 	{
 		if (!NewTiles.Contains(PreviousTile))
 		{
-			PreviousTile->CollisionObjects.Remove(InCollision);
+			PreviousTile->CollisionObjects.RemoveAll(InCollision);
 		}
 	}
 
@@ -340,7 +305,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FCircle& CircleDataA = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleData();
 						const FCircle& CircleDataB = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleData();
 
-						bIsIntersecting = FCollisionGlobals::CirclesIntersect(this, CircleDataA, CircleDataB);
+						bIsIntersecting = FCollisionGlobals::CirclesIntersect(CircleDataA, CircleDataB);
 
 						break;
 					}
@@ -349,7 +314,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleData();
 						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
 
-						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(this, RectangleData, CircleData);
+						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
 
 						break;
 					}
@@ -372,7 +337,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
 						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleData();
 
-						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(this, RectangleData, CircleData);
+						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
 
 						break;
 					}
@@ -381,7 +346,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FRectangleWithDiagonal& RectangleDataA = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
 						const FRectangleWithDiagonal& RectangleDataB = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
 
-						bIsIntersecting = FCollisionGlobals::RectanglesIntersect(this, RectangleDataA, RectangleDataB);
+						bIsIntersecting = FCollisionGlobals::RectanglesIntersect(RectangleDataA, RectangleDataB);
 
 						break;
 					}
@@ -452,7 +417,7 @@ CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRectangle(const F
 		LOG_WARN("Custom logic is required for Objects greater than single CollisionTile. #1");
 	}
 
-	const FVector2D<int> RelativeLocation = InLocation - CurrentMapOffset;
+	const FVector2D<int> RelativeLocation = InLocation;
 
 	// Find edge locations and add to @OutTiles
 	CArray<FVector2D<int>> RectangleEdgeLocations;
@@ -537,12 +502,12 @@ void FCollisionManager::OnCollisionEnd(FCollisionBase* InCollision)
 	InCollision->OtherCollidersCurrentlyColliding.Clear();
 }
 
-bool FCollisionGlobals::RectanglesIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)
+bool FCollisionGlobals::RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)
 {
-	const FVector2D<int> RectAPositionBottomRight = CollisionManager->ConvertLocationToRelative(RectangleA.GetPositionBottomRight());
-	const FVector2D<int> RectAPositionTopLeft = CollisionManager->ConvertLocationToRelative(RectangleA.GetPositionTopLeft());
-	const FVector2D<int> RectBPositionBottomRight = CollisionManager->ConvertLocationToRelative(RectangleB.GetPositionBottomRight());
-	const FVector2D<int> RectBPositionTopLeft = CollisionManager->ConvertLocationToRelative(RectangleB.GetPositionTopLeft());
+	const FVector2D<int> RectAPositionBottomRight = RectangleA.GetPositionBottomRight();
+	const FVector2D<int> RectAPositionTopLeft = RectangleA.GetPositionTopLeft();
+	const FVector2D<int> RectBPositionBottomRight = RectangleB.GetPositionBottomRight();
+	const FVector2D<int> RectBPositionTopLeft = RectangleB.GetPositionTopLeft();
 
 	return !(	RectAPositionBottomRight.X <= RectBPositionTopLeft.X	||		// RectangleA is left of RectangleB 
 				RectBPositionBottomRight.X <= RectAPositionTopLeft.X	||		// RectangleB is left of RectangleA 
@@ -550,10 +515,10 @@ bool FCollisionGlobals::RectanglesIntersect(const FCollisionManager* CollisionMa
 				RectBPositionBottomRight.Y <= RectAPositionTopLeft.Y	);		// RectangleB is above RectangleA 
 }
 
-bool FCollisionGlobals::CirclesIntersect(const FCollisionManager* CollisionManager, const FCircle& CircleA, const FCircle& CircleB)
+bool FCollisionGlobals::CirclesIntersect(const FCircle& CircleA, const FCircle& CircleB)
 {
-	const FVector2D<int> CircleALocation = CollisionManager->ConvertLocationToRelative(CircleA.GetLocation());
-	const FVector2D<int> CircleBLocation = CollisionManager->ConvertLocationToRelative(CircleB.GetLocation());
+	const FVector2D<int> CircleALocation = CircleA.GetLocation();
+	const FVector2D<int> CircleBLocation = CircleB.GetLocation();
 
 	const int Distance = CircleALocation.DistanceTo(CircleBLocation);
 	const int SummaryRadius = CircleA.GetRadius() + CircleB.GetRadius();
@@ -561,12 +526,12 @@ bool FCollisionGlobals::CirclesIntersect(const FCollisionManager* CollisionManag
 	return (SummaryRadius > Distance);
 }
 
-bool FCollisionGlobals::CircleAndSquareIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& Rectangle, const FCircle& Circle)
+bool FCollisionGlobals::CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle)
 {
-	const FVector2D<int> RectPositionBottomRight = CollisionManager->ConvertLocationToRelative(Rectangle.GetPositionBottomRight());
-	const FVector2D<int> RectPositionTopLeft = CollisionManager->ConvertLocationToRelative(Rectangle.GetPositionTopLeft());
+	const FVector2D<int> RectPositionBottomRight = Rectangle.GetPositionBottomRight();
+	const FVector2D<int> RectPositionTopLeft = Rectangle.GetPositionTopLeft();
 
-	const FVector2D<int> CircleLocation = CollisionManager->ConvertLocationToRelative(Circle.GetLocation());
+	const FVector2D<int> CircleLocation = Circle.GetLocation();
 
 	// Find the closest point to the circle within the rectangle 
 	const int ClosestX = std::max(RectPositionTopLeft.X, std::min(CircleLocation.X, RectPositionBottomRight.X));

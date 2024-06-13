@@ -111,18 +111,25 @@ void UArrowComponent::RenderArrow()
 
 void UArrowComponent::SetArrow(FTextureAsset* NewTextureAsset)
 {
-	if (NewTextureAsset != nullptr)
+	if (RootTransformComponent != nullptr)
 	{
-		if (ArrowTextureAsset != nullptr)
+		if (NewTextureAsset != nullptr)
 		{
-			ArrowTextureAsset->DecrementNumberOfReferences();
+			if (ArrowTextureAsset != nullptr)
+			{
+				ArrowTextureAsset->DecrementNumberOfReferences();
+			}
+
+			ArrowTextureAsset = NewTextureAsset;
+			ArrowTextureAsset->IncrementNumberOfReferences();
+
+			ArrowRenderSize = NewTextureAsset->GetSize() / 3;
+
+			SetLocationRelative(RootTransformComponent->GetSize() / 2);
 		}
-
-		ArrowTextureAsset = NewTextureAsset;
-		ArrowTextureAsset->IncrementNumberOfReferences();
-
-		ArrowRenderSize = NewTextureAsset->GetSize() / 3;
-
-		SetLocationOffset(RootTransformComponent->GetSize() / 2);
+	}
+	else
+	{
+		LOG_ERROR("Mising root component. Did you forget to create one?");
 	}
 }

@@ -16,9 +16,6 @@ public:
 	virtual ~UParentComponent() override = default;
 
 	/** Begin UBaseComponent */
-	void BeginPlay() override;
-	void EndPlay() override;
-
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent) override;
 	/** End UBaseComponent */
@@ -31,9 +28,6 @@ public:
 
 	void SetSize(const FVector2D<int> NewSize);
 	FVector2D<int> GetSize() const;
-
-	/** Called from map using delegate each time map location (camera position) is changed */
-	void OnMapLocationChanged(FVector2D<int> NewLocation);
 
 protected:
 	FVector2D<int> Size;

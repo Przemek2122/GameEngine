@@ -18,7 +18,9 @@ void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseCompo
 		AddUpdatedComponent(TransformComponent);
 
 		// Update location of new component
-		TransformComponent->SetLocationFromParent(GetLocation());
+		TransformComponent->SetParentLocation(GetLocation());
+
+		// Update rotation of new component
 		TransformComponent->SetParentRotation(GetRotation());
 	}
 }

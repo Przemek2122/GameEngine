@@ -50,15 +50,7 @@ public:
 
 	bool IsDebugEnabled() const { return bIsDebugEnabled; }
 
-	/** Adds map location offset */
-	FVector2D<int> ConvertLocationToAbsolute(const FVector2D<int>& Relative) const;
-
-	/** Remove map location offset */
-	FVector2D<int> ConvertLocationToRelative(const FVector2D<int>& Absolute) const;
-
 protected:
-	void OnMapLocationChange(FVector2D<int> NewLocation);
-
 	void BuildCollision();
 	void CreateCollisionTiles();
 
@@ -103,9 +95,6 @@ private:
 	/** Size of map in pixels for async work */
 	FVector2D<int> MapSizeInPixelsCache;
 
-	/** Map offset */
-	FVector2D<int> CurrentMapOffset;
-
 	/** Called when collision is created */
 	FDelegateSafe<void> OnCollisionTilesCreated;
 
@@ -120,8 +109,8 @@ private:
 class FCollisionGlobals
 {
 public:
-	static bool RectanglesIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB);
-	static bool CirclesIntersect(const FCollisionManager* CollisionManager, const FCircle& CircleA, const FCircle& CircleB);
-	static bool CircleAndSquareIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& Rectangle, const FCircle& Circle);
+	static bool RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB);
+	static bool CirclesIntersect(const FCircle& CircleA, const FCircle& CircleB);
+	static bool CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle);
 
 };

@@ -68,6 +68,8 @@ protected:
 
 	_NODISCARD virtual FEntityManager* CreateEntityManager();
 
+	void UpdateMapOffsetOnRenderer() const;
+
 protected:
 	/** Map data: tiles size, tiles location and assets for map */
 	FMapData MapData;

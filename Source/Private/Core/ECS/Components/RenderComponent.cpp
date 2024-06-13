@@ -5,6 +5,7 @@
 
 #include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
+#include "Assets/Collection/AssetCollectionItem.h"
 
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
@@ -39,6 +40,11 @@ void URenderComponent::Render()
 	{
 		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, GetLocation(), SizeCached);
 	}
+}
+
+void URenderComponent::SetImage(const FAssetCollectionItem& AssetCollectionItem)
+{
+	SetImage(AssetCollectionItem.GetAssetName(), AssetCollectionItem.GetAssetPath());
 }
 
 void URenderComponent::SetImage(const std::string& InImageName, const std::string& OptionalPath)
