@@ -263,7 +263,7 @@ void UMoveComponent::UpdateLocationLinear(const float DeltaTime)
 	FVector2D<> CalculatedMoveDistance = CurrentMoveVector * DistanceToMoveInThisTick;
 
 	// Save precise float location
-	PreciseLocation = CalculatedMoveDistance;
+	PreciseLocation += CalculatedMoveDistance;
 
 	// Apply location
 	RootTransformComponent->SetLocation(PreciseLocation);

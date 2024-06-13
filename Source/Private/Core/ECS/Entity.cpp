@@ -56,9 +56,14 @@ void EEntity::SetRootComponent(UBaseComponent* NewComponent)
 	DefaultRootComponent = NewComponent;
 }
 
-UBaseComponent* EEntity::GetRootComponent()
+UBaseComponent* EEntity::GetRootComponent() const
 {
 	return DefaultRootComponent;
+}
+
+UParentComponent* EEntity::GetParentComponent() const
+{
+	return dynamic_cast<UParentComponent*>(DefaultRootComponent);
 }
 
 void EEntity::RegisterInput(FEventHandler* InputHandler)

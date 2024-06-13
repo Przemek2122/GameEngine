@@ -15,9 +15,12 @@ EProjectileEntity::EProjectileEntity(FEntityManager* InEntityManager)
 
 void EProjectileEntity::SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams) const
 {
+	// Set movement settings
 	MovementComponent->SetMovementMethod(EMovementMethod::Linear);
-
 	MovementComponent->SetLinearSpeedPerSecond(InitialProjectileParams.LinearSpeedPerSecond);
+
+	// Set rotation
+	GetParentComponent()->SetRotation(InitialProjectileParams.Angle);
 }
 
 URenderComponent* EProjectileEntity::GetRenderComponent() const

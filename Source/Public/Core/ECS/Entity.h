@@ -35,7 +35,8 @@ public:
 	void ReceiveRender();
 
 	virtual void SetRootComponent(UBaseComponent* NewComponent);
-	virtual UBaseComponent* GetRootComponent();
+	virtual UBaseComponent* GetRootComponent() const;
+	virtual UParentComponent* GetParentComponent() const;
 
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;

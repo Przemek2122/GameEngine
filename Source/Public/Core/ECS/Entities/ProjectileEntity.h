@@ -8,12 +8,17 @@ class URenderComponent;
 
 struct EInitialProjectileParams
 {
-	EInitialProjectileParams(const float InLinearSpeedPerSecond = 40.f)
+	EInitialProjectileParams(const float InLinearSpeedPerSecond = 40.f, const int InAngle = 0)
 		: LinearSpeedPerSecond(InLinearSpeedPerSecond)
+		, Angle(InAngle)
 	{
 	}
 
+	/** Speed of projectile */
 	float LinearSpeedPerSecond;
+
+	/** Sets default angle of RootComponent */
+	int Angle;
 };
 
 /**
