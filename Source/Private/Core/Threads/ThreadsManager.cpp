@@ -4,7 +4,7 @@
 #include "Mutex/MutexScopeLock.h"
 
 FThreadsManager::FThreadsManager()
-	: StartingNumberOfThreads(4)
+	: StartingNumberOfThreads(1)
 	, DefaultThreadName("DefaultThread_")
 {
 }

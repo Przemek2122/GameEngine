@@ -14,6 +14,9 @@
 #define INLINE_DEBUGABLE inline
 #endif
 
+typedef int32_t int32;
+typedef int64_t int64;
+
 inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 {
 	if (Condition)

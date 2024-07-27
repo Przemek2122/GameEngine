@@ -5,7 +5,14 @@
 #include "ParentComponent.h"
 #include "ECS/Component.h"
 
+enum class ERenderType
+{
+	Center,
+	LeftTopCorner,
+};
+
 struct FAssetCollectionItem;
+
 /**
  * Component for handling transform of the entity
  */
@@ -32,11 +39,15 @@ public:
 	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
 	void SetImageSize(const FVector2D<int>& InSize);
 
+	void SetRenderLocationType(const ERenderType RenderType);
+
 protected:
 	/** Image to render */
 	FTextureAsset* TextureAsset;
 
 	FVector2D<int> LocationRenderOffset;
 	FVector2D<int> SizeCached;
+
+	ERenderType CurrentRenderType;
 
 };

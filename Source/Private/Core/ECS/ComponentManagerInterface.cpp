@@ -7,6 +7,7 @@ IComponentManagerInterface::IComponentManagerInterface(IComponentManagerInterfac
 	: ComponentManagerInterfaceParent(InComponentManagerInterfaceParent)
 	, bDoesHaveComponentManagerInterfaceParent(InComponentManagerInterfaceParent != nullptr)
 	, OwnerWindow(InOwnerWindow)
+	, bShouldCallBeginPlayOnNewComponents(false)
 {
 }
 

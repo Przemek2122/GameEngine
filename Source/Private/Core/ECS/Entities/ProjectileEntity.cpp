@@ -13,14 +13,14 @@ EProjectileEntity::EProjectileEntity(FEntityManager* InEntityManager)
 	MovementComponent = NewRootComponent->CreateComponent<UMoveComponent>("MovementComponent");
 }
 
-void EProjectileEntity::SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams) const
+void EProjectileEntity::SetProjectileMovementParams(const EProjectileMovementParams& ProjectileMovementParams) const
 {
 	// Set movement settings
 	MovementComponent->SetMovementMethod(EMovementMethod::Linear);
-	MovementComponent->SetLinearSpeedPerSecond(InitialProjectileParams.LinearSpeedPerSecond);
+	MovementComponent->SetLinearSpeedPerSecond(ProjectileMovementParams.LinearSpeedPerSecond);
 
 	// Set rotation
-	GetParentComponent()->SetRotation(InitialProjectileParams.Angle);
+	GetParentComponent()->SetRotation(ProjectileMovementParams.Angle);
 }
 
 URenderComponent* EProjectileEntity::GetRenderComponent() const

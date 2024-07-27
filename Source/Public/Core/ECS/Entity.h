@@ -78,4 +78,6 @@ private:
 	/** Ai tree array */
 	CArray<std::shared_ptr<FAiTree>> AiTreeArray;
 
+	bool bWasBeginPlayCalled;
+
 };

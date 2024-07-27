@@ -15,6 +15,8 @@ class UComponent : public UBaseComponent, public ITransformChildInterface2D<int>
 public:
 	UComponent(IComponentManagerInterface* InComponentManagerInterface);
 
+	void BeginPlay() override;
+
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent) override;
 

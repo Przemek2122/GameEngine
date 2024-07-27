@@ -66,6 +66,8 @@ protected:
 
 	void UpdateLocationLinear(float DeltaTime);
 
+	bool IsInMapBounds(const FVector2D<int>& Location) const;
+
 	/** Called when unit moves out of map bounds */
 	virtual void OnRequestedLocationOutOfBounds();
 
@@ -94,6 +96,8 @@ protected:
 	FVector2D<int> CalculatedTargetLocation;
 
 	bool bHasCustomStopDistance;
+
+	FMap* CurrentMap;
 
 #if _DEBUG
 	UArrowComponent* ArrowComponent = nullptr;

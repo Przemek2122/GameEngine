@@ -1,7 +1,7 @@
 // Created by Przemys³aw Wiewióra 2024
 
 #include "CoreEngine.h"
-#include "ECS/Components/CollisionComponent.h"
+#include "ECS/Components/Collision/CollisionComponent.h"
 
 #include "ECS/Collision/CollisionManager.h"
 #include "Renderer/Map/Map.h"
@@ -10,6 +10,8 @@
 UCollisionComponent::UCollisionComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, CollisionManagerCached(nullptr)
+	, bCollisionsEnabled(false)
+	, bCollisionsEnabledInitial(true)
 {
 }
 
@@ -18,6 +20,13 @@ void UCollisionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionManagerCached = GetCollisionManager();
+
+	SetCollisionsEnabled(bCollisionsEnabledInitial);
+}
+
+void UCollisionComponent::SetCollisionsEnabled(const bool bNewInEnabled)
+{
+	bCollisionsEnabled = bNewInEnabled;
 }
 
 void UCollisionComponent::AddCollision(FCollisionBase* CollisionObject)
@@ -60,10 +69,6 @@ void UCollisionComponent::OnTransformLocationChanged()
 			CollisionManagerCached->OnCollisionObjectMoved(CollisionObjects);
 		}
 	}
-	else
-	{
-		LOG_ERROR("Missing CollisionManager. Collision will not update.");
-	}
 }
 
 const CArray<FCollisionBase*>& UCollisionComponent::GetCollisionObjectsArray() const
@@ -73,12 +78,12 @@ const CArray<FCollisionBase*>& UCollisionComponent::GetCollisionObjectsArray() c
 
 void UCollisionComponent::OnCollisionBegin(UCollisionComponent* OtherCollision)
 {
-	LOG_INFO("C Start");
+	LOG_INFO("Collision Start");
 }
 
 void UCollisionComponent::OnCollisionEnd(UCollisionComponent* OtherCollision)
 {
-	LOG_INFO("C End");
+	LOG_INFO("Collision End");
 }
 
 FCollisionManager* UCollisionComponent::GetCollisionManager() const

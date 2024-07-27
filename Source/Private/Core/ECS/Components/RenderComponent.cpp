@@ -10,6 +10,7 @@
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, TextureAsset(nullptr)
+	, CurrentRenderType(ERenderType::Center)
 {
 }
 
@@ -38,7 +39,29 @@ void URenderComponent::Render()
 
 	if (TextureAsset != nullptr)
 	{
-		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, GetLocation(), SizeCached);
+		FVector2D<int> RenderLocation;
+ 
+		switch (CurrentRenderType)
+		{
+			case ERenderType::Center:
+			{
+				RenderLocation = GetLocationCenter();
+
+				break;
+			}
+
+			case ERenderType::LeftTopCorner:
+			{
+				RenderLocation = GetLocation();
+
+				break;
+			}
+
+			default:
+				LOG_WARN("CurrentRenderType has changed and has undefined type.");
+		}
+
+		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(TextureAsset, RenderLocation, SizeCached, GetRotation(), SizeCached / 2);
 	}
 }
 
@@ -49,19 +72,26 @@ void URenderComponent::SetImage(const FAssetCollectionItem& AssetCollectionItem)
 
 void URenderComponent::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
-	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-	if (AssetsManager != nullptr)
+	if (!InImageName.empty())
 	{
-		FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
+		FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+		if (AssetsManager != nullptr)
+		{
+			FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
 
-		if (TemporaryTexture != nullptr)
-		{
-			SetImage(TemporaryTexture);
+			if (TemporaryTexture != nullptr)
+			{
+				SetImage(TemporaryTexture);
+			}
+			else
+			{
+				LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in URenderComponent::SetImage");
+			}
 		}
-		else
-		{
-			LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in URenderComponent::SetImage");
-		}
+	}
+	else
+	{
+		LOG_ERROR("Got empty @InImageName. We will not set an image");
 	}
 }
 
@@ -90,4 +120,9 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 {
 	SizeCached = InSize;
+}
+
+void URenderComponent::SetRenderLocationType(const ERenderType RenderType)
+{
+	CurrentRenderType = RenderType;
 }

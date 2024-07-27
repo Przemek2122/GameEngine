@@ -16,6 +16,7 @@ public:
 	virtual ~UParentComponent() override = default;
 
 	/** Begin UBaseComponent */
+	void BeginPlay() override;
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent) override;
 	/** End UBaseComponent */

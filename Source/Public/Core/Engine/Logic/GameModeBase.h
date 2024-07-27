@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UserState.h"
 
+struct FUserId;
+class FUSerState;
 class FWindowAdvanced;
 class FGameModeManager;
 
@@ -21,17 +24,33 @@ public:
 
 	/** Use to start (Calls Start()) */
 	void Begin();
-	/** USe to end (Calls End()) */
+
+	/** Use to end (Calls End()) */
 	void Finish();
 
-	bool IsInProgress() const { return bIsInProgress; }
+	/** Creating player instance */
+	FPlayerState* AddPlayer();
 
-	FGameModeManager* GetOwnerGameModeManager() const;
+	/** Creating AI instance */
+	FAIState* AddBot();
+
+	/** Remove user or AI by ID */
+	bool RemoveUser(const FUserId& InUserIdToRemove);
+
+	virtual bool IsInProgress() const { return bIsInProgress; }
+
+	FGameModeManager* GetGameModeManager() const;
 	FWindowAdvanced* GetWindowAdvanced() const;
 
 protected:
 	virtual void Start();
 	virtual void End();
+
+	/** Override to set custom UserState class for each player */
+	virtual FPlayerState* CreatePlayerState(const FUserId& InUserId);
+
+	/** Override to set custom UserState class for each AI */
+	virtual FAIState* CreateAIState(const FUserId& InUserId);
 
 private:
 	/** Has Start been called? */
@@ -39,5 +58,11 @@ private:
 
 	/** Parent */
 	FGameModeManager* OwnerGameModeManager;
+
+	/** All user state instances */
+	CArray<FUSerState*> UserStateArray;
+
+	/** Current user state index */
+	int32 CurrentUserIndex;
 
 };

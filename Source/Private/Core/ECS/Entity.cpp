@@ -10,14 +10,23 @@ EEntity::EEntity(FEntityManager* InEntityManager)
 	: IComponentManagerInterface(nullptr, InEntityManager->GetOwnerWindow())
 	, EntityManagerOwner(InEntityManager)
 	, DefaultRootComponent(nullptr)
+	, bWasBeginPlayCalled(false)
 {
 }
 
 void EEntity::BeginPlay()
 {
+	for (auto& ComponentPair : ComponentsMap)
+	{
+		ComponentPair.second->BeginPlay();
+	}
+
 	RegisterInputInternal();
 
 	SetupAiActions();
+
+	bWasBeginPlayCalled = true;
+	bShouldCallBeginPlayOnNewComponents = true;
 }
 
 void EEntity::EndPlay()
@@ -49,6 +58,19 @@ void EEntity::ReceiveRender()
 	Render();
 
 	RenderComponents();
+
+#if _DEBUG
+	UParentComponent* RootComponent = dynamic_cast<UParentComponent*>(GetRootComponent());
+	if (RootComponent != nullptr)
+	{
+		FRenderer* Renderer = GetWindow()->GetRenderer();
+
+		FVector2D<int> DebugRectLocation = RootComponent->GetLocation() - FVector2D<int>(2, 2);
+		FVector2D<int> DebugRectSize = { 4, 4 };
+
+		Renderer->DrawRectangle(DebugRectLocation, DebugRectSize, FColorRGBA::ColorOrange());
+	}
+#endif
 }
 
 void EEntity::SetRootComponent(UBaseComponent* NewComponent)

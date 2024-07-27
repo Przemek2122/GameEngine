@@ -8,6 +8,16 @@ UComponent::UComponent(IComponentManagerInterface* InComponentManagerInterface)
 {
 }
 
+void UComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	for (const auto& ComponentPair : ComponentsMap)
+	{
+		ComponentPair.second->BeginPlay();
+	}
+}
+
 void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);

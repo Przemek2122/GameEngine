@@ -1,7 +1,7 @@
 // Created by Przemys³aw Wiewióra 2020-2024
 
 #include "CoreEngine.h"
-#include "Core/ECS/Components/SquareCollisionComponent.h"
+#include "Core/ECS/Components/Collision/SquareCollisionComponent.h"
 
 #include "ECS/Collision/CollisionManager.h"
 #include "ECS/Collision/SquareCollision.h"
@@ -47,9 +47,12 @@ void USquareCollisionComponent::OnTransformLocationChanged()
 {
 	Super::OnTransformLocationChanged();
 
-	// Update location
-	FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
-	SquareDataForEdit.SetLocationTopLeftCorner(GetLocation());
+	if (SquareCollision != nullptr)
+	{
+		// Update location
+		FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
+		SquareDataForEdit.SetLocationTopLeftCorner(GetLocation());
+	}
 }
 
 void USquareCollisionComponent::OnTransformRotationChanged()

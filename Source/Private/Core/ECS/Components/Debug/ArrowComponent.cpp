@@ -1,7 +1,7 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #include "CoreEngine.h"
-#include "ECS/Components/ArrowComponent.h"
+#include "ECS/Components/Debug/ArrowComponent.h"
 
 #include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
@@ -100,13 +100,16 @@ bool UArrowComponent::IsDebug() const
 
 void UArrowComponent::RenderArrow()
 {
-	FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
+	if (ArrowTextureAsset != nullptr)
+	{
+		FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
 
-	FVector2D<int> ArrowPivotPoint = { 0, 0 };
+		static const FVector2D<int> ArrowPivotPoint = { 0, 0 };
 
-	FRenderer::OverrideTextureColor(ArrowTextureAsset->GetTexture()->GetSDLTexture(), FColorRGBA::ColorRed());
-	Renderer->DrawTextureAdvanced(ArrowTextureAsset, GetLocation(), ArrowRenderSize, GetRotation() + 180, ArrowPivotPoint, SDL_FLIP_VERTICAL);
-	FRenderer::OverrideTextureColorReset(ArrowTextureAsset->GetTexture()->GetSDLTexture());
+		FRenderer::OverrideTextureColor(ArrowTextureAsset->GetTexture()->GetSDLTexture(), FColorRGBA::ColorRed());
+		Renderer->DrawTextureAdvanced(ArrowTextureAsset, GetLocationCenter(), ArrowRenderSize, GetRotation() + 180, ArrowPivotPoint, SDL_FLIP_VERTICAL);
+		FRenderer::OverrideTextureColorReset(ArrowTextureAsset->GetTexture()->GetSDLTexture());
+	}
 }
 
 void UArrowComponent::SetArrow(FTextureAsset* NewTextureAsset)

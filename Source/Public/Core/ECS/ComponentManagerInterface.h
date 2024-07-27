@@ -18,7 +18,10 @@ public:
 
 		ComponentsMap.Emplace(ComponentName, NewComponent);
 
-		NewComponent.get()->BeginPlay();
+		if (bShouldCallBeginPlayOnNewComponents)
+		{
+			NewComponent.get()->BeginPlay();
+		}
 
 		OnComponentCreated(ComponentName, NewComponent.get());
 
@@ -103,5 +106,7 @@ protected:
 
 	/** Window owner */
 	FWindow* OwnerWindow;
+
+	bool bShouldCallBeginPlayOnNewComponents;
 
 };

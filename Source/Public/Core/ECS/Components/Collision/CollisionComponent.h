@@ -18,6 +18,11 @@ public:
 
 	void BeginPlay() override;
 
+	/** Allows to enable or disable collision of this component */
+	virtual void SetCollisionsEnabled(const bool bNewInEnabled);
+
+	bool IsCollisionEnabled() const { return bCollisionsEnabled; }
+
 	void AddCollision(FCollisionBase* CollisionObject);
 	void RemoveCollision(FCollisionBase* CollisionObject);
 
@@ -46,4 +51,13 @@ private:
 	/** Array with collision objects */
 	CArray<FCollisionBase*> CollisionObjectsArray;
 
+	/**
+	 * This bool will be initially disabled.
+	 * Then depending on @bCheckCollisionsAfterInit it will be set to true or false
+	 * User can also disable or enable collisions
+	 */
+	bool bCollisionsEnabled;
+
+	/** See bool above */
+	bool bCollisionsEnabledInitial;
 };

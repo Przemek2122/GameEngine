@@ -56,7 +56,7 @@ protected:
 
 	void OnCollisionCreated();
 
-	void PutCollisionIntoMesh(FCollisionBase* InCollision);
+	void PutCollisionIntoMesh(FCollisionBase* InCollision, const bool bIsDelayed = false);
 	void RemoveCollisionFromMesh(FCollisionBase* InCollision);
 	void UpdateCollisionOnMesh(FCollisionBase* InCollision);
 

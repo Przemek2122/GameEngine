@@ -1,7 +1,7 @@
 // Created by Przemys³aw Wiewióra 2020-2024
 
 #include "CoreEngine.h"
-#include "Core/ECS/Components/CircleCollisionComponent.h"
+#include "Core/ECS/Components/Collision/CircleCollisionComponent.h"
 
 #include "ECS/Collision/CircleCollision.h"
 #include "ECS/Collision/CollisionManager.h"
@@ -21,7 +21,7 @@ void UCircleCollisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CircleCollision = new FCircleCollision(this, GetLocationCenter(), GetCircleRadius());
+	CircleCollision = new FCircleCollision(this, GetLocationForCollision(), GetCircleRadius());
 
 	AddCollision(CircleCollision);
 }
@@ -44,10 +44,13 @@ void UCircleCollisionComponent::Render()
 
 void UCircleCollisionComponent::OnTransformLocationChanged()
 {
-	UCollisionComponent::OnTransformLocationChanged();
+	Super::OnTransformLocationChanged();
 
-	FCircle& CircleCollisionDataForEdit = CircleCollision->GetCircleDataForEdit();
-	CircleCollisionDataForEdit.UpdateLocation(GetLocationCenter());
+	if (CircleCollision != nullptr)
+	{
+		FCircle& CircleCollisionDataForEdit = CircleCollision->GetCircleDataForEdit();
+		CircleCollisionDataForEdit.UpdateLocation(GetLocationForCollision());
+	}
 }
 
 int UCircleCollisionComponent::GetCircleRadius() const
@@ -59,5 +62,5 @@ int UCircleCollisionComponent::GetCircleRadius() const
 
 FVector2D<int> UCircleCollisionComponent::GetLocationForCollision() const
 {
-	return GetLocationCenter();
+	return GetLocation();
 }

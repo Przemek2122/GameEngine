@@ -6,9 +6,9 @@
 class UMoveComponent;
 class URenderComponent;
 
-struct EInitialProjectileParams
+struct EProjectileMovementParams
 {
-	EInitialProjectileParams(const float InLinearSpeedPerSecond = 40.f, const int InAngle = 0)
+	EProjectileMovementParams(const float InLinearSpeedPerSecond = 40.f, const int InAngle = 0)
 		: LinearSpeedPerSecond(InLinearSpeedPerSecond)
 		, Angle(InAngle)
 	{
@@ -29,7 +29,7 @@ class EProjectileEntity : public EEntity
 public:
 	EProjectileEntity(FEntityManager* InEntityManager);
 
-	void SetProjectileParams(const EInitialProjectileParams& InitialProjectileParams) const;
+	void SetProjectileMovementParams(const EProjectileMovementParams& ProjectileMovementParams) const;
 
 	URenderComponent* GetRenderComponent() const;
 	UMoveComponent* GetMovementComponent() const;

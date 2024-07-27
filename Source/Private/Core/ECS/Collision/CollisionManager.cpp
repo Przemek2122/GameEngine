@@ -5,7 +5,7 @@
 
 #include "ECS/Collision/CircleCollision.h"
 #include "ECS/Collision/SquareCollision.h"
-#include "ECS/Components/CollisionComponent.h"
+#include "ECS/Components/Collision/CollisionComponent.h"
 #include "Renderer/Map/Map.h"
 #include "Threads/ThreadsManager.h"
 
@@ -46,7 +46,7 @@ void FCollisionManager::TickSubSystem()
 		{
 			for (FCollisionBase* Collision : CollisionWaitingForAddArray)
 			{
-				PutCollisionIntoMesh(Collision);
+				PutCollisionIntoMesh(Collision, true);
 			}
 
 			CollisionWaitingForAddArray.Clear();
@@ -194,7 +194,7 @@ void FCollisionManager::OnCollisionCreated()
 	LOG_INFO("Collision map created.");
 }
 
-void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
+void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision, const bool bIsDelayed)
 {
 	InCollision->CurrentlyLocatedTiles = GetTilesFromCollision(InCollision);
 
@@ -203,25 +203,29 @@ void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
 		Tile->CollisionObjects.Push(InCollision);
 	}
 
-	// After putting it inside we should find intersections with other colliders
-	for (FCollisionTile* Tile : InCollision->CurrentlyLocatedTiles)
+	// In case where we added collision before building collision mesh, skip this step
+	if (!bIsDelayed)
 	{
-		// Skip single colliders
-		if (Tile->CollisionObjects.Size() > 1)
+		// After putting it inside we should find intersections with other colliders
+		for (FCollisionTile* Tile : InCollision->CurrentlyLocatedTiles)
 		{
-			for (FCollisionBase* TileCollisionA : Tile->CollisionObjects)
+			// Skip single colliders
+			if (Tile->CollisionObjects.Size() > 1)
 			{
-				for (FCollisionBase* TileCollisionB : Tile->CollisionObjects)
+				for (FCollisionBase* TileCollisionA : Tile->CollisionObjects)
 				{
-					// Skip self
-					if (TileCollisionA != TileCollisionB)
+					for (FCollisionBase* TileCollisionB : Tile->CollisionObjects)
 					{
-						const bool bIsIntersecting = IsIntersecting(TileCollisionA, TileCollisionB);
-						if (bIsIntersecting)
+						// Skip self
+						if (TileCollisionA != TileCollisionB && TileCollisionA->CollisionComponent->IsCollisionEnabled() && TileCollisionB->CollisionComponent->IsCollisionEnabled())
 						{
-							LOG_INFO("Found intersection :)!");
+							const bool bIsIntersecting = IsIntersecting(TileCollisionA, TileCollisionB);
+							if (bIsIntersecting)
+							{
+								LOG_INFO("Found intersection :)!");
 
-							OnCollisionBegin(TileCollisionA, TileCollisionB);
+								OnCollisionBegin(TileCollisionA, TileCollisionB);
+							}
 						}
 					}
 				}
@@ -265,7 +269,7 @@ void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision)
 	{
 		for (FCollisionBase* CollisionObject : Tiles->CollisionObjects)
 		{
-			if (CollisionObject != InCollision)
+			if (CollisionObject != InCollision && CollisionObject->CollisionComponent->IsCollisionEnabled() && InCollision->CollisionComponent->IsCollisionEnabled())
 			{
 				const bool bWasIntersecting = CollisionObject->OtherCollidersCurrentlyColliding.Contains(InCollision);
 				const bool bIsCurrentlyIntersecting = IsIntersecting(InCollision, CollisionObject);

@@ -2,7 +2,7 @@
 
 #include "CoreEngine.h"
 #include "ECS/Components/MoveComponent.h"
-#include "ECS/Components/ArrowComponent.h"
+#include "ECS/Components/Debug/ArrowComponent.h"
 #include "ECS/Components/ParentComponent.h"
 #include "Renderer/Map/Map.h"
 
@@ -14,6 +14,7 @@ UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInt
 	, LinearSpeedPerSecond(40.f)
 	, AngularSpeedPerSecond(90.f)
 	, bHasCustomStopDistance(false)
+	, CurrentMap(nullptr)
 	, CurrentMovementMethod(EMovementMethod::Default)
 {
 #if _DEBUG
@@ -28,7 +29,17 @@ void UMoveComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	RootTransformComponent = dynamic_cast<UParentComponent*>(GetRootComponentOfEntity());
+	EEntity* EntityOwner = GetEntity();
+	if (EntityOwner != nullptr)
+	{
+		RootTransformComponent = dynamic_cast<UParentComponent*>(EntityOwner->GetRootComponent());
+		if (RootTransformComponent != nullptr)
+		{
+			PreciseLocation = RootTransformComponent->GetLocation();
+		}
+
+		CurrentMap = EntityOwner->GetCurrentMap();
+	}
 }
 
 void UMoveComponent::Tick(const float DeltaTime)
@@ -236,17 +247,24 @@ void UMoveComponent::UpdateLocationToTarget(const float DeltaTime)
 		// Distance to move
 		float DistanceToMoveInThisTick = LinearSpeedPerSecond * DeltaTime;
 
+		FVector2D<> NewLocation;
+
 		const int DistanceBetweenPoints = RootTransformComponent->GetLocation().DistanceTo(TargetLocation);
 		if (DistanceBetweenPoints < FMath::RoundToInt(DistanceToMoveInThisTick))
 		{
-			RootTransformComponent->SetLocation(TargetLocation);
+			NewLocation = TargetLocation;
 		}
 		else
 		{
 			const FVector2D<float> LocationToMove = CurrentMoveVector * DistanceToMoveInThisTick;
 			PreciseLocation += LocationToMove;
 
-			RootTransformComponent->SetLocation(PreciseLocation);
+			NewLocation = PreciseLocation;
+		}
+
+		if (IsInMapBounds(NewLocation))
+		{
+			RootTransformComponent->SetLocation(NewLocation);
 		}
 	}
 }
@@ -262,11 +280,34 @@ void UMoveComponent::UpdateLocationLinear(const float DeltaTime)
 	// Calculated distance to move in 2D
 	FVector2D<> CalculatedMoveDistance = CurrentMoveVector * DistanceToMoveInThisTick;
 
-	// Save precise float location
-	PreciseLocation += CalculatedMoveDistance;
+	if (IsInMapBounds(PreciseLocation + CalculatedMoveDistance))
+	{
+		// Save precise float location
+		PreciseLocation += CalculatedMoveDistance;
 
-	// Apply location
-	RootTransformComponent->SetLocation(PreciseLocation);
+		// Apply location
+		RootTransformComponent->SetLocation(PreciseLocation);
+	}
+	else
+	{
+		AbortMovement();
+	}
+}
+
+bool UMoveComponent::IsInMapBounds(const FVector2D<int>& Location) const
+{
+	bool bIsInBounds;
+
+	if (CurrentMap != nullptr)
+	{
+		bIsInBounds = CurrentMap->IsInBounds(Location);
+	}
+	else
+	{
+		bIsInBounds = false;
+	}
+
+	return bIsInBounds;
 }
 
 void UMoveComponent::OnRequestedLocationOutOfBounds()

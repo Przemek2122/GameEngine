@@ -11,6 +11,16 @@ UParentComponent::UParentComponent(IComponentManagerInterface* InComponentManage
 {
 }
 
+void UParentComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	for (auto ComponentPair : ComponentsMap)
+	{
+		ComponentPair.second->BeginPlay();
+	}
+}
+
 void UParentComponent::OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent)
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);

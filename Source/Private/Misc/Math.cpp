@@ -94,7 +94,7 @@ void FMath::RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Ang
 
 FVector2D<int> FMath::GetLocationCenter(const FVector2D<int>& InLocation, const FVector2D<int>& InSize)
 {
-	return InLocation + (InSize / 2);
+	return InLocation - (InSize / 2);
 }
 
 int FMath::FloorToInt(const float Value)
