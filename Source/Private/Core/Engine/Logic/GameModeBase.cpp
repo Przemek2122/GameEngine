@@ -3,24 +3,17 @@
 #include "CoreEngine.h"
 #include "Core/Engine/Logic/GameModeBase.h"
 #include "Engine/Logic/GameModeManager.h"
-#include "Engine/Logic/UserState.h"
+#include "Engine/Logic/BaseController.h"
 
 FGameModeBase::FGameModeBase(FGameModeManager* InGameModeManager)
 	: bIsInProgress(false)
 	, OwnerGameModeManager(InGameModeManager)
 	, CurrentUserIndex(-1)
 {
+	CurrentMap = OwnerGameModeManager->GetOwnerWindowAdvanced()->GetMapManager()->GetCurrentMap();
 }
 
-FGameModeBase::~FGameModeBase()
-{
-	for (FUSerState* UserState : UserStateArray)
-	{
-		delete UserState;
-	}
-
-	UserStateArray.Clear();
-}
+FGameModeBase::~FGameModeBase() = default;
 
 void FGameModeBase::Initialize()
 {
@@ -50,26 +43,40 @@ void FGameModeBase::Finish()
 	}
 }
 
-FPlayerState* FGameModeBase::AddPlayer()
+FPlayerController* FGameModeBase::AddPlayer()
 {
-	CurrentUserIndex++;
+	FPlayerController* NewController = CreatePlayerController();
 
-	FPlayerState* State = CreatePlayerState(FUserId(CurrentUserIndex));
+	UserStateArray.Push(NewController);
 
-	UserStateArray.Push(State);
+	if (NewController != nullptr)
+	{
+		LOG_INFO("Player created succesfully.");
+	}
+	else
+	{
+		LOG_WARN("Player NOT created!");
+	}
 
-	return State;
+	return NewController;
 }
 
-FAIState* FGameModeBase::AddBot()
+FAIController* FGameModeBase::AddBot()
 {
-	CurrentUserIndex++;
+	FAIController* NewAIController = CreateAIController();
 
-	FAIState* State = CreateAIState(FUserId(CurrentUserIndex));
+	UserStateArray.Push(NewAIController);
 
-	UserStateArray.Push(State);
+	if (NewAIController != nullptr)
+	{
+		LOG_INFO("AI created succesfully.");
+	}
+	else
+	{
+		LOG_WARN("AI NOT created!");
+	}
 
-	return State;
+	return NewAIController;
 }
 
 bool FGameModeBase::RemoveUser(const FUserId& InUserIdToRemove)
@@ -78,9 +85,9 @@ bool FGameModeBase::RemoveUser(const FUserId& InUserIdToRemove)
 
 	for (ContainerInt i = 0; i < UserStateArray.Size(); i++)
 	{
-		FUSerState* USerState = UserStateArray[i];
+		FBaseController* BaseController = UserStateArray[i];
 
-		if (USerState->GetUserId() == InUserIdToRemove)
+		if (BaseController->GetUserId() == InUserIdToRemove)
 		{
 			UserStateArray.RemoveAt(i);
 
@@ -93,6 +100,41 @@ bool FGameModeBase::RemoveUser(const FUserId& InUserIdToRemove)
 	return bWasRemoved;
 }
 
+FPlayerController* FGameModeBase::GetPlayerControllerByUserId(const FUserId& InUserId)
+{
+	FPlayerController* Controller = nullptr;
+
+	for (FBaseController* BaseController : UserStateArray)
+	{
+		if (BaseController->GetUserId() == InUserId)
+		{
+			Controller = dynamic_cast<FPlayerController*>(BaseController);
+		}
+	}
+
+	return Controller;
+}
+
+FAIController* FGameModeBase::GetAIControllerByUserId(const FUserId& InUserId)
+{
+	FAIController* Controller = nullptr;
+
+	for (FBaseController* BaseController : UserStateArray)
+	{
+		if (BaseController->GetUserId() == InUserId)
+		{
+			Controller = dynamic_cast<FAIController*>(BaseController);
+		}
+	}
+
+	return Controller;
+}
+
+const CArray<FBaseController*>& FGameModeBase::GetControllerArray() const
+{
+	return UserStateArray;
+}
+
 void FGameModeBase::Start()
 {
 }
@@ -101,14 +143,19 @@ void FGameModeBase::End()
 {
 }
 
-FPlayerState* FGameModeBase::CreatePlayerState(const FUserId& InUserId)
+FPlayerController* FGameModeBase::CreatePlayerController()
 {
-	return new FPlayerState(InUserId);
+	return CreateController<FPlayerController>();
 }
 
-FAIState* FGameModeBase::CreateAIState(const FUserId& InUserId)
+FAIController* FGameModeBase::CreateAIController()
 {
-	return new FAIState(InUserId);
+	return CreateController<FAIController>();
+}
+
+FMap* FGameModeBase::GetCurrentMap() const
+{
+	return CurrentMap;
 }
 
 FGameModeManager* FGameModeBase::GetGameModeManager() const

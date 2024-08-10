@@ -162,8 +162,9 @@ void FEventHandler::ResetAll()
 
 void FEventHandler::InitializeInputFromConfig()
 {
+	const std::string EngineInputSettingsIniName = "EngineInput";
 	FIniManager* IniManager = GEngine->GetAssetsManager()->GetIniManager();
-	EngineInputIniObject = IniManager->GetIniObject("EngineInput");
+	EngineInputIniObject = IniManager->GetIniObject(EngineInputSettingsIniName);
 	if (EngineInputIniObject->DoesIniExist())
 	{
 		EngineInputIniObject->LoadIni();

@@ -3,6 +3,7 @@
 #include "CoreEngine.h"
 #include "ECS/Entity.h"
 
+#include "Engine/Logic/GameModeManager.h"
 #include "Renderer/WindowAdvanced.h"
 #include "Renderer/Map/MapManager.h"
 
@@ -119,6 +120,11 @@ FMap* EEntity::GetCurrentMap() const
 FGameModeManager* EEntity::GetGameModeManager() const
 {
 	return GetWindowAdvanced()->GetGameModeManager();
+}
+
+FGameModeBase* EEntity::GetGameMode() const
+{
+	return GetGameModeManager()->GetCurrentGameMode();
 }
 
 void EEntity::RegisterInputInternal()

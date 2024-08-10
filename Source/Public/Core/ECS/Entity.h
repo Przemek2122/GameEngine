@@ -5,11 +5,15 @@
 #include "AI/AiTree.h"
 #include "ECS/BaseComponent.h"
 
+class FGameModeBase;
 class FWindowAdvanced;
 class FMap;
 class FGameModeManager;
 class FEntityManager;
 
+/**
+ * Generic entity class
+ */
 class EEntity : public FObject, public IComponentManagerInterface
 {
 public:
@@ -42,6 +46,7 @@ public:
 	FWindow* GetWindow() const;
 	FWindowAdvanced* GetWindowAdvanced() const;
 	FGameModeManager* GetGameModeManager() const;
+	FGameModeBase* GetGameMode() const;
 	FMap* GetCurrentMap() const;
 
 protected:

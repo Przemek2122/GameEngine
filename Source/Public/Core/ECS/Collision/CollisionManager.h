@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECS/SubSystems/SubSystemInstanceInterface.h"
 
+class FIniObject;
 struct FCircle;
 struct FRectangleWithDiagonal;
 class FCollisionBase;
@@ -103,6 +104,9 @@ private:
 
 	/** If true debug will be enabled on manager and components */
 	bool bIsDebugEnabled;
+
+	/** ini with settings for collision */
+	std::shared_ptr<FIniObject> EngineCollisionSettingsIniObject;
 
 };
 

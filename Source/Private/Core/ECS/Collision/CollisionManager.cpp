@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "ECS/Collision/CollisionManager.h"
 
+#include "Assets/IniReader/IniManager.h"
+#include "Assets/IniReader/IniObject.h"
 #include "ECS/Collision/CircleCollision.h"
 #include "ECS/Collision/SquareCollision.h"
 #include "ECS/Components/Collision/CollisionComponent.h"
@@ -32,6 +34,25 @@ FCollisionManager::~FCollisionManager()
 void FCollisionManager::InitializeSubSystem()
 {
 	Super::InitializeSubSystem();
+
+	const std::string CollisionSettingsIniName = "CollisionSettings";
+	FIniManager* IniManager = GEngine->GetAssetsManager()->GetIniManager();
+	EngineCollisionSettingsIniObject = IniManager->GetIniObject(CollisionSettingsIniName);
+	if (EngineCollisionSettingsIniObject->DoesIniExist())
+	{
+		EngineCollisionSettingsIniObject->LoadIni();
+
+		const std::string CollisionTileSizeFieldName = "CollisionTileSize";
+		const FIniField IniField = EngineCollisionSettingsIniObject->FindFieldByName(CollisionTileSizeFieldName);
+		if (IniField.IsValid())
+		{
+			const int CollisionTileSizeValue = IniField.GetValueAsInt();
+
+			CollisionTileSize = FVector2D<int>(CollisionTileSizeValue, CollisionTileSizeValue);
+
+			LOG_INFO("Collision mesh size from ini: " << CollisionTileSizeValue << " x " << CollisionTileSizeValue << " each.");
+		}
+	}
 
 	BuildCollision();
 }

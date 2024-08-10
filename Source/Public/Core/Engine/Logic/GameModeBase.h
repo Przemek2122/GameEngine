@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UserState.h"
+#include "BaseController.h"
+#include "GameModeManager.h"
+#include "Renderer/Map/Map.h"
+#include "Renderer/Map/MapManager.h"
 
 struct FUserId;
-class FUSerState;
+class FBaseController;
 class FWindowAdvanced;
 class FGameModeManager;
 
@@ -22,20 +25,35 @@ public:
 	virtual void Initialize();
 	virtual void DeInitialize();
 
-	/** Use to start (Calls Start()) */
+	/**
+	 * Use to start gameplay
+	 * Will call Start()
+	 */
 	void Begin();
 
-	/** Use to end (Calls End()) */
+	/**
+	 * Use to end gameplay
+	 * Will call End()
+	 */
 	void Finish();
 
 	/** Creating player instance */
-	FPlayerState* AddPlayer();
+	FPlayerController* AddPlayer();
 
 	/** Creating AI instance */
-	FAIState* AddBot();
+	FAIController* AddBot();
 
-	/** Remove user or AI by ID */
+	/** Remove player (FPlayerController) or AI (FAIController) by ID */
 	bool RemoveUser(const FUserId& InUserIdToRemove);
+
+	/** @returns FPlayerState found by UserId */
+	FPlayerController* GetPlayerControllerByUserId(const FUserId& InUserId);
+
+	/** @returns FPlayerState found by UserId */
+	FAIController* GetAIControllerByUserId(const FUserId& InUserId);
+
+	/** Array with all controllers */
+	const CArray<FBaseController*>& GetControllerArray() const;
 
 	virtual bool IsInProgress() const { return bIsInProgress; }
 
@@ -47,10 +65,31 @@ protected:
 	virtual void End();
 
 	/** Override to set custom UserState class for each player */
-	virtual FPlayerState* CreatePlayerState(const FUserId& InUserId);
+	virtual FPlayerController* CreatePlayerController();
 
 	/** Override to set custom UserState class for each AI */
-	virtual FAIState* CreateAIState(const FUserId& InUserId);
+	virtual FAIController* CreateAIController();
+
+	template<class TControllerClass>
+	TControllerClass* CreateController()
+	{
+		TControllerClass* Controller = nullptr;
+
+		if (CurrentMap != nullptr)
+		{
+			FEntityManager* EntityManager = CurrentMap->GetEntityManager();
+			if (EntityManager != nullptr)
+			{
+				CurrentUserIndex++;
+
+				Controller = EntityManager->CreateEntity<TControllerClass>(FUserId(CurrentUserIndex));
+			}
+		}
+
+		return Controller;
+	}
+
+	FMap* GetCurrentMap() const;
 
 private:
 	/** Has Start been called? */
@@ -60,9 +99,12 @@ private:
 	FGameModeManager* OwnerGameModeManager;
 
 	/** All user state instances */
-	CArray<FUSerState*> UserStateArray;
+	CArray<FBaseController*> UserStateArray;
 
 	/** Current user state index */
 	int32 CurrentUserIndex;
+
+	/** Cached map for gamemode */
+	FMap* CurrentMap;
 
 };
