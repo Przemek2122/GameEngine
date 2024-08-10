@@ -449,19 +449,22 @@
     <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemManagerInterface.h">
       <Filter>Public\Core\ECS\SubSystems</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\TeamEntity.h">
+      <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h">
       <Filter>Public\Core\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h">
       <Filter>Public\Core\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Engine\Logic\BaseController.h">
+      <Filter>Public\Core\Engine\Logic</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h">
       <Filter>Public\Core\Engine\Logic</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h">
-      <Filter>Public\Core\Engine\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Core\Engine\Logic\UserState.h">
       <Filter>Public\Core\Engine\Logic</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine.h">
@@ -1129,19 +1132,22 @@
     <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemManagerInterface.cpp">
       <Filter>Private\Core\ECS\SubSystems</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\TeamEntity.cpp">
+      <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp">
       <Filter>Private\Core\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp">
       <Filter>Private\Core\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Engine\Logic\BaseController.cpp">
+      <Filter>Private\Core\Engine\Logic</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp">
       <Filter>Private\Core\Engine\Logic</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp">
-      <Filter>Private\Core\Engine\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\Engine\Logic\UserState.cpp">
       <Filter>Private\Core\Engine\Logic</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine.cpp">

@@ -86,6 +86,7 @@
     <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\Logic\BaseController.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
@@ -326,6 +327,7 @@
     <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\Logic\BaseController.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
