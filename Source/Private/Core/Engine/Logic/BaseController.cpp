@@ -8,32 +8,43 @@ FUserId::FUserId(const int32 NewIdNumber)
 {
 }
 
-FBaseController::FBaseController(FEntityManager* InEntityManager, const FUserId& InUserId)
-	: EEntity(InEntityManager)
-	, UserId(InUserId)
-	, PlayerState(nullptr)
+FUserId::FUserId()
+	: IdNumber(USER_ID_DEFAULT_INCORRECT)
 {
 }
 
-FBaseController::~FBaseController()
+EState::EState(FEntityManager* InEntityManager)
+	: EEntity(InEntityManager)
+	, BaseController(nullptr)
 {
-	delete PlayerState;
+}
+
+EHUDBase::EHUDBase(FEntityManager* InEntityManager)
+	: EEntity(InEntityManager)
+	, PlayerController(nullptr)
+{
+}
+
+FPlayerController* EHUDBase::GetPlayerController() const
+{
+	return PlayerController;
+}
+
+FBaseController::FBaseController(FEntityManager* InEntityManager, const FUserId& InUserId)
+	: EEntity(InEntityManager)
+	, UserId(InUserId)
+	, State(nullptr)
+{
 }
 
 void FBaseController::BeginPlay()
 {
-	PlayerState = CreateState();
-	PlayerState->BaseController = this;
-	PlayerState->BeginPlay();
+	FEntityManager* EntityManager = GetEntityManagerOwner();
 
-	EEntity::BeginPlay();
-}
+	State = CreateState(EntityManager);
+	State->BaseController = this;
 
-void FBaseController::EndPlay()
-{
-	PlayerState->EndPlay();
-
-	EEntity::EndPlay();
+	Super::BeginPlay();
 }
 
 FUserId FBaseController::GetUserId() const
@@ -41,9 +52,9 @@ FUserId FBaseController::GetUserId() const
 	return UserId;
 }
 
-FState* FBaseController::GetPlayerState() const
+EState* FBaseController::GetPlayerState() const
 {
-	return PlayerState;
+	return State;
 }
 
 EStateType FBaseController::GetStateType() const
@@ -51,19 +62,35 @@ EStateType FBaseController::GetStateType() const
 	return EStateType::Base;
 }
 
-FState* FBaseController::CreateState()
+EState* FBaseController::CreateState(FEntityManager* EntityManager)
 {
-	return new FState();
+	return EntityManager->CreateEntity<EState>();
 }
 
 FPlayerController::FPlayerController(FEntityManager* InEntityManager, const FUserId& InUserId)
 	: FBaseController(InEntityManager, InUserId)
+	, HUD(nullptr)
 {
+}
+
+void FPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	FEntityManager* EntityManager = GetEntityManagerOwner();
+
+	HUD = CreateHUD(EntityManager);
+	HUD->PlayerController = this;
 }
 
 EStateType FPlayerController::GetStateType() const
 {
 	return EStateType::Player;
+}
+
+EHUDBase* FPlayerController::CreateHUD(FEntityManager* EntityManager)
+{
+	return EntityManager->CreateEntity<EHUDBase>();
 }
 
 FAIController::FAIController(FEntityManager* InEntityManager, const FUserId& InUserId)

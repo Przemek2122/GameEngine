@@ -60,6 +60,9 @@ public:
 	FGameModeManager* GetGameModeManager() const;
 	FWindowAdvanced* GetWindowAdvanced() const;
 
+	/** Called when start is called. Make sure to check if gameplay is not already in progress using IsInProgress() */
+	FDelegate<void> OnGameplayStart;
+
 protected:
 	virtual void Start();
 	virtual void End();

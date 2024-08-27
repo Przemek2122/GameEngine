@@ -30,6 +30,8 @@ void FGameModeBase::Begin()
 		bIsInProgress = true;
 
 		Start();
+
+		OnGameplayStart.Execute();
 	}
 }
 

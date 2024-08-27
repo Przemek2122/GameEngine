@@ -10,17 +10,21 @@
 class UTeamComponent : public UBaseComponent
 {
 public:
+	UTeamComponent(IComponentManagerInterface* InComponentManagerInterface);
 	UTeamComponent(IComponentManagerInterface* InComponentManagerInterface, const FUserId& InOwnerUserId, const int InTeam);
+
+	void SetOwnerUserId(const FUserId& NewOwnerUserId) { OwnerUserId = NewOwnerUserId; }
+	FUserId GetOwnerUserId() const { return OwnerUserId; }
 
 	int GetCurrentTeam() const { return CurrentTeam; }
 
-	FUserId GetOwnerUserId() const { return OwnerUserId; }
-
 protected:
+	/** Owner id */
+	FUserId OwnerUserId;
+
 	/** Team of owning entity */
 	int CurrentTeam;
 
-	/** Owner id */
-	FUserId OwnerUserId;
+
 
 };

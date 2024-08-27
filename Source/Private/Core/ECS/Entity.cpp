@@ -149,8 +149,13 @@ void EEntity::OnComponentCreated(const std::string& ComponentName, UBaseComponen
 {
 	IComponentManagerInterface::OnComponentCreated(ComponentName, NewComponent);
 
+	// If we are missing component for root, try to find one
 	if (DefaultRootComponent == nullptr)
 	{
-		DefaultRootComponent = NewComponent;
+		// But only with specific base
+		if (UParentComponent* ParentComponent = dynamic_cast<UParentComponent*>(NewComponent))
+		{
+			DefaultRootComponent = NewComponent;
+		}
 	}
 }

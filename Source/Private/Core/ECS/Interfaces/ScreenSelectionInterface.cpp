@@ -49,6 +49,11 @@ void IScreenSelectionInterface::UnregisterFromScreenSelection()
 	}
 }
 
+bool IScreenSelectionInterface::NativeCanBeSelected()
+{
+	return CanSelect();
+}
+
 void IScreenSelectionInterface::NativeSelect()
 {
 	if (!bIsSelected)

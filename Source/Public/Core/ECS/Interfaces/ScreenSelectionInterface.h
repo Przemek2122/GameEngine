@@ -19,6 +19,9 @@ public:
 	/** Unregister does not have to be called */
 	void UnregisterFromScreenSelection();
 
+	/** Use to check if unit can be selected */
+	bool NativeCanBeSelected();
+
 	void NativeSelect();
 
 	void NativeDeselect();
@@ -32,6 +35,9 @@ public:
 	virtual FVector2D<int> GetSize() = 0;
 
 protected:
+	/** Use to determine if object can be selected */
+	virtual bool CanSelect() { return true; }
+
 	/** Called when object is selected (once) */
 	virtual void OnSelect() = 0;
 

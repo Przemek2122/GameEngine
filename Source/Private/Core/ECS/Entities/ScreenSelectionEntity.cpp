@@ -160,7 +160,9 @@ void EScreenSelectionEntity::CheckScreenSelection(const FVector2D<int>& InMouseP
 		const bool bIsSelectedVerticalToUp = SelectionStart.Y >= ScreenSelectableLocation.Y &&
 			SelectionEnd.Y <= ScreenSelectableLocation.Y + ScreenSelectableSize.Y;
 
-		if ((bIsSelectedHorizontalToRight || bIsSelectedHorizontalToLeft) && (bIsSelectedVerticalToDown || bIsSelectedVerticalToUp))
+		if (ScreenSelectable->NativeCanBeSelected() 
+			&& (bIsSelectedHorizontalToRight	|| bIsSelectedHorizontalToLeft) 
+			&& (bIsSelectedVerticalToDown		|| bIsSelectedVerticalToUp))
 		{
 			ScreenSelectable->NativeSelect();
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+class FPlayerController;
 class FBaseController;
 class FGameModeBase;
 
@@ -13,6 +14,8 @@ enum EStateType
 	Player,
 	AI
 };
+
+#define USER_ID_DEFAULT_INCORRECT (-1)
 
 /**
  * User Id for disallowing to provide raw Id.
@@ -26,6 +29,8 @@ private:
 	FUserId(const int32 NewIdNumber);
 
 public:
+	FUserId();
+
 	/** Get raw integer */
 	int32 Get() const { return IdNumber; }
 
@@ -41,20 +46,12 @@ private:
  * Class for data shared between AI and player like
  * resources for current game etc...
  */
-class FState
+class EState : public EEntity
 {
 	friend FBaseController;
 
 public:
-	virtual ~FState() = default;
-
-	virtual void BeginPlay()
-	{
-	}
-
-	virtual void EndPlay()
-	{
-	}
+	EState(FEntityManager* InEntityManager);
 
 	FBaseController* GetController() const { return BaseController; }
 
@@ -63,31 +60,47 @@ protected:
 	
 };
 
+class EHUDBase : public EEntity
+{
+	friend FPlayerController;
+
+public:
+	EHUDBase(FEntityManager* InEntityManager);
+
+	FPlayerController* GetPlayerController() const;
+
+protected:
+	FPlayerController* PlayerController;
+
+};
+
 /** This class should exist for each user or AI */
 class FBaseController : public EEntity
 {
 public:
 	FBaseController(FEntityManager* InEntityManager, const FUserId& InUserId);
-	~FBaseController() override;
 
 	void BeginPlay() override;
-	void EndPlay() override;
+
+	template<typename TStateType = EState>
+	TStateType* GetPlayerState() const
+	{
+		return dynamic_cast<TStateType*>(State);
+	}
 
 	FUserId GetUserId() const;
-
-	FState* GetPlayerState() const;
-
+	EState* GetPlayerState() const;
 	virtual EStateType GetStateType() const;
 
 protected:
-	virtual FState* CreateState();
+	virtual EState* CreateState(FEntityManager* EntityManager);
 
 private:
 	/** Unique id for each player */
 	FUserId UserId;
 
-	/** Player state class for each user */
-	FState* PlayerState;
+	/** Player state class */
+	EState* State;
 
 };
 
@@ -97,7 +110,22 @@ class FPlayerController : public FBaseController
 public:
 	FPlayerController(FEntityManager* InEntityManager, const FUserId& InUserId);
 
+	/** Begin FBaseController */
+	void BeginPlay() override;
 	EStateType GetStateType() const override;
+	/** End FBaseController */
+
+	template<typename THUDType = EHUDBase>
+	THUDType* GetHUD() const
+	{
+		return dynamic_cast<THUDType*>(HUD);
+	}
+
+protected:
+	virtual EHUDBase* CreateHUD(FEntityManager* EntityManager);
+
+protected:
+	EHUDBase* HUD;
 
 };
 
