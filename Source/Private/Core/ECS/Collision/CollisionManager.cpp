@@ -38,7 +38,7 @@ void FCollisionManager::InitializeSubSystem()
 	const std::string CollisionSettingsIniName = "CollisionSettings";
 	FIniManager* IniManager = GEngine->GetAssetsManager()->GetIniManager();
 	EngineCollisionSettingsIniObject = IniManager->GetIniObject(CollisionSettingsIniName);
-	if (EngineCollisionSettingsIniObject->DoesIniExist())
+	if (EngineCollisionSettingsIniObject && EngineCollisionSettingsIniObject->DoesIniExist())
 	{
 		EngineCollisionSettingsIniObject->LoadIni();
 
@@ -52,6 +52,10 @@ void FCollisionManager::InitializeSubSystem()
 
 			LOG_INFO("Collision mesh size from ini: " << CollisionTileSizeValue << " x " << CollisionTileSizeValue << " each.");
 		}
+	}
+	else
+	{
+		LOG_WARN("Missing collision ini file.");
 	}
 
 	BuildCollision();

@@ -28,15 +28,9 @@ public:
 	virtual ~FInteractionBaseWidget() override;
 
 	/** Begin FWidget */
-	void Init() override;
-	void PreDeInit() override;
+	void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState) override;
+	bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState) override;
 	/** End FWidget */
-
-	void SetupInput(FWidgetInputManager* InWidgetInputManager);
-	void ClearInput(FWidgetInputManager* InWidgetInputManager);
-
-	bool OnMouseLeftButtonUsed(FVector2D<int> Location, EInputState InputState);
-	void OnMouseMove(FVector2D<int> Location, EInputState InputState);
 
 	static _NODISCARD FVector2D<int> GetMouseLocation();
 
@@ -67,6 +61,5 @@ protected:
 
 	bool bIsInWidget;
 	bool bMouseEnteredWidget;
-	FWidgetInputManager* WidgetInputManager;
 	
 };

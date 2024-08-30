@@ -61,8 +61,10 @@ void ECameraManager::UnregisterInput()
 	}
 }
 
-void ECameraManager::OnMouseMove(const FVector2D<int> CurrentMouseLocation, EInputState)
+bool ECameraManager::OnMouseMove(const FVector2D<int> CurrentMouseLocation, EInputState)
 {
+	bool bWasInputConsumed = false;
+
 	if (bIsRightMouseButtonPressed)
 	{
 		if (WindowMapManager != nullptr)
@@ -70,22 +72,34 @@ void ECameraManager::OnMouseMove(const FVector2D<int> CurrentMouseLocation, EInp
 			const FVector2D<int> LocationChange = CurrentMouseLocation - LastMouseLocation;
 
 			WindowMapManager->MoveMap(LocationChange);
+
+			bWasInputConsumed = true;
 		}
 	}
 
 	LastMouseLocation = CurrentMouseLocation;
+
+	return bWasInputConsumed;
 }
 
-void ECameraManager::OnMouseRightClick(const FVector2D<int> CurrentMouseLocation, const EInputState InputState)
+bool ECameraManager::OnMouseRightClick(const FVector2D<int> CurrentMouseLocation, const EInputState InputState)
 {
+	bool bWasInputConsumed = false;
+
 	if (InputState == EInputState::PRESS)
 	{
 		bIsRightMouseButtonPressed = true;
 
 		LastMouseLocation = CurrentMouseLocation;
+
+		bWasInputConsumed = true;
 	}
 	else if (InputState == EInputState::RELEASE)
 	{
 		bIsRightMouseButtonPressed = false;
+
+		bWasInputConsumed = true;
 	}
+
+	return bWasInputConsumed;
 }

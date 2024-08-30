@@ -42,9 +42,11 @@ public:
 		Delegate.UnBindObject(Object, InFunctionPointer);
 	}
 
-	virtual void Execute(TInParams... Params)
+	virtual bool Execute(TInParams... Params)
 	{
 		Delegate.Execute(Params...);
+
+		return false;
 	}
 
 protected:
@@ -66,7 +68,7 @@ public:
 	}
 
 	/** Function which should be called when input is received */
-	void ExecuteByLambda(TInParams... Params)
+	bool ExecuteByLambda(TInParams... Params)
 	{
 		bool bInputConsumed = false;
 
@@ -86,6 +88,8 @@ public:
 			});
 
 		Super::Delegate.ExecuteByLambda(Lambda, Params...);
+
+		return bInputConsumed;
 	}
 
 protected:
@@ -104,6 +108,12 @@ public:
 	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
 	 */
 	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>, EInputState>> OnMouseLeftButtonUsed;
+
+	/**
+	 * Function triggered when right mouse button is pressed or released @see EInputState,
+	 * function should return true when pressed (blocks input for other widgets) inside and false if not.
+	 */
+	FAutoDeletePointer<FWidgetInputConsumableWrapper<bool, FVector2D<int>, EInputState>> OnMouseRightButtonUsed;
 };
 
 class FKeyboardInputCollection

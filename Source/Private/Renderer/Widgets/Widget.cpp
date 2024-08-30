@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Widget.h"
 
+#include "Renderer/Widgets/WidgetInputManager.h"
+
 FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder)
 	: IWidgetPositionInterface(InWidgetManagementInterface)
 	, bWasRenderedThisFrame(false)
@@ -12,6 +14,7 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bIsPendingDelete(false)
+	, WidgetInputManager(nullptr)
 {
 #if _DEBUG
 	// Critical to be valid.
@@ -55,6 +58,37 @@ void FWidget::Init()
 	RegisterWidgetPostInit(this);
 
 	bWasInitCalled = true;
+
+	// Register input
+	FDelegate<void, FWidgetInputManager*> SetupDelegate;
+	SetupDelegate.BindObject(this, &FWidget::SetupInput);
+
+	WidgetInputManager = GetWindow()->GetWidgetInputManager();
+	WidgetInputManager->Register(this, SetupDelegate);
+}
+
+void FWidget::PreDeInit()
+{
+	if (WidgetInputManager != nullptr)
+	{
+		// Unregister input
+		FDelegate<void, FWidgetInputManager*> ClearDelegate;
+		ClearDelegate.BindObject(this, &FWidget::ClearInput);
+
+		WidgetInputManager->UnRegister(this, ClearDelegate);
+	}
+	else
+	{
+		LOG_WARN("Unable to unregister input for widget.");
+	}
+
+	// Unregister widget
+	if (WidgetManagementInterface != nullptr)
+	{
+		WidgetManagementInterface->UnRegisterWidget(this);
+
+		WidgetManagementInterface = nullptr;
+	}
 }
 
 void FWidget::DeInit()
@@ -79,15 +113,36 @@ void FWidget::ReCalculate()
 	}
 }
 
-void FWidget::PreDeInit()
+void FWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
 {
-	if (WidgetManagementInterface != nullptr)
-	{
-		WidgetManagementInterface->UnRegisterWidget(this);
-
-		WidgetManagementInterface = nullptr;
-	}
 }
+
+bool FWidget::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	// By default, we do not capture input on widgets, you can change returned value to true to block input for other input receivers
+	return false;
+}
+
+bool FWidget::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	// By default, we do not capture input on widgets, you can change returned value to true to block input for other input receivers
+	return false;
+}
+
+void FWidget::SetupInput(FWidgetInputManager* InWidgetInputManager)
+{
+	InWidgetInputManager->MouseInputCollection.OnMouseMove.Get()->BindObject(this, &FWidget::OnMouseMove);
+	InWidgetInputManager->MouseInputCollection.OnMouseLeftButtonUsed.Get()->BindObject(this, &FWidget::OnMouseLeftClick);
+	InWidgetInputManager->MouseInputCollection.OnMouseRightButtonUsed.Get()->BindObject(this, &FWidget::OnMouseRightClick);
+}
+
+void FWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
+{
+	InWidgetInputManager->MouseInputCollection.OnMouseMove.Get()->UnBindObject(this, &FWidget::OnMouseMove);
+	InWidgetInputManager->MouseInputCollection.OnMouseLeftButtonUsed.Get()->UnBindObject(this, &FWidget::OnMouseLeftClick);
+	InWidgetInputManager->MouseInputCollection.OnMouseRightButtonUsed.Get()->UnBindObject(this, &FWidget::OnMouseRightClick);
+}
+
 
 void FWidget::DestroyWidget()
 {

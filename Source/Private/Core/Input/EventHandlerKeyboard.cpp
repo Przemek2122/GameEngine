@@ -10,7 +10,24 @@ void FInputDelegateWrapper::Execute(const EInputState InputState)
 
 		if (EInputState::PRESS == InputState && CurrentInputState == EInputState::NOT_PRESSED)
 		{
-			Delegate.Execute(InputState);
+			bool bInputConsumed = false;
+
+			const FFunctorLambda<bool, FFunctorBase<bool, EInputState>*, EInputState> Lambda(
+			[&](FFunctorBase<bool, EInputState>* Function, EInputState) -> bool
+			{
+				if (!bInputConsumed)
+				{
+					const bool bFunctionResult = Function->operator()(InputState);
+					if (bFunctionResult)
+					{
+						bInputConsumed = true;
+					}
+				}
+
+				return bInputConsumed;
+			});
+
+			Delegate.ExecuteByLambda(Lambda, InputState);
 
 			CurrentInputState = EInputState::PRESS;
 		}

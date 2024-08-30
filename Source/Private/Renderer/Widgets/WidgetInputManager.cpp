@@ -130,6 +130,11 @@ void FWidgetInputManager::SetupMouseDelegates(FEventHandler* EventHandler)
 		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT"),
 		WIDGET_CONSUME_INPUT_ALLOW
 	);
+
+	MouseInputCollection.OnMouseRightButtonUsed = CreateMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT"),
+		WIDGET_CONSUME_INPUT_ALLOW
+	);
 }
 
 void FWidgetInputManager::SetupKeyboardDelegates(FEventHandler* EventHandler)
@@ -149,6 +154,10 @@ void FWidgetInputManager::ClearMouseDelegates(FEventHandler* EventHandler)
 
 	RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
 		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT"), MouseInputCollection.OnMouseLeftButtonUsed.Get()
+	);
+
+	RemoveMouseWidgetInputConsumableWrapper<FVector2D<int>, EInputState>(
+		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT"), MouseInputCollection.OnMouseRightButtonUsed.Get()
 	);
 }
 

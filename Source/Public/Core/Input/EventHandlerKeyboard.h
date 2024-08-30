@@ -3,7 +3,10 @@
 #include "CoreMinimal.h"
 #include "Core/Input/EventHandlerShared.h"
 
-/** This class is used to handle keyboard events. It exists to allow rebinding. */
+/**
+ * This class is used to handle keyboard events. It exists to allow rebinding.
+ * If delegate returns true it means input is consumed and should not be sent anymore
+ */
 class FInputDelegateWrapper
 {
 public:
@@ -19,7 +22,7 @@ public:
 	void Reset();
 
 	/** Called when input is detected. */
-	FDelegate<void, EInputState> Delegate;
+	FDelegate<bool, EInputState> Delegate;
 
 private:
 	void AddToResetQueue();

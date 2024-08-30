@@ -19,6 +19,8 @@ class FRenderer;
 class FWindow;
 
 class FWidget;
+class FImageWidget;
+
 class FWidgetManager;
 class IWidgetManagementInterface;
 class IWidgetInteraction;

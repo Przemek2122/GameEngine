@@ -7,6 +7,7 @@
 #include "WidgetsPositionInterface.h"
 #include "WidgetEnums.h"
 
+enum class EInputState;
 class FWidgetInputManager;
 class FInteractionBaseWidget;
 
@@ -51,6 +52,13 @@ protected:
 
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
+
+	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
+
+	void SetupInput(FWidgetInputManager* InWidgetInputManager);
+	void ClearInput(FWidgetInputManager* InWidgetInputManager);
 
 public:
 	void DestroyWidget();
@@ -127,6 +135,10 @@ private:
 	/** Owner manager */
 	IWidgetManagementInterface* WidgetManagementInterface;
 
+	/** if true widget is going to be destroyed */
 	bool bIsPendingDelete;
+
+	/** Cached input manager for widgets */
+	FWidgetInputManager* WidgetInputManager;
 	
 };

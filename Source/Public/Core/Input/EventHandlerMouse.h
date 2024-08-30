@@ -3,7 +3,10 @@
 #include "CoreMinimal.h"
 #include "Core/Input/EventHandlerShared.h"
 
-/** This class is used to handle mouse events. */
+/**
+ * This class is used to handle mouse events.
+ * If delegate returns true it means input is consumed and should not be sent anymore
+ */
 class FMouseInputDelegateWrapper
 {
 public:
@@ -18,7 +21,7 @@ public:
 
 	void Reset();
 
-	FDelegate<void, FVector2D<int>, EInputState> Delegate;
+	FDelegate<bool, FVector2D<int>, EInputState> Delegate;
 
 private:
 	void AddToResetQueue();

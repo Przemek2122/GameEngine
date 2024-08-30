@@ -11,7 +11,6 @@ FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWid
 	, HoverState(EHoverState::None)
 	, bIsInWidget(false)
 	, bMouseEnteredWidget(false)
-	, WidgetInputManager(nullptr)
 {
 }
 
@@ -19,75 +18,17 @@ FInteractionBaseWidget::~FInteractionBaseWidget()
 {
 }
 
-void FInteractionBaseWidget::Init()
-{
-	FWidget::Init();
-
-	FDelegate<void, FWidgetInputManager*> SetupDelegate;
-	SetupDelegate.BindObject(this, &FInteractionBaseWidget::SetupInput);
-
-	WidgetInputManager = GetWindow()->GetWidgetInputManager();
-	WidgetInputManager->Register(this, SetupDelegate);
-}
-
-void FInteractionBaseWidget::PreDeInit()
-{
-	FDelegate<void, FWidgetInputManager*> ClearDelegate;
-	ClearDelegate.BindObject(this, &FInteractionBaseWidget::ClearInput);
-
-	WidgetInputManager->UnRegister(this, ClearDelegate);
-
-	FWidget::PreDeInit();
-}
-
-void FInteractionBaseWidget::SetupInput(FWidgetInputManager* InWidgetInputManager)
-{
-	WidgetInputManager->MouseInputCollection.OnMouseLeftButtonUsed.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonUsed);
-	WidgetInputManager->MouseInputCollection.OnMouseMove.Get()->BindObject(this, &FInteractionBaseWidget::OnMouseMove);
-}
-
-void FInteractionBaseWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
-{
-	WidgetInputManager->MouseInputCollection.OnMouseLeftButtonUsed.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseLeftButtonUsed);
-	WidgetInputManager->MouseInputCollection.OnMouseMove.Get()->UnBindObject(this, &FInteractionBaseWidget::OnMouseMove);
-}
-
-bool FInteractionBaseWidget::OnMouseLeftButtonUsed(FVector2D<int> Location, EInputState InputState)
-{
-	if (bIsInWidget && IsInteractive())
-	{
-		if (ClickState == EClickState::NotClicked)
-		{
-			ClickState = EClickState::Pressed;
-
-			NativePress();
-
-			return true;
-		}
-		else if (ClickState == EClickState::Pressed)
-		{
-			ClickState = EClickState::Released;
-
-			NativeRelease();
-
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void FInteractionBaseWidget::OnMouseMove(FVector2D<int> MouseLocation, EInputState InputState)
+void FInteractionBaseWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
 {
 	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int> Size = GetWidgetSize();
 
 	bIsInWidget = false;
 	
-	if ( MouseLocation.X	>	Location.X	
-	&&	 MouseLocation.X	<	Location.X + Size.X
-	&&	 MouseLocation.Y	>	Location.Y	
-	&&	 MouseLocation.Y	<	Location.Y + Size.Y )
+	if (InMousePosition.X	>	Location.X
+	&&	InMousePosition.X	<	Location.X + Size.X
+	&&	InMousePosition.Y	>	Location.Y
+	&&	InMousePosition.Y	<	Location.Y + Size.Y )
 	{
 		bIsInWidget = true;
 	}
@@ -112,6 +53,31 @@ void FInteractionBaseWidget::OnMouseMove(FVector2D<int> MouseLocation, EInputSta
 			bMouseEnteredWidget = false;
 		}
 	}
+}
+
+bool FInteractionBaseWidget::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	if (bIsInWidget && IsInteractive())
+	{
+		if (ClickState == EClickState::NotClicked)
+		{
+			ClickState = EClickState::Pressed;
+
+			NativePress();
+
+			return true;
+		}
+		else if (ClickState == EClickState::Pressed)
+		{
+			ClickState = EClickState::Released;
+
+			NativeRelease();
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 FVector2D<int> FInteractionBaseWidget::GetMouseLocation()

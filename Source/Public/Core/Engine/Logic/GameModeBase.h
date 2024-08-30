@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseController.h"
-#include "GameModeManager.h"
 #include "Renderer/Map/Map.h"
-#include "Renderer/Map/MapManager.h"
 
 struct FUserId;
 class FBaseController;
@@ -20,7 +18,7 @@ class FGameModeBase
 {
 public:
 	FGameModeBase(FGameModeManager* InGameModeManager);
-	virtual ~FGameModeBase();
+	virtual ~FGameModeBase() = default;
 
 	virtual void Initialize();
 	virtual void DeInitialize();
@@ -63,9 +61,15 @@ public:
 	/** Called when start is called. Make sure to check if gameplay is not already in progress using IsInProgress() */
 	FDelegate<void> OnGameplayStart;
 
+	FUserId GetLocalUserId() const;
+	const FPlayerController* GetLocalController() const;
+
 protected:
 	virtual void Start();
 	virtual void End();
+
+	/** This function is used to set default controller. For example local one */
+	virtual void SetDefaultControllers();
 
 	/** Override to set custom UserState class for each player */
 	virtual FPlayerController* CreatePlayerController();
@@ -92,6 +96,8 @@ protected:
 		return Controller;
 	}
 
+	void SetPlayerController(FPlayerController* PlayerController);
+
 	FMap* GetCurrentMap() const;
 
 private:
@@ -109,5 +115,11 @@ private:
 
 	/** Cached map for gamemode */
 	FMap* CurrentMap;
+
+	/** Local user controller */
+	FPlayerController* LocalUserController;
+
+	/** Local user id - Should be same as in LocalUserController */
+	FUserId LocalUserId;
 
 };

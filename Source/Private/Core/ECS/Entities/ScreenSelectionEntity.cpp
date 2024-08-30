@@ -28,18 +28,24 @@ void EScreenSelectionEntity::UnRegisterScreenSelectable(IScreenSelectionInterfac
 	ScreenSelectableObjects.Remove(InScreenSelectable);
 }
 
-void EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputState)
+bool EScreenSelectionEntity::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
 {
+	bool bWasInputConsumed = false;
+
 	const FVector2D<int> InMousePositionConverted = ConvertLocationFromScreenSpace(InMousePosition);
 
 	if (bIsSelecting)
 	{
 		CheckScreenSelection(InMousePositionConverted);
 	}
+
+	return bWasInputConsumed;
 }
 
-void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
+bool EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
+	bool bWasInputConsumed = false;
+
 	const FVector2D<int> InMousePositionConverted = ConvertLocationFromScreenSpace(InMousePosition);
 
 	switch (InputState)
@@ -49,6 +55,8 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 			SelectionStart = InMousePositionConverted;
 
 			OnStartSelecting();
+
+			bWasInputConsumed = true;
 
 			break;
 		}
@@ -62,6 +70,8 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 				OnClickInsteadOfSelection(InMousePositionConverted);
 			}
 
+			bWasInputConsumed = true;
+
 			break;
 		}
 
@@ -70,10 +80,14 @@ void EScreenSelectionEntity::OnMouseLeftClick(FVector2D<int> InMousePosition, EI
 			LOG_ERROR("EScreenSelectionEntity::OnMouseLeftClick: Unknown InputState");
 		}
 	}
+
+	return bWasInputConsumed;
 }
 
-void EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+bool EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
+	bool bWasInputConsumed = false;
+
 	const FVector2D<int> InMousePositionConverted = ConvertLocationFromScreenSpace(InMousePosition);
 
 	switch (InputState)
@@ -89,11 +103,15 @@ void EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, E
 
 					CurrentlySelectedObject->NativeDoAction(InMousePositionConverted);
 				}
+
+				bWasInputConsumed = true;
 			}
 
 			break;
 		}
 	}
+
+	return bWasInputConsumed;
 }
 
 void EScreenSelectionEntity::OnStartSelecting()

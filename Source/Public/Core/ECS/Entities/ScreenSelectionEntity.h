@@ -19,9 +19,9 @@ public:
 	virtual void RegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 	virtual void UnRegisterScreenSelectable(IScreenSelectionInterface* InScreenSelectable);
 
-	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState);
-	virtual void OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
-	virtual void OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
 
 	/** Called when selection is started */
 	virtual void OnStartSelecting();

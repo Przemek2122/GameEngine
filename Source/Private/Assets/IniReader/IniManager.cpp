@@ -20,7 +20,7 @@ std::shared_ptr<FIniObject> FIniManager::GetIniObject(const std::string& IniName
 
 	if (IniNameToObjectMap.ContainsKey(IniName))
 	{
-		IniObject = IniNameToObjectMap.FindValueByKey(IniName);
+		IniObject = IniNameToObjectMap[IniName];
 	}
 	else
 	{

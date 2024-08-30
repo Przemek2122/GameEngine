@@ -4,19 +4,20 @@
 #include "Core/Engine/Logic/GameModeBase.h"
 #include "Engine/Logic/GameModeManager.h"
 #include "Engine/Logic/BaseController.h"
+#include "Renderer/Map/MapManager.h"
 
 FGameModeBase::FGameModeBase(FGameModeManager* InGameModeManager)
 	: bIsInProgress(false)
 	, OwnerGameModeManager(InGameModeManager)
 	, CurrentUserIndex(-1)
+	, LocalUserController(nullptr)
 {
 	CurrentMap = OwnerGameModeManager->GetOwnerWindowAdvanced()->GetMapManager()->GetCurrentMap();
 }
 
-FGameModeBase::~FGameModeBase() = default;
-
 void FGameModeBase::Initialize()
 {
+	SetDefaultControllers();
 }
 
 void FGameModeBase::DeInitialize()
@@ -145,6 +146,11 @@ void FGameModeBase::End()
 {
 }
 
+void FGameModeBase::SetDefaultControllers()
+{
+	LocalUserController = CreatePlayerController();
+}
+
 FPlayerController* FGameModeBase::CreatePlayerController()
 {
 	return CreateController<FPlayerController>();
@@ -153,6 +159,21 @@ FPlayerController* FGameModeBase::CreatePlayerController()
 FAIController* FGameModeBase::CreateAIController()
 {
 	return CreateController<FAIController>();
+}
+
+void FGameModeBase::SetPlayerController(FPlayerController* PlayerController)
+{
+	LocalUserController = PlayerController;
+}
+
+FUserId FGameModeBase::GetLocalUserId() const
+{
+	return LocalUserId;
+}
+
+const FPlayerController* FGameModeBase::GetLocalController() const
+{
+	return LocalUserController;
 }
 
 FMap* FGameModeBase::GetCurrentMap() const

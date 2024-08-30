@@ -36,7 +36,7 @@ void FPauseUIMenu::DeInitialize()
 	VerticalBoxWidget->DestroyWidget();
 }
 
-void FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
+bool FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
 {
 	if (InputState == EInputState::RELEASE)
 	{
@@ -49,6 +49,8 @@ void FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
 			EnablePauseMenu();
 		}
 	}
+
+	return true;
 }
 
 void FPauseUIMenu::OnExitToMenuRequested()
