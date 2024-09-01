@@ -25,6 +25,8 @@ public:
 	void NativeMouseExitWidget() override;
 	/** End FInteractionBaseWidget */
 
+	void SetUseDefaultSize(const bool bInUseDefaultSize);
+
 	FColorRGBA GetButtonRenderColor() const { return ButtonRenderColor; }
 	FColorRGBA GetButtonNormalColor() const { return ButtonNormalColor; }
 	FColorRGBA GetButtonHoverColor() const { return ButtonHoverColor; }
@@ -44,5 +46,8 @@ protected:
 	FColorRGBA ButtonNormalColor;
 	FColorRGBA ButtonHoverColor;
 	FColorRGBA ButtonClickColor;
+
+	/** If true, default size will be set in init */
+	bool bUseDefaultSize;
 	
 };

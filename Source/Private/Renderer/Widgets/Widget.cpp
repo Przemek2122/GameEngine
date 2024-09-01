@@ -133,6 +133,13 @@ void FWidget::OnWidgetVisibilityChanged()
 {
 }
 
+void FWidget::OnChildSizeChanged()
+{
+	Super::OnChildSizeChanged();
+
+	UpdateSizeToFitChildren();
+}
+
 void FWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
 {
 }
@@ -163,30 +170,43 @@ void FWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
 	InWidgetInputManager->MouseInputCollection.OnMouseRightButtonUsed.Get()->UnBindObject(this, &FWidget::OnMouseRightClick);
 }
 
-void FWidget::OnChildSizeChanged()
+void FWidget::UpdateSizeToFitChildren()
 {
-	Super::OnChildSizeChanged();
-
 	if (bShouldChangeSizeOnChildChange)
 	{
 		FVector2D<int> DesiredSize;
 
-		for (const FWidget* ManagedWidget : ManagedWidgets)
+		for (const FWidget* ChildWidget : ManagedWidgets)
 		{
-			const FVector2D<int> ChildSize = ManagedWidget->GetWidgetSize();
-
-			if (ChildSize.X > DesiredSize.X)
+			if (ChildWidget->IsVisible())
 			{
-				DesiredSize.X = ChildSize.X;
-			}
+				const FVector2D<int> ChildSize = ChildWidget->GetWidgetSize();
 
-			DesiredSize.Y += DesiredSize.Y;
+				if (ChildSize.X > DesiredSize.X)
+				{
+					DesiredSize.X = ChildSize.X;
+				}
+
+				DesiredSize.Y += ChildSize.Y;
+			}
 		}
 
 		const FVector2D<int> CurrentWidgetSize = GetWidgetSize();
 
-		if (CurrentWidgetSize > DesiredSize)
+		if (DesiredSize.X > CurrentWidgetSize.X && DesiredSize.Y > CurrentWidgetSize.Y)
 		{
+			SetWidgetSize(DesiredSize);
+		}
+		else if (DesiredSize.X > CurrentWidgetSize.X)
+		{
+			DesiredSize.Y = CurrentWidgetSize.Y;
+
+			SetWidgetSize(DesiredSize);
+		}
+		else if (DesiredSize.Y > CurrentWidgetSize.Y)
+		{
+			DesiredSize.X = CurrentWidgetSize.X;
+
 			SetWidgetSize(DesiredSize);
 		}
 	}

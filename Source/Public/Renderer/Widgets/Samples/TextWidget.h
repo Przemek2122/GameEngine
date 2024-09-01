@@ -82,6 +82,7 @@ protected:
 	ETextRenderMode TextRenderMode;
 
 protected:
-	bool bAutoScaleWidget;
+	/** if this property is set to true it will cut text to fit inside of parent */
+	bool bAutoCutTextToFitInsideOfParent;
 	
 };

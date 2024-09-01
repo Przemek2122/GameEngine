@@ -62,6 +62,7 @@ protected:
 
 	virtual void OnWidgetOrderChanged();
 	virtual void OnWidgetVisibilityChanged();
+	void OnChildSizeChanged() override;
 
 	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState);
 	virtual bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
@@ -70,7 +71,7 @@ protected:
 	void SetupInput(FWidgetInputManager* InWidgetInputManager);
 	void ClearInput(FWidgetInputManager* InWidgetInputManager);
 
-	void OnChildSizeChanged() override;
+	void UpdateSizeToFitChildren();
 
 public:
 	void DestroyWidget();

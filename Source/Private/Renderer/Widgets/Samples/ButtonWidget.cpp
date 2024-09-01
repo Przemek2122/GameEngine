@@ -9,12 +9,17 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 	, ButtonNormalColor(FColorRGBA::ColorGray())
 	, ButtonHoverColor(FColorRGBA::ColorLightGray())
 	, ButtonClickColor(FColorRGBA::ColorDarkGray())
+	, bUseDefaultSize(true)
 {
 }
 
 void FButtonWidget::Init()
 {
-	SetWidgetSize({ 200, 40 });
+	if (bUseDefaultSize)
+	{
+		// Default size of button
+		SetWidgetSize({ 180, 40 });
+	}
 
 	Super::Init();
 }
@@ -70,6 +75,11 @@ void FButtonWidget::NativeMouseExitWidget()
 	Super::NativeMouseExitWidget();
 	
 	ButtonRenderColor = ButtonNormalColor;
+}
+
+void FButtonWidget::SetUseDefaultSize(const bool bInUseDefaultSize)
+{
+	bUseDefaultSize = bInUseDefaultSize;
 }
 
 void FButtonWidget::SetButtonRenderColor(const FColorRGBA& Color)

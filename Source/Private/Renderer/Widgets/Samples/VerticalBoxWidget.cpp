@@ -105,7 +105,7 @@ void FVerticalBoxWidget::AlignDefault()
 				const FVector2D<int> ChildWidgetSize = ChildWidget->GetWidgetSize();
 
 				// Find child with the biggest width
-				if (VerticalBoxSizeCalculated.X < ChildWidgetSize.X)
+				if (ChildWidgetSize.X > VerticalBoxSizeCalculated.X)
 				{
 					VerticalBoxSizeCalculated.X = ChildWidgetSize.X;
 				}

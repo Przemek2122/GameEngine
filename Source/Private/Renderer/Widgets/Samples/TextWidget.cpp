@@ -23,7 +23,7 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	, TextTexture(nullptr)
 	, LastTextTextureSize({ 0, 0 })
 	, TextRenderMode(ETextRenderMode::Blended)
-	, bAutoScaleWidget(true)
+	, bAutoCutTextToFitInsideOfParent(false)
 {
 #if _DEBUG
 	// Unable to find font asset.
@@ -52,8 +52,6 @@ void FTextWidget::Init()
 	{
 		SetText(DefaultText);
 	}
-
-	AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
 }
 
 void FTextWidget::Render()
@@ -183,15 +181,9 @@ void FTextWidget::RedrawText()
 	{
 		RenderedText = DesiredText;
 
-		if (bAutoScaleWidget)
+		if (bAutoCutTextToFitInsideOfParent)
 		{
 			AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
-
-			// @HACK
-			if (RenderedText.empty())
-			{
-				RenderedText = DesiredText;
-			}
 		}
 
 		SDL_Surface* SdlSurface = nullptr;
