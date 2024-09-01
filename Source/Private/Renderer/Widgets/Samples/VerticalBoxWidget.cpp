@@ -17,13 +17,6 @@ FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManag
 #endif
 }
 
-void FVerticalBoxWidget::Init()
-{
-	SetWidgetSize({ 200, 300 });
-
-	Super::Init();
-}
-
 void FVerticalBoxWidget::ReCalculate()
 {
 	Super::ReCalculate();
@@ -31,17 +24,11 @@ void FVerticalBoxWidget::ReCalculate()
 	AlignWidgets(true);
 }
 
-void FVerticalBoxWidget::RegisterWidgetPostInit(FWidget* Widget)
+void FVerticalBoxWidget::OnAnyChildChanged()
 {
-	Super::RegisterWidgetPostInit(Widget);
+	Super::OnAnyChildChanged();
 
-	AlignWidgets();
-}
-
-void FVerticalBoxWidget::UnRegisterWidget(FWidget* Widget)
-{
-	Super::UnRegisterWidget(Widget);
-
+	// @TODO Could be queued to be done on end of tick as adding many widget may be very slow
 	AlignWidgets();
 }
 
@@ -49,6 +36,7 @@ void FVerticalBoxWidget::OnChildSizeChanged()
 {
 	Super::OnChildSizeChanged();
 
+	// @TODO Could be queued to be done on end of tick as adding many widget may be very slow
 	AlignWidgets(true);
 }
 

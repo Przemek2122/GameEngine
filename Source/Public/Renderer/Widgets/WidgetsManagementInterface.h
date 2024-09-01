@@ -62,12 +62,12 @@ public:
 			InWidgetName = GetUniqueNameFor<TWidgetTemplate>();
 		}
 
-#ifdef _DEBUG
-		if (!ENSURE_VALID(!ManagedWidgetsMap.ContainsKey(InWidgetName)))
+		if (ManagedWidgetsMap.ContainsKey(InWidgetName))
 		{
-			LOG_ERROR("Widget with this name already exists! Duplicate: " << InWidgetName);
+			LOG_WARN("Widget with this name already exists! Duplicate: " << InWidgetName);
+
+			InWidgetName = GetUniqueNameFor<TWidgetTemplate>();
 		}
-#endif
 		
 		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName, InWidgetOrder);
 
@@ -128,8 +128,14 @@ public:
 
 	virtual void OnChildSizeChanged();
 
-	/** Called when any widget is changed. Not really efficient */
-	FDelegateSafe<void> OnAnyWidgetChanged;
+	/** @See OnAnyChildChangedDelegate */
+	virtual void OnAnyChildChanged();
+
+	/**
+	 * Called when any widget is changed (created or destroyed).
+	 * Performance heavy, will be triggered when any child has changed as well
+	 */
+	FDelegateSafe<void> OnAnyChildChangedDelegate;
 
 protected:
 	/** Called by wiget when order is changed. */

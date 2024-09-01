@@ -26,17 +26,11 @@ void FHorizontalBoxWidget::ReCalculate()
 	AlignWidgets(true);
 }
 
-void FHorizontalBoxWidget::RegisterWidgetPostInit(FWidget* Widget)
+void FHorizontalBoxWidget::OnAnyChildChanged()
 {
-	Super::RegisterWidgetPostInit(Widget);
+	Super::OnAnyChildChanged();
 
-	AlignWidgets();
-}
-
-void FHorizontalBoxWidget::UnRegisterWidget(FWidget* Widget)
-{
-	Super::UnRegisterWidget(Widget);
-
+	// @TODO Could be queued to be done on end of tick as adding many widget may be very slow
 	AlignWidgets();
 }
 
@@ -44,6 +38,7 @@ void FHorizontalBoxWidget::OnChildSizeChanged()
 {
 	Super::OnChildSizeChanged();
 
+	// @TODO Could be queued to be done on end of tick as adding many widget may be very slow
 	AlignWidgets(true);
 }
 

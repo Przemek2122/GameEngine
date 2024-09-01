@@ -19,6 +19,8 @@ protected:
 	void RefreshDisplayedWidgets();
 	void CreateDebuggersForWidgets(FVerticalBoxWidget* InVerticalBox, const CArray<FWidget*>& InWidgets, int32 Depth);
 
+	void CreateSingleDebuggerForWidget(FWidget* Widget);
+
 protected:
 	/** Debugged window */
 	FWindow* Window;

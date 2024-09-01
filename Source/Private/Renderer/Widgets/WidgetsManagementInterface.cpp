@@ -6,6 +6,7 @@
 IWidgetManagementInterface::IWidgetManagementInterface()
 	: LastWidgetNumber(0)
 {
+	OnAnyChildChangedDelegate.BindObject(this, &IWidgetManagementInterface::OnAnyChildChanged);
 }
 
 IWidgetManagementInterface::~IWidgetManagementInterface()
@@ -158,28 +159,37 @@ void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 
 	AddChild(NewWidget);
 
-	OnAnyWidgetChanged.Execute();
+	OnAnyChildChangedDelegate.Execute();
 
 	if (HasParent())
 	{
 		IWidgetManagementInterface* Parent = GetParent();
-		Parent->OnAnyWidgetChanged.Execute();
+		Parent->OnAnyChildChangedDelegate.Execute();
 	}
 }
 
 void IWidgetManagementInterface::OnChildWidgetDestroyed(FWidget* NewWidget)
 {
-	OnAnyWidgetChanged.Execute();
+	OnAnyChildChangedDelegate.Execute();
 
 	if (HasParent())
 	{
 		IWidgetManagementInterface* Parent = GetParent();
-		Parent->OnAnyWidgetChanged.Execute();
+		Parent->OnAnyChildChangedDelegate.Execute();
 	}
 }
 
 void IWidgetManagementInterface::OnChildSizeChanged()
 {
+}
+
+void IWidgetManagementInterface::OnAnyChildChanged()
+{
+	if (HasParent())
+	{
+		IWidgetManagementInterface* Parent = GetParent();
+		Parent->OnAnyChildChangedDelegate.Execute();
+	}
 }
 
 void IWidgetManagementInterface::ChangeWidgetOrder(FWidget* InWidget)

@@ -33,7 +33,7 @@ void FWidgetDebugger::StartDebugger()
 			RefreshDisplayedWidgets();
 
 			// Bind to refresh on each changed of widget
-			WidgetManager->OnAnyWidgetChanged.BindObject(this, &FWidgetDebugger::RefreshDisplayedWidgets);
+			WidgetManager->OnAnyChildChangedDelegate.BindObject(this, &FWidgetDebugger::RefreshDisplayedWidgets);
 		}
 	}
 }
@@ -82,13 +82,43 @@ void FWidgetDebugger::CreateDebuggersForWidgets(FVerticalBoxWidget* InVerticalBo
 		FinalWidgetName += " - ";
 		FinalWidgetName += WidgetName;
 
-		//FButtonWidget* Button = InVerticalBox->CreateWidget<FButtonWidget>();
+		FButtonWidget* Button = InVerticalBox->CreateWidget<FButtonWidget>();
+		Button->OnClickRelease.BindLambda([&, Widget]()
+		{
+			CreateSingleDebuggerForWidget(Widget);
+		});
 
-		FTextWidget* TextWidget = InVerticalBox->CreateWidget<FTextWidget>();
+		FTextWidget* TextWidget = Button->CreateWidget<FTextWidget>();
+		TextWidget->SetAnchor(EAnchor::LeftCenter);
 		TextWidget->SetText(FinalWidgetName);
 
 		CArray<FWidget*> Widgets = Widget->GetManagedWidgets();
 
 		CreateDebuggersForWidgets(InVerticalBox, Widgets, Depth + 1);
+	}
+}
+
+void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
+{
+	LOG_DEBUG("Widget selected for debugging: " << Widget->GetName());
+
+	FWidgetManager* DebuggerWindowWidgetManager = DebuggerWindow->GetWidgetManager();
+	if (DebuggerWindowWidgetManager != nullptr)
+	{
+		DebuggerWindowWidgetManager->ClearChildren();
+		FVerticalBoxWidget* VerticalBox = DebuggerWindowWidgetManager->CreateWidget<FVerticalBoxWidget>();
+
+		VerticalBox->CreateWidget<FTextWidget>()->SetText("Currently debugging: ");
+		VerticalBox->CreateWidget<FTextWidget>()->SetText(Widget->GetName());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Location: " << Widget->GetWidgetLocation());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Size: " << Widget->GetWidgetSize());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Children count:" << Widget->GetChildrenCount());
+
+		FButtonWidget* Button = VerticalBox->CreateWidget<FButtonWidget>();
+		Button->CreateWidget<FTextWidget>()->SetText("Exit");
+		Button->OnClickRelease.BindLambda([&]()
+		{
+			RefreshDisplayedWidgets();
+		});
 	}
 }
