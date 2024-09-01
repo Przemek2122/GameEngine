@@ -60,6 +60,9 @@ protected:
 	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
 	virtual void ReCalculate();
 
+	virtual void OnWidgetOrderChanged();
+	virtual void OnWidgetVisibilityChanged();
+
 	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState);
 	virtual bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
 	virtual bool OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
@@ -67,18 +70,20 @@ protected:
 	void SetupInput(FWidgetInputManager* InWidgetInputManager);
 	void ClearInput(FWidgetInputManager* InWidgetInputManager);
 
+	void OnChildSizeChanged() override;
+
 public:
 	void DestroyWidget();
 	void FinalizeDestroyWidget();
-
 	/** Currently a hack - Do not use at all. */
 	void DestroyWidgetImmediate();
 
-	/** True if DestroyWidget() has been called already */
-	bool IsPendingDelete() const { return bIsPendingDelete; }
-
 	/** Full widget refresh. Performance heavy. */
 	virtual void RefreshWidget(const bool bRefreshChildren = true);
+
+	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
+	void SetWidgetOrder(const int InWidgetOrder);
+	void SetShouldChangeSizeOnChildChange(const bool bInShouldChangeSizeOnChildChange);
 
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
@@ -87,32 +92,24 @@ public:
 	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
 	virtual void OnWindowChanged() override;
 	/** End IWidgetManagementInterface */
+
+	/** True if DestroyWidget() has been called already */
+	bool IsPendingDelete() const { return bIsPendingDelete; }
+
+	bool IsVisible() const;
+	bool IsInteractive() const;
 	
 	/** Decides if Render() should be called, affects all children */
 	_NODISCARD virtual bool ShouldBeRendered() const;
-	
-	_NODISCARD FWindow* GetWindow() const;
-
-	_NODISCARD FRenderer* GetRenderer() const;
-
-	static _NODISCARD FEventHandler* GetEventHandler();
-	
-	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
-
-	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
-
-	bool IsVisible() const;
-
-	virtual void OnWidgetVisibilityChanged();
 
 	/** Name of this widget. Can be displayed or widget can be get using this variable. */
 	_NODISCARD std::string GetName() const;
-
+	
+	_NODISCARD FWindow* GetWindow() const;
+	_NODISCARD FRenderer* GetRenderer() const;
+	static _NODISCARD FEventHandler* GetEventHandler();
+	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
 	_NODISCARD int GetWidgetOrder() const;
-
-	void SetWidgetOrder(const int InWidgetOrder);
-
-	virtual void OnWidgetOrderChanged();
 
 	/** @returns parent IWidgetManagementInterface pointer */
 	_NODISCARD IWidgetManagementInterface* GetParent() const override;
@@ -120,10 +117,9 @@ public:
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
 
-	bool IsInteractive() const;
-
 #if WIDGET_DEBUG_COLORS
 	void SetWidgetDebugColor(const FColorRGBA& Color);
+	void SetDebugWidgetColorsEnabled(const bool bInDebugWidgetColorsEnabled);
 #endif
 
 protected:
@@ -149,11 +145,15 @@ private:
 	/** if true widget is going to be destroyed */
 	bool bIsPendingDelete;
 
+	/** if children does not fit and this property is set to true we will resize widget */
+	bool bShouldChangeSizeOnChildChange;
+
 	/** Cached input manager for widgets */
 	FWidgetInputManager* WidgetInputManager;
 
 #if WIDGET_DEBUG_COLORS
 	FColorRGBA WidgetDebugColor;
+	bool bDebugWidgetColorsEnabled;
 #endif
 	
 };

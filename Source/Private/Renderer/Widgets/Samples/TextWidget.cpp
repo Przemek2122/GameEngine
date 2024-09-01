@@ -70,7 +70,7 @@ void FTextWidget::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidg
 
 void FTextWidget::SetWidgetSize(const FVector2D<int> InWidgetSize)
 {
-	FWidget::SetWidgetSize(InWidgetSize);
+	Super::SetWidgetSize(InWidgetSize);
 
 	// @TODO Can not use OnTextChanged due to infinite call loop
 }

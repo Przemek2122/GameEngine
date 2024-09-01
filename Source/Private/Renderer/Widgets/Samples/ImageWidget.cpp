@@ -11,6 +11,10 @@ FImageWidget::FImageWidget(IWidgetManagementInterface* InWidgetManagementInterfa
 	, bScaleWidgetToImage(false)
 	, TextureAsset(nullptr)
 {
+#if WIDGET_DEBUG_COLORS
+	// Image widget does not use colors debug because it has image
+	SetDebugWidgetColorsEnabled(false);
+#endif
 }
 
 void FImageWidget::Init()
@@ -22,7 +26,7 @@ void FImageWidget::Init()
 
 void FImageWidget::PreDeInit()
 {
-	FWidget::PreDeInit();
+	Super::PreDeInit();
 
 	if (TextureAsset != nullptr)
 	{
@@ -38,7 +42,7 @@ void FImageWidget::Render()
 		GetRenderer()->DrawTexture(TextureAsset, GetWidgetLocation(), GetWidgetSize(), false);
 	}
 
-	FWidget::Render();
+	Super::Render();
 }
 
 void FImageWidget::SetImage(const std::string& InImageName, const std::string& OptionalPath)

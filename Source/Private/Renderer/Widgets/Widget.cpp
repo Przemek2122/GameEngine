@@ -14,7 +14,11 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bIsPendingDelete(false)
+	, bShouldChangeSizeOnChildChange(true)
 	, WidgetInputManager(nullptr)
+#if WIDGET_DEBUG_COLORS
+	, bDebugWidgetColorsEnabled(true)
+#endif
 {
 #if _DEBUG
 	// Critical to be valid.
@@ -102,8 +106,11 @@ void FWidget::Tick()
 void FWidget::Render()
 {
 #if WIDGET_DEBUG_COLORS
-	FRenderer* Renderer = GetRenderer();
-	Renderer->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), WidgetDebugColor);
+	if (bDebugWidgetColorsEnabled)
+	{
+		FRenderer* Renderer = GetRenderer();
+		Renderer->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), WidgetDebugColor);
+	}
 #endif
 }
 
@@ -115,6 +122,15 @@ void FWidget::ReCalculate()
 	{
 		Widget->OnWindowChanged();
 	}
+}
+
+void FWidget::OnWidgetOrderChanged()
+{
+	WidgetManagementInterface->ChangeWidgetOrder(this);
+}
+
+void FWidget::OnWidgetVisibilityChanged()
+{
 }
 
 void FWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
@@ -147,6 +163,34 @@ void FWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
 	InWidgetInputManager->MouseInputCollection.OnMouseRightButtonUsed.Get()->UnBindObject(this, &FWidget::OnMouseRightClick);
 }
 
+void FWidget::OnChildSizeChanged()
+{
+	Super::OnChildSizeChanged();
+
+	if (bShouldChangeSizeOnChildChange)
+	{
+		FVector2D<int> DesiredSize;
+
+		for (const FWidget* ManagedWidget : ManagedWidgets)
+		{
+			const FVector2D<int> ChildSize = ManagedWidget->GetWidgetSize();
+
+			if (ChildSize.X > DesiredSize.X)
+			{
+				DesiredSize.X = ChildSize.X;
+			}
+
+			DesiredSize.Y += DesiredSize.Y;
+		}
+
+		const FVector2D<int> CurrentWidgetSize = GetWidgetSize();
+
+		if (CurrentWidgetSize > DesiredSize)
+		{
+			SetWidgetSize(DesiredSize);
+		}
+	}
+}
 
 void FWidget::DestroyWidget()
 {
@@ -211,6 +255,30 @@ void FWidget::RefreshWidget(const bool bRefreshChildren)
 	}
 }
 
+void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
+{
+	WidgetVisibility = InWidgetVisibility;
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
+	}
+
+	ReCalculate();
+}
+
+void FWidget::SetWidgetOrder(const int InWidgetOrder)
+{
+	WidgetOrder = InWidgetOrder;
+
+	OnWidgetOrderChanged();
+}
+
+void FWidget::SetShouldChangeSizeOnChildChange(const bool bInShouldChangeSizeOnChildChange)
+{
+	bShouldChangeSizeOnChildChange = bInShouldChangeSizeOnChildChange;
+}
+
 FVector2D<int> FWidget::GetWidgetManagerOffset() const
 {
 	return GetWidgetLocation(EWidgetOrientation::Absolute);
@@ -236,9 +304,24 @@ void FWidget::OnWindowChanged()
 	ReCalculate();
 }
 
+bool FWidget::IsVisible() const
+{
+	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
+}
+
+bool FWidget::IsInteractive() const
+{
+	return (GetWidgetVisibility() == EWidgetVisibility::Visible || GetWidgetVisibility() == EWidgetVisibility::Hidden);
+}
+
 bool FWidget::ShouldBeRendered() const
 {
 	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
+}
+
+std::string FWidget::GetName() const
+{
+	return WidgetName;
 }
 
 FWindow* FWidget::GetWindow() const
@@ -256,52 +339,14 @@ FEventHandler* FWidget::GetEventHandler()
 	return GEngine->GetEventHandler();
 }
 
-void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
-{
-	WidgetVisibility = InWidgetVisibility;
-
-	for (FWidget* ManagedWidget : ManagedWidgets)
-	{
-		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
-	}
-
-	ReCalculate();
-}
-
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
 }
 
-bool FWidget::IsVisible() const
-{
-	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
-}
-
-void FWidget::OnWidgetVisibilityChanged()
-{
-}
-
-std::string FWidget::GetName() const
-{
-	return WidgetName;
-}
-
 int FWidget::GetWidgetOrder() const
 {
 	return WidgetOrder;
-}
-
-void FWidget::SetWidgetOrder(const int InWidgetOrder)
-{
-	WidgetOrder = InWidgetOrder;
-	
-	OnWidgetOrderChanged();
-}
-
-void FWidget::OnWidgetOrderChanged()
-{
-	WidgetManagementInterface->ChangeWidgetOrder(this);
 }
 
 IWidgetManagementInterface* FWidget::GetParent() const
@@ -327,14 +372,14 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 	return nullptr;
 }
 
-bool FWidget::IsInteractive() const
-{
-	return (GetWidgetVisibility() == EWidgetVisibility::Visible || GetWidgetVisibility() == EWidgetVisibility::Hidden);
-}
-
 #if WIDGET_DEBUG_COLORS
 void FWidget::SetWidgetDebugColor(const FColorRGBA& Color)
 {
 	WidgetDebugColor = Color;
+}
+
+void FWidget::SetDebugWidgetColorsEnabled(const bool bInDebugWidgetColorsEnabled)
+{
+	bDebugWidgetColorsEnabled = bInDebugWidgetColorsEnabled;
 }
 #endif
