@@ -608,6 +608,9 @@
     <ClInclude Include="Source\Public\Renderer\Renderer.h">
       <Filter>Public\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\BorderWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
@@ -1275,6 +1278,9 @@
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp">
       <Filter>Private\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\BorderWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>

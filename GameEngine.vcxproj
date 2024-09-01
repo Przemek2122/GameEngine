@@ -135,6 +135,7 @@
     <ClInclude Include="Source\Public\Renderer\Map\MapEditor.h" />
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h" />
     <ClInclude Include="Source\Public\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\BorderWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ButtonWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\CheckBoxWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\FPSTextWidget.h" />
@@ -372,6 +373,7 @@
     <ClCompile Include="Source\Private\Renderer\Map\MapEditor.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\BorderWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ButtonWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\CheckBoxWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\FPSTextWidget.cpp" />
