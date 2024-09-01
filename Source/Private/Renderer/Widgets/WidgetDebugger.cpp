@@ -58,7 +58,7 @@ void FWidgetDebugger::RefreshDisplayedWidgets()
 
 void FWidgetDebugger::CreateDebuggersForWidgets(FVerticalBoxWidget* InVerticalBox, const CArray<FWidget*>& InWidgets, int32 Depth)
 {
-	static const std::string DepthString = "^";
+	static const std::string DepthString = "^ ";
 
 	for (FWidget* Widget : InWidgets)
 	{
