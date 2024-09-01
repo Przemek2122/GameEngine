@@ -23,10 +23,10 @@ void FWidgetDebugger::StartDebugger()
 	{
 		FWindowCreationData WindowCreationData(true);
 
-		static const std::string ColonDebugger = " : Debugger";
+		static const std::string ColonDebugger = " : Widget Debugger";
 		const std::string WindowName = Window->GetWindowTitle() + ColonDebugger;
 
-		static const FVector2D<int> WindowLocation = FVector2D<int>(400, 400);
+		static const FVector2D<int> WindowLocation = Window->GetWindowLocation() + FVector2D<int>(Window->GetWindowSize().X, 0);
 		static const FVector2D<int> WindowDefaultSize = FVector2D<int>(800, 600);
 
 		DebuggerWindow = GEngine->GetEngineRender()->CreateWindow<FWindow>(WindowCreationData, WindowName, WindowLocation, WindowDefaultSize);
@@ -65,18 +65,31 @@ void FWidgetDebugger::CreateDebuggersForWidgets(FVerticalBoxWidget* InVerticalBo
 
 	for (FWidget* Widget : InWidgets)
 	{
-		std::string WidgetName = Widget->GetName();
+		std::string WidgetDepthNote;
+		const std::string WidgetName = Widget->GetName();
 
-		for (int32 i = 0; i < Depth; i++)
+		if (Depth == 0)
 		{
-			WidgetName = DepthString + WidgetName;
+			// R means it's root due to 0 depth
+			WidgetDepthNote = 'R';
 		}
+		else
+		{
+			for (int32 i = 0; i < Depth; i++)
+			{
+				WidgetDepthNote += DepthString;
+			}
+		}
+		
+		std::string FinalWidgetName = WidgetDepthNote;
+		FinalWidgetName += " - ";
+		FinalWidgetName += WidgetName;
 
 		FTextWidget* TextWidget = InVerticalBox->CreateWidget<FTextWidget>();
-		TextWidget->SetText(WidgetName);
+		TextWidget->SetText(FinalWidgetName);
 
 		CArray<FWidget*> Widgets = Widget->GetManagedWidgets();
 
-		CreateDebuggersForWidgets(InVerticalBox, Widgets, ++Depth);
+		CreateDebuggersForWidgets(InVerticalBox, Widgets, Depth + 1);
 	}
 }
