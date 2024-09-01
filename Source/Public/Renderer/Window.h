@@ -102,6 +102,11 @@ public:
 	{
 		return GetWidgetManager()->CreateWidget<TWidgetTemplate>();
 	}
+	template<class TWidgetTemplate>
+	_NODISCARD TWidgetTemplate* CreateWidget(const std::string& WidgetName) const
+	{
+		return GetWidgetManager()->CreateWidget<TWidgetTemplate>(WidgetName);
+	}
 	bool DestroyWidget(FWidget* Widget) const
 	{
 		return GetWidgetManager()->DestroyChildWidget(Widget);

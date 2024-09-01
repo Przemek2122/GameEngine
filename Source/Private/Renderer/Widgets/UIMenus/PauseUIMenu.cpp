@@ -1,7 +1,6 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/UIMenus/PauseUIMenu.h"
 
-#include "Input/EventHandler.h"
 #include "Input/WindowInputManager.h"
 #include "Renderer/WindowAdvanced.h"
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
@@ -17,10 +16,12 @@ FPauseUIMenu::FPauseUIMenu(FWindow* InGameWindow)
 
 void FPauseUIMenu::Initialize()
 {
+	static const std::string PauseVerticalBoxName = "VerticalBox_PauseUI";
+
 	OnBindDelegateRequested();
 
 	// Create VerticalBoxWidget
-	VerticalBoxWidget = GetOwnerWindow()->CreateWidget<FVerticalBoxWidget>();
+	VerticalBoxWidget = GetOwnerWindow()->CreateWidget<FVerticalBoxWidget>(PauseVerticalBoxName);
 	VerticalBoxWidget->SetAnchor(EAnchor::Center);
 
 	// Create content
@@ -123,10 +124,14 @@ void FPauseUIMenu::OnMenuHidden()
 
 void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidget)
 {
-	FButtonWidget* BackButton = VerticalBoxWidget->CreateWidget<FButtonWidget>();
-	FTextWidget* TextWidget = BackButton->CreateWidget<FTextWidget>();
-	TextWidget->SetText("Back to menu");
+	static const std::string PauseButtonName = "Button_PauseUI";
+	static const std::string PauseTextName = "Text_PauseUI";
+	static const std::string BackToMenuText = "Back to menu";
+
+	FButtonWidget* BackButton = VerticalBoxWidget->CreateWidget<FButtonWidget>(PauseButtonName);
 	BackButton->OnClickRelease.BindObject(this, &FPauseUIMenu::OnExitToMenuRequested);
+	FTextWidget* TextWidget = BackButton->CreateWidget<FTextWidget>(PauseTextName);
+	TextWidget->SetText(BackToMenuText);
 }
 
 void FPauseUIMenu::OnBindDelegateRequested()
