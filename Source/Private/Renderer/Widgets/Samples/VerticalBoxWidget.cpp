@@ -9,6 +9,9 @@ FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManag
 	, bScaleToContent(true)
 	, CurrentlyCalculatedNumberOfWidgets(0)
 {
+#if WIDGET_DEBUG_COLORS
+	SetWidgetDebugColor(FColorRGBA::ColorPink());
+#endif
 }
 
 void FVerticalBoxWidget::Init()
@@ -16,15 +19,6 @@ void FVerticalBoxWidget::Init()
 	SetWidgetSize({ 200, 300 });
 
 	Super::Init();
-}
-
-void FVerticalBoxWidget::Render()
-{
-	Super::Render();
-
-#if _DEBUG
-	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorOrange(), false);
-#endif
 }
 
 void FVerticalBoxWidget::ReCalculate()

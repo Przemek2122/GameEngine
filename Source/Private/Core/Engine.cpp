@@ -14,6 +14,7 @@
 #include "Assets/Assets/FontAsset.h"
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
+#include "Test/Samples/TestPerformance.h"
 #include "Test/Samples/TestTimers.h"
 #include "Threads/RenderThread.h"
 #include "Threads/ThreadsManager.h"
@@ -149,6 +150,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	TestManager->SpawnTestCaseByClass<FTestDelegate>();
 	TestManager->SpawnTestCaseByClass<FTestClassType>();
 	TestManager->SpawnTestCaseByClass<FTimersLongRunTest>();
+	TestManager->SpawnTestCaseByClass<FTestPerformance>();
 #endif
 
 	AssetsManager->AddAsset<FFontAsset>("OpenSans", R"(Assets\Fonts\OpenSans\OpenSans-Regular.ttf)");

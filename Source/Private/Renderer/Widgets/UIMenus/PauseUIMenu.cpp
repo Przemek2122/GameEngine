@@ -2,6 +2,7 @@
 #include "Renderer/Widgets/UIMenus/PauseUIMenu.h"
 
 #include "Input/EventHandler.h"
+#include "Input/WindowInputManager.h"
 #include "Renderer/WindowAdvanced.h"
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
 #include "Renderer/Widgets/Samples/TextWidget.h"
@@ -130,14 +131,16 @@ void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidg
 
 void FPauseUIMenu::OnBindDelegateRequested()
 {
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
+	FWindowInputManager* WindowInputManager = GetOwnerWindow()->GetWindowInputManager();
 
+	FInputDelegateWrapper* EscapeDelegate = WindowInputManager->KeyBoardDelegates.ButtonEscape.Get();
 	EscapeDelegate->Delegate.BindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }
 
 void FPauseUIMenu::OnUnbindDelegateRequested()
 {
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
+	FWindowInputManager* WindowInputManager = GetOwnerWindow()->GetWindowInputManager();
 
+	FInputDelegateWrapper* EscapeDelegate = WindowInputManager->KeyBoardDelegates.ButtonEscape.Get();
 	EscapeDelegate->Delegate.UnBindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }

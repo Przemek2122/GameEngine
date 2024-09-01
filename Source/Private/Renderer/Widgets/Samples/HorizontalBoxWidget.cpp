@@ -11,14 +11,8 @@ FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetM
 	, bScaleToContent(false)
 	, CurrentlyCalculatedNumberOfWidgets(0)
 {
-}
-
-void FHorizontalBoxWidget::Render()
-{
-	Super::Render();
-
-#if _DEBUG
-	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), FColorRGBA::ColorPink(), false);
+#if WIDGET_DEBUG_COLORS
+	SetWidgetDebugColor(FColorRGBA::ColorOrange());
 #endif
 }
 

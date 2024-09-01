@@ -20,6 +20,8 @@ class FWindow;
 
 class FWidget;
 class FImageWidget;
+class FHorizontalBoxWidget;
+class FVerticalBoxWidget;
 
 class FWidgetManager;
 class IWidgetManagementInterface;

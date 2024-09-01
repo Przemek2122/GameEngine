@@ -128,6 +128,9 @@ public:
 
 	virtual void OnChildSizeChanged();
 
+	/** Called when any widget is changed. Not really efficient */
+	FDelegateSafe<void> OnAnyWidgetChanged;
+
 protected:
 	/** Called by wiget when order is changed. */
 	void ChangeWidgetOrder(FWidget* InWidget);

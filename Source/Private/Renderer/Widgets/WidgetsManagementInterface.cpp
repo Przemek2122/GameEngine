@@ -157,10 +157,25 @@ void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 	NewWidget->Init();
 
 	AddChild(NewWidget);
+
+	OnAnyWidgetChanged.Execute();
+
+	if (HasParent())
+	{
+		IWidgetManagementInterface* Parent = GetParent();
+		Parent->OnAnyWidgetChanged.Execute();
+	}
 }
 
 void IWidgetManagementInterface::OnChildWidgetDestroyed(FWidget* NewWidget)
 {
+	OnAnyWidgetChanged.Execute();
+
+	if (HasParent())
+	{
+		IWidgetManagementInterface* Parent = GetParent();
+		Parent->OnAnyWidgetChanged.Execute();
+	}
 }
 
 void IWidgetManagementInterface::OnChildSizeChanged()

@@ -20,7 +20,6 @@ public:
 
 	/** Begin FWidget interface */
 	void Init() override;
-	void Render() override;
 	void ReCalculate() override;
 	/** End FWidget interface */
 

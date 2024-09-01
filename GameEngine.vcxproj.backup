@@ -82,11 +82,12 @@
     <ClInclude Include="Source\Public\Core\ECS\Interfaces\ScreenSelectionInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemInstanceInterface.h" />
     <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemManagerInterface.h" />
+    <ClInclude Include="Source\Public\Core\ECS\TeamEntity.h" />
     <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h" />
     <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h" />
+    <ClInclude Include="Source\Public\Core\Engine\Logic\BaseController.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h" />
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h" />
-    <ClInclude Include="Source\Public\Core\Engine\Logic\BaseController.h" />
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestClassType.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestDelegate.h" />
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestPerformance.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestTimers.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestTypes.h" />
     <ClInclude Include="Source\Public\Core\Test\TestBase.h" />
@@ -147,6 +149,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\UIMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\UIMenus\PauseUIMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetDebugger.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputManager.h" />
@@ -323,11 +326,12 @@
     <ClCompile Include="Source\Private\Core\ECS\Interfaces\ScreenSelectionInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemInstanceInterface.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemManagerInterface.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\TeamEntity.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp" />
+    <ClCompile Include="Source\Private\Core\Engine\Logic\BaseController.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp" />
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp" />
-    <ClCompile Include="Source\Private\Core\Engine\Logic\BaseController.cpp" />
     <ClCompile Include="Source\Private\Core\Engine.cpp" />
     <ClCompile Include="Source\Private\Core\EngineMain.cpp" />
     <ClCompile Include="Source\Private\Core\EngineRender.cpp" />
@@ -344,6 +348,7 @@
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestClassType.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestDelegate.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestPerformance.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestTimers.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestTypes.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestBase.cpp" />
@@ -380,6 +385,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\UIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\UIMenus\PauseUIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetDebugger.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />

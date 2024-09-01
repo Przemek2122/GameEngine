@@ -103,6 +103,7 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandlerKeyboard.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandlerMouse.h" />
     <ClInclude Include="Source\Public\Core\Input\EventHandlerShared.h" />
+    <ClInclude Include="Source\Public\Core\Input\WindowInputManager.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\ITickInterface.h" />
     <ClInclude Include="Source\Public\Core\Interfaces\TransformInterface2D.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Source\Public\Core\Object.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestClassType.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestDelegate.h" />
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestPerformance.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestTimers.h" />
     <ClInclude Include="Source\Public\Core\Test\Samples\TestTypes.h" />
     <ClInclude Include="Source\Public\Core\Test\TestBase.h" />
@@ -148,6 +150,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\UIMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\UIMenus\PauseUIMenu.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetDebugger.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetInputManager.h" />
@@ -337,6 +340,7 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandlerKeyboard.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandlerMouse.cpp" />
     <ClCompile Include="Source\Private\Core\Input\EventHandlerShared.cpp" />
+    <ClCompile Include="Source\Private\Core\Input\WindowInputManager.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\ITickInterface.cpp" />
     <ClCompile Include="Source\Private\Core\Interfaces\TransformInterface2D.cpp" />
@@ -346,6 +350,7 @@
     <ClCompile Include="Source\Private\Core\Object.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestClassType.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestDelegate.cpp" />
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestPerformance.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestTimers.cpp" />
     <ClCompile Include="Source\Private\Core\Test\Samples\TestTypes.cpp" />
     <ClCompile Include="Source\Private\Core\Test\TestBase.cpp" />
@@ -382,6 +387,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\UIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\UIMenus\PauseUIMenu.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetDebugger.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputManager.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInteraction.cpp" />

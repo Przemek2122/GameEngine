@@ -101,6 +101,10 @@ void FWidget::Tick()
 
 void FWidget::Render()
 {
+#if WIDGET_DEBUG_COLORS
+	FRenderer* Renderer = GetRenderer();
+	Renderer->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), WidgetDebugColor);
+#endif
 }
 
 void FWidget::ReCalculate()
@@ -327,3 +331,10 @@ bool FWidget::IsInteractive() const
 {
 	return (GetWidgetVisibility() == EWidgetVisibility::Visible || GetWidgetVisibility() == EWidgetVisibility::Hidden);
 }
+
+#if WIDGET_DEBUG_COLORS
+void FWidget::SetWidgetDebugColor(const FColorRGBA& Color)
+{
+	WidgetDebugColor = Color;
+}
+#endif

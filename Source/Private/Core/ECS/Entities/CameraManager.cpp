@@ -3,12 +3,13 @@
 #include "CoreEngine.h"
 #include "ECS/Entities/CameraManager.h"
 
-#include "Input/EventHandler.h"
+#include "Input/WindowInputManager.h"
 #include "Renderer/Map/MapManager.h"
 
 ECameraManager::ECameraManager(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 	, WindowMapManager(nullptr)
+	, bIsRightMouseButtonPressed(false)
 {
 }
 
@@ -39,25 +40,23 @@ void ECameraManager::Tick(float DeltaTime)
 
 void ECameraManager::RegisterInput()
 {
-	FEventHandler* EventHandler = GEngine->GetEventHandler();
-
-	if (EventHandler != nullptr)
+	FWindowInputManager* WindowInputManager = GetWindow()->GetWindowInputManager();
+	if (WindowInputManager != nullptr)
 	{
-		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.BindObject(this, &ECameraManager::OnMouseMove);
+		WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.BindObject(this, &ECameraManager::OnMouseMove);
 
-		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.BindObject(this, &ECameraManager::OnMouseRightClick);
+		WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.BindObject(this, &ECameraManager::OnMouseRightClick);
 	}
 }
 
 void ECameraManager::UnregisterInput()
 {
-	FEventHandler* EventHandler = GEngine->GetEventHandler();
-
-	if (EventHandler != nullptr)
+	FWindowInputManager* WindowInputManager = GetWindow()->GetWindowInputManager();
+	if (WindowInputManager != nullptr)
 	{
-		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.UnBindObject(this, &ECameraManager::OnMouseMove);
+		WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.UnBindObject(this, &ECameraManager::OnMouseMove);
 
-		EventHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &ECameraManager::OnMouseRightClick);
+		WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &ECameraManager::OnMouseRightClick);
 	}
 }
 

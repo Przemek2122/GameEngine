@@ -11,6 +11,13 @@ enum class EInputState;
 class FWidgetInputManager;
 class FInteractionBaseWidget;
 
+#if _DEBUG
+/** Should allow showing debug colors on widgets at all? */
+#define WIDGET_DEBUG_COLORS 1
+#else
+#define WIDGET_DEBUG_COLORS 0
+#endif
+
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
  * It's mostly to ensure widget render in proper window.
@@ -115,6 +122,10 @@ public:
 
 	bool IsInteractive() const;
 
+#if WIDGET_DEBUG_COLORS
+	void SetWidgetDebugColor(const FColorRGBA& Color);
+#endif
+
 protected:
 	/** True if WidgetManagementInterface decided to render this widget. */
 	bool bWasRenderedThisFrame;
@@ -140,5 +151,9 @@ private:
 
 	/** Cached input manager for widgets */
 	FWidgetInputManager* WidgetInputManager;
+
+#if WIDGET_DEBUG_COLORS
+	FColorRGBA WidgetDebugColor;
+#endif
 	
 };

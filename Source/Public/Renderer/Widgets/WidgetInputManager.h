@@ -130,7 +130,7 @@ public:
 class FWidgetInputManager
 {
 public:
-	FWidgetInputManager();
+	FWidgetInputManager(FWindow* InOwnerWindow);
 	~FWidgetInputManager();
 
 	/** Should be called when widget wants to receive input */
@@ -145,14 +145,16 @@ public:
 	FKeyboardInputCollection KeyboardInputCollection;
 
 protected:
-	void SetupMouseDelegates(FEventHandler* EventHandler);
-	void SetupKeyboardDelegates(FEventHandler* EventHandler);
+	void SetupMouseDelegates();
+	void SetupKeyboardDelegates();
 
-	void ClearMouseDelegates(FEventHandler* EventHandler);
-	void ClearKeyboardDelegates(FEventHandler* EventHandler);
+	void ClearMouseDelegates();
+	void ClearKeyboardDelegates();
 
 protected:
 	/** Widgets which should be asked about input */
 	CArray<FWidget*> WidgetsArray;
+
+	FWindow* OwnerWindow;
 
 };

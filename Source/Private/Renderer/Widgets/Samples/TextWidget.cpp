@@ -29,6 +29,10 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	// Unable to find font asset.
 	ENSURE_VALID(FontAsset != nullptr);
 #endif
+
+#if WIDGET_DEBUG_COLORS
+	SetWidgetDebugColor(FColorRGBA::ColorLightGreen());
+#endif
 }
 
 FTextWidget::~FTextWidget()

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -348,6 +347,9 @@
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreEngine.h">
+      <Filter>Public\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -447,19 +449,22 @@
     <ClInclude Include="Source\Public\Core\ECS\SubSystems\SubSystemManagerInterface.h">
       <Filter>Public\Core\ECS\SubSystems</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\TeamEntity.h">
+      <Filter>Public\Core\ECS</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\EngineRenderingManager.h">
       <Filter>Public\Core\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\EngineTickingManager.h">
       <Filter>Public\Core\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Engine\Logic\BaseController.h">
+      <Filter>Public\Core\Engine\Logic</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeBase.h">
       <Filter>Public\Core\Engine\Logic</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine\Logic\GameModeManager.h">
-      <Filter>Public\Core\Engine\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Core\Engine\Logic\BaseController.h">
       <Filter>Public\Core\Engine\Logic</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Engine.h">
@@ -532,6 +537,9 @@
       <Filter>Public\Core\Test\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\Samples\TestDelegate.h">
+      <Filter>Public\Core\Test\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestPerformance.h">
       <Filter>Public\Core\Test\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\Samples\TestTimers.h">
@@ -640,6 +648,9 @@
       <Filter>Public\Renderer\Widgets\UIMenus</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetDebugger.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h">
@@ -1127,19 +1138,22 @@
     <ClCompile Include="Source\Private\Core\ECS\SubSystems\SubSystemManagerInterface.cpp">
       <Filter>Private\Core\ECS\SubSystems</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\TeamEntity.cpp">
+      <Filter>Private\Core\ECS</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\EngineRenderingManager.cpp">
       <Filter>Private\Core\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\EngineTickingManager.cpp">
       <Filter>Private\Core\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Engine\Logic\BaseController.cpp">
+      <Filter>Private\Core\Engine\Logic</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeBase.cpp">
       <Filter>Private\Core\Engine\Logic</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine\Logic\GameModeManager.cpp">
-      <Filter>Private\Core\Engine\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\Engine\Logic\BaseController.cpp">
       <Filter>Private\Core\Engine\Logic</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Engine.cpp">
@@ -1188,6 +1202,9 @@
       <Filter>Private\Core\Test\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\Samples\TestDelegate.cpp">
+      <Filter>Private\Core\Test\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestPerformance.cpp">
       <Filter>Private\Core\Test\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\Samples\TestTimers.cpp">
@@ -1298,6 +1315,9 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetDebugger.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
@@ -1360,13 +1380,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Scripts\BuildActions\README.txt" />
-  </ItemGroup>
-</Project>
+    <None Include="cpp.hint" /> 
+  </ItemGroup> 
+</Project> 

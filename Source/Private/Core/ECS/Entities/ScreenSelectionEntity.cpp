@@ -1,7 +1,7 @@
 #include "CoreEngine.h"
 #include "ECS/Entities/ScreenSelectionEntity.h"
 #include "ECS/Interfaces/ScreenSelectionInterface.h"
-#include "Input/EventHandler.h"
+#include "Input/WindowInputManager.h"
 #include "Renderer/Map/Map.h"
 
 EScreenSelectionEntity::EScreenSelectionEntity(FEntityManager* InEntityManager)
@@ -139,18 +139,22 @@ const CArray<IScreenSelectionInterface*>& EScreenSelectionEntity::GetCurrentlySe
 
 void EScreenSelectionEntity::RegisterInput(FEventHandler* InputHandler)
 {
+	FWindowInputManager* WindowInputManager = GetWindow()->GetWindowInputManager();
+
 	// Bind input
-	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseMove);
-	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT")->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
-	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
+	WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseMove);
+	WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT")->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
+	WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.BindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
 }
 
 void EScreenSelectionEntity::UnRegisterInput(FEventHandler* InputHandler)
 {
+	FWindowInputManager* WindowInputManager = GetWindow()->GetWindowInputManager();
+
 	// Input must be unregistered, otherwise it might be called after the entity is destroyed
-	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseMove);
-	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
-	InputHandler->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
+	WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_MOVE")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseMove);
+	WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_LEFT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseLeftClick);
+	WindowInputManager->MouseDelegates.GetMouseDelegateByName("MOUSE_BUTTON_RIGHT")->Delegate.UnBindObject(this, &EScreenSelectionEntity::OnMouseRightClick);
 }
 
 void EScreenSelectionEntity::CheckScreenSelection(const FVector2D<int>& InMousePositionConverted)

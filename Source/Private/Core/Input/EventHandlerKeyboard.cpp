@@ -52,3 +52,46 @@ void FInputDelegateWrapper::AddToResetQueue()
 {
 	EventHandler->AddKeyboardInputDelegateToReset(this);
 }
+
+void FKeyBoardDelegates::Init(FEventHandler* EventHandler)
+{
+	const std::shared_ptr<FInputDelegateWrapper> InputPtr = std::make_shared<FInputDelegateWrapper>(EventHandler);
+
+	RawInputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
+	InputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
+}
+
+void FKeyBoardDelegates::AddInput(FEventHandler* EventHandler, const std::string& RawInputName, const std::string& InputName)
+{
+#if _DEBUG
+	if (EventHandler != nullptr)
+	{
+#endif
+
+		const std::shared_ptr<FInputDelegateWrapper> InputPtr = std::make_shared<FInputDelegateWrapper>(EventHandler);
+
+		RawInputNameToDelegateMap.Emplace(RawInputName, InputPtr);
+		InputNameToDelegateMap.Emplace(InputName, InputPtr);
+
+#if _DEBUG
+	}
+	else
+	{
+		LOG_ERROR("EventHandler can not be nullptr!");
+	}
+#endif
+}
+
+FInputDelegateWrapper* FKeyBoardDelegates::GetMouseDelegateByName(const std::string& InputName)
+{
+	if (InputNameToDelegateMap.ContainsKey(InputName))
+	{
+		return InputNameToDelegateMap[InputName].get();
+	}
+	else
+	{
+		LOG_ERROR("FKeyBoardDelegates::GetMouseDelegateByName returns default input mapping. It will not work.");
+
+		return InputNameToDelegateMap[DefaultInputName].get();
+	}
+}

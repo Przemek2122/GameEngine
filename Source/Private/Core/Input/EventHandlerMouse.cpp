@@ -34,3 +34,67 @@ void FMouseInputDelegateWrapper::Reset()
 
 	CurrentInputState = EInputState::NOT_PRESSED;
 }
+
+void FMouseDelegates::Init(FEventHandler* EventHandler)
+{
+	const std::shared_ptr<FMouseInputDelegateWrapper> InputPtr = std::make_shared<FMouseInputDelegateWrapper>(EventHandler);
+
+	RawInputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
+	InputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
+}
+
+void FMouseDelegates::AddInput(FEventHandler* EventHandler, FIniObject* InIniObject, const std::string& RawInputName)
+{
+#if _DEBUG
+	if (EventHandler != nullptr)
+	{
+#endif
+
+		if (InIniObject != nullptr)
+		{
+			FIniField IniField = InIniObject->FindFieldByName(RawInputName);
+			if (IniField.IsValid())
+			{
+				const std::shared_ptr<FMouseInputDelegateWrapper> InputPtr = std::make_shared<FMouseInputDelegateWrapper>(EventHandler);
+
+				RawInputNameToDelegateMap.Emplace(RawInputName, InputPtr);
+				InputNameToDelegateMap.Emplace(IniField.GetValueAsString(), InputPtr);
+			}
+		}
+
+#if _DEBUG
+	}
+	else
+	{
+		LOG_ERROR("EventHandler can not be nullptr!");
+	}
+#endif
+}
+
+FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByNameRaw(const std::string& InputName)
+{
+	if (RawInputNameToDelegateMap.ContainsKey(InputName))
+	{
+		return RawInputNameToDelegateMap[InputName].get();
+	}
+	else
+	{
+		LOG_ERROR("FMouseDelegates::GetMouseDelegateByNameRaw returns default input mapping. Input not found: " << InputName);
+
+		return RawInputNameToDelegateMap[DefaultInputName].get();
+	}
+}
+
+FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByName(const std::string& InputName)
+{
+	if (InputNameToDelegateMap.ContainsKey(InputName))
+	{
+		return InputNameToDelegateMap[InputName].get();
+	}
+	else
+	{
+		LOG_ERROR("FMouseDelegates::GetMouseDelegateByName returns default input mapping. Input not found: " << InputName);
+
+		return InputNameToDelegateMap[DefaultInputName].get();
+	}
+}

@@ -512,6 +512,9 @@
     <ClInclude Include="Source\Public\Core\Input\EventHandlerShared.h">
       <Filter>Public\Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\Input\WindowInputManager.h">
+      <Filter>Public\Core\Input</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\Interfaces\CoreLoop\IRenderInterface.h">
       <Filter>Public\Core\Interfaces\CoreLoop</Filter>
     </ClInclude>
@@ -537,6 +540,9 @@
       <Filter>Public\Core\Test\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\Samples\TestDelegate.h">
+      <Filter>Public\Core\Test\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\Test\Samples\TestPerformance.h">
       <Filter>Public\Core\Test\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\Test\Samples\TestTimers.h">
@@ -645,6 +651,9 @@
       <Filter>Public\Renderer\Widgets\UIMenus</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Widget.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetDebugger.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetEnums.h">
@@ -1171,6 +1180,9 @@
     <ClCompile Include="Source\Private\Core\Input\EventHandlerShared.cpp">
       <Filter>Private\Core\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\Input\WindowInputManager.cpp">
+      <Filter>Private\Core\Input</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\Interfaces\CoreLoop\IRenderInterface.cpp">
       <Filter>Private\Core\Interfaces\CoreLoop</Filter>
     </ClCompile>
@@ -1196,6 +1208,9 @@
       <Filter>Private\Core\Test\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\Samples\TestDelegate.cpp">
+      <Filter>Private\Core\Test\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Core\Test\Samples\TestPerformance.cpp">
       <Filter>Private\Core\Test\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\Test\Samples\TestTimers.cpp">
@@ -1304,6 +1319,9 @@
       <Filter>Private\Renderer\Widgets\UIMenus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Widget.cpp">
+      <Filter>Private\Renderer\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\WidgetDebugger.cpp">
       <Filter>Private\Renderer\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\WidgetInputInterface.cpp">
