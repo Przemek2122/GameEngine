@@ -20,7 +20,9 @@ FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, co
 	, bIsWindowVisible(true)
 	, bIsWindowMouseInside(true)
 	, WidgetManager(nullptr)
+#if DEBUG
 	, WidgetDebugger(nullptr)
+#endif
 	, WindowInputManager(nullptr)
 	, WidgetInputManager(nullptr)
 	, MapManager(nullptr)
@@ -43,7 +45,9 @@ FWindow::~FWindow()
 {
 	delete Renderer;	
 	delete WidgetManager;
+#if DEBUG
 	delete WidgetDebugger;
+#endif
 	delete WidgetInputManager;
 	delete MapManager;
 
@@ -88,10 +92,12 @@ FWidgetManager* FWindow::CreateWidgetManager()
 	return new FWidgetManager(this);
 }
 
+#if DEBUG
 FWidgetDebugger* FWindow::CreateWidgetDebugger()
 {
 	return new FWidgetDebugger(this);
 }
+#endif
 
 FWindowInputManager* FWindow::CreateWindowInputManager()
 {
@@ -133,11 +139,13 @@ void FWindow::Render()
 	Renderer->PostRender();
 }
 
+#if DEBUG
 void FWindow::StartWidgetDebugger()
 {
 	WidgetDebugger = CreateWidgetDebugger();
 	WidgetDebugger->StartDebugger();
 }
+#endif
 
 void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 {

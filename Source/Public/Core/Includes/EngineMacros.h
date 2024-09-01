@@ -6,7 +6,9 @@
 
 #include "CoreMinimal.h"
 
-#if _DEBUG
+#define DEBUG ((defined _DEBUG) && _DEBUG)
+
+#if DEBUG
 // Not inline in debug to be able to see callstack.
 #define INLINE_DEBUGABLE
 #else
@@ -31,7 +33,7 @@ inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 	}
 };
 
-#if _DEBUG
+#if DEBUG
 // Just a stop, can be continued
 #define ENSURE_VALID(Condition) Inline_ENSURE_VALID_Lambda(Condition)
 //#define ENSURE_VALID_MESSAGE(Condition, Message) Inline_ENSURE_VALID_MESSAGE_Lambda(Condition, Message)

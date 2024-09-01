@@ -7,12 +7,15 @@
 #include "Widgets/WidgetManager.h"
 
 class FWindowInputManager;
-class FWidgetDebugger;
 class FMapManager;
 class FEntityManager;
 class FWidgetInputManager;
 class FWidgetManager;
 class FWidget;
+
+#if DEBUG
+class FWidgetDebugger;
+#endif
 
 #define WINDOW_DEFAULT_FLAGS (SDL_WINDOW_RESIZABLE)
 
@@ -38,7 +41,9 @@ protected:
 	void ReceiveTick();
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
+#if DEBUG
 	_NODISCARD virtual FWidgetDebugger* CreateWidgetDebugger();
+#endif
 	_NODISCARD virtual FWindowInputManager* CreateWindowInputManager();
 	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
 	_NODISCARD virtual FMapManager* CreateMapManager();
@@ -50,8 +55,10 @@ public:
 	/** Render this window using renderer. */
 	virtual void Render();
 
+#if DEBUG
 	/** Call to enable debugger for widgets */
 	virtual void StartWidgetDebugger();
+#endif
 
 	/** Call to change window size. */
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true);
@@ -127,7 +134,9 @@ protected:
 	bool bIsWindowMouseInside;
 
 	FWidgetManager* WidgetManager;
+#if DEBUG
 	FWidgetDebugger* WidgetDebugger;
+#endif
 	FWindowInputManager* WindowInputManager;
 	FWidgetInputManager* WidgetInputManager;
 
