@@ -3,16 +3,13 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/WidgetDebugger.h"
 
+#include "Renderer/Widgets/Samples/ButtonWidget.h"
 #include "Renderer/Widgets/Samples/TextWidget.h"
 #include "Renderer/Widgets/Samples/VerticalBoxWidget.h"
 
 FWidgetDebugger::FWidgetDebugger(FWindow* InWindow)
 	: Window(InWindow)
 	, DebuggerWindow(nullptr)
-{
-}
-
-FWidgetDebugger::~FWidgetDebugger()
 {
 }
 
@@ -84,6 +81,8 @@ void FWidgetDebugger::CreateDebuggersForWidgets(FVerticalBoxWidget* InVerticalBo
 		std::string FinalWidgetName = WidgetDepthNote;
 		FinalWidgetName += " - ";
 		FinalWidgetName += WidgetName;
+
+		//FButtonWidget* Button = InVerticalBox->CreateWidget<FButtonWidget>();
 
 		FTextWidget* TextWidget = InVerticalBox->CreateWidget<FTextWidget>();
 		TextWidget->SetText(FinalWidgetName);

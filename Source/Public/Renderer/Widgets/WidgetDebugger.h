@@ -11,7 +11,7 @@ class FWidgetDebugger
 {
 public:
 	FWidgetDebugger(FWindow* InWindow);
-	virtual ~FWidgetDebugger();
+	virtual ~FWidgetDebugger() = default;
 
 	void StartDebugger();
 
