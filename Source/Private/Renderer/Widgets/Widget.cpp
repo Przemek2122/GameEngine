@@ -109,7 +109,7 @@ void FWidget::Render()
 	if (bDebugWidgetColorsEnabled)
 	{
 		FRenderer* Renderer = GetRenderer();
-		Renderer->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), WidgetDebugColor);
+		Renderer->DrawRectangle(GetWidgetLocation() - Renderer->GetRenderOffset(), GetWidgetSize(), WidgetDebugColor);
 	}
 #endif
 }
