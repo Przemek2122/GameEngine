@@ -148,27 +148,27 @@ public:
 	
 	friend bool operator==(const FVector2D& L, const FVector2D& R)
 	{
-		return std::tie(L.X, L.Y) == std::tie(R.X, R.Y);
+		return (L.X == R.X) && (L.Y == R.Y);
 	}
 	friend bool operator!=(const FVector2D& L, const FVector2D& R)
 	{
-		return !(L == R);
+		return (L.X != R.X) || (L.Y != R.Y);
 	}
-	friend bool operator< (const FVector2D& L, const FVector2D& R)
+	friend bool operator<(const FVector2D& L, const FVector2D& R)
 	{
-		return std::tie(L.X, L.Y) < std::tie(R.X, R.Y);
-	}
-	friend bool operator>=(const FVector2D& L, const FVector2D& R)
-	{
-		return !(L < R);
-	}
-	friend bool operator> (const FVector2D& L, const FVector2D& R)
-	{
-		return   R < L;
+		return (L.X < R.X) || (L.Y < R.Y);
 	}
 	friend bool operator<=(const FVector2D& L, const FVector2D& R)
 	{
-		return !(R < L);
+		return (L.X <= R.X) && (L.Y <= R.Y);
+	}
+	friend bool operator>(const FVector2D& L, const FVector2D& R)
+	{
+		return (L.X > R.X) || (L.Y > R.Y);;
+	}
+	friend bool operator>=(const FVector2D& L, const FVector2D& R)
+	{
+		return (L.X >= R.X) && (L.Y >= R.Y);;
 	}
 
 	TType DistanceTo(const FVector2D& OtherVector) const
