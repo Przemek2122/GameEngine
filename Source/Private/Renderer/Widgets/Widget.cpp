@@ -16,9 +16,6 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, bIsPendingDelete(false)
 	, bShouldChangeSizeToFitChildren(true)
 	, WidgetInputManager(nullptr)
-#if WIDGET_DEBUG_COLORS
-	, bDebugWidgetColorsEnabled(true)
-#endif
 #if WITH_WIDGET_DEBUGGER
 	, bIsWidgetBeingDebugged(false)
 #endif
@@ -120,13 +117,6 @@ void FWidget::Tick()
 
 void FWidget::Render()
 {
-#if WIDGET_DEBUG_COLORS
-	if (bDebugWidgetColorsEnabled)
-	{
-		FRenderer* Renderer = GetRenderer();
-		Renderer->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), WidgetDebugColor, false);
-	}
-#endif
 }
 
 void FWidget::ReCalculate()
@@ -413,17 +403,5 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 void FWidget::SetIsWidgetBeingDebugged(const bool bNewValue)
 {
 	bIsWidgetBeingDebugged = bNewValue;
-}
-#endif
-
-#if WIDGET_DEBUG_COLORS
-void FWidget::SetWidgetDebugColor(const FColorRGBA& Color)
-{
-	WidgetDebugColor = Color;
-}
-
-void FWidget::SetDebugWidgetColorsEnabled(const bool bInDebugWidgetColorsEnabled)
-{
-	bDebugWidgetColorsEnabled = bInDebugWidgetColorsEnabled;
 }
 #endif

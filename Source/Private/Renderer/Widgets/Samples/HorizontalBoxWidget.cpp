@@ -11,10 +11,6 @@ FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetM
 {
 	// This is handled by VerticalBox so we do not need to do it
 	SetShouldChangeSizeOnChildChange(false);
-
-#if WIDGET_DEBUG_COLORS
-	SetWidgetDebugColor(FColorRGBA::ColorOrange());
-#endif
 }
 
 void FHorizontalBoxWidget::ReCalculate()

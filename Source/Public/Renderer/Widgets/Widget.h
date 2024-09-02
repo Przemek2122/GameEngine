@@ -6,13 +6,6 @@
 #include "WidgetsPositionInterface.h"
 #include "WidgetEnums.h"
 
-#if DEBUG
-/** Should allow showing debug colors on widgets at all? */
-#define WIDGET_DEBUG_COLORS 0
-#else
-#define WIDGET_DEBUG_COLORS 0
-#endif
-
 enum class EInputState;
 class FWidgetInputManager;
 class FInteractionBaseWidget;
@@ -117,11 +110,6 @@ public:
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
 
-#if WIDGET_DEBUG_COLORS
-	void SetWidgetDebugColor(const FColorRGBA& Color);
-	void SetDebugWidgetColorsEnabled(const bool bInDebugWidgetColorsEnabled);
-#endif
-
 #if WITH_WIDGET_DEBUGGER
 	void SetIsWidgetBeingDebugged(const bool bNewValue);
 #endif
@@ -154,11 +142,6 @@ private:
 
 	/** Cached input manager for widgets */
 	FWidgetInputManager* WidgetInputManager;
-
-#if WIDGET_DEBUG_COLORS
-	FColorRGBA WidgetDebugColor;
-	bool bDebugWidgetColorsEnabled;
-#endif
 
 #if WITH_WIDGET_DEBUGGER
 	bool bIsWidgetBeingDebugged;
