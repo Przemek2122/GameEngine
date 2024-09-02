@@ -57,6 +57,8 @@ void FTextWidget::Init()
 void FTextWidget::Render()
 {
 	SDL_RenderCopy(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
+
+	Super::Render();
 }
 
 void FTextWidget::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor)

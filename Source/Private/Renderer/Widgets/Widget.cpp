@@ -19,6 +19,9 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 #if WIDGET_DEBUG_COLORS
 	, bDebugWidgetColorsEnabled(true)
 #endif
+#if DEBUG
+	, bIsWidgetBeingDebugged(false)
+#endif
 {
 #if _DEBUG
 	// Critical to be valid.
@@ -46,9 +49,21 @@ void FWidget::ReceiveTick()
 
 void FWidget::ReceiveRender()
 {
-	Render();
-	
-	RenderWidgets();
+	bWasRenderedThisFrame = ShouldBeRendered();
+	if (bWasRenderedThisFrame)
+	{
+		Render();
+
+		RenderWidgets();
+	}
+
+#if DEBUG
+	if (bIsWidgetBeingDebugged)
+	{
+		FRenderer* Renderer = GetRenderer();
+		Renderer->DrawRectangleOutline(GetWidgetLocation(), GetWidgetSize(), FColorRGBA::ColorRed(), false);
+	}
+#endif
 }
 
 void FWidget::Init()
@@ -392,6 +407,11 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 	}
 
 	return nullptr;
+}
+
+void FWidget::SetIsWidgetBeingDebugged(const bool bNewValue)
+{
+	bIsWidgetBeingDebugged = bNewValue;
 }
 
 #if WIDGET_DEBUG_COLORS

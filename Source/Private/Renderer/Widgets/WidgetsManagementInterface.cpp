@@ -55,13 +55,7 @@ void IWidgetManagementInterface::RenderWidgets()
 	for (ContainerInt i = 0; i < Size; i++)
 	{
 		FWidget* CurrentWidget = ManagedWidgets[i];
-
-		CurrentWidget->bWasRenderedThisFrame = CurrentWidget->ShouldBeRendered();
-
-		if (CurrentWidget->bWasRenderedThisFrame)
-		{
-			CurrentWidget->ReceiveRender();
-		}
+		CurrentWidget->ReceiveRender();
 	}
 }
 

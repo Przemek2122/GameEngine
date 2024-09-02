@@ -47,6 +47,12 @@ void FWidgetDebugger::RefreshDisplayedWidgets()
 	{
 		DebuggerWindowWidgetManager->ClearChildren();
 
+		if (CurrentlyDebuggedWidget != nullptr && !CurrentlyDebuggedWidget->IsPendingDelete())
+		{
+			CurrentlyDebuggedWidget->SetIsWidgetBeingDebugged(false);
+			CurrentlyDebuggedWidget = nullptr;
+		}
+
 		FVerticalBoxWidget* VerticalBox = DebuggerWindowWidgetManager->CreateWidget<FVerticalBoxWidget>();
 		VerticalBox->SetWidgetSizePercent({ 1, 1 });
 
@@ -105,6 +111,9 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 	FWidgetManager* DebuggerWindowWidgetManager = DebuggerWindow->GetWidgetManager();
 	if (DebuggerWindowWidgetManager != nullptr)
 	{
+		CurrentlyDebuggedWidget = Widget;
+		CurrentlyDebuggedWidget->SetIsWidgetBeingDebugged(true);
+
 		DebuggerWindowWidgetManager->ClearChildren();
 		FVerticalBoxWidget* VerticalBox = DebuggerWindowWidgetManager->CreateWidget<FVerticalBoxWidget>();
 
@@ -116,7 +125,7 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 
 		FButtonWidget* Button = VerticalBox->CreateWidget<FButtonWidget>();
 		Button->CreateWidget<FTextWidget>()->SetText("Exit");
-		Button->OnClickRelease.BindLambda([&]()
+		Button->OnClickRelease.BindLambda([&, Widget]()
 		{
 			RefreshDisplayedWidgets();
 		});

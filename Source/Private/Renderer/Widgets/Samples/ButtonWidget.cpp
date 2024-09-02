@@ -26,9 +26,9 @@ void FButtonWidget::Init()
 
 void FButtonWidget::Render()
 {
-	Super::Render();
-
 	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), ButtonRenderColor, false);
+
+	Super::Render();
 }
 
 void FButtonWidget::NativeHover()

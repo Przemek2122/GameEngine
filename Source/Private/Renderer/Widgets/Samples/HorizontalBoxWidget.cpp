@@ -6,7 +6,7 @@
 FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HorizontalBoxAlignMethod(EHorizontalBoxAlignMethod::FromTheLeft)
-	, bScaleToContent(true)
+	, bScaleToContent(false)
 	, CurrentlyCalculatedNumberOfWidgets(0)
 {
 	// This is handled by VerticalBox so we do not need to do it

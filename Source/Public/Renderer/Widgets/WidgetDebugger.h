@@ -27,5 +27,8 @@ protected:
 
 	/** Window created for debugging primary Window */
 	FWindow* DebuggerWindow;
+
+	/** Currently debugged widget pointer set in CreateSingleDebuggerForWidget */
+	FWidget* CurrentlyDebuggedWidget;
 	
 };

@@ -123,6 +123,10 @@ public:
 	void SetDebugWidgetColorsEnabled(const bool bInDebugWidgetColorsEnabled);
 #endif
 
+#if DEBUG
+	void SetIsWidgetBeingDebugged(const bool bNewValue);
+#endif
+
 protected:
 	/** True if WidgetManagementInterface decided to render this widget. */
 	bool bWasRenderedThisFrame;
@@ -155,6 +159,10 @@ private:
 #if WIDGET_DEBUG_COLORS
 	FColorRGBA WidgetDebugColor;
 	bool bDebugWidgetColorsEnabled;
+#endif
+
+#if DEBUG
+	bool bIsWidgetBeingDebugged;
 #endif
 	
 };
