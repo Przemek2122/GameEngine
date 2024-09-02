@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 
 #define DEBUG ((defined _DEBUG) && _DEBUG)
+#define WITH_WIDGET_DEBUGGER DEBUG
 
 #if DEBUG
 // Not inline in debug to be able to see callstack.

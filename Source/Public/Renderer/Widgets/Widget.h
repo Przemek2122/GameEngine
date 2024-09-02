@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "WidgetsPositionInterface.h"
 #include "WidgetEnums.h"
 
@@ -123,7 +122,7 @@ public:
 	void SetDebugWidgetColorsEnabled(const bool bInDebugWidgetColorsEnabled);
 #endif
 
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	void SetIsWidgetBeingDebugged(const bool bNewValue);
 #endif
 
@@ -161,7 +160,7 @@ private:
 	bool bDebugWidgetColorsEnabled;
 #endif
 
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	bool bIsWidgetBeingDebugged;
 #endif
 	

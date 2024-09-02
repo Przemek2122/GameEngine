@@ -6,7 +6,9 @@
 #include "Input/WindowInputManager.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Map/MapManager.h"
+#if WITH_WIDGET_DEBUGGER
 #include "Renderer/Widgets/WidgetDebugger.h"
+#endif
 #include "Renderer/Widgets/WidgetInputManager.h"
 
 FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, const Uint32 InWindowFlags)
@@ -20,7 +22,7 @@ FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, co
 	, bIsWindowVisible(true)
 	, bIsWindowMouseInside(true)
 	, WidgetManager(nullptr)
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	, WidgetDebugger(nullptr)
 #endif
 	, WindowInputManager(nullptr)
@@ -45,7 +47,7 @@ FWindow::~FWindow()
 {
 	delete Renderer;	
 	delete WidgetManager;
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	delete WidgetDebugger;
 #endif
 	delete WidgetInputManager;
@@ -92,7 +94,7 @@ FWidgetManager* FWindow::CreateWidgetManager()
 	return new FWidgetManager(this);
 }
 
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 FWidgetDebugger* FWindow::CreateWidgetDebugger()
 {
 	return new FWidgetDebugger(this);

@@ -19,7 +19,7 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 #if WIDGET_DEBUG_COLORS
 	, bDebugWidgetColorsEnabled(true)
 #endif
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	, bIsWidgetBeingDebugged(false)
 #endif
 {
@@ -57,7 +57,7 @@ void FWidget::ReceiveRender()
 		RenderWidgets();
 	}
 
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	if (bIsWidgetBeingDebugged)
 	{
 		FRenderer* Renderer = GetRenderer();
@@ -409,10 +409,12 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 	return nullptr;
 }
 
+#if WITH_WIDGET_DEBUGGER
 void FWidget::SetIsWidgetBeingDebugged(const bool bNewValue)
 {
 	bIsWidgetBeingDebugged = bNewValue;
 }
+#endif
 
 #if WIDGET_DEBUG_COLORS
 void FWidget::SetWidgetDebugColor(const FColorRGBA& Color)

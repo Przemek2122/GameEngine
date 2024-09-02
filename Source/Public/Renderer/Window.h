@@ -13,7 +13,7 @@ class FWidgetInputManager;
 class FWidgetManager;
 class FWidget;
 
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 class FWidgetDebugger;
 #endif
 
@@ -41,7 +41,7 @@ protected:
 	void ReceiveTick();
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	_NODISCARD virtual FWidgetDebugger* CreateWidgetDebugger();
 #endif
 	_NODISCARD virtual FWindowInputManager* CreateWindowInputManager();
@@ -55,7 +55,7 @@ public:
 	/** Render this window using renderer. */
 	virtual void Render();
 
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	/** Call to enable debugger for widgets */
 	virtual void StartWidgetDebugger();
 #endif
@@ -134,7 +134,7 @@ protected:
 	bool bIsWindowMouseInside;
 
 	FWidgetManager* WidgetManager;
-#if DEBUG
+#if WITH_WIDGET_DEBUGGER
 	FWidgetDebugger* WidgetDebugger;
 #endif
 	FWindowInputManager* WindowInputManager;

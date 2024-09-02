@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+#if WITH_WIDGET_DEBUGGER
 /**
  * UI Debugger
  */
@@ -32,3 +33,4 @@ protected:
 	FWidget* CurrentlyDebuggedWidget;
 	
 };
+#endif

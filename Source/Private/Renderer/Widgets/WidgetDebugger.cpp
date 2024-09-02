@@ -3,6 +3,7 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/WidgetDebugger.h"
 
+#if WITH_WIDGET_DEBUGGER
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
 #include "Renderer/Widgets/Samples/TextWidget.h"
 #include "Renderer/Widgets/Samples/VerticalBoxWidget.h"
@@ -131,3 +132,4 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 		});
 	}
 }
+#endif
