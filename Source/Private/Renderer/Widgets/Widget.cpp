@@ -14,7 +14,7 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bIsPendingDelete(false)
-	, bShouldChangeSizeOnChildChange(true)
+	, bShouldChangeSizeToFitChildren(true)
 	, WidgetInputManager(nullptr)
 #if WIDGET_DEBUG_COLORS
 	, bDebugWidgetColorsEnabled(true)
@@ -55,7 +55,7 @@ void FWidget::Init()
 {
 	WidgetManagementInterface->RegisterWidget(this);
 
-	SetAnchor(DefaultAnchorInterface);
+	SetAnchor(DefaultAnchor);
 
 	RefreshWidget();
 
@@ -109,7 +109,7 @@ void FWidget::Render()
 	if (bDebugWidgetColorsEnabled)
 	{
 		FRenderer* Renderer = GetRenderer();
-		Renderer->DrawRectangle(GetWidgetLocation() - Renderer->GetRenderOffset(), GetWidgetSize(), WidgetDebugColor);
+		Renderer->DrawRectangle(GetWidgetLocation(), GetWidgetSize(), WidgetDebugColor, false);
 	}
 #endif
 }
@@ -172,7 +172,7 @@ void FWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
 
 void FWidget::UpdateSizeToFitChildren()
 {
-	if (bShouldChangeSizeOnChildChange)
+	if (bShouldChangeSizeToFitChildren)
 	{
 		FVector2D<int> DesiredSize;
 
@@ -209,6 +209,8 @@ void FWidget::UpdateSizeToFitChildren()
 
 			SetWidgetSize(DesiredSize);
 		}
+
+		RefreshAnchor();
 	}
 }
 
@@ -296,7 +298,7 @@ void FWidget::SetWidgetOrder(const int InWidgetOrder)
 
 void FWidget::SetShouldChangeSizeOnChildChange(const bool bInShouldChangeSizeOnChildChange)
 {
-	bShouldChangeSizeOnChildChange = bInShouldChangeSizeOnChildChange;
+	bShouldChangeSizeToFitChildren = bInShouldChangeSizeOnChildChange;
 }
 
 FVector2D<int> FWidget::GetWidgetManagerOffset() const

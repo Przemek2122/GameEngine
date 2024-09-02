@@ -7,16 +7,16 @@
 #include "WidgetsPositionInterface.h"
 #include "WidgetEnums.h"
 
-enum class EInputState;
-class FWidgetInputManager;
-class FInteractionBaseWidget;
-
-#if _DEBUG
+#if DEBUG
 /** Should allow showing debug colors on widgets at all? */
-#define WIDGET_DEBUG_COLORS 1
+#define WIDGET_DEBUG_COLORS 0
 #else
 #define WIDGET_DEBUG_COLORS 0
 #endif
+
+enum class EInputState;
+class FWidgetInputManager;
+class FInteractionBaseWidget;
 
 /** 
  * Widgets can be created only from within FWidgetManager which is inside window or inside other widgets.
@@ -146,8 +146,8 @@ private:
 	/** if true widget is going to be destroyed */
 	bool bIsPendingDelete;
 
-	/** if children does not fit and this property is set to true we will resize widget */
-	bool bShouldChangeSizeOnChildChange;
+	/** if children does not fit and this property is set to true we will resize widget to fit them */
+	bool bShouldChangeSizeToFitChildren;
 
 	/** Cached input manager for widgets */
 	FWidgetInputManager* WidgetInputManager;

@@ -7,8 +7,8 @@
 
 IWidgetPositionInterface::IWidgetPositionInterface(IWidgetManagementInterface* InWidgetManagementInterface)
 	: WidgetSizeType(EWidgetSizeType::Pixels)
-	, DefaultAnchorInterface(EAnchor::Center)
-	, AnchorInterface(EAnchor::None)
+	, DefaultAnchor(EAnchor::Center)
+	, CurrentAnchor(EAnchor::None)
 	, ClippingMethodInterface(EClipping::Cut)
 {
 }
@@ -23,7 +23,7 @@ void IWidgetPositionInterface::OnSizeChanged()
 
 void IWidgetPositionInterface::OnAnchorChanged(const EAnchor NewAnchor)
 {
-	AnchorInterface = NewAnchor;
+	CurrentAnchor = NewAnchor;
 	
 	RefreshAnchor();
 }
@@ -176,7 +176,7 @@ void IWidgetPositionInterface::RefreshWidgetLocation()
 
 void IWidgetPositionInterface::RefreshAnchor()
 {
-	switch (AnchorInterface)
+	switch (CurrentAnchor)
 	{
 	case EAnchor::None:
 		{
@@ -306,15 +306,15 @@ void IWidgetPositionInterface::RefreshAnchor()
 
 void IWidgetPositionInterface::SetDefaultAnchor(const EAnchor NewAnchor)
 {
-	if (DefaultAnchorInterface != NewAnchor)
+	if (DefaultAnchor != NewAnchor)
 	{
-		DefaultAnchorInterface = NewAnchor;
+		DefaultAnchor = NewAnchor;
 	}
 }
 
 void IWidgetPositionInterface::SetAnchor(const EAnchor NewAnchor)
 {
-	if (AnchorInterface != NewAnchor)
+	if (CurrentAnchor != NewAnchor)
 	{
 		OnAnchorChanged(NewAnchor);
 	}
@@ -322,7 +322,7 @@ void IWidgetPositionInterface::SetAnchor(const EAnchor NewAnchor)
 
 EAnchor IWidgetPositionInterface::GetAnchor() const
 {
-	return AnchorInterface;
+	return CurrentAnchor;
 }
 
 EClipping IWidgetPositionInterface::GetClippingMethod() const

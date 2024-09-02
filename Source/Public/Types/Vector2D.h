@@ -77,6 +77,13 @@ public:
 		return FVector2D(-X, -Y);
 	}
 
+	static FVector2D Zero()
+	{
+		static FVector2D ZeroVector(0, 0);
+
+		return ZeroVector;
+	}
+
 	// Basic calculations
 	
 	friend FVector2D operator+(const FVector2D<TType>& A, const FVector2D<TType>& B) 

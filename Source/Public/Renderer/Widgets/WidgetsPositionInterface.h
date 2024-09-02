@@ -44,6 +44,7 @@ public:
 	void RefreshWidgetLocation();
 
 	void RefreshAnchor();
+
 	void SetDefaultAnchor(const EAnchor NewAnchor);
 	void SetAnchor(const EAnchor NewAnchor);
 	_NODISCARD EAnchor GetAnchor() const;
@@ -75,9 +76,9 @@ private:
 	FVector2D<float> WidgetSizeInScreenPercentInterface;
 
 	/** Default anchor when this widget is created.\n @See Init() */
-	EAnchor DefaultAnchorInterface;
+	EAnchor DefaultAnchor;
 	/** Anchor of this widget. Used to align to parent. */
-	EAnchor AnchorInterface;
+	EAnchor CurrentAnchor;
 
 	/** Defines widget behavior if it's too big. */
 	EClipping ClippingMethodInterface;

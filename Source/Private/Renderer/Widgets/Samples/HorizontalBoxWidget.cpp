@@ -3,12 +3,10 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/HorizontalBoxWidget.h"
 
-#include "Misc/Math.h"
-
 FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HorizontalBoxAlignMethod(EHorizontalBoxAlignMethod::FromTheLeft)
-	, bScaleToContent(false)
+	, bScaleToContent(true)
 	, CurrentlyCalculatedNumberOfWidgets(0)
 {
 	// This is handled by VerticalBox so we do not need to do it
@@ -64,14 +62,14 @@ void FHorizontalBoxWidget::AlignWidgets(const bool bForce)
 
 void FHorizontalBoxWidget::AlignFromTheLeft()
 {
-	const FVector2D<int> HorizontalBoxLocation = GetWidgetLocation(EWidgetOrientation::Relative);
-	const FVector2D<int> HorizontalBoxSize = GetWidgetSize();
+	const FVector2D<int> VerticalBoxLocation = GetWidgetLocation(EWidgetOrientation::Relative);
+	const FVector2D<int> VerticalBoxSize = GetWidgetSize();
 
-	const FVector2D<int> HorizontalBoxMaxBounds = HorizontalBoxLocation + HorizontalBoxSize;
+	const FVector2D<int> VerticalBoxMaxBounds = VerticalBoxLocation + VerticalBoxSize;
 
 	if (bScaleToContent)
 	{
-		FVector2D<int> HorizontalBoxSizeCalculated = { 0, 0 };
+		FVector2D<int> VerticalBoxSizeCalculated = { 0, 0 };
 
 		// Calculate size for parent widget
 		for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
@@ -83,18 +81,18 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 			{
 				const FVector2D<int> ChildWidgetSize = ChildWidget->GetWidgetSize();
 
-				// Find child with the biggest height
-				if (HorizontalBoxSizeCalculated.Y < ChildWidgetSize.Y)
+				// Find child with the biggest width
+				if (ChildWidgetSize.Y > VerticalBoxSizeCalculated.Y)
 				{
-					HorizontalBoxSizeCalculated.Y = ChildWidgetSize.Y;
+					VerticalBoxSizeCalculated.Y = ChildWidgetSize.Y;
 				}
 
-				// Always add width
-				HorizontalBoxSizeCalculated.X += ChildWidgetSize.X;
+				// Always add height
+				VerticalBoxSizeCalculated.X += ChildWidgetSize.X;
 			}
 		}
 
-		SetWidgetSize(HorizontalBoxSizeCalculated);
+		SetWidgetSize(VerticalBoxSizeCalculated);
 	}
 
 	FVector2D<int> AggregatedChildSizeLast = { 0, 0 };
@@ -106,22 +104,21 @@ void FHorizontalBoxWidget::AlignFromTheLeft()
 		// We must ensure it's only done when it should be visible
 		if (ChildWidget->IsVisible())
 		{
-			FVector2D<int> NewChildLocation = HorizontalBoxLocation;
+			FVector2D<int> NewChildLocation = VerticalBoxLocation;
 			NewChildLocation.X += AggregatedChildSizeLast.X;
 
 			FVector2D<int> ChildWidgetSize = ChildWidget->GetWidgetSize();
 
 			const FVector2D<int> ChildBounds = NewChildLocation + ChildWidgetSize;
 
-			// Make sure it fits horizontally inside the box
-			if (ChildBounds.X > HorizontalBoxMaxBounds.X)
+			// Make sure it fits inside box
+			if (ChildBounds.X > VerticalBoxMaxBounds.X)
 			{
-				ChildWidgetSize.X = HorizontalBoxMaxBounds.X;
+				ChildWidgetSize.X = VerticalBoxMaxBounds.X;
 			}
-			// Make sure it fits vertically inside the box
-			if (ChildBounds.Y > HorizontalBoxMaxBounds.Y)
+			if (ChildBounds.Y > VerticalBoxMaxBounds.Y)
 			{
-				ChildWidgetSize.Y = HorizontalBoxMaxBounds.Y;
+				ChildWidgetSize.Y = VerticalBoxMaxBounds.Y;
 			}
 
 			ChildWidget->SetWidgetLocation(NewChildLocation, EWidgetOrientation::Relative, true);
