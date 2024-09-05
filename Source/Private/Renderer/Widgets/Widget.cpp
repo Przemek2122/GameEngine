@@ -14,7 +14,6 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetVisibility(EWidgetVisibility::Visible)
 	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bIsPendingDelete(false)
-	, bShouldChangeSizeToFitChildren(true)
 	, WidgetInputManager(nullptr)
 #if WITH_WIDGET_DEBUGGER
 	, bIsWidgetBeingDebugged(false)
@@ -69,8 +68,6 @@ void FWidget::Init()
 
 	SetAnchor(DefaultAnchor);
 
-	RefreshWidget();
-
 	RegisterWidgetPostInit(this);
 
 	bWasInitCalled = true;
@@ -117,16 +114,6 @@ void FWidget::Tick()
 
 void FWidget::Render()
 {
-}
-
-void FWidget::ReCalculate()
-{
-	RefreshWidget(false);
-
-	for (FWidget* Widget : ManagedWidgets)
-	{
-		Widget->OnWindowChanged();
-	}
 }
 
 void FWidget::OnWidgetOrderChanged()
@@ -177,6 +164,7 @@ void FWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
 
 void FWidget::UpdateSizeToFitChildren()
 {
+	// @TODO Refactor due to widget changes
 	if (bShouldChangeSizeToFitChildren)
 	{
 		FVector2D<int> DesiredSize;
@@ -215,7 +203,7 @@ void FWidget::UpdateSizeToFitChildren()
 			SetWidgetSize(DesiredSize);
 		}
 
-		RefreshAnchor();
+		UpdateAnchor();
 	}
 }
 
@@ -223,13 +211,13 @@ void FWidget::DestroyWidget()
 {
 	if (!bIsPendingDelete)
 	{
+		RequestWidgetRebuild();
+
 		bIsPendingDelete = true;
 
-		ClearChildren();
-
-		SetWidgetVisibility(EWidgetVisibility::Collapsed);
-
 		PreDeInit();
+
+		ClearChildren();
 
 		GEngine->GetFunctionsToCallOnStartOfNextTick().BindObject(this, &FWidget::FinalizeDestroyWidget);
 	}
@@ -257,8 +245,6 @@ void FWidget::DestroyWidgetImmediate()
 
 		ClearChildren();
 
-		SetWidgetVisibility(EWidgetVisibility::Collapsed);
-
 		PreDeInit();
 
 		DeInit();
@@ -267,31 +253,20 @@ void FWidget::DestroyWidgetImmediate()
 	}
 }
 
-void FWidget::RefreshWidget(const bool bRefreshChildren)
-{
-	RefreshWidgetSize();
-	RefreshWidgetLocation();
-	RefreshAnchor();
-
-	if (bRefreshChildren)
-	{
-		for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
-		{
-			ManagedWidgets[i]->RefreshWidget();
-		}
-	}
-}
-
 void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 {
-	WidgetVisibility = InWidgetVisibility;
-
-	for (FWidget* ManagedWidget : ManagedWidgets)
+	if (WidgetVisibility != InWidgetVisibility)
 	{
-		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
-	}
+		WidgetVisibility = InWidgetVisibility;
 
-	ReCalculate();
+		// TODO: Not sure if this is correct approach
+		for (FWidget* ManagedWidget : ManagedWidgets)
+		{
+			ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
+		}
+
+		RequestWidgetRebuild();
+	}
 }
 
 void FWidget::SetWidgetOrder(const int InWidgetOrder)
@@ -318,6 +293,7 @@ FVector2D<int> FWidget::GetWidgetManagerSize() const
 
 bool FWidget::HasParent() const
 {
+	// Widgets unlike FWidgetManager always have parent
 	return true;
 }
 
@@ -328,7 +304,12 @@ FWindow* FWidget::GetOwnerWindow() const
 
 void FWidget::OnWindowChanged()
 {
-	ReCalculate();
+	RequestWidgetRebuild();
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->OnWindowChanged();
+	}
 }
 
 bool FWidget::IsVisible() const

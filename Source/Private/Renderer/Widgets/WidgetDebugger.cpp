@@ -11,6 +11,7 @@
 FWidgetDebugger::FWidgetDebugger(FWindow* InWindow)
 	: Window(InWindow)
 	, DebuggerWindow(nullptr)
+	, CurrentlyDebuggedWidget(nullptr)
 {
 }
 
@@ -55,6 +56,7 @@ void FWidgetDebugger::RefreshDisplayedWidgets()
 		}
 
 		FVerticalBoxWidget* VerticalBox = DebuggerWindowWidgetManager->CreateWidget<FVerticalBoxWidget>();
+		VerticalBox->SetVerticalBoxAlignMethod(EVerticalBoxAlignMethod::AlignToLeft);
 		VerticalBox->SetWidgetSizePercent({ 1, 1 });
 
 		CArray<FWidget*> Widgets = WindowWidgetManager->GetManagedWidgets();
@@ -122,11 +124,18 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 		VerticalBox->CreateWidget<FTextWidget>()->SetText(Widget->GetName());
 		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Location: " << Widget->GetWidgetLocation());
 		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Size: " << Widget->GetWidgetSize());
-		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Children count:" << Widget->GetChildrenCount());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Children count: " << Widget->GetChildrenCount());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("NeedsWidgetRebuild: " << Widget->NeedsWidgetRebuild());
 
-		FButtonWidget* Button = VerticalBox->CreateWidget<FButtonWidget>();
-		Button->CreateWidget<FTextWidget>()->SetText("Exit");
+		FButtonWidget* Button = VerticalBox->CreateWidget<FButtonWidget>("Button_Rebuild");
+		Button->CreateWidget<FTextWidget>()->SetText("Rebuild");
 		Button->OnClickRelease.BindLambda([&, Widget]()
+		{
+			Widget->RequestWidgetRebuild();
+		});
+		FButtonWidget* ButtonExit = VerticalBox->CreateWidget<FButtonWidget>("Button_Exit");
+		ButtonExit->CreateWidget<FTextWidget>()->SetText("Exit");
+		ButtonExit->OnClickRelease.BindLambda([&, Widget]()
 		{
 			RefreshDisplayedWidgets();
 		});

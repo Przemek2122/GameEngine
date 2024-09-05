@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 /** Visibility and hit control enum */

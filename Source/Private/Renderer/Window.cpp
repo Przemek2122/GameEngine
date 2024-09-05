@@ -125,7 +125,7 @@ void FWindow::Tick()
 {
 	const float DeltaTime = GEngine->GetDeltaTime();
 
-	WidgetManager->TickWidgets();
+	WidgetManager->ReceiveTick();
 	MapManager->TickMap(DeltaTime);
 }
 

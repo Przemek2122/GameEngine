@@ -10,6 +10,8 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 	, ButtonHoverColor(FColorRGBA::ColorLightGray())
 	, ButtonClickColor(FColorRGBA::ColorDarkGray())
 	, bUseDefaultSize(true)
+	, bScaleHorizontally(true)
+	, HorizontalAlignMethod(EHorizontalAlignMethod::AlignOnlyIfNotFitting)
 {
 }
 
@@ -29,6 +31,30 @@ void FButtonWidget::Render()
 	GetRenderer()->DrawRectangle(GetWidgetLocation(EWidgetOrientation::Absolute), GetWidgetSize(), ButtonRenderColor, false);
 
 	Super::Render();
+}
+
+void FButtonWidget::RebuildWidget()
+{
+	Super::RebuildWidget();
+
+	if (HorizontalAlignMethod == EHorizontalAlignMethod::AlignToFit)
+	{
+		FVector2D<int32> NewSize = GetWidgetSize();
+		NewSize.X = DesiredWidgetGeometry.Size.X;
+
+		SetWidgetSize(NewSize, true);
+	}
+	else if (HorizontalAlignMethod == EHorizontalAlignMethod::AlignOnlyIfNotFitting)
+	{
+		FVector2D<int32> NewSize = GetWidgetSize();
+
+		if (DesiredWidgetGeometry.Size.X > NewSize.X)
+		{
+			NewSize.X = DesiredWidgetGeometry.Size.X;
+
+			SetWidgetSize(NewSize, true);
+		}
+	}
 }
 
 void FButtonWidget::NativeHover()
@@ -80,6 +106,11 @@ void FButtonWidget::NativeMouseExitWidget()
 void FButtonWidget::SetUseDefaultSize(const bool bInUseDefaultSize)
 {
 	bUseDefaultSize = bInUseDefaultSize;
+}
+
+void FButtonWidget::SetScaleHorizontally(const bool bInScaleHorizontally)
+{
+	bScaleHorizontally = bInScaleHorizontally;
 }
 
 void FButtonWidget::SetButtonRenderColor(const FColorRGBA& Color)

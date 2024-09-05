@@ -5,12 +5,10 @@
 #include "CoreMinimal.h"
 #include "../Widget.h"
 
-enum class EVerticalBoxAlignMethod
+enum class EVerticalBoxAlignMethod : uint8
 {
-	/** One by one starting from the top of the widget */
-	Default,
-	/** Try to evenly divide space if possible */
-	Even
+	AlignToLeft,
+	AlignToCenter,
 };
 
 class FVerticalBoxWidget : public FWidget
@@ -18,13 +16,8 @@ class FVerticalBoxWidget : public FWidget
 public:
 	FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
-	/** Begin FWidget interface */
-	void ReCalculate() override;
-	/** End FWidget interface */
-
 	/** Begin IWidgetManagementInterface interface */
-	void OnAnyChildChanged() override;
-	void OnChildSizeChanged() override;
+	void RebuildWidget() override;
 	/** End IWidgetManagementInterface interface */
 
 	void SetScaleToContent(const bool bNewScaleToContent);
@@ -32,17 +25,17 @@ public:
 	
 	void AlignWidgets(const bool bForce = false);
 
-	void AlignDefault();
-	void AlignEven();
-
 	void SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod, const bool bUpdateAfterSet = true);
 	_NODISCARD EVerticalBoxAlignMethod GetVerticalBoxAlignMethod() const;
 		 
 protected:
+	void AlignToLeft();
+	void AlignToCenter();
+
 	EVerticalBoxAlignMethod VerticalBoxAlignMethod;
 
 	bool bScaleToContent;
 
-	int CurrentlyCalculatedNumberOfWidgets;
+	int32 CurrentlyCalculatedNumberOfWidgets;
 	
 };

@@ -10,7 +10,7 @@
  * Class for safe queue.
  * Not thread safe
  */
-template<typename TKey, typename TValue, typename TSizeType = int>
+template<typename TKey, typename TValue, typename TSizeType = ContainerInt>
 class CMap : public CContainerBase<TValue, TSizeType>
 {
 public:

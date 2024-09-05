@@ -16,7 +16,8 @@ protected:
 	FWidgetManager(FWindow* InOwnerWindow);
 	virtual ~FWidgetManager() override;
 
-	void DeInit();
+	virtual void DeInit();
+	virtual void ReceiveTick();
 
 	/** Begin IWidgetManagementInterface */
 	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;

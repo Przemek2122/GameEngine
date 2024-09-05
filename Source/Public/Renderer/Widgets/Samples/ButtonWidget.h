@@ -5,6 +5,12 @@
 #include "CoreMinimal.h"
 #include "InteractionBaseWidget.h"
 
+enum class EHorizontalAlignMethod : Uint8
+{
+	AlignToFit,
+	AlignOnlyIfNotFitting
+};
+
 class FButtonWidget : public FInteractionBaseWidget
 {
 public:
@@ -16,6 +22,10 @@ public:
 	void Render() override;
 	/** End FWidget */
 
+	/** IWidgetPositionInterface FWidget */
+	void RebuildWidget() override;
+	/** End IWidgetPositionInterface */
+	
 	/** Begin FInteractionBaseWidget */
 	void NativeHover() override;
 	void NativePress() override;
@@ -26,6 +36,8 @@ public:
 	/** End FInteractionBaseWidget */
 
 	void SetUseDefaultSize(const bool bInUseDefaultSize);
+
+	void SetScaleHorizontally(const bool bInScaleHorizontally);
 
 	FColorRGBA GetButtonRenderColor() const { return ButtonRenderColor; }
 	FColorRGBA GetButtonNormalColor() const { return ButtonNormalColor; }
@@ -49,5 +61,10 @@ protected:
 
 	/** If true, default size will be set in init */
 	bool bUseDefaultSize;
+
+	/** Should scale horizontally to fit children? */
+	bool bScaleHorizontally;
+
+	EHorizontalAlignMethod HorizontalAlignMethod;
 	
 };

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "WidgetsPositionInterface.h"
-#include "WidgetEnums.h"
 
 enum class EInputState;
 class FWidgetInputManager;
@@ -18,6 +17,8 @@ class FInteractionBaseWidget;
  * Widget is Created using IWidgetManagementInterface it inherits from. @See CreateWidget inside of this interface.
  * Widget is destroying in same interface using DestroyWidget or DestroyWidget on widget you would like to destroy.
  * @Note It's worth mentioning that after destroying it's kept for one frame to ensure proper destruction of all children.
+ *
+ * Widgets are build one frame after requesting rebuild to avoid loops when creating widgets
  */
 class FWidget : public FObject, public IWidgetPositionInterface
 {
@@ -49,9 +50,6 @@ protected:
 	/** Called each frame.\n Should be used To draw data only. @Note: When using Renderer calls use bIsLocationRelative=false in each function to prevent UI Moving with map */
 	virtual void Render();
 
-	/** Called when there is a need for recalculating cached data eg:\n Window size changed. */
-	virtual void ReCalculate();
-
 	virtual void OnWidgetOrderChanged();
 	virtual void OnWidgetVisibilityChanged();
 	void OnChildSizeChanged() override;
@@ -71,9 +69,6 @@ public:
 	/** Currently a hack - Do not use at all. */
 	void DestroyWidgetImmediate();
 
-	/** Full widget refresh. Performance heavy. */
-	virtual void RefreshWidget(const bool bRefreshChildren = true);
-
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
 	void SetWidgetOrder(const int InWidgetOrder);
 	void SetShouldChangeSizeOnChildChange(const bool bInShouldChangeSizeOnChildChange);
@@ -88,7 +83,6 @@ public:
 
 	/** True if DestroyWidget() has been called already */
 	bool IsPendingDelete() const { return bIsPendingDelete; }
-
 	bool IsVisible() const;
 	bool IsInteractive() const;
 	
@@ -96,7 +90,7 @@ public:
 	_NODISCARD virtual bool ShouldBeRendered() const;
 
 	/** Name of this widget. Can be displayed or widget can be get using this variable. */
-	_NODISCARD std::string GetName() const;
+	_NODISCARD std::string GetName() const override;
 	
 	_NODISCARD FWindow* GetWindow() const;
 	_NODISCARD FRenderer* GetRenderer() const;
@@ -136,9 +130,6 @@ private:
 
 	/** if true widget is going to be destroyed */
 	bool bIsPendingDelete;
-
-	/** if children does not fit and this property is set to true we will resize widget to fit them */
-	bool bShouldChangeSizeToFitChildren;
 
 	/** Cached input manager for widgets */
 	FWidgetInputManager* WidgetInputManager;

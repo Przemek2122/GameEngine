@@ -10,25 +10,43 @@ IWidgetPositionInterface::IWidgetPositionInterface(IWidgetManagementInterface* I
 	, DefaultAnchor(EAnchor::Center)
 	, CurrentAnchor(EAnchor::None)
 	, ClippingMethodInterface(EClipping::Cut)
+	, bShouldChangeSizeToFitChildren(true)
 {
 }
 
-void IWidgetPositionInterface::OnLocationChanged()
+void IWidgetPositionInterface::GenerateWidgetGeometry(FWidgetGeometry& InWidgetGeometry)
 {
+	GenerateChildWidgetGeometry();
+
+	const FWidgetMargin& CurrentPadding = GetWidgetMargin();
+	InWidgetGeometry.Size = GetWidgetSize() + CurrentPadding.GetSize();
+
+	Super::GenerateWidgetGeometry(InWidgetGeometry);
 }
 
-void IWidgetPositionInterface::OnSizeChanged()
+void IWidgetPositionInterface::GenerateDesiredWidgetGeometry()
 {
+	// Default alignment is like VerticalBox
+	const CArray<FWidgetGeometry>& ChildrenGeometryRef = GetChildrenGeometry();
+	for (const FWidgetGeometry& Geometry : ChildrenGeometryRef)
+	{
+		DesiredWidgetGeometry.Size.Y += Geometry.Size.Y;
+
+		if (Geometry.Size.X > DesiredWidgetGeometry.Size.X)
+		{
+			DesiredWidgetGeometry.Size.X = Geometry.Size.X;
+		}
+	}
 }
 
-void IWidgetPositionInterface::OnAnchorChanged(const EAnchor NewAnchor)
+void IWidgetPositionInterface::RebuildWidget()
 {
-	CurrentAnchor = NewAnchor;
-	
-	RefreshAnchor();
+	GenerateChildWidgetGeometry();
+
+	Super::RebuildWidget();
 }
 
-FVector2D<int> IWidgetPositionInterface::GetWidgetLocation(EWidgetOrientation WidgetOrientation) const
+FVector2D<int32> IWidgetPositionInterface::GetWidgetLocation(const EWidgetOrientation WidgetOrientation) const
 {
 	switch (WidgetOrientation)
 	{
@@ -45,7 +63,7 @@ FVector2D<int> IWidgetPositionInterface::GetWidgetLocation(EWidgetOrientation Wi
 	return { };
 }
 
-void IWidgetPositionInterface::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor)
+void IWidgetPositionInterface::SetWidgetLocation(const FVector2D<int32> InWidgetLocation, const EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor, const bool bWasSentFromRebuild)
 {
 	switch (WidgetOrientation)
 	{
@@ -67,28 +85,38 @@ void IWidgetPositionInterface::SetWidgetLocation(const FVector2D<int> InWidgetLo
 	{
 		SetAnchor(EAnchor::None);
 	}
-	
-	RefreshWidgetLocation();
+
+	if (!bWasSentFromRebuild)
+	{
+		RequestWidgetRebuild();
+	}
+
+	UpdateWidgetLocation();
 }
 
-FVector2D<int> IWidgetPositionInterface::GetWidgetSize() const
+FVector2D<int32> IWidgetPositionInterface::GetWidgetSize() const
 {
 	return WidgetSizeInPixelsInterface;
 }
 
-void IWidgetPositionInterface::SetWidgetSize(const FVector2D<int> InWidgetSize)
+void IWidgetPositionInterface::SetWidgetSize(const FVector2D<int32> InWidgetSize, const bool bWasSentFromRebuild)
 {
 	WidgetSizeType = EWidgetSizeType::Pixels;
-
 	WidgetSizeInPixelsInterface = InWidgetSize;
 
-	RefreshAnchor();
+	bShouldChangeSizeToFitChildren = false;
 
-	RefreshWidgetSize();
+	UpdateAnchor();
+	UpdateWidgetSize();
 
 	if (HasParent())
 	{
 		GetParent()->OnChildSizeChanged();
+	}
+
+	if (!bWasSentFromRebuild)
+	{
+		RequestWidgetRebuild();
 	}
 }
 
@@ -98,11 +126,11 @@ void IWidgetPositionInterface::SetWidgetSizePercent(const FVector2D<float> InScr
 
 	WidgetSizeInScreenPercentInterface = InScreenPercentage;
 
-	RefreshSizeInPercent();
+	UpdateSizeInPercent();
 
-	RefreshAnchor();
+	UpdateAnchor();
 
-	RefreshWidgetSize();
+	UpdateWidgetSize();
 
 	if (HasParent())
 	{
@@ -110,81 +138,43 @@ void IWidgetPositionInterface::SetWidgetSizePercent(const FVector2D<float> InScr
 	}
 }
 
-void IWidgetPositionInterface::RefreshSizeInPercent()
+void IWidgetPositionInterface::UpdateWidgetLocation()
 {
-	if (WidgetSizeType == EWidgetSizeType::ParentPercentage)
-	{
-		const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 
-		WidgetSizeInPixelsInterface.X = FMath::RoundToInt(static_cast<float>(ParentSize.X) * WidgetSizeInScreenPercentInterface.X);
-		WidgetSizeInPixelsInterface.Y = FMath::RoundToInt(static_cast<float>(ParentSize.Y) * WidgetSizeInScreenPercentInterface.Y);
-	}
+	RefreshWidgetLocationForChildren();
 }
 
-void IWidgetPositionInterface::RefreshWidgetSize()
+void IWidgetPositionInterface::UpdateWidgetSize()
 {
-	RefreshSizeInPercent();
-
-	switch (ClippingMethodInterface)
+	switch (WidgetSizeType)
 	{
-	case EClipping::None:
-		break;
-		
-	case EClipping::Resize:
+		case EWidgetSizeType::Pixels:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
+			UpdateWidgetSizePixels();
 
-			if (ParentSize.X < WidgetSizeInPixelsInterface.X)
-			{
-				WidgetSizeInPixelsInterface.X = ParentSize.X;
-			}
-
-			if (ParentSize.Y < WidgetSizeInPixelsInterface.Y)
-			{
-				WidgetSizeInPixelsInterface.Y = ParentSize.Y;
-			}
+			break;
 		}
-		break;
-	case EClipping::Cut:
+		case EWidgetSizeType::ParentPercentage:
 		{
-			const FVector2D<int> ParentSize = GetWidgetManagerSize();
-
-			if (ParentSize.X < WidgetSizeInPixelsInterface.X)
-			{
-				WidgetSizeInPixelsInterface.X = ParentSize.X;
-			}
-
-			if (ParentSize.Y < WidgetSizeInPixelsInterface.Y)
-			{
-				WidgetSizeInPixelsInterface.Y = ParentSize.Y;
-			}
+			UpdateSizeInPercent();
+			break;
 		}
-		break;
 	}
 
-	OnRefreshWidgetSize();
-
-	RefreshWidgetSizeChild();
+	RefreshWidgetSizeForChildren();
 }
 
-void IWidgetPositionInterface::RefreshWidgetLocation()
-{
-	OnRefreshWidgetLocation();
-
-	RefreshWidgetLocationChild();
-}
-
-void IWidgetPositionInterface::RefreshAnchor()
+void IWidgetPositionInterface::UpdateAnchor()
 {
 	switch (CurrentAnchor)
 	{
-	case EAnchor::None:
+		case EAnchor::None:
 		{
 			// This option means user do not want to use Anchor system.
 			break;
 		}
 		
-	case EAnchor::Center:
+		case EAnchor::Center:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -198,13 +188,13 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::LeftTop:
+		case EAnchor::LeftTop:
 		{
 			SetWidgetLocation(0, EWidgetOrientation::Absolute, false);
 			break;
 		}
 		
-	case EAnchor::LeftBottom:
+		case EAnchor::LeftBottom:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -218,7 +208,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::RightTop:
+		case EAnchor::RightTop:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -232,7 +222,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::RightBottom:
+		case EAnchor::RightBottom:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -246,7 +236,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::TopCenter:
+		case EAnchor::TopCenter:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -260,7 +250,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::LeftCenter:
+		case EAnchor::LeftCenter:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -274,7 +264,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::BottomCenter:
+		case EAnchor::BottomCenter:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -288,7 +278,7 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 		
-	case EAnchor::RightCenter:
+		case EAnchor::RightCenter:
 		{
 			const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
 			const FVector2D<int> ThisWidgetSize = GetWidgetSize();
@@ -302,6 +292,8 @@ void IWidgetPositionInterface::RefreshAnchor()
 			break;
 		}
 	}
+
+	UpdateAnchorForChildren();
 }
 
 void IWidgetPositionInterface::SetDefaultAnchor(const EAnchor NewAnchor)
@@ -316,18 +308,15 @@ void IWidgetPositionInterface::SetAnchor(const EAnchor NewAnchor)
 {
 	if (CurrentAnchor != NewAnchor)
 	{
-		OnAnchorChanged(NewAnchor);
+		CurrentAnchor = NewAnchor;
+
+		UpdateAnchor();
 	}
 }
 
 EAnchor IWidgetPositionInterface::GetAnchor() const
 {
 	return CurrentAnchor;
-}
-
-EClipping IWidgetPositionInterface::GetClippingMethod() const
-{
-	return ClippingMethodInterface;
 }
 
 void IWidgetPositionInterface::SetClippingMethod(const EClipping NewClippingMethod)
@@ -340,30 +329,146 @@ void IWidgetPositionInterface::SetClippingMethod(const EClipping NewClippingMeth
 	}
 }
 
+EClipping IWidgetPositionInterface::GetClippingMethod() const
+{
+	return ClippingMethodInterface;
+}
+
+void IWidgetPositionInterface::SetWidgetMargin(const FWidgetMargin& InWidgetMargin)
+{
+	WidgetMargin = InWidgetMargin;
+}
+
+std::string IWidgetPositionInterface::GetName() const
+{
+	static const std::string DefaultWidgetName = "DefaultWidgetNameInInterface";
+
+	return DefaultWidgetName;
+}
+
 void IWidgetPositionInterface::OnClippingMethodChanged(EClipping NewClippingMethod)
 {
 }
 
-void IWidgetPositionInterface::OnRefreshWidgetSize()
-{
-}
-
-void IWidgetPositionInterface::OnRefreshWidgetLocation()
-{
-}
-
-void IWidgetPositionInterface::RefreshWidgetSizeChild()
+void IWidgetPositionInterface::RefreshWidgetSizeForChildren()
 {
 	for (FWidget* Widget : ManagedWidgets)
 	{
-		Widget->RefreshWidgetSize();
+		Widget->UpdateWidgetSize();
 	}
 }
 
-void IWidgetPositionInterface::RefreshWidgetLocationChild()
+void IWidgetPositionInterface::RefreshWidgetLocationForChildren()
 {
 	for (FWidget* Widget : ManagedWidgets)
 	{
-		Widget->RefreshWidgetLocation();
+		Widget->UpdateWidgetLocation();
 	}
+}
+
+void IWidgetPositionInterface::UpdateAnchorForChildren()
+{
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->UpdateAnchor();
+	}
+}
+
+void IWidgetPositionInterface::UpdateLocation()
+{
+	UpdateAnchor();
+}
+
+void IWidgetPositionInterface::UpdateSizeInPercent()
+{
+	if (WidgetSizeType == EWidgetSizeType::ParentPercentage)
+	{
+		const FVector2D<int> ParentSize = GetParent()->GetWidgetManagerSize();
+
+		WidgetSizeInPixelsInterface.X = FMath::RoundToInt(static_cast<float>(ParentSize.X) * WidgetSizeInScreenPercentInterface.X);
+		WidgetSizeInPixelsInterface.Y = FMath::RoundToInt(static_cast<float>(ParentSize.Y) * WidgetSizeInScreenPercentInterface.Y);
+	}
+}
+
+void IWidgetPositionInterface::UpdateWidgetSizePixels()
+{
+	switch (ClippingMethodInterface)
+	{
+	case EClipping::None:
+	{
+		break;
+	}
+
+	case EClipping::Resize:
+	{
+		const FVector2D<int> ParentSize = GetWidgetManagerSize();
+
+		if (ParentSize.X < WidgetSizeInPixelsInterface.X)
+		{
+			WidgetSizeInPixelsInterface.X = ParentSize.X;
+		}
+
+		if (ParentSize.Y < WidgetSizeInPixelsInterface.Y)
+		{
+			WidgetSizeInPixelsInterface.Y = ParentSize.Y;
+		}
+
+		break;
+	}
+	case EClipping::Cut:
+	{
+		const FVector2D<int> ParentSize = GetWidgetManagerSize();
+
+		if (ParentSize.X < WidgetSizeInPixelsInterface.X)
+		{
+			WidgetSizeInPixelsInterface.X = ParentSize.X;
+		}
+
+		if (ParentSize.Y < WidgetSizeInPixelsInterface.Y)
+		{
+			WidgetSizeInPixelsInterface.Y = ParentSize.Y;
+		}
+
+		break;
+	}
+	}
+}
+
+void IWidgetPositionInterface::GenerateChildWidgetGeometry()
+{
+	const bool bAnyChanged = RebuildChildren();
+	if (bAnyChanged)
+	{
+		ChildrenGeometry.Clear();
+
+		for (FWidget* ManagedWidget : ManagedWidgets)
+		{
+			FWidgetGeometry ChildWidgetGeometry;
+			ManagedWidget->GenerateWidgetGeometry(ChildWidgetGeometry);
+
+			ChildrenGeometry.Push(ChildWidgetGeometry);
+		}
+
+		DesiredWidgetGeometry = FWidgetGeometry();
+
+		// When we have children size we can create desired geometry
+		GenerateDesiredWidgetGeometry();
+	}
+}
+
+bool IWidgetPositionInterface::RebuildChildren()
+{
+	bool bAnyChildChanged = false;
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		if (ManagedWidget->NeedsWidgetRebuild())
+		{
+			ManagedWidget->RebuildWidget();
+
+			bAnyChildChanged = true;
+		}
+	}
+
+	return bAnyChildChanged;
 }

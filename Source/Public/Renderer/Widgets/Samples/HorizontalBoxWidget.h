@@ -15,24 +15,20 @@ class FHorizontalBoxWidget : public FWidget
 public:
 	FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
-	/** Begin FWidget interface */
-	void ReCalculate() override;
-	/** End FWidget interface */
-
 	/** Begin IWidgetManagementInterface interface */
-	void OnAnyChildChanged() override;
-	void OnChildSizeChanged() override;
+	void GenerateDesiredWidgetGeometry() override;
 	/** End IWidgetManagementInterface interface */
 
 	void AlignWidgets(const bool bForce = false);
 
-	void AlignFromTheLeft();
-
 	void SetScaleToContent(const bool bInScaleToContent);
-
 	bool ShouldScaleToContent() const { return bScaleToContent; }
 
 protected:
+	void RebuildWidget() override;
+
+	void AlignFromTheLeft();
+
 	EHorizontalBoxAlignMethod HorizontalBoxAlignMethod;
 
 	bool bScaleToContent;

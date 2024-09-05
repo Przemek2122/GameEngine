@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WidgetEnums.h"
+#include "WidgetStructs.h"
 
 /**
  * Class responsible for managing widgets. \n
@@ -28,6 +30,8 @@ public:
 	/** True if has owner */
 	_NODISCARD virtual bool HasParent() const = 0;
 
+	virtual bool NeedsWidgetRebuild() { return bIsWidgetRequestingRebuild; }
+
 	/**
 	 * Ticking widgets works different than render. \n
 	 * First child widgets are ticked than parent.
@@ -39,6 +43,18 @@ public:
 	 * First parent is rendered than all its child and it's children ...
 	 */
 	virtual void RenderWidgets();
+
+	/** Marks widget as requiring rebuild. */
+	virtual void RequestWidgetRebuild();
+
+	/** Marks widget as after finished rebuild. Rebuild will not be done. */
+	virtual void MarkAsWidgetRebuild();
+
+	/** Used to determine widget size */
+	virtual void GenerateWidgetGeometry(FWidgetGeometry& InWidgetGeometry);
+
+	/** Will be called before calling GenerateWidgetGeometry to determine widget size but only if requesting it using bIsWidgetRequestingRebuild */
+	virtual void RebuildWidget();
 
 	/**
 	 * Add child by moving from other interface. \n
@@ -103,6 +119,12 @@ public:
 	bool HasWidget(const std::string& InWidgetName);
 	/** @returns true if widget exists SLOW */
 	bool HasWidget(FWidget* InWidget);
+
+	/** Called before any initialization */
+	virtual void RegisterWidget(FWidget* Widget);
+	/** Called after widget initialization */
+	virtual void RegisterWidgetPostInit(FWidget* Widget);
+	virtual void UnRegisterWidget(FWidget* Widget);
 	
 	/** @returns Window which created this manager */
 	_NODISCARD virtual FWindow* GetOwnerWindow() const = 0;
@@ -137,6 +159,15 @@ public:
 	 */
 	FDelegateSafe<void> OnAnyChildChangedDelegate;
 
+	/** Called when any child widget needs rebuild */
+	FDelegateSafe<void> OnAnyChildRequestedRebuild;
+
+	/** Called when widget order is changed */
+	FDelegateSafe<void, FWidget*> OnWidgetOrderChanged;
+
+	/** Last widget number - using when generating unique names for widgets */
+	int32 LastWidgetNumber;
+
 protected:
 	/** Called by wiget when order is changed. */
 	void ChangeWidgetOrder(FWidget* InWidget);
@@ -148,15 +179,8 @@ protected:
 	/** Maps string to widget. */
 	CMap<std::string, FWidget*> ManagedWidgetsMap;
 
-public:
-	/** Called before any initialization */
-	virtual void RegisterWidget(FWidget* Widget);
-	/** Called after widget initialization */
-	virtual void RegisterWidgetPostInit(FWidget* Widget);
-	virtual void UnRegisterWidget(FWidget* Widget);
+private:
+	/** True if widget needs update, important because whole chain up to parent needs to update */
+	bool bIsWidgetRequestingRebuild;
 
-	FDelegate<void, FWidget*> OnWidgetOrderChanged;
-
-	int LastWidgetNumber;
-	
 };

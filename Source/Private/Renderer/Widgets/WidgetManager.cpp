@@ -22,6 +22,22 @@ void FWidgetManager::DeInit()
 	ClearChildren();
 }
 
+void FWidgetManager::ReceiveTick()
+{
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		if (ManagedWidget->NeedsWidgetRebuild())
+		{
+			FWidgetGeometry WidgetGeometry;
+			ManagedWidget->GenerateWidgetGeometry(WidgetGeometry);
+
+			ManagedWidget->RebuildWidget();
+		}
+	}
+
+	TickWidgets();
+}
+
 FVector2D<int> FWidgetManager::GetWidgetManagerOffset() const
 {
 	return 0;

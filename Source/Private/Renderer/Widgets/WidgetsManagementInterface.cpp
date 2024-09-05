@@ -5,6 +5,7 @@
 
 IWidgetManagementInterface::IWidgetManagementInterface()
 	: LastWidgetNumber(0)
+	, bIsWidgetRequestingRebuild(false)
 {
 	OnAnyChildChangedDelegate.BindObject(this, &IWidgetManagementInterface::OnAnyChildChanged);
 }
@@ -59,6 +60,47 @@ void IWidgetManagementInterface::RenderWidgets()
 	}
 }
 
+void IWidgetManagementInterface::RequestWidgetRebuild()
+{
+	if (!bIsWidgetRequestingRebuild)
+	{
+		// Parent is required as otherwise we will not be able to ever rebuild
+		IWidgetManagementInterface* Parent = GetParent();
+		if (Parent != nullptr)
+		{
+			bIsWidgetRequestingRebuild = true;
+
+			if (!Parent->NeedsWidgetRebuild())
+			{
+				Parent->RequestWidgetRebuild();
+			}
+
+			// Propagate to children
+			for (FWidget* ManagedWidget : ManagedWidgets)
+			{
+				if (!ManagedWidget->NeedsWidgetRebuild())
+				{
+					ManagedWidget->RequestWidgetRebuild();
+				}
+			}
+		}
+	}
+}
+
+void IWidgetManagementInterface::MarkAsWidgetRebuild()
+{
+	bIsWidgetRequestingRebuild = false;
+}
+
+void IWidgetManagementInterface::GenerateWidgetGeometry(FWidgetGeometry& InWidgetGeometry)
+{
+}
+
+void IWidgetManagementInterface::RebuildWidget()
+{
+	MarkAsWidgetRebuild();
+}
+
 bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 {
 	if (InWidget != nullptr)
@@ -75,6 +117,10 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 			RegisterWidgetPostInit(InWidget);
 
 			return true;
+		}
+		else
+		{
+			LOG_WARN("Double called AddChild");
 		}
 	}
 
@@ -228,6 +274,8 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 		// This means re-register to same parent and it's not supported
 		ENSURE_VALID(false);
 	}
+
+	RequestWidgetRebuild();
 }
 
 void IWidgetManagementInterface::RegisterWidgetPostInit(FWidget* Widget)
@@ -242,6 +290,8 @@ void IWidgetManagementInterface::UnRegisterWidget(FWidget* Widget)
 	
 	ManagedWidgets.Remove(Widget);
 	ManagedWidgetsMap.Remove(Widget->GetName());
+
+	RequestWidgetRebuild();
 
 #if _DEBUG
 	const auto NotDeletedIndex = ManagedWidgets.FindIndexOf(Widget);

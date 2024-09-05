@@ -680,6 +680,9 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsPositionInterface.h">
       <Filter>Public\Renderer\Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetStructs.h">
+      <Filter>Public\Renderer\Widgets</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Window.h">
       <Filter>Public\Renderer</Filter>
     </ClInclude>

@@ -173,13 +173,6 @@ void FEngine::EngineTick()
 		GEngine->RequestExit();
 	}
 
-	// Tick objects registered with TickInterface
-	TickingObjectsDelegate.Execute(DeltaTimeFloat);
-
-	Tick();
-
-	EngineTickingManager->EngineTick(DeltaTimeFloat);
-
 	// Tick functions for next tick
 	if (FunctionsToCallOnStartOfNextTick.IsBound())
 	{
@@ -187,6 +180,13 @@ void FEngine::EngineTick()
 
 		FunctionsToCallOnStartOfNextTick.UnBindAll();
 	}
+
+	// Tick objects registered with TickInterface
+	TickingObjectsDelegate.Execute(DeltaTimeFloat);
+
+	Tick();
+
+	EngineTickingManager->EngineTick(DeltaTimeFloat);
 
 	EngineRender->Tick();
 

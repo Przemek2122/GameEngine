@@ -7,6 +7,7 @@
 /** What should happen if widget is too big? */
 enum class ETextRenderMode : Uint8
 {
+	None,						// Default value
 	Solid,						// Render text only
 	Shaded,						// Render text with background
 	Blended,					// Render
@@ -19,13 +20,15 @@ public:
 	~FTextWidget() override;
 	
 	/** Begin FWidget */
-	void Init() override;
 	void Render() override;
-	void SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor) override;
-	void SetWidgetSize(const FVector2D<int> InWidgetSize) override;
 	void OnClippingMethodChanged(EClipping NewClipping) override;
-	void RefreshWidget(const bool bRefreshChildren) override;
 	/** End FWidget */
+
+	/** Begin IWidgetPositionInterface */
+	void UpdateWidgetLocation() override;
+	void UpdateWidgetSize() override;
+	void UpdateAnchor() override;
+	/** End IWidgetPositionInterface */
 
 public:
 	/** Use for advanced text with parameters like InText='"Test button " << 1' */
@@ -44,8 +47,10 @@ public:
 	_NODISCARD ETextRenderMode GetTextRenderMode() const;
 
 protected:
+	void RebuildWidget() override;
+
 	/** Redraw text and auto calc size */
-	void OnTextChanged();
+	virtual void OnTextChanged();
 
 	/** Auto adjusts size for @RenderedText */
 	void AutoAdjustSize(const bool bLimitToParentSize = false);
@@ -55,9 +60,6 @@ protected:
 
 	/** SDL Wrapper */
 	int CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) const;
-
-	/** Calculate size for SDL */
-	void UpdateSDLRectSize() const;
 
 	/** Makes new texture for text */
 	void RedrawText();
@@ -79,7 +81,8 @@ protected:
 
 	FVector2D<int> LastTextTextureSize;
 
-	ETextRenderMode TextRenderMode;
+	ETextRenderMode CurrentTextRenderMode;
+	ETextRenderMode DesiredTextRenderMode;
 
 protected:
 	/** if this property is set to true it will cut text to fit inside of parent */
