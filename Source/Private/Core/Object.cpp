@@ -15,3 +15,13 @@ std::string FObject::GetCppClassName() const
 {
 	return typeid(this).name();
 }
+
+std::string FObject::GetCppClassNameWithoutClass() const
+{
+	std::string ClassName = GetCppClassName();
+
+	// Remove "class "
+	ClassName = ClassName.replace(0, 5, "");
+
+	return ClassName;
+}

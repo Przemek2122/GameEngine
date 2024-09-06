@@ -28,6 +28,8 @@ protected:
 	virtual void OnWindowChanged() override;
 	/** End IWidgetManagementInterface */
 
+	void OnWindowSizeChanged();
+
 private:
 	/** Window where widgets are rendered */
 	FWindow* OwnerWindow;

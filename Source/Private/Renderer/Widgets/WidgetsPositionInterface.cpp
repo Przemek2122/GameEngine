@@ -19,7 +19,7 @@ void IWidgetPositionInterface::GenerateWidgetGeometry(FWidgetGeometry& InWidgetG
 	GenerateChildWidgetGeometry();
 
 	const FWidgetMargin& CurrentPadding = GetWidgetMargin();
-	InWidgetGeometry.Size = GetWidgetSize() + CurrentPadding.GetSize();
+	InWidgetGeometry.Size = GetWidgetSize() + CurrentPadding.Get();
 
 	Super::GenerateWidgetGeometry(InWidgetGeometry);
 }
@@ -41,6 +41,9 @@ void IWidgetPositionInterface::GenerateDesiredWidgetGeometry()
 
 void IWidgetPositionInterface::RebuildWidget()
 {
+	UpdateWidgetSize();
+	UpdateWidgetLocation();
+
 	GenerateChildWidgetGeometry();
 
 	Super::RebuildWidget();
@@ -138,10 +141,13 @@ void IWidgetPositionInterface::SetWidgetSizePercent(const FVector2D<float> InScr
 	}
 }
 
+void IWidgetPositionInterface::UpdateWidget()
+{
+	RequestWidgetRebuild();
+}
+
 void IWidgetPositionInterface::UpdateWidgetLocation()
 {
-
-	RefreshWidgetLocationForChildren();
 }
 
 void IWidgetPositionInterface::UpdateWidgetSize()
@@ -160,8 +166,6 @@ void IWidgetPositionInterface::UpdateWidgetSize()
 			break;
 		}
 	}
-
-	RefreshWidgetSizeForChildren();
 }
 
 void IWidgetPositionInterface::UpdateAnchor()
@@ -348,22 +352,6 @@ std::string IWidgetPositionInterface::GetName() const
 
 void IWidgetPositionInterface::OnClippingMethodChanged(EClipping NewClippingMethod)
 {
-}
-
-void IWidgetPositionInterface::RefreshWidgetSizeForChildren()
-{
-	for (FWidget* Widget : ManagedWidgets)
-	{
-		Widget->UpdateWidgetSize();
-	}
-}
-
-void IWidgetPositionInterface::RefreshWidgetLocationForChildren()
-{
-	for (FWidget* Widget : ManagedWidgets)
-	{
-		Widget->UpdateWidgetLocation();
-	}
 }
 
 void IWidgetPositionInterface::UpdateAnchorForChildren()

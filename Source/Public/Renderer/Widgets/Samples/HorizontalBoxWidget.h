@@ -19,7 +19,7 @@ public:
 	void GenerateDesiredWidgetGeometry() override;
 	/** End IWidgetManagementInterface interface */
 
-	void AlignWidgets(const bool bForce = false);
+	void AlignWidgets();
 
 	void SetScaleToContent(const bool bInScaleToContent);
 	bool ShouldScaleToContent() const { return bScaleToContent; }
@@ -32,7 +32,5 @@ protected:
 	EHorizontalBoxAlignMethod HorizontalBoxAlignMethod;
 
 	bool bScaleToContent;
-
-	int CurrentlyCalculatedNumberOfWidgets;
 	
 };

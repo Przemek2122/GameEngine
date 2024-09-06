@@ -7,7 +7,6 @@ FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetM
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HorizontalBoxAlignMethod(EHorizontalBoxAlignMethod::FromTheLeft)
 	, bScaleToContent(true)
-	, CurrentlyCalculatedNumberOfWidgets(0)
 {
 	// This is handled by HorizontalBox so we do not need to do it
 	SetShouldChangeSizeOnChildChange(false);
@@ -28,27 +27,20 @@ void FHorizontalBoxWidget::GenerateDesiredWidgetGeometry()
 	}
 }
 
-void FHorizontalBoxWidget::AlignWidgets(const bool bForce)
+void FHorizontalBoxWidget::AlignWidgets()
 {
-	const int CurrentNumberOfManagedWidgets = ManagedWidgets.Size();
-
-	if (bForce || (CurrentNumberOfManagedWidgets > 0 && CurrentlyCalculatedNumberOfWidgets != CurrentNumberOfManagedWidgets))
+	if (bScaleToContent)
 	{
-		CurrentlyCalculatedNumberOfWidgets = CurrentNumberOfManagedWidgets;
+		SetWidgetSize(GetDesiredWidgetGeometry().Size, true);
+	}
 
-		if (bScaleToContent)
+	switch (HorizontalBoxAlignMethod)
+	{
+		case EHorizontalBoxAlignMethod::FromTheLeft:
 		{
-			SetWidgetSize(GetDesiredWidgetGeometry().Size, true);
-		}
+			AlignFromTheLeft();
 
-		switch (HorizontalBoxAlignMethod)
-		{
-			case EHorizontalBoxAlignMethod::FromTheLeft:
-			{
-				AlignFromTheLeft();
-
-				break;
-			}
+			break;
 		}
 	}
 }
@@ -62,7 +54,7 @@ void FHorizontalBoxWidget::RebuildWidget()
 {
 	Super::RebuildWidget();
 
-	AlignWidgets(true);
+	AlignWidgets();
 }
 
 void FHorizontalBoxWidget::AlignFromTheLeft()

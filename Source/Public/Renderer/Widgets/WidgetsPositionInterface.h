@@ -39,6 +39,8 @@ public:
 	/** Set size of this widget in percentage of parent size (0.0 to 1.0) where 1.0 means 100% size. */
 	virtual void SetWidgetSizePercent(const FVector2D<float> InScreenPercentage);
 
+	virtual void UpdateWidget();
+
 	/** Called when changed location */
 	virtual void UpdateWidgetLocation();
 
@@ -67,8 +69,6 @@ public:
 	virtual void OnClippingMethodChanged(EClipping NewClippingMethod);
 
 protected:
-	virtual void RefreshWidgetSizeForChildren();
-	virtual void RefreshWidgetLocationForChildren();
 	virtual void UpdateAnchorForChildren();
 
 	void UpdateLocation();

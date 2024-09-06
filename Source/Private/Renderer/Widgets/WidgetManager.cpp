@@ -70,3 +70,11 @@ void FWidgetManager::OnWindowChanged()
 		Widget->OnWindowChanged();
 	}
 }
+
+void FWidgetManager::OnWindowSizeChanged()
+{
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->RequestWidgetRebuild();
+	}
+}

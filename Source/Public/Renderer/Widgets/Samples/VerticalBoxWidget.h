@@ -23,7 +23,7 @@ public:
 	void SetScaleToContent(const bool bNewScaleToContent);
 	bool ShouldScaleToContent() const { return bScaleToContent; }
 	
-	void AlignWidgets(const bool bForce = false);
+	void AlignWidgets();
 
 	void SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod, const bool bUpdateAfterSet = true);
 	_NODISCARD EVerticalBoxAlignMethod GetVerticalBoxAlignMethod() const;
@@ -35,7 +35,5 @@ protected:
 	EVerticalBoxAlignMethod VerticalBoxAlignMethod;
 
 	bool bScaleToContent;
-
-	int32 CurrentlyCalculatedNumberOfWidgets;
 	
 };

@@ -304,11 +304,10 @@ FWindow* FWidget::GetOwnerWindow() const
 
 void FWidget::OnWindowChanged()
 {
-	RequestWidgetRebuild();
-
 	for (FWidget* ManagedWidget : ManagedWidgets)
 	{
 		ManagedWidget->OnWindowChanged();
+		ManagedWidget->RequestWidgetRebuild();
 	}
 }
 

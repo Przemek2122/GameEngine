@@ -22,8 +22,20 @@ struct FWidgetMargin
 	{
 	}
 
-	FVector2D<int32> GetSize() const { return { Horizontal, Vertical }; }
+	int32 SetHorizontal() const { return Horizontal; }
+	int32 SetVertical() const { return Vertical; }
 
+	FVector2D<int32> Get() const { return { Horizontal, Vertical }; }
+
+	int32 GetHorizontal() const { return Horizontal; }
+	int32 GetVertical() const { return Vertical; }
+
+	int32 GetLeft() const { return Horizontal / 2; }
+	int32 GetRight() const { return Horizontal / 2; }
+	int32 GetTop() const { return Vertical / 2; }
+	int32 GetBottom() const { return Vertical / 2; }
+
+protected:
 	int32 Horizontal;
 	int32 Vertical;
 };

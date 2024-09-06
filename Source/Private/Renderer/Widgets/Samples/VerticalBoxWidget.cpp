@@ -7,7 +7,6 @@ FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManag
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::AlignToCenter)
 	, bScaleToContent(true)
-	, CurrentlyCalculatedNumberOfWidgets(0)
 {
 	// This is handled by VerticalBox so we do not need to do it
 	SetShouldChangeSizeOnChildChange(false);
@@ -25,37 +24,30 @@ void FVerticalBoxWidget::SetScaleToContent(const bool bNewScaleToContent)
 	bScaleToContent = bNewScaleToContent;
 }
 
-void FVerticalBoxWidget::AlignWidgets(const bool bForce)
+void FVerticalBoxWidget::AlignWidgets()
 {
-	const int CurrentNumberOfManagedWidgets = ManagedWidgets.Size();
-
-	if (bForce || CurrentNumberOfManagedWidgets > 0 && CurrentlyCalculatedNumberOfWidgets != CurrentNumberOfManagedWidgets)
+	if (bScaleToContent)
 	{
-		CurrentlyCalculatedNumberOfWidgets = CurrentNumberOfManagedWidgets;
-
-		if (bScaleToContent)
-		{
-			SetWidgetSize(GetDesiredWidgetGeometry().Size, true);
-		}
-
-		switch (VerticalBoxAlignMethod)
-		{
-			case EVerticalBoxAlignMethod::AlignToLeft:
-			{
-				AlignToLeft();
-
-				break;
-			}
-			case EVerticalBoxAlignMethod::AlignToCenter:
-			{
-				AlignToCenter();
-
-				break;
-			}
-		}
-
-		UpdateAnchor();
+		SetWidgetSize(GetDesiredWidgetGeometry().Size, true);
 	}
+
+	switch (VerticalBoxAlignMethod)
+	{
+		case EVerticalBoxAlignMethod::AlignToLeft:
+		{
+			AlignToLeft();
+
+			break;
+		}
+		case EVerticalBoxAlignMethod::AlignToCenter:
+		{
+			AlignToCenter();
+
+			break;
+		}
+	}
+
+	UpdateAnchor();
 }
 
 void FVerticalBoxWidget::SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod, const bool bUpdateAfterSet)
@@ -150,4 +142,6 @@ void FVerticalBoxWidget::AlignToCenter()
 			AggregatedChildSizeLast.Y += ChildWidgetSize.Y;
 		}
 	}
+
+	RequestWidgetRebuild();
 }
