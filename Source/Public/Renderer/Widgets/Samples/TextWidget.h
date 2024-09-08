@@ -26,8 +26,8 @@ public:
 
 	/** Begin IWidgetPositionInterface */
 	void UpdateWidgetLocation() override;
-	void UpdateWidgetSize() override;
-	void UpdateAnchor() override;
+	void UpdateWidgetSize(const bool bWasSentFromRebuild) override;
+	void UpdateAnchor(const bool bIsFromRebuild) override;
 	/** End IWidgetPositionInterface */
 
 public:

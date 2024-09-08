@@ -7,6 +7,7 @@ FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManag
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::AlignToCenter)
 	, bScaleToContent(true)
+	, CurrentNumberOfCalculatedChildren(0)
 {
 	// This is handled by VerticalBox so we do not need to do it
 	SetShouldChangeSizeOnChildChange(false);
@@ -46,8 +47,6 @@ void FVerticalBoxWidget::AlignWidgets()
 			break;
 		}
 	}
-
-	UpdateAnchor();
 }
 
 void FVerticalBoxWidget::SetVerticalBoxAlignMethod(const EVerticalBoxAlignMethod InVerticalBoxAlignMethod, const bool bUpdateAfterSet)
@@ -101,6 +100,14 @@ void FVerticalBoxWidget::AlignToLeft()
 			AggregatedChildSizeLast.Y += ChildWidgetSize.Y;
 		}
 	}
+
+	// @TODO Enable this and debug why children do not align properly if rebuilt only once
+	//if (CurrentNumberOfCalculatedChildren != GetChildrenCount())
+	{
+		RequestWidgetRebuild();
+
+		CurrentNumberOfCalculatedChildren = GetChildrenCount();
+	}
 }
 
 void FVerticalBoxWidget::AlignToCenter()
@@ -143,5 +150,11 @@ void FVerticalBoxWidget::AlignToCenter()
 		}
 	}
 
-	RequestWidgetRebuild();
+	// @TODO Enable this and debug why children do not align properly if rebuilt only once
+	//if (CurrentNumberOfCalculatedChildren != GetChildrenCount())
+	{
+		RequestWidgetRebuild();
+
+		CurrentNumberOfCalculatedChildren = GetChildrenCount();
+	}
 }

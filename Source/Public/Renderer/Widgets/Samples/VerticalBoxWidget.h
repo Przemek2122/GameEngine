@@ -35,5 +35,7 @@ protected:
 	EVerticalBoxAlignMethod VerticalBoxAlignMethod;
 
 	bool bScaleToContent;
+
+	ContainerInt CurrentNumberOfCalculatedChildren;
 	
 };

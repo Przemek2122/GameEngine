@@ -45,10 +45,10 @@ public:
 	virtual void UpdateWidgetLocation();
 
 	/** Called when changed size */
-	virtual void UpdateWidgetSize();
+	virtual void UpdateWidgetSize(const bool bWasSentFromRebuild);
 
 	/** Called when anchor changed */
-	virtual void UpdateAnchor();
+	virtual void UpdateAnchor(const bool bIsFromRebuild = false);
 
 	void SetDefaultAnchor(const EAnchor NewAnchor);
 	void SetAnchor(const EAnchor NewAnchor);
@@ -69,12 +69,12 @@ public:
 	virtual void OnClippingMethodChanged(EClipping NewClippingMethod);
 
 protected:
-	virtual void UpdateAnchorForChildren();
+	virtual void UpdateAnchorForChildren(const bool bIsFromRebuild);
 
 	void UpdateLocation();
 
-	void UpdateSizeInPercent();
-	void UpdateWidgetSizePixels();
+	void UpdateSizeInPercent(const bool bWasSentFromRebuild);
+	void UpdateWidgetSizePixels(const bool bWasSentFromRebuild);
 
 	void GenerateChildWidgetGeometry();
 

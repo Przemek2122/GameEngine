@@ -164,6 +164,8 @@ void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 	{
 		Widget->OnWindowChanged();
 	}
+
+	WidgetManager->RequestWidgetRebuild();
 }
 
 void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)

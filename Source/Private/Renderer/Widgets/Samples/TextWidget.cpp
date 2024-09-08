@@ -31,7 +31,7 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	ENSURE_VALID(FontAsset != nullptr);
 #endif
 
-	SetWidgetMargin(FWidgetMargin(20, 16));
+	SetWidgetMargin(FWidgetMargin(10, 10, 8, 8 ));
 }
 
 FTextWidget::~FTextWidget()
@@ -66,9 +66,9 @@ void FTextWidget::UpdateWidgetLocation()
 	SDLRect->y = LocationCache.Y;
 }
 
-void FTextWidget::UpdateWidgetSize()
+void FTextWidget::UpdateWidgetSize(const bool bWasSentFromRebuild)
 {
-	Super::UpdateWidgetSize();
+	Super::UpdateWidgetSize(bWasSentFromRebuild);
 
 	const FVector2D<int>& SizeCache = GetWidgetSize();
 
@@ -76,9 +76,9 @@ void FTextWidget::UpdateWidgetSize()
 	SDLRect->h = SizeCache.Y;
 }
 
-void FTextWidget::UpdateAnchor()
+void FTextWidget::UpdateAnchor(const bool bIsFromRebuild)
 {
-	Super::UpdateAnchor();
+	Super::UpdateAnchor(bIsFromRebuild);
 
 	const FVector2D<int>& LocationCache = GetWidgetLocation(EWidgetOrientation::Absolute);
 	const FVector2D<int>& SizeCache = GetWidgetSize();
