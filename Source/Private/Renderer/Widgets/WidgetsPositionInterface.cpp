@@ -50,6 +50,24 @@ void IWidgetPositionInterface::RebuildWidget()
 	Super::RebuildWidget();
 }
 
+bool IWidgetPositionInterface::IsLocationInsideWidget(const FVector2D<int32>& TestLocation) const
+{
+	const FVector2D<int32> WidgetLocation = GetWidgetLocation(EWidgetOrientation::Absolute);
+	const FVector2D<int32> WidgetSize = GetWidgetSize();
+
+	bool bIsInWidget = false;
+
+	if (	TestLocation.X > WidgetLocation.X
+		&&	TestLocation.X < WidgetLocation.X + WidgetSize.X
+		&&	TestLocation.Y > WidgetLocation.Y
+		&&	TestLocation.Y < WidgetLocation.Y + WidgetSize.Y	)
+	{
+		bIsInWidget = true;
+	}
+
+	return bIsInWidget;
+}
+
 FVector2D<int32> IWidgetPositionInterface::GetWidgetLocation(const EWidgetOrientation WidgetOrientation) const
 {
 	switch (WidgetOrientation)
@@ -176,6 +194,10 @@ void IWidgetPositionInterface::UpdateAnchor(const bool bIsFromRebuild)
 		case EAnchor::None:
 		{
 			// This option means user do not want to use Anchor system.
+			// Due to no anchor we add only margin
+			//FVector2D<int> RelativeCenter = { WidgetMargin.GetLeft(), WidgetMargin.GetTop() };
+			//SetWidgetLocation(RelativeCenter, EWidgetOrientation::Relative, false, bIsFromRebuild);
+
 			break;
 		}
 		

@@ -11,14 +11,16 @@ enum class EHorizontalAlignMethod : Uint8
 	AlignOnlyIfNotFitting
 };
 
+/**
+ * Button widget
+ * Contains background with customizable colors and clicking ability
+ */
 class FButtonWidget : public FInteractionBaseWidget
 {
 public:
 	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
-	virtual ~FButtonWidget() override = default;
 
 	/** Begin FWidget */
-	void Init() override;
 	void Render() override;
 	/** End FWidget */
 
@@ -35,8 +37,7 @@ public:
 	void NativeMouseExitWidget() override;
 	/** End FInteractionBaseWidget */
 
-	void SetUseDefaultSize(const bool bInUseDefaultSize);
-
+	void UseDefaultSize();
 	void SetScaleHorizontally(const bool bInScaleHorizontally);
 
 	FColorRGBA GetButtonRenderColor() const { return ButtonRenderColor; }
@@ -49,18 +50,11 @@ public:
 	void SetButtonHoverColor(const FColorRGBA& Color);
 	void SetButtonClickColor(const FColorRGBA& Color);
 
-	FDelegate<> OnHover;
-	FDelegate<> OnClickPress;
-	FDelegate<> OnClickRelease;
-
 protected:
 	FColorRGBA ButtonRenderColor;
 	FColorRGBA ButtonNormalColor;
 	FColorRGBA ButtonHoverColor;
 	FColorRGBA ButtonClickColor;
-
-	/** If true, default size will be set in init */
-	bool bUseDefaultSize;
 
 	/** Should scale horizontally to fit children? */
 	bool bScaleHorizontally;

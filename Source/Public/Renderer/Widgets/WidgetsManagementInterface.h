@@ -6,6 +6,8 @@
 #include "WidgetEnums.h"
 #include "WidgetStructs.h"
 
+#define WIDGET_MAX_DEPTH 1024
+
 /**
  * Class responsible for managing widgets. \n
  * It will be on WidgetManager class as well as on each widget as we can add widget to each of those.
@@ -26,6 +28,9 @@ public:
 
 	/** Get owner or nullptr if there is none */
 	_NODISCARD virtual IWidgetManagementInterface* GetParent() const = 0;
+
+	/** Calculate numer of parents. */
+	_NODISCARD virtual int32 GetParentsNumber() const = 0;
 
 	/** True if has owner */
 	_NODISCARD virtual bool HasParent() const = 0;
@@ -64,14 +69,14 @@ public:
 	
 	/** Create new widget from template, auto-managed. */
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(const char* InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER)
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(const char* InWidgetName, const int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER)
 	{
 		return CreateWidget<TWidgetTemplate>(std::string(InWidgetName), InWidgetOrder);
 	}
 
 	/** Create new widget from template, auto-managed. */
 	template<class TWidgetTemplate>
-	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName = "", const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER)
+	INLINE_DEBUGABLE TWidgetTemplate* CreateWidget(std::string InWidgetName = "", int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER)
 	{
 		if (InWidgetName == "")
 		{
@@ -83,6 +88,11 @@ public:
 			LOG_WARN("Widget with this name already exists! Duplicate: " << InWidgetName);
 
 			InWidgetName = GetUniqueNameFor<TWidgetTemplate>();
+		}
+
+		if (InWidgetOrder == WIDGET_DEFINES_DEFAULT_ORDER)
+		{
+			InWidgetOrder = GetParentsNumber() + 1;
 		}
 		
 		TWidgetTemplate* CreatedWidget = new TWidgetTemplate(this, InWidgetName, InWidgetOrder);

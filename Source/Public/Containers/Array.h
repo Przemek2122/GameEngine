@@ -123,7 +123,7 @@ public:
 	}
 	
 	template<typename TTypeAuto>
-	SDL_FORCE_INLINE void InsertAt(int Index, TTypeAuto Value)
+	SDL_FORCE_INLINE void InsertAt(TSizeType Index, TTypeAuto Value)
 	{
 		Vector.insert(Vector.begin() + Index, Value); 
 	}

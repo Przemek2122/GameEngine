@@ -8,15 +8,34 @@ void FMouseInputDelegateWrapper::Execute(const FVector2D<int>& Location, const E
 	{
 		AddToResetQueue();
 
+		bool bWasInputConsumed = false;
+
+		auto ExecutionLambda = [&bWasInputConsumed](FFunctorBase<bool, FVector2D<int>, EInputState>* Function, FVector2D<int> LambdaLocation, EInputState LambdaInputState) -> bool
+		{
+			if (!bWasInputConsumed)
+			{
+				const bool bShouldConsumeInput = Function->operator()(LambdaLocation, LambdaInputState);
+
+				if (bShouldConsumeInput)
+				{
+					bWasInputConsumed = bShouldConsumeInput;
+
+					return bShouldConsumeInput;
+				}
+			}
+
+			return false;
+		};
+
 		if (InputState == EInputState::PRESS && CurrentInputState == EInputState::NOT_PRESSED)
 		{
-			Delegate.Execute(Location, InputState);
+			Delegate.ExecuteByLambda(ExecutionLambda, Location, InputState);
 
 			CurrentInputState = EInputState::PRESS;
 		}
 		else if (InputState == EInputState::RELEASE && (CurrentInputState == EInputState::PRESS || CurrentInputState == EInputState::NOT_PRESSED))
 		{
-			Delegate.Execute(Location, InputState);
+			Delegate.ExecuteByLambda(ExecutionLambda, Location, InputState);
 
 			bWasSentAlready = true;
 		}

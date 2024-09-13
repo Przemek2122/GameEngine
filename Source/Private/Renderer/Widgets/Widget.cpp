@@ -12,6 +12,7 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetName(std::move(InWidgetName))
 	, WidgetOrder(InWidgetOrder)
 	, WidgetVisibility(EWidgetVisibility::Visible)
+	, WidgetInteraction(EWidgetInteraction::NotInteractive)
 	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bIsPendingDelete(false)
 	, WidgetInputManager(nullptr)
@@ -72,28 +73,14 @@ void FWidget::Init()
 
 	bWasInitCalled = true;
 
-	// Register input
-	FDelegate<void, FWidgetInputManager*> SetupDelegate;
-	SetupDelegate.BindObject(this, &FWidget::SetupInput);
-
-	WidgetInputManager = GetWindow()->GetWidgetInputManager();
-	WidgetInputManager->Register(this, SetupDelegate);
+	FEventHandler* EventHandler = GEngine->GetEventHandler();
+	SetupInput(EventHandler);
 }
 
 void FWidget::PreDeInit()
 {
-	if (WidgetInputManager != nullptr)
-	{
-		// Unregister input
-		FDelegate<void, FWidgetInputManager*> ClearDelegate;
-		ClearDelegate.BindObject(this, &FWidget::ClearInput);
-
-		WidgetInputManager->UnRegister(this, ClearDelegate);
-	}
-	else
-	{
-		LOG_WARN("Unable to unregister input for widget.");
-	}
+	FEventHandler* EventHandler = GEngine->GetEventHandler();
+	ClearInput(EventHandler);
 
 	// Unregister widget
 	if (WidgetManagementInterface != nullptr)
@@ -116,6 +103,14 @@ void FWidget::Render()
 {
 }
 
+void FWidget::SetupInput(FEventHandler* EventHandler)
+{
+}
+
+void FWidget::ClearInput(FEventHandler* EventHandler)
+{
+}
+
 void FWidget::OnWidgetOrderChanged()
 {
 	WidgetManagementInterface->ChangeWidgetOrder(this);
@@ -123,6 +118,10 @@ void FWidget::OnWidgetOrderChanged()
 
 void FWidget::OnWidgetVisibilityChanged()
 {
+	if (WidgetVisibility == EWidgetVisibility::Hidden)
+	{
+		OnVisibilityChangedToHidden();
+	}
 }
 
 void FWidget::OnChildSizeChanged()
@@ -139,27 +138,13 @@ void FWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState
 bool FWidget::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
 	// By default, we do not capture input on widgets, you can change returned value to true to block input for other input receivers
-	return false;
+	return (ShouldConsumeInput() && IsLocationInsideWidget(InMousePosition));
 }
 
 bool FWidget::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
 	// By default, we do not capture input on widgets, you can change returned value to true to block input for other input receivers
-	return false;
-}
-
-void FWidget::SetupInput(FWidgetInputManager* InWidgetInputManager)
-{
-	InWidgetInputManager->MouseInputCollection.OnMouseMove.Get()->BindObject(this, &FWidget::OnMouseMove);
-	InWidgetInputManager->MouseInputCollection.OnMouseLeftButtonUsed.Get()->BindObject(this, &FWidget::OnMouseLeftClick);
-	InWidgetInputManager->MouseInputCollection.OnMouseRightButtonUsed.Get()->BindObject(this, &FWidget::OnMouseRightClick);
-}
-
-void FWidget::ClearInput(FWidgetInputManager* InWidgetInputManager)
-{
-	InWidgetInputManager->MouseInputCollection.OnMouseMove.Get()->UnBindObject(this, &FWidget::OnMouseMove);
-	InWidgetInputManager->MouseInputCollection.OnMouseLeftButtonUsed.Get()->UnBindObject(this, &FWidget::OnMouseLeftClick);
-	InWidgetInputManager->MouseInputCollection.OnMouseRightButtonUsed.Get()->UnBindObject(this, &FWidget::OnMouseRightClick);
+	return (ShouldConsumeInput() && IsLocationInsideWidget(InMousePosition));
 }
 
 void FWidget::UpdateSizeToFitChildren()
@@ -259,14 +244,15 @@ void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 	{
 		WidgetVisibility = InWidgetVisibility;
 
-		// TODO: Not sure if this is correct approach
-		for (FWidget* ManagedWidget : ManagedWidgets)
-		{
-			ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
-		}
+		OnWidgetVisibilityChanged();
 
 		RequestWidgetRebuild();
 	}
+}
+
+void FWidget::SetWidgetInteraction(const EWidgetInteraction InWidgetInteraction)
+{
+	WidgetInteraction = InWidgetInteraction;
 }
 
 void FWidget::SetWidgetOrder(const int InWidgetOrder)
@@ -313,17 +299,22 @@ void FWidget::OnWindowChanged()
 
 bool FWidget::IsVisible() const
 {
-	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
+	return (GetWidgetVisibility() == EWidgetVisibility::Visible);
 }
 
 bool FWidget::IsInteractive() const
 {
-	return (GetWidgetVisibility() == EWidgetVisibility::Visible || GetWidgetVisibility() == EWidgetVisibility::Hidden);
+	return bWasRenderedThisFrame && (GetWidgetInteraction() == EWidgetInteraction::Interactive);
+}
+
+bool FWidget::ShouldConsumeInput() const
+{
+	return (IsInteractive());
 }
 
 bool FWidget::ShouldBeRendered() const
 {
-	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
+	return (WidgetVisibility == EWidgetVisibility::Visible);
 }
 
 std::string FWidget::GetName() const
@@ -351,9 +342,37 @@ EWidgetVisibility FWidget::GetWidgetVisibility() const
 	return WidgetVisibility;
 }
 
-int FWidget::GetWidgetOrder() const
+std::string FWidget::GetWidgetVisibilityAsString() const
+{
+	return WidgetVisibilityToString(WidgetVisibility);
+}
+
+EWidgetInteraction FWidget::GetWidgetInteraction() const
+{
+	return WidgetInteraction;
+}
+
+std::string FWidget::GetWidgetInteractionAsString() const
+{
+	return WidgetInteractionToString(WidgetInteraction);
+}
+
+int32 FWidget::GetWidgetOrder() const
 {
 	return WidgetOrder;
+}
+
+int32 FWidget::GetParentsNumber() const
+{
+	int32 OutParentNumber = 0;
+
+	IWidgetManagementInterface* CurrentParent = GetParent();
+	for (; OutParentNumber < WIDGET_MAX_DEPTH && CurrentParent != nullptr; OutParentNumber++)
+	{
+		CurrentParent = CurrentParent->GetParent();
+	}
+
+	return OutParentNumber;
 }
 
 IWidgetManagementInterface* FWidget::GetParent() const
@@ -379,9 +398,76 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 	return nullptr;
 }
 
+void FWidget::ReceiveOnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		FWidget* ManagedWidget = ManagedWidgets[i];
+
+		ManagedWidget->ReceiveOnMouseMove(InMousePosition, InputState);
+	}
+
+	OnMouseMove(InMousePosition, InputState);
+}
+
+bool FWidget::ReceiveOnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	bool bIsInputConsumed = false;
+
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		FWidget* ManagedWidget = ManagedWidgets[i];
+
+		if (ManagedWidget->ReceiveOnMouseLeftClick(InMousePosition, InputState))
+		{
+			bIsInputConsumed = true;
+		}
+	}
+
+	if (!bIsInputConsumed)
+	{
+		bIsInputConsumed = OnMouseLeftClick(InMousePosition, InputState);
+	}
+
+	return bIsInputConsumed;
+}
+
+bool FWidget::ReceiveOnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	bool bIsInputConsumed = false;
+
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		FWidget* ManagedWidget = ManagedWidgets[i];
+
+		if (ManagedWidget->ReceiveOnMouseRightClick(InMousePosition, InputState))
+		{
+			bIsInputConsumed = true;
+		}
+	}
+
+	if (!bIsInputConsumed)
+	{
+		bIsInputConsumed = OnMouseRightClick(InMousePosition, InputState);
+	}
+
+	return bIsInputConsumed;
+}
+
 #if WITH_WIDGET_DEBUGGER
 void FWidget::SetIsWidgetBeingDebugged(const bool bNewValue)
 {
 	bIsWidgetBeingDebugged = bNewValue;
+}
+
+void FWidget::OnVisibilityChangedToHidden()
+{
+	bWasRenderedThisFrame = false;
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->OnVisibilityChangedToHidden();
+	}
+
 }
 #endif

@@ -25,7 +25,6 @@ class FInteractionBaseWidget : public FWidget
 {
 public:
 	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
-	virtual ~FInteractionBaseWidget() override;
 
 	/** Begin FWidget */
 	void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState) override;
@@ -48,12 +47,18 @@ public:
 	/** Called when mouse exits this widget */
 	virtual void NativeMouseExitWidget();
 
+	void CheckIfMouseIsInsideWidget();
+
 	void SetHoverState(EHoverState NewHoverState);
 	_NODISCARD EHoverState GetHoverState() const;
 	virtual void OnHoverStateChanged();
 
 	void OnLeftMouseButtonReleased(FVector2D<int> Location);
 	void OnRightMouseButtonReleased(FVector2D<int> Location);
+
+	FDelegate<> OnHover;
+	FDelegate<> OnClickPress;
+	FDelegate<> OnClickRelease;
 
 protected:
 	EClickState ClickState;

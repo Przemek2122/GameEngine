@@ -9,21 +9,9 @@ FButtonWidget::FButtonWidget(IWidgetManagementInterface* InWidgetManagementInter
 	, ButtonNormalColor(FColorRGBA::ColorGray())
 	, ButtonHoverColor(FColorRGBA::ColorLightGray())
 	, ButtonClickColor(FColorRGBA::ColorDarkGray())
-	, bUseDefaultSize(true)
 	, bScaleHorizontally(true)
 	, HorizontalAlignMethod(EHorizontalAlignMethod::AlignOnlyIfNotFitting)
 {
-}
-
-void FButtonWidget::Init()
-{
-	if (bUseDefaultSize)
-	{
-		// Default size of button
-		SetWidgetSize({ 180, 40 });
-	}
-
-	Super::Init();
 }
 
 void FButtonWidget::Render()
@@ -59,8 +47,6 @@ void FButtonWidget::RebuildWidget()
 
 void FButtonWidget::NativeHover()
 {
-	OnHover.Execute();
-
 	Super::NativeHover();
 }
 
@@ -69,8 +55,6 @@ void FButtonWidget::NativePress()
 	Super::NativePress();
 	
 	ButtonRenderColor = ButtonClickColor;
-	
-	OnClickPress.Execute();
 }
 
 void FButtonWidget::NativeRelease()
@@ -78,8 +62,6 @@ void FButtonWidget::NativeRelease()
 	Super::NativeRelease();
 	
 	ButtonRenderColor = ButtonNormalColor;
-	
-	OnClickRelease.Execute();
 }
 
 void FButtonWidget::NativeReleaseOutsideWidget()
@@ -103,9 +85,10 @@ void FButtonWidget::NativeMouseExitWidget()
 	ButtonRenderColor = ButtonNormalColor;
 }
 
-void FButtonWidget::SetUseDefaultSize(const bool bInUseDefaultSize)
+void FButtonWidget::UseDefaultSize()
 {
-	bUseDefaultSize = bInUseDefaultSize;
+	// Default size of button
+	SetWidgetSize({ 180, 40 });
 }
 
 void FButtonWidget::SetScaleHorizontally(const bool bInScaleHorizontally)

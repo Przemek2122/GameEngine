@@ -22,6 +22,8 @@ public:
 	void RebuildWidget() override;
 	/** End IWidgetManagementInterface */
 
+	bool IsLocationInsideWidget(const FVector2D<int32>& TestLocation) const;
+
 	_NODISCARD virtual FVector2D<int32> GetWidgetLocation(EWidgetOrientation WidgetOrientation = EWidgetOrientation::Absolute) const;
 
 	const CArray<FWidgetGeometry>& GetChildrenGeometry() const { return ChildrenGeometry; }

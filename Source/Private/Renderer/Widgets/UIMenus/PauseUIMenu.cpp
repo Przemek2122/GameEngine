@@ -109,7 +109,7 @@ void FPauseUIMenu::Show()
 
 void FPauseUIMenu::Hide()
 {
-	VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Collapsed);
+	VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Hidden);
 
 	OnMenuHidden();
 }
@@ -129,6 +129,7 @@ void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidg
 	static const std::string BackToMenuText = "Back to menu";
 
 	FButtonWidget* BackButton = VerticalBoxWidget->CreateWidget<FButtonWidget>(PauseButtonName);
+	BackButton->UseDefaultSize();
 	BackButton->OnClickRelease.BindObject(this, &FPauseUIMenu::OnExitToMenuRequested);
 	FTextWidget* TextWidget = BackButton->CreateWidget<FTextWidget>(PauseTextName);
 	TextWidget->SetText(BackToMenuText);

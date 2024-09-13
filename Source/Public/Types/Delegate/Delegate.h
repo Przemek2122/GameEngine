@@ -104,7 +104,7 @@ public:
 	 * Example on how to bind your object
 	 * OnYourDelegateChanged.BindObject(this, &FYourClass::YourFunctionName);
 	 * Real example from code:
-	 * OnWidgetOrderChanged.BindObject(this, &FWidgetInputManager::ChangeOrder);
+	 * OnWidgetOrderChanged.BindObject(this, &FWidgetInputManager::AddWidgetDependingOnOrder);
 	 */
 	template<typename TClass>
 	void BindObject(TClass* InClassObject, TReturnType(TClass::* InFunctionPointer)(TInParams...))

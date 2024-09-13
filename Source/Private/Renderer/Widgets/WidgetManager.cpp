@@ -53,6 +53,11 @@ bool FWidgetManager::HasParent() const
 	return false;
 }
 
+int32 FWidgetManager::GetParentsNumber() const
+{
+	return 0;
+}
+
 IWidgetManagementInterface* FWidgetManager::GetParent() const
 {
 	return nullptr;

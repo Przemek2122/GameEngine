@@ -124,6 +124,9 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 		VerticalBox->CreateWidget<FTextWidget>()->SetText(Widget->GetName());
 		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Location: " << Widget->GetWidgetLocation());
 		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Size: " << Widget->GetWidgetSize());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Order: " << Widget->GetWidgetOrder());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Visibility: " << Widget->GetWidgetVisibilityAsString());
+		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Interaction: " << Widget->GetWidgetInteractionAsString());
 		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("Children count: " << Widget->GetChildrenCount());
 		VerticalBox->CreateWidget<FTextWidget>()->SET_TEXT_ADV("NeedsWidgetRebuild: " << Widget->NeedsWidgetRebuild());
 
@@ -133,6 +136,7 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 		{
 			Widget->RequestWidgetRebuild();
 		});
+
 		FButtonWidget* ButtonExit = VerticalBox->CreateWidget<FButtonWidget>("Button_Exit");
 		ButtonExit->CreateWidget<FTextWidget>()->SetText("Exit");
 		ButtonExit->OnClickRelease.BindLambda([&, Widget]()

@@ -50,6 +50,9 @@ protected:
 	/** Called each frame.\n Should be used To draw data only. @Note: When using Renderer calls use bIsLocationRelative=false in each function to prevent UI Moving with map */
 	virtual void Render();
 
+	virtual void SetupInput(FEventHandler* EventHandler);
+	virtual void ClearInput(FEventHandler* EventHandler);
+
 	virtual void OnWidgetOrderChanged();
 	virtual void OnWidgetVisibilityChanged();
 	void OnChildSizeChanged() override;
@@ -57,9 +60,6 @@ protected:
 	virtual void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState);
 	virtual bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
 	virtual bool OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
-
-	void SetupInput(FWidgetInputManager* InWidgetInputManager);
-	void ClearInput(FWidgetInputManager* InWidgetInputManager);
 
 	void UpdateSizeToFitChildren();
 
@@ -70,6 +70,7 @@ public:
 	void DestroyWidgetImmediate();
 
 	void SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility);
+	void SetWidgetInteraction(const EWidgetInteraction InWidgetInteraction);
 	void SetWidgetOrder(const int InWidgetOrder);
 	void SetShouldChangeSizeOnChildChange(const bool bInShouldChangeSizeOnChildChange);
 
@@ -85,6 +86,7 @@ public:
 	bool IsPendingDelete() const { return bIsPendingDelete; }
 	bool IsVisible() const;
 	bool IsInteractive() const;
+	virtual bool ShouldConsumeInput() const;
 	
 	/** Decides if Render() should be called, affects all children */
 	_NODISCARD virtual bool ShouldBeRendered() const;
@@ -96,7 +98,12 @@ public:
 	_NODISCARD FRenderer* GetRenderer() const;
 	static _NODISCARD FEventHandler* GetEventHandler();
 	_NODISCARD EWidgetVisibility GetWidgetVisibility() const;
-	_NODISCARD int GetWidgetOrder() const;
+	_NODISCARD std::string GetWidgetVisibilityAsString() const;
+	_NODISCARD EWidgetInteraction GetWidgetInteraction() const;
+	_NODISCARD std::string GetWidgetInteractionAsString() const;
+	_NODISCARD int32 GetWidgetOrder() const;
+
+	int32 GetParentsNumber() const override;
 
 	/** @returns parent IWidgetManagementInterface pointer */
 	_NODISCARD IWidgetManagementInterface* GetParent() const override;
@@ -104,11 +111,18 @@ public:
 	/** @returns first parent (top of tree) */
 	_NODISCARD IWidgetManagementInterface* GetParentRoot() const;
 
+	virtual void ReceiveOnMouseMove(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool ReceiveOnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState);
+	virtual bool ReceiveOnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState);
+
 #if WITH_WIDGET_DEBUGGER
 	void SetIsWidgetBeingDebugged(const bool bNewValue);
 #endif
 
 protected:
+	/** Will be called when this widget or any parent was hidden */
+	void OnVisibilityChangedToHidden();
+
 	/** True if WidgetManagementInterface decided to render this widget. */
 	bool bWasRenderedThisFrame;
 
@@ -120,10 +134,13 @@ private:
 	std::string WidgetName;
 
 	/** Order - Higher = render first, interact first */
-	int WidgetOrder;
+	int32 WidgetOrder;
 
 	/** Visibility state of widget */
 	EWidgetVisibility WidgetVisibility;
+
+	/** Widget interaction */
+	EWidgetInteraction WidgetInteraction;
 
 	/** Owner manager */
 	IWidgetManagementInterface* WidgetManagementInterface;
