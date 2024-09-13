@@ -90,14 +90,10 @@ bool ECameraManager::OnMouseRightClick(const FVector2D<int> CurrentMouseLocation
 		bIsRightMouseButtonPressed = true;
 
 		LastMouseLocation = CurrentMouseLocation;
-
-		bWasInputConsumed = true;
 	}
 	else if (InputState == EInputState::RELEASE)
 	{
 		bIsRightMouseButtonPressed = false;
-
-		bWasInputConsumed = true;
 	}
 
 	return bWasInputConsumed;
