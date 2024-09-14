@@ -99,8 +99,6 @@ bool EScreenSelectionEntity::OnMouseRightClick(FVector2D<int> InMousePosition, E
 			{
 				for (IScreenSelectionInterface* CurrentlySelectedObject : CurrentlySelectedObjects)
 				{
-					FVector2D<int> MapRenderOffset = CurrentMap->GetMapRenderOffset();
-
 					CurrentlySelectedObject->NativeDoAction(InMousePositionConverted);
 				}
 

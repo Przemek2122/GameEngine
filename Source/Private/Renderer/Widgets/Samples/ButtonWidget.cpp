@@ -45,29 +45,43 @@ void FButtonWidget::RebuildWidget()
 	}
 }
 
-void FButtonWidget::NativeHover()
+void FButtonWidget::NativeHoverInsideTick()
 {
-	Super::NativeHover();
+	Super::NativeHoverInsideTick();
 }
 
-void FButtonWidget::NativePress()
+void FButtonWidget::NativeHoverOutsideTick()
 {
-	Super::NativePress();
+	Super::NativeHoverOutsideTick();
+
+	ButtonRenderColor = ButtonNormalColor;
+}
+
+void FButtonWidget::NativePressLeft()
+{
+	Super::NativePressLeft();
 	
 	ButtonRenderColor = ButtonClickColor;
 }
 
-void FButtonWidget::NativeRelease()
+void FButtonWidget::NativeReleaseLeft()
 {
-	Super::NativeRelease();
+	Super::NativeReleaseLeft();
 	
 	ButtonRenderColor = ButtonNormalColor;
 }
 
-void FButtonWidget::NativeReleaseOutsideWidget()
+void FButtonWidget::NativePressRight()
 {
-	Super::NativeReleaseOutsideWidget();
-	
+	Super::NativePressRight();
+
+	ButtonRenderColor = ButtonClickColor;
+}
+
+void FButtonWidget::NativeReleaseRight()
+{
+	Super::NativeReleaseRight();
+
 	ButtonRenderColor = ButtonNormalColor;
 }
 

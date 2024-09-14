@@ -130,7 +130,7 @@ void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidg
 
 	FButtonWidget* BackButton = VerticalBoxWidget->CreateWidget<FButtonWidget>(PauseButtonName);
 	BackButton->UseDefaultSize();
-	BackButton->OnClickRelease.BindObject(this, &FPauseUIMenu::OnExitToMenuRequested);
+	BackButton->OnLeftClickRelease.BindObject(this, &FPauseUIMenu::OnExitToMenuRequested);
 	FTextWidget* TextWidget = BackButton->CreateWidget<FTextWidget>(PauseTextName);
 	TextWidget->SetText(BackToMenuText);
 }

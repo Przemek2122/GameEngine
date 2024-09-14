@@ -29,10 +29,12 @@ public:
 	/** End IWidgetPositionInterface */
 	
 	/** Begin FInteractionBaseWidget */
-	void NativeHover() override;
-	void NativePress() override;
-	void NativeRelease() override;
-	void NativeReleaseOutsideWidget() override;
+	void NativeHoverInsideTick() override;
+	void NativeHoverOutsideTick() override;
+	void NativePressLeft() override;
+	void NativeReleaseLeft() override;
+	void NativePressRight() override;
+	void NativeReleaseRight() override;
 	void NativeMouseEnterWidget() override;
 	void NativeMouseExitWidget() override;
 	/** End FInteractionBaseWidget */

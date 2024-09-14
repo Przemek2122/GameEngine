@@ -29,18 +29,25 @@ public:
 	/** Begin FWidget */
 	void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState) override;
 	bool OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState) override;
+	bool OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState) override;
 	/** End FWidget */
 
 	static _NODISCARD FVector2D<int> GetMouseLocation();
 
 	/** Called once when pressed in widget area. */
-	virtual void NativePress();
+	virtual void NativePressLeft();
 	/** Called once when released. */
-	virtual void NativeRelease();
-	/** Called when should be released because mouse is outside of widget */
-	virtual void NativeReleaseOutsideWidget();
+	virtual void NativeReleaseLeft();
+
+	/** Called once when pressed in widget area. */
+	virtual void NativePressRight();
+	/** Called once when released. */
+	virtual void NativeReleaseRight();
+
 	/** Called every frame when hovered. */
-	virtual void NativeHover();
+	virtual void NativeHoverInsideTick();
+	/** Called every frame when not hovered. */
+	virtual void NativeHoverOutsideTick();
 
 	/** Called when mouse enters this widget */
 	virtual void NativeMouseEnterWidget();
@@ -51,20 +58,37 @@ public:
 
 	void SetHoverState(EHoverState NewHoverState);
 	_NODISCARD EHoverState GetHoverState() const;
+	EClickState GetClickStateLeftMouseButton() const;
+	EClickState GetClickStateRightMouseButton() const;
+
 	virtual void OnHoverStateChanged();
 
-	void OnLeftMouseButtonReleased(FVector2D<int> Location);
-	void OnRightMouseButtonReleased(FVector2D<int> Location);
+	virtual bool IsClickable() const;
 
-	FDelegate<> OnHover;
-	FDelegate<> OnClickPress;
-	FDelegate<> OnClickRelease;
+	/** Called when mouse is over widget */
+	FDelegate<> OnHoverStart;
+	/** Called when mouse is not over widget anymore */
+	FDelegate<> OnHoverEnd;
 
-protected:
-	EClickState ClickState;
+	/** Called when clicked with left mouse button - Press */
+	FDelegate<> OnLeftClickPress;
+	/** Called when clicked with left mouse button - Release */
+	FDelegate<> OnLeftClickRelease;
+
+	/** Called when clicked with right mouse button - Press */
+	FDelegate<> OnRightClickPress;
+	/** Called when clicked with right mouse button - Release */
+	FDelegate<> OnRightClickRelease;
+
+private:
 	EHoverState HoverState;
+	EClickState LeftClickState;
+	EClickState RightClickState;
 
+	/** Is mouse inside of this widget? (You can use @OnHover delegate instead) */
 	bool bIsInWidget;
+
+	/**  */
 	bool bMouseEnteredWidget;
 	
 };

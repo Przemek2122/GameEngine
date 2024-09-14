@@ -92,7 +92,7 @@ void FWidgetDebugger::CreateDebuggersForWidgets(FVerticalBoxWidget* InVerticalBo
 		FinalWidgetName += WidgetName;
 
 		FButtonWidget* Button = InVerticalBox->CreateWidget<FButtonWidget>();
-		Button->OnClickRelease.BindLambda([&, Widget]()
+		Button->OnLeftClickRelease.BindLambda([&, Widget]()
 		{
 			CreateSingleDebuggerForWidget(Widget);
 		});
@@ -132,14 +132,14 @@ void FWidgetDebugger::CreateSingleDebuggerForWidget(FWidget* Widget)
 
 		FButtonWidget* Button = VerticalBox->CreateWidget<FButtonWidget>("Button_Rebuild");
 		Button->CreateWidget<FTextWidget>()->SetText("Rebuild");
-		Button->OnClickRelease.BindLambda([&, Widget]()
+		Button->OnLeftClickRelease.BindLambda([&, Widget]()
 		{
 			Widget->RequestWidgetRebuild();
 		});
 
 		FButtonWidget* ButtonExit = VerticalBox->CreateWidget<FButtonWidget>("Button_Exit");
 		ButtonExit->CreateWidget<FTextWidget>()->SetText("Exit");
-		ButtonExit->OnClickRelease.BindLambda([&, Widget]()
+		ButtonExit->OnLeftClickRelease.BindLambda([&, Widget]()
 		{
 			RefreshDisplayedWidgets();
 		});

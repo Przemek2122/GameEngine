@@ -6,8 +6,9 @@
 
 FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
-	, ClickState(EClickState::NotClicked)
 	, HoverState(EHoverState::None)
+	, LeftClickState(EClickState::NotClicked)
+	, RightClickState(EClickState::NotClicked)
 	, bIsInWidget(false)
 	, bMouseEnteredWidget(false)
 {
@@ -20,27 +21,56 @@ void FInteractionBaseWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputS
 
 bool FInteractionBaseWidget::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
 {
-	if (bIsInWidget && IsInteractive())
+	bool bIsInputConsumed = false;
+
+	if (IsClickable())
 	{
-		if (ClickState == EClickState::NotClicked)
+		if (LeftClickState == EClickState::NotClicked)
 		{
-			ClickState = EClickState::Pressed;
+			LeftClickState = EClickState::Pressed;
 
-			NativePress();
+			NativePressLeft();
 
-			return true;
+			bIsInputConsumed = true;
 		}
-		else if (ClickState == EClickState::Pressed)
+		else if (LeftClickState == EClickState::Pressed)
 		{
-			ClickState = EClickState::Released;
+			LeftClickState = EClickState::Released;
 
-			NativeRelease();
+			NativeReleaseLeft();
 
-			return true;
+			bIsInputConsumed = true;
 		}
 	}
 
-	return false;
+	return bIsInputConsumed;
+}
+
+bool FInteractionBaseWidget::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	bool bIsInputConsumed = false;
+
+	if (IsClickable())
+	{
+		if (RightClickState == EClickState::NotClicked)
+		{
+			RightClickState = EClickState::Pressed;
+
+			NativePressRight();
+
+			bIsInputConsumed = true;
+		}
+		else if (RightClickState == EClickState::Pressed)
+		{
+			RightClickState = EClickState::Released;
+
+			NativeReleaseRight();
+
+			bIsInputConsumed = true;
+		}
+	}
+
+	return bIsInputConsumed;
 }
 
 FVector2D<int> FInteractionBaseWidget::GetMouseLocation()
@@ -48,52 +78,68 @@ FVector2D<int> FInteractionBaseWidget::GetMouseLocation()
 	return GetEventHandler()->GetMouseLocationCurrent();
 }
 
-void FInteractionBaseWidget::NativePress()
+void FInteractionBaseWidget::NativePressLeft()
 {
-	OnClickPress.Execute();
+	OnLeftClickPress.Execute();
 }
 
-void FInteractionBaseWidget::NativeRelease()
+void FInteractionBaseWidget::NativeReleaseLeft()
 {
-	OnClickRelease.Execute();
+	OnLeftClickRelease.Execute();
 
 	CheckIfMouseIsInsideWidget();
 }
 
-void FInteractionBaseWidget::NativeReleaseOutsideWidget()
+void FInteractionBaseWidget::NativePressRight()
 {
+	OnRightClickPress.Execute();
 }
 
-void FInteractionBaseWidget::NativeHover()
+void FInteractionBaseWidget::NativeReleaseRight()
 {
-	if (ClickState == EClickState::Released)
-	{
-		ClickState = EClickState::NotClicked;
+	OnRightClickRelease.Execute();
 
-		OnHover.Execute();
+	CheckIfMouseIsInsideWidget();
+}
+void FInteractionBaseWidget::NativeHoverInsideTick()
+{
+	if (LeftClickState == EClickState::Released)
+	{
+		LeftClickState = EClickState::NotClicked;
 	}
+
+	if (RightClickState == EClickState::Released)
+	{
+		RightClickState = EClickState::NotClicked;
+	}
+}
+
+void FInteractionBaseWidget::NativeHoverOutsideTick()
+{
 }
 
 void FInteractionBaseWidget::NativeMouseEnterWidget()
 {
-	
+	OnHoverStart.Execute();
 }
 
 void FInteractionBaseWidget::NativeMouseExitWidget()
 {
-	if (ClickState == EClickState::Pressed)
+	if (LeftClickState == EClickState::Pressed)
 	{
-		NativeReleaseOutsideWidget();
-
-		ClickState = EClickState::NotClicked;
+		LeftClickState = EClickState::NotClicked;
 	}
+
+	if (RightClickState == EClickState::Released)
+	{
+		RightClickState = EClickState::NotClicked;
+	}
+
+	OnHoverEnd.Execute();
 }
 
 void FInteractionBaseWidget::CheckIfMouseIsInsideWidget()
 {
-	const FVector2D<int> Location = GetWidgetLocation(EWidgetOrientation::Absolute);
-	const FVector2D<int> Size = GetWidgetSize();
-
 	const FVector2D<int> LastMouseLocation = GetMouseLocation();
 	bIsInWidget = IsLocationInsideWidget(LastMouseLocation);
 
@@ -106,7 +152,7 @@ void FInteractionBaseWidget::CheckIfMouseIsInsideWidget()
 			bMouseEnteredWidget = true;
 		}
 
-		NativeHover();
+		NativeHoverInsideTick();
 	}
 	else
 	{
@@ -116,6 +162,8 @@ void FInteractionBaseWidget::CheckIfMouseIsInsideWidget()
 
 			bMouseEnteredWidget = false;
 		}
+
+		NativeHoverOutsideTick();
 	}
 }
 
@@ -132,6 +180,16 @@ void FInteractionBaseWidget::SetHoverState(EHoverState NewHoverState)
 EHoverState FInteractionBaseWidget::GetHoverState() const
 {
 	return HoverState;
+}
+
+EClickState FInteractionBaseWidget::GetClickStateLeftMouseButton() const
+{
+	return LeftClickState;
+}
+
+EClickState FInteractionBaseWidget::GetClickStateRightMouseButton() const
+{
+	return RightClickState;
 }
 
 void FInteractionBaseWidget::OnHoverStateChanged()
@@ -159,10 +217,7 @@ void FInteractionBaseWidget::OnHoverStateChanged()
 	}
 }
 
-void FInteractionBaseWidget::OnLeftMouseButtonReleased(FVector2D<int> Location)
+bool FInteractionBaseWidget::IsClickable() const
 {
-}
-
-void FInteractionBaseWidget::OnRightMouseButtonReleased(FVector2D<int> Location)
-{
+	return (bIsInWidget && IsInteractive());
 }
