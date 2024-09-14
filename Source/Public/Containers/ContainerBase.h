@@ -1,13 +1,12 @@
 // Created by Przemys³aw Wiewióra 2020 
 
 #pragma once
+#include "Includes/EngineMacros.h"
 
-/** 32 bit integer - Default integer type for containers. */
-typedef Uint32 ContainerInt;
-/** 64 bit integer type for containers. */
-typedef Uint64 ContainerBigInt;
-/** 63 + 1 bit integer type for containers. */
-typedef int64_t PotentiallyNegativeContainerInt;
+/** 32-bit integer - Default integer type for containers. */
+typedef int32 ContainerInt;
+/** 64-bit integer type for containers. */
+typedef int64 ContainerBigInt;
 
 /**
  * Base class for containers.

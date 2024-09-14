@@ -81,16 +81,24 @@ public:
 	/** @returns time left using variable - performance efficient */
 	Uint32 GetTimeLeftRaw() const;
 
-	Uint32 GetTimeElapsedSinceStart() const;
+	Uint32 GetTimeMSElapsedSinceStart() const;
+
+	/** @returns raw SDL Timer id */
 	SDL_TimerID GetTimerId() const;
 
 	FOptionalTimerParams* GetOptionalTimerParams() const;
+
+	/** @returns percent of timer elapsed (In range of (0.f to 1.f where 1 is finished and 0 is just started) */
+	float GetTimerPercent() const;
 
 protected:
 	/** Function used by constructors to run function */
 	void InitializeTimer();
 
+	/** Conversion from seconds (float) to milliseconds (Uint32) */
 	static Uint32 TimeFloatToMs(const float Time);
+
+	/** Conversion from milliseconds (Uint32) to seconds (float) */
 	static float TimeMsToFloat(const Uint32 Time);
 
 private:

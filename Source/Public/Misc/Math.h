@@ -77,7 +77,7 @@ public:
 	}
 
 	template<typename TType>
-	static int Clamp(const TType Value, const TType Min,  const TType Max)
+	static TType Clamp(const TType Value, const TType Min,  const TType Max)
 	{
 		if (Value < Min)
 		{

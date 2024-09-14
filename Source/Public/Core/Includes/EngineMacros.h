@@ -18,6 +18,8 @@
 #endif
 
 typedef Uint8 uint8;
+typedef Uint32 uint32;
+typedef Uint64 uint64;
 typedef int32_t int32;
 typedef int64_t int64;
 

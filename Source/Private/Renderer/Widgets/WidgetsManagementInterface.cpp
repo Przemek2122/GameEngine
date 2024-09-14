@@ -166,9 +166,9 @@ void IWidgetManagementInterface::ClearChildren()
 {
 	if (!ManagedWidgets.IsEmpty())
 	{
-		for (PotentiallyNegativeContainerInt i = ManagedWidgets.Size() - 1; i >= 0; i--)
+		for (ContainerInt i = ManagedWidgets.Size() - 1; i >= 0; i--)
 		{
-			ManagedWidgets[static_cast<ContainerInt>(i)]->DestroyWidget();
+			ManagedWidgets[i]->DestroyWidget();
 		}
 	}
 }
