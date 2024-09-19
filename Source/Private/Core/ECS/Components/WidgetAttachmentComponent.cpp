@@ -11,10 +11,7 @@ void UWidgetAttachmentComponent::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FRenderer* Renderer = GetOwnerWindow()->GetRenderer();
-	const FVector2D<int> CurrentRendererOffset = Renderer->GetRenderOffset();
-
-	Widget->SetWidgetLocation(GetLocation() - CurrentRendererOffset);
+	Widget->SetWidgetLocation(GetLocation());
 }
 
 void UWidgetAttachmentComponent::SetWidget(FWidget* NewWidget)
