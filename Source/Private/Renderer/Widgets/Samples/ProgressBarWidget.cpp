@@ -10,6 +10,8 @@ FProgressBarWidget::FProgressBarWidget(IWidgetManagementInterface* InWidgetManag
 	, CurrentProgressBarValue(0.5f)
 	, ProgressBarRange(0.f, 1.f)
 	, ProgressBarOrientation(EProgressBarOrientation::Horizontal)
+	, ProgressBarColorFill(FColorRGBA::ColorLightGreen())
+	, ProgressBarColorNotFill(FColorRGBA::ColorGray())
 {
 }
 
