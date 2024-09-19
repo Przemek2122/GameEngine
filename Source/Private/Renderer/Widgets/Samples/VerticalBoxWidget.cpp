@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/VerticalBoxWidget.h"
 
-FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FVerticalBoxWidget::FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, VerticalBoxAlignMethod(EVerticalBoxAlignMethod::AlignToCenter)
 	, bScaleToContent(true)

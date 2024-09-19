@@ -159,6 +159,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetManager.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsManagementInterface.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\WidgetsPositionInterface.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\WidgetStructs.h" />
     <ClInclude Include="Source\Public\Renderer\Window.h" />
     <ClInclude Include="Source\Public\Renderer\WindowAdvanced.h" />
     <ClInclude Include="Source\Public\Types\ColorRGBA.h" />

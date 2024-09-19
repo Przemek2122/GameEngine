@@ -6,7 +6,7 @@
 #include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
 
-FImageWidget::FImageWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FImageWidget::FImageWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, bScaleWidgetToImage(false)
 	, TextureAsset(nullptr)

@@ -33,7 +33,7 @@ public:
 	virtual void SetWidgetLocation(const FVector2D<int32> InWidgetLocation, EWidgetOrientation WidgetOrientation = EWidgetOrientation::Absolute, const bool bSetNoneAnchor = true, const bool bWasSentFromRebuild = false);
 	
 	/** @returns size of this widget. */
-	_NODISCARD virtual FVector2D<int32> GetWidgetSize() const;
+	_NODISCARD virtual const FVector2D<int32>& GetWidgetSize() const;
 
 	/** Set size of this widget in pixels. */
 	virtual void SetWidgetSize(const FVector2D<int32> InWidgetSize, const bool bWasSentFromRebuild = false);

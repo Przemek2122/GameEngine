@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/BorderWidget.h"
 
-FBorderWidget::FBorderWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FBorderWidget::FBorderWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, CurrentBorderDisplayMethod(EBorderDisplayMethod::BorderOutline)
 {

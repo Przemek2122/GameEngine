@@ -26,7 +26,7 @@ class FWidget : public FObject, public IWidgetPositionInterface
 
 protected:
 	/** If creating outside manager make sure to send proper IWidgetManagementInterface. Otherwise exception will be thrown in debug. */
-	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
+	FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 	~FWidget() override;
 
 	/** Advanced, use Tick() if possible instead. */

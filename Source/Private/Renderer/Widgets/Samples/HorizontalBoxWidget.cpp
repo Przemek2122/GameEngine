@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/HorizontalBoxWidget.h"
 
-FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FHorizontalBoxWidget::FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HorizontalBoxAlignMethod(EHorizontalBoxAlignMethod::FromTheLeft)
 	, bScaleToContent(true)

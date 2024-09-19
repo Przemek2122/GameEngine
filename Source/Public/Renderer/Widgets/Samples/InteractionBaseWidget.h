@@ -24,7 +24,7 @@ enum class EClickState : Uint8
 class FInteractionBaseWidget : public FWidget
 {
 public:
-	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
+	FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
 	/** Begin FWidget */
 	void OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState) override;

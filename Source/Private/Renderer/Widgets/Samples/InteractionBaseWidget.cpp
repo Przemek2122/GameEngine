@@ -4,7 +4,7 @@
 #include "Renderer/Widgets/Samples/InteractionBaseWidget.h"
 #include "Input/EventHandler.h"
 
-FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FInteractionBaseWidget::FInteractionBaseWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, HoverState(EHoverState::None)
 	, LeftClickState(EClickState::NotClicked)

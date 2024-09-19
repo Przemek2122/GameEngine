@@ -154,4 +154,10 @@ public:
 		return (Abs(A - B) < Tolerance);
 	}
 
+	template<typename TType = float>
+	static TType MapRange(TType Value, const FVector2D<TType>& InRange, const FVector2D<TType>& OutRange)
+	{
+		return (Value - InRange.X) * (OutRange.Y - OutRange.X) / (InRange.Y - InRange.X) + OutRange.X;
+	}
+
 };

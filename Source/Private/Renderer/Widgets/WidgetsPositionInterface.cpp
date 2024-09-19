@@ -116,7 +116,7 @@ void IWidgetPositionInterface::SetWidgetLocation(const FVector2D<int32> InWidget
 	UpdateWidgetLocation();
 }
 
-FVector2D<int32> IWidgetPositionInterface::GetWidgetSize() const
+const FVector2D<int32>& IWidgetPositionInterface::GetWidgetSize() const
 {
 	return WidgetSizeInPixelsInterface;
 }

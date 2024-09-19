@@ -10,7 +10,7 @@
 static const char* DefaultText = "Default text"; 
 static const char* DefaultFont = "OpenSans";
 
-FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, DesiredText(DefaultText)
 	, RenderedText(DefaultText)

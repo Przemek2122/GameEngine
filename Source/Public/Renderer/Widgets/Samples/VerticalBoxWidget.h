@@ -14,7 +14,7 @@ enum class EVerticalBoxAlignMethod : uint8
 class FVerticalBoxWidget : public FWidget
 {
 public:
-	FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
+	FVerticalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
 	/** Begin IWidgetManagementInterface interface */
 	void RebuildWidget() override;

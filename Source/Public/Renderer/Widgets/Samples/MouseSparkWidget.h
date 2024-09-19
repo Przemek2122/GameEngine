@@ -20,7 +20,7 @@ struct FSpark
 class FMouseSparkWidget : public FWidget
 {
 public:
-	FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
+	FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
 	/** Begin FWidget interface */
 	void Init() override;

@@ -416,6 +416,9 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\TeamComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\Components\WidgetAttachmentComponent.h">
+      <Filter>Public\Core\ECS\Components</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Entities\CameraManager.h">
       <Filter>Public\Core\ECS\Entities</Filter>
     </ClInclude>
@@ -636,6 +639,9 @@
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h">
+      <Filter>Public\Renderer\Widgets\Samples</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ProgressBarWidget.h">
       <Filter>Public\Renderer\Widgets\Samples</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\SpacerWidget.h">
@@ -1114,6 +1120,9 @@
     <ClCompile Include="Source\Private\Core\ECS\Components\TeamComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\Components\WidgetAttachmentComponent.cpp">
+      <Filter>Private\Core\ECS\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Entities\CameraManager.cpp">
       <Filter>Private\Core\ECS\Entities</Filter>
     </ClCompile>
@@ -1310,6 +1319,9 @@
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp">
+      <Filter>Private\Renderer\Widgets\Samples</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ProgressBarWidget.cpp">
       <Filter>Private\Renderer\Widgets\Samples</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\SpacerWidget.cpp">

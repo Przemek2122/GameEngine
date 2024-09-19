@@ -71,6 +71,7 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\TeamComponent.h" />
+    <ClInclude Include="Source\Public\Core\ECS\Components\WidgetAttachmentComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\CameraManager.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\Character.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\NPCCharacter.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InputTextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\InteractionBaseWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\MouseSparkWidget.h" />
+    <ClInclude Include="Source\Public\Renderer\Widgets\Samples\ProgressBarWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\SpacerWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\TextWidget.h" />
     <ClInclude Include="Source\Public\Renderer\Widgets\Samples\VerticalBoxWidget.h" />
@@ -318,6 +320,7 @@
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\TeamComponent.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\Components\WidgetAttachmentComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\CameraManager.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\Character.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\NPCCharacter.cpp" />
@@ -384,6 +387,7 @@
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InputTextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\InteractionBaseWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\MouseSparkWidget.cpp" />
+    <ClCompile Include="Source\Private\Renderer\Widgets\Samples\ProgressBarWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\SpacerWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\TextWidget.cpp" />
     <ClCompile Include="Source\Private\Renderer\Widgets\Samples\VerticalBoxWidget.cpp" />
