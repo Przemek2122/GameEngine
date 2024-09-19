@@ -10,29 +10,29 @@ class FClass
 public:
     virtual ~FClass() = default;
 
-	virtual void* Allocate() const = 0;
 	virtual std::string GetClassName() const = 0;
 };
 
 /** Do not use directly - Use FClassStorage instead */
-template<typename TType>
+template<typename TType, typename... TArgs>
 class TClass : public FClass
 {
 public:
 	/** Create instance */
-	void* Allocate() const override
+	virtual void* Allocate(TArgs... Args) const
 	{
-        return new TType;
+        return new TType(Args...);
     }
 
 	std::string GetClassName() const override
 	{
-		return typeid(TType).name();
+		return "please fix xD";
+		//return typeid(TType).name();
 	}
 };
 
 /** Storage class for storing TClass */
-template<typename TBaseClass>
+template<typename TBaseClass, typename... TArgs>
 class FClassStorage
 {
 public:
@@ -41,12 +41,26 @@ public:
 	{
 	}
 
-	FClassStorage(FClassStorage& ClassStorage) = delete;
-	FClassStorage(FClassStorage&& ClassStorage) = delete;
-
-	~FClassStorage()
+	FClassStorage(const FClassStorage& ClassStorage)
+		: StoredClass(ClassStorage.StoredClass)
 	{
-		delete StoredClass;
+		
+	}
+	FClassStorage(const FClassStorage&& ClassStorage) noexcept
+		: StoredClass(ClassStorage.StoredClass)
+	{
+		
+	}
+
+	virtual ~FClassStorage()
+	{
+	}
+
+	FClassStorage& operator=(const FClassStorage& Other)
+	{
+		StoredClass = Other.StoredClass;
+
+		return *this;
 	}
 
 	/** Set stored class. */
@@ -56,9 +70,7 @@ public:
 		// Perform check for base class, it has to be child of TType
 		static_assert(std::is_base_of_v<TBaseClass, TType>, "FClassStorage::Set given class does not inherit from TBaseClass");
 
-		delete StoredClass;
-
-		StoredClass = new TClass<TType>;
+		StoredClass = std::make_shared<TClass<TType, TArgs...>>();
 	}
 
 	/**
@@ -67,14 +79,14 @@ public:
 	 * @Note: Might return null if class is not set.
 	 * @Note: Will not be garbage collected any way so make sure to delete it after use!
 	 */
-	_NODISCARD TBaseClass* Allocate()
+	_NODISCARD TBaseClass* Allocate(TArgs... Args)
 	{
 		if (StoredClass == nullptr)
 		{
 			Set<TBaseClass>();
 		}
 
-		return static_cast<TBaseClass*>(StoredClass->Allocate());
+		return static_cast<TBaseClass*>(StoredClass->Allocate(Args...));
 	}
 
 	/** @returns true if any type is in storage */
@@ -106,12 +118,10 @@ public:
 
 	void Reset()
 	{
-		delete StoredClass;
-
 		StoredClass = nullptr;
 	}
 
 protected:
-	FClass* StoredClass;
+	std::shared_ptr<TClass<TBaseClass, TArgs...>> StoredClass;
 
 };
