@@ -29,10 +29,6 @@ void FAIActionMove::StartAction()
 	{
 
 	}
-	else
-	{
-		LOG_WARN("Missing MoveComponent. FAIActionMove will not work properly.");
-	}
 }
 
 void FAIActionMove::EndAction()
