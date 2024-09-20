@@ -9,11 +9,11 @@ class FAITree;
 /**
  * AI actions base class
  */
-class FAiActionBase
+class FAIActionBase
 {
 public:
-	FAiActionBase(FAITree* InAiTree);
-	virtual ~FAiActionBase() = default;
+	FAIActionBase(FAITree* InAiTree);
+	virtual ~FAIActionBase() = default;
 
 	/** Ticks only when action is active */
 	virtual void Tick();

@@ -11,7 +11,7 @@ enum class EChooseActionMethod
 	Custom
 };
 
-class FAiActionBase;
+class FAIActionBase;
 
 /**
  * AI Trees are used for decision making on which action should AI Choose
@@ -36,7 +36,7 @@ public:
 	}
 
 	/** Delete AI Action. */
-	void RemoveAction(const FAiActionBase* AiAction);
+	void RemoveAction(const FAIActionBase* AiAction);
 
 	void TickInternal();
 
@@ -52,7 +52,7 @@ protected:
 	/** If you want to have custom behaviour of choosing action set ChooseActionMethod and override this method */
 	virtual void ChooseActionCustom();
 
-	virtual void OnActionChosen(FAiActionBase* AiAction);
+	virtual void OnActionChosen(FAIActionBase* AiAction);
 
 private:
 	void ChooseActionInternal();
@@ -63,11 +63,11 @@ private:
 	/** Owner entity */
 	EEntity* OwnerEntity;
 
-	/** FAiActionBase array, see CreateAction and RemoveAction */
-	CArray<std::shared_ptr<FAiActionBase>> AiActionsArray;
+	/** FAIActionBase array, see CreateAction and RemoveAction */
+	CArray<std::shared_ptr<FAIActionBase>> AiActionsArray;
 
 	/** Current AiAction running */
-	FAiActionBase* CurrentAction;
+	FAIActionBase* CurrentAction;
 
 	/** If true Tick will choose action when previous finished. */
 	bool bIsTreeEnabled;

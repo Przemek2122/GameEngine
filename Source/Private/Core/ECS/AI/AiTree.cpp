@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "ECS/AI/AITree.h"
 
-#include "ECS/AI/AiActionBase.h"
+#include "ECS/AI/AIActionBase.h"
 
 FAITree::FAITree(EEntity* InOwnerEntity)
 	: ChooseActionMethod(EChooseActionMethod::Random)
@@ -13,11 +13,11 @@ FAITree::FAITree(EEntity* InOwnerEntity)
 {
 }
 
-void FAITree::RemoveAction(const FAiActionBase* AiAction)
+void FAITree::RemoveAction(const FAIActionBase* AiAction)
 {
 	ContainerInt Index;
 
-	const bool bIsIndexFound = AiActionsArray.FindByLambda([&](const std::shared_ptr<FAiActionBase>& Item)
+	const bool bIsIndexFound = AiActionsArray.FindByLambda([&](const std::shared_ptr<FAIActionBase>& Item)
 	{
 		bool bIsItemEqual = false;
 
@@ -83,7 +83,7 @@ void FAITree::ChooseActionCustom()
 {
 }
 
-void FAITree::OnActionChosen(FAiActionBase* AiAction)
+void FAITree::OnActionChosen(FAIActionBase* AiAction)
 {
 	CurrentAction = AiAction;
 	CurrentAction->Start();
@@ -95,13 +95,13 @@ void FAITree::ChooseActionInternal()
 	{
 		case EChooseActionMethod::Random:
 		{
-			FAiActionBase* ChosenAction = nullptr;
-			CArray<std::shared_ptr<FAiActionBase>> AllActionsCopy = AiActionsArray;
+			FAIActionBase* ChosenAction = nullptr;
+			CArray<std::shared_ptr<FAIActionBase>> AllActionsCopy = AiActionsArray;
 
 			while(ChosenAction == nullptr && AllActionsCopy.Size() > 0)
 			{
 				int32_t RandomIndex = FMath::RandRange(0, AllActionsCopy.Size() - 1);
-				const std::shared_ptr<FAiActionBase>& AiAction = AllActionsCopy[RandomIndex];
+				const std::shared_ptr<FAIActionBase>& AiAction = AllActionsCopy[RandomIndex];
 
 				if (AiAction->IsActionReady())
 				{
@@ -123,9 +123,9 @@ void FAITree::ChooseActionInternal()
 		case EChooseActionMethod::ByPriority:
 		{
 			int32_t HighestPriority = -1;
-			FAiActionBase* HighestPriorityAction = nullptr;
+			FAIActionBase* HighestPriorityAction = nullptr;
 
-			for (std::shared_ptr<FAiActionBase>& AiAction : AiActionsArray)
+			for (std::shared_ptr<FAIActionBase>& AiAction : AiActionsArray)
 			{
 				if (AiAction->IsActionReady())
 				{

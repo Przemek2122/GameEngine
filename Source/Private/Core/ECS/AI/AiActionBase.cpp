@@ -1,56 +1,56 @@
 // Created by Przemys³aw Wiewióra 2024
 
 #include "CoreEngine.h"
-#include "Core/ECS/AI/AiActionBase.h"
+#include "Core/ECS/AI/AIActionBase.h"
 
-FAiActionBase::FAiActionBase(FAITree* InAiTree)
+FAIActionBase::FAIActionBase(FAITree* InAiTree)
 	: AiTree(InAiTree)
 {
 }
 
-void FAiActionBase::Tick()
+void FAIActionBase::Tick()
 {
 }
 
-void FAiActionBase::Start()
+void FAIActionBase::Start()
 {
 	StartAction();
 }
 
-void FAiActionBase::End()
+void FAIActionBase::End()
 {
 	EndAction();
 }
 
-bool FAiActionBase::ShouldFinishAction() const
+bool FAIActionBase::ShouldFinishAction() const
 {
 	return false;
 }
 
-bool FAiActionBase::IsActionReady() const
+bool FAIActionBase::IsActionReady() const
 {
 	return true;
 }
 
-int32_t FAiActionBase::GetActionPriority() const
+int32_t FAIActionBase::GetActionPriority() const
 {
 	return 0;
 }
 
-FAITree* FAiActionBase::GetTree() const
+FAITree* FAIActionBase::GetTree() const
 {
 	return AiTree;
 }
 
-EEntity* FAiActionBase::GetEntity() const
+EEntity* FAIActionBase::GetEntity() const
 {
 	return AiTree->GetOwnerEntity();
 }
 
-void FAiActionBase::StartAction()
+void FAIActionBase::StartAction()
 {
 }
 
-void FAiActionBase::EndAction()
+void FAIActionBase::EndAction()
 {
 }

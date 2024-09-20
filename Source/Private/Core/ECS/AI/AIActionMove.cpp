@@ -5,18 +5,18 @@
 
 #include "ECS/Components/MoveComponent.h"
 
-FAiActionMove::FAiActionMove(FAITree* InAiTree)
-	: FAiActionBase(InAiTree)
+FAIActionMove::FAIActionMove(FAITree* InAiTree)
+	: FAIActionBase(InAiTree)
 	, CurrentMoveComponent(nullptr)
 {
 }
 
-bool FAiActionMove::ShouldFinishAction() const
+bool FAIActionMove::ShouldFinishAction() const
 {
 	return (CurrentMoveComponent != nullptr && !CurrentMoveComponent->IsMoving());
 }
 
-void FAiActionMove::StartAction()
+void FAIActionMove::StartAction()
 {
 	Super::StartAction();
 
@@ -27,15 +27,15 @@ void FAiActionMove::StartAction()
 	CurrentMoveComponent = Entity->GetComponentByClass<UMoveComponent>();
 	if (CurrentMoveComponent != nullptr)
 	{
-		
+
 	}
 	else
 	{
-		LOG_WARN("Missing MoveComponent. FAiActionMove will not work properly.");
+		LOG_WARN("Missing MoveComponent. FAIActionMove will not work properly.");
 	}
 }
 
-void FAiActionMove::EndAction()
+void FAIActionMove::EndAction()
 {
 	Super::EndAction();
 

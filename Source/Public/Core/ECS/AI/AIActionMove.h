@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AiActionBase.h"
+#include "AIActionBase.h"
 
 class UMoveComponent;
 class FAITree;
@@ -11,11 +11,11 @@ class FAITree;
 /**
  * AI actions base class
  */
-class FAiActionMove : public FAiActionBase
+class FAIActionMove : public FAIActionBase
 {
 public:
-	FAiActionMove(FAITree* InAiTree);
-	virtual ~FAiActionMove() override = default;
+	FAIActionMove(FAITree* InAiTree);
+	virtual ~FAIActionMove() override = default;
 
 	bool ShouldFinishAction() const override;
 

@@ -50,7 +50,7 @@
     <ClInclude Include="Source\Public\Containers\QueueSafe.h" />
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h" />
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
-    <ClInclude Include="Source\Public\Core\ECS\AI\AiActionBase.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AIActionBase.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AITree.h" />
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
@@ -299,7 +299,7 @@
     <ClCompile Include="Source\Private\Assets\TypesForAssets\Texture.cpp" />
     <ClCompile Include="Source\Private\Containers\ContainerBase.cpp" />
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\AI\AiActionBase.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\AI\AIActionBase.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AITree.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp" />

@@ -351,7 +351,7 @@
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\ECS\AI\AiActionBase.h">
+    <ClInclude Include="Source\Public\Core\ECS\AI\AIActionBase.h">
       <Filter>Public\Core\ECS\AI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h">
@@ -1055,7 +1055,7 @@
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp">
       <Filter>Private\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Core\ECS\AI\AiActionBase.cpp">
+    <ClCompile Include="Source\Private\Core\ECS\AI\AIActionBase.cpp">
       <Filter>Private\Core\ECS\AI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp">
