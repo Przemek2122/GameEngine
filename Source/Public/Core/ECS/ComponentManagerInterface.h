@@ -1,6 +1,8 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #pragma once
+#include "BaseComponent.h"
+#include "BaseComponent.h"
 
 class UBaseComponent;
 
@@ -66,6 +68,17 @@ public:
 			if (ComponentCasted != nullptr)
 			{
 				return ComponentCasted;
+			}
+		}
+
+		// Search subcomponents if not present on top
+		for (std::pair<const std::string, std::shared_ptr<UBaseComponent>>& ComponentPair : ComponentsMap)
+		{
+			TComponentClass* Component = ComponentPair.second.get()->GetComponentByClass<TComponentClass>();
+
+			if (Component != nullptr)
+			{
+				return Component;
 			}
 		}
 
