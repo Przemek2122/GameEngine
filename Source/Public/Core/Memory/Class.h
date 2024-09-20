@@ -5,29 +5,21 @@
 #include "CoreMinimal.h"
 
 /** Do not use directly - Use FClassStorage instead */
-class FClass
-{
-public:
-    virtual ~FClass() = default;
-
-	virtual std::string GetClassName() const = 0;
-};
-
-/** Do not use directly - Use FClassStorage instead */
 template<typename TType, typename... TArgs>
-class TClass : public FClass
+class TClass
 {
 public:
+	virtual ~TClass() = default;
+
 	/** Create instance */
 	virtual void* Allocate(TArgs... Args) const
 	{
         return new TType(Args...);
     }
 
-	std::string GetClassName() const override
+	std::string GetClassName() const
 	{
-		return "please fix xD";
-		//return typeid(TType).name();
+		return typeid(TType).name();
 	}
 };
 
@@ -35,30 +27,44 @@ public:
 template<typename TBaseClass, typename... TArgs>
 class FClassStorage
 {
+	typedef TClass<TBaseClass, TArgs...> TClassTypeWithArgs;
+
 public:
+	/** Default */
 	FClassStorage()
 		: StoredClass(nullptr)
+		, bIsMoved(false)
 	{
 	}
 
+	/** Copy */
 	FClassStorage(const FClassStorage& ClassStorage)
-		: StoredClass(ClassStorage.StoredClass)
+		: StoredClass(nullptr)
+		, bIsMoved(false)
 	{
-		
+		PerformCopy(ClassStorage);
 	}
-	FClassStorage(const FClassStorage&& ClassStorage) noexcept
+
+	/** Move */
+	FClassStorage(FClassStorage&& ClassStorage) noexcept
 		: StoredClass(ClassStorage.StoredClass)
+		, bIsMoved(false)
 	{
-		
+		ClassStorage.bIsMoved = true;
 	}
 
 	virtual ~FClassStorage()
 	{
+		if (!bIsMoved)
+		{
+			delete StoredClass;
+		}
 	}
 
+	/** @Note: Assign to self will result in crash */
 	FClassStorage& operator=(const FClassStorage& Other)
 	{
-		StoredClass = Other.StoredClass;
+		PerformCopy(Other);
 
 		return *this;
 	}
@@ -68,15 +74,24 @@ public:
 	void Set()
 	{
 		// Perform check for base class, it has to be child of TType
-		static_assert(std::is_base_of_v<TBaseClass, TType>, "FClassStorage::Set given class does not inherit from TBaseClass");
+		static_assert(std::is_base_of_v<TBaseClass, TType>, "FClassStorage::Set given class does not inherit from TBaseClass (Class set as base in FClassStorage)");
 
-		StoredClass = std::make_shared<TClass<TType, TArgs...>>();
+		auto TempClass = new TClass<TType, TArgs...>();
+
+		StoredClass = (TClassTypeWithArgs*)(TempClass);
+
+		// Should never happen due to compile time static_assert on begin of the function
+		// but just in case we do not want any kind of memory leak
+		if (StoredClass == nullptr)
+		{
+			delete TempClass;
+		}
 	}
 
 	/**
 	 * Function for actually creating class instance.
 	 *
-	 * @Note: Might return null if class is not set.
+	 * @Note: If class is not set, it will use default BaseClass
 	 * @Note: Will not be garbage collected any way so make sure to delete it after use!
 	 */
 	_NODISCARD TBaseClass* Allocate(TArgs... Args)
@@ -103,7 +118,7 @@ public:
 			return false;
 		}
 
-		return dynamic_cast<TClass<TType>*>(StoredClass) != nullptr;
+		return (dynamic_cast<TClass<TType>*>(StoredClass) != nullptr);
 	}
 
 	std::string GetClassName() const
@@ -122,6 +137,22 @@ public:
 	}
 
 protected:
-	std::shared_ptr<TClass<TBaseClass, TArgs...>> StoredClass;
+	void PerformCopy(const FClassStorage& Other)
+	{
+		if (Other.StoredClass != nullptr)
+		{
+			// Make copy
+			StoredClass = static_cast<TClassTypeWithArgs*>(malloc(sizeof(Other.StoredClass)));
+			memcpy(StoredClass, Other.StoredClass, sizeof(Other.StoredClass));
+		}
+		else
+		{
+			StoredClass = nullptr;
+		}
+	}
+
+protected:
+	TClassTypeWithArgs* StoredClass;
+	bool bIsMoved;
 
 };
