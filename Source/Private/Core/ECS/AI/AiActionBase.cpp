@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Core/ECS/AI/AiActionBase.h"
 
-FAiActionBase::FAiActionBase(FAiTree* InAiTree)
+FAiActionBase::FAiActionBase(FAITree* InAiTree)
 	: AiTree(InAiTree)
 {
 }
@@ -37,7 +37,7 @@ int32_t FAiActionBase::GetActionPriority() const
 	return 0;
 }
 
-FAiTree* FAiActionBase::GetTree() const
+FAITree* FAiActionBase::GetTree() const
 {
 	return AiTree;
 }

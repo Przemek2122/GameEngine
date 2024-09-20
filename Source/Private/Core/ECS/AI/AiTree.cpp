@@ -1,11 +1,11 @@
 // Created by Przemys³aw Wiewióra 2024
 
 #include "CoreEngine.h"
-#include "ECS/AI/AiTree.h"
+#include "ECS/AI/AITree.h"
 
 #include "ECS/AI/AiActionBase.h"
 
-FAiTree::FAiTree(EEntity* InOwnerEntity)
+FAITree::FAITree(EEntity* InOwnerEntity)
 	: ChooseActionMethod(EChooseActionMethod::Random)
 	, OwnerEntity(InOwnerEntity)
 	, CurrentAction(nullptr)
@@ -13,7 +13,7 @@ FAiTree::FAiTree(EEntity* InOwnerEntity)
 {
 }
 
-void FAiTree::RemoveAction(const FAiActionBase* AiAction)
+void FAITree::RemoveAction(const FAiActionBase* AiAction)
 {
 	ContainerInt Index;
 
@@ -35,7 +35,7 @@ void FAiTree::RemoveAction(const FAiActionBase* AiAction)
 	}
 }
 
-void FAiTree::TickInternal()
+void FAITree::TickInternal()
 {
 	if (bIsTreeEnabled)
 	{
@@ -43,7 +43,7 @@ void FAiTree::TickInternal()
 	}
 }
 
-void FAiTree::Tick()
+void FAITree::Tick()
 {
 	if (CurrentAction == nullptr)
 	{
@@ -64,32 +64,32 @@ void FAiTree::Tick()
 	}
 }
 
-EEntity* FAiTree::GetOwnerEntity() const
+EEntity* FAITree::GetOwnerEntity() const
 {
 	return OwnerEntity;
 }
 
-void FAiTree::SetChooseActionMethod(const EChooseActionMethod InChooseActionMethod)
+void FAITree::SetChooseActionMethod(const EChooseActionMethod InChooseActionMethod)
 {
 	ChooseActionMethod = InChooseActionMethod;
 }
 
-void FAiTree::SetIsTreeEnabled(const bool bInEnable)
+void FAITree::SetIsTreeEnabled(const bool bInEnable)
 {
 	bIsTreeEnabled = bInEnable;
 }
 
-void FAiTree::ChooseActionCustom()
+void FAITree::ChooseActionCustom()
 {
 }
 
-void FAiTree::OnActionChosen(FAiActionBase* AiAction)
+void FAITree::OnActionChosen(FAiActionBase* AiAction)
 {
 	CurrentAction = AiAction;
 	CurrentAction->Start();
 }
 
-void FAiTree::ChooseActionInternal()
+void FAITree::ChooseActionInternal()
 {
 	switch (ChooseActionMethod)
 	{

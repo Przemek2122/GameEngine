@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "AI/AiTree.h"
+#include "AI/AITree.h"
 #include "ECS/BaseComponent.h"
 
 class FGameModeBase;
@@ -81,7 +81,7 @@ private:
 	UBaseComponent* DefaultRootComponent;
 
 	/** Ai tree array */
-	CArray<std::shared_ptr<FAiTree>> AiTreeArray;
+	CArray<std::shared_ptr<FAITree>> AiTreeArray;
 
 	bool bWasBeginPlayCalled;
 

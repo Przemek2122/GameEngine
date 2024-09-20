@@ -37,7 +37,7 @@ void EEntity::EndPlay()
 
 void EEntity::Tick(float DeltaTime)
 {
-	for (const std::shared_ptr<FAiTree>& TreeArray : AiTreeArray)
+	for (const std::shared_ptr<FAITree>& TreeArray : AiTreeArray)
 	{
 		TreeArray->TickInternal();
 	}

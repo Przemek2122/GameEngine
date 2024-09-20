@@ -19,10 +19,10 @@ class FAiActionBase;
  * One tree for movement. One action for direct approach. One for approach from left etc...
  * Another example would be AI with multiple weapons.
  */
-class FAiTree
+class FAITree
 {
 public:
-	FAiTree(EEntity* InOwnerEntity);
+	FAITree(EEntity* InOwnerEntity);
 
 	/** Create AI Action. */
 	template<typename TActionClass>

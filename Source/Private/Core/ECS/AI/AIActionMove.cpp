@@ -5,7 +5,7 @@
 
 #include "ECS/Components/MoveComponent.h"
 
-FAiActionMove::FAiActionMove(FAiTree* InAiTree)
+FAiActionMove::FAiActionMove(FAITree* InAiTree)
 	: FAiActionBase(InAiTree)
 	, CurrentMoveComponent(nullptr)
 {
@@ -28,6 +28,10 @@ void FAiActionMove::StartAction()
 	if (CurrentMoveComponent != nullptr)
 	{
 		
+	}
+	else
+	{
+		LOG_WARN("Missing MoveComponent. FAiActionMove will not work properly.");
 	}
 }
 

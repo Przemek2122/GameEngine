@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-class FAiTree;
+class FAITree;
 
 /**
  * AI actions base class
@@ -12,7 +12,7 @@ class FAiTree;
 class FAiActionBase
 {
 public:
-	FAiActionBase(FAiTree* InAiTree);
+	FAiActionBase(FAITree* InAiTree);
 	virtual ~FAiActionBase() = default;
 
 	/** Ticks only when action is active */
@@ -34,7 +34,7 @@ public:
 	virtual int32_t GetActionPriority() const;
 
 	/** @return owner AI tree */
-	FAiTree* GetTree() const;
+	FAITree* GetTree() const;
 
 	/** @return Entity owner for this action */
 	EEntity* GetEntity() const;
@@ -44,6 +44,6 @@ protected:
 	virtual void EndAction();
 
 private:
-	FAiTree* AiTree;
+	FAITree* AiTree;
 
 };

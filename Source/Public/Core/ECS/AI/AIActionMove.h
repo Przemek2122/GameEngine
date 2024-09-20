@@ -6,7 +6,7 @@
 #include "AiActionBase.h"
 
 class UMoveComponent;
-class FAiTree;
+class FAITree;
 
 /**
  * AI actions base class
@@ -14,7 +14,7 @@ class FAiTree;
 class FAiActionMove : public FAiActionBase
 {
 public:
-	FAiActionMove(FAiTree* InAiTree);
+	FAiActionMove(FAITree* InAiTree);
 	virtual ~FAiActionMove() override = default;
 
 	bool ShouldFinishAction() const override;
