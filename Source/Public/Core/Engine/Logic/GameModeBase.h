@@ -61,7 +61,6 @@ public:
 	/** Called when start is called. Make sure to check if gameplay is not already in progress using IsInProgress() */
 	FDelegate<void> OnGameplayStart;
 
-	FUserId GetLocalUserId() const;
 	const FPlayerController* GetLocalController() const;
 
 protected:
@@ -95,6 +94,9 @@ protected:
 
 		return Controller;
 	}
+
+	virtual void OnPlayerAdded(FPlayerController* PlayerController);
+	virtual void OnBotAdded(FAIController* AIController);
 
 	void SetPlayerController(FPlayerController* PlayerController);
 

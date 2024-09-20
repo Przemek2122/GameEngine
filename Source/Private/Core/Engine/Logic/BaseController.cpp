@@ -52,6 +52,11 @@ FUserId FBaseController::GetUserId() const
 	return UserId;
 }
 
+int32 FBaseController::GetUserTeamId() const
+{
+	return UserTeamId;
+}
+
 EState* FBaseController::GetPlayerState() const
 {
 	return State;
@@ -60,6 +65,11 @@ EState* FBaseController::GetPlayerState() const
 EStateType FBaseController::GetStateType() const
 {
 	return EStateType::Base;
+}
+
+void FBaseController::SetTeam(const int32 InTeamId)
+{
+	UserTeamId = InTeamId;
 }
 
 EState* FBaseController::CreateState(FEntityManager* EntityManager)

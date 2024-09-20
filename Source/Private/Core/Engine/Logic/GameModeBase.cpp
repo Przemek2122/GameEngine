@@ -50,11 +50,13 @@ FPlayerController* FGameModeBase::AddPlayer()
 {
 	FPlayerController* NewController = CreatePlayerController();
 
-	UserStateArray.Push(NewController);
-
 	if (NewController != nullptr)
 	{
 		LOG_INFO("Player created succesfully.");
+
+		UserStateArray.Push(NewController);
+
+		OnPlayerAdded(NewController);
 	}
 	else
 	{
@@ -68,11 +70,13 @@ FAIController* FGameModeBase::AddBot()
 {
 	FAIController* NewAIController = CreateAIController();
 
-	UserStateArray.Push(NewAIController);
-
 	if (NewAIController != nullptr)
 	{
 		LOG_INFO("AI created succesfully.");
+
+		UserStateArray.Push(NewAIController);
+
+		OnBotAdded(NewAIController);
 	}
 	else
 	{
@@ -148,7 +152,7 @@ void FGameModeBase::End()
 
 void FGameModeBase::SetDefaultControllers()
 {
-	LocalUserController = CreatePlayerController();
+	LocalUserController = AddPlayer();
 }
 
 FPlayerController* FGameModeBase::CreatePlayerController()
@@ -161,14 +165,17 @@ FAIController* FGameModeBase::CreateAIController()
 	return CreateController<FAIController>();
 }
 
+void FGameModeBase::OnPlayerAdded(FPlayerController* PlayerController)
+{
+}
+
+void FGameModeBase::OnBotAdded(FAIController* AIController)
+{
+}
+
 void FGameModeBase::SetPlayerController(FPlayerController* PlayerController)
 {
 	LocalUserController = PlayerController;
-}
-
-FUserId FGameModeBase::GetLocalUserId() const
-{
-	return LocalUserId;
 }
 
 const FPlayerController* FGameModeBase::GetLocalController() const

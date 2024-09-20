@@ -8,6 +8,10 @@ FAIActionBase::FAIActionBase(FAITree* InAiTree)
 {
 }
 
+void FAIActionBase::Initalize()
+{
+}
+
 void FAIActionBase::Tick()
 {
 }

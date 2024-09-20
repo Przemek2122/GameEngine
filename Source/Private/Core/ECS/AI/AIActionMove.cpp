@@ -11,24 +11,34 @@ FAIActionMove::FAIActionMove(FAITree* InAiTree)
 {
 }
 
-bool FAIActionMove::ShouldFinishAction() const
+void FAIActionMove::Initalize()
 {
-	return (CurrentMoveComponent != nullptr && !CurrentMoveComponent->IsMoving());
-}
-
-void FAIActionMove::StartAction()
-{
-	Super::StartAction();
+	Super::Initalize();
 
 	// Get entity. Should always be valid.
 	EEntity* Entity = GetTree()->GetOwnerEntity();
 
 	// Move component does not have to be present.
 	CurrentMoveComponent = Entity->GetComponentByClass<UMoveComponent>();
-	if (CurrentMoveComponent != nullptr)
+	if (CurrentMoveComponent == nullptr)
 	{
-
+		LOG_WARN("Missing MoveComponent in FAIActionMove, Entity class: " << Entity->GetCppClassNameWithoutClass());
 	}
+}
+
+bool FAIActionMove::ShouldFinishAction() const
+{
+	return (CurrentMoveComponent != nullptr && !CurrentMoveComponent->IsMoving());
+}
+
+bool FAIActionMove::IsActionReady() const
+{
+	return false;
+}
+
+void FAIActionMove::StartAction()
+{
+	Super::StartAction();
 }
 
 void FAIActionMove::EndAction()

@@ -17,10 +17,14 @@ public:
 	FAIActionMove(FAITree* InAiTree);
 	virtual ~FAIActionMove() override = default;
 
+	/** Begin FAIActionBase */
+	void Initalize() override;
 	bool ShouldFinishAction() const override;
+	bool IsActionReady() const override;
 
 	void StartAction() override;
 	void EndAction() override;
+	/** End FAIActionBase */
 
 protected:
 	UMoveComponent* CurrentMoveComponent;

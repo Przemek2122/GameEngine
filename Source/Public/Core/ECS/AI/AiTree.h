@@ -30,6 +30,8 @@ public:
 	{
 		std::shared_ptr<TActionClass> ActionPtr = std::make_shared<TActionClass>(this);
 
+		ActionPtr->Initalize();
+
 		AiActionsArray.Push(ActionPtr);
 
 		return ActionPtr.get();

@@ -89,8 +89,11 @@ public:
 	}
 
 	FUserId GetUserId() const;
+	int32 GetUserTeamId() const;
 	EState* GetPlayerState() const;
 	virtual EStateType GetStateType() const;
+
+	void SetTeam(const int32 InTeamId);
 
 protected:
 	virtual EState* CreateState(FEntityManager* EntityManager);
@@ -98,6 +101,9 @@ protected:
 private:
 	/** Unique id for each player */
 	FUserId UserId;
+
+	/** User team */
+	int32 UserTeamId;
 
 	/** Player state class */
 	EState* State;
