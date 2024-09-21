@@ -6,7 +6,7 @@
 #include "Thread.h"
 #include "ThreadStructure.h"
 #include "ThreadData.h"
-#include "Mutex/Mutex.h"
+#include "Types/Mutex/Mutex.h"
 
 /**
  * Class for managing threads using SDL2.
