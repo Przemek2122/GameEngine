@@ -162,13 +162,13 @@ void FCollisionManager::BuildCollision()
 	{
 		MapSizeInPixelsCache = CurrentMap->GetMapSizeInPixels();
 
+		bIsCollisionReady = false;
+
 		FDelegateSafe<> AsyncWork;
 		AsyncWork.BindObject(this, &FCollisionManager::CreateCollisionTiles);
 
 		FDelegateSafe<> MainThreadCallback;
 		MainThreadCallback.BindObject(this, &FCollisionManager::OnCollisionCreated);
-
-		bIsCollisionReady = false;
 
 		GEngine->GetThreadsManager()->AddAsyncDelegate(AsyncWork, MainThreadCallback);
 	}

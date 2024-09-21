@@ -18,7 +18,7 @@ public:
 	virtual ~FAIActionMove() override = default;
 
 	/** Begin FAIActionBase */
-	void Initalize() override;
+	void Initialize() override;
 	bool ShouldFinishAction() const override;
 	bool IsActionReady() const override;
 

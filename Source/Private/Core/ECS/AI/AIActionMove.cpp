@@ -11,9 +11,9 @@ FAIActionMove::FAIActionMove(FAITree* InAiTree)
 {
 }
 
-void FAIActionMove::Initalize()
+void FAIActionMove::Initialize()
 {
-	Super::Initalize();
+	Super::Initialize();
 
 	// Get entity. Should always be valid.
 	EEntity* Entity = GetTree()->GetOwnerEntity();

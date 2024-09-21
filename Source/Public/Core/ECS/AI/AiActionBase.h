@@ -15,7 +15,7 @@ public:
 	FAIActionBase(FAITree* InAiTree);
 	virtual ~FAIActionBase() = default;
 
-	virtual void Initalize();
+	virtual void Initialize();
 
 	/** Ticks only when action is active */
 	virtual void Tick();
