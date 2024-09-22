@@ -26,6 +26,8 @@ public:
 	void EndAction() override;
 	/** End FAIActionBase */
 
+	void SetTargetLocation(const FVector2D<int>& NewLocation) const;
+
 protected:
 	UMoveComponent* CurrentMoveComponent;
 

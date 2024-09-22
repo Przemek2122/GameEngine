@@ -8,6 +8,16 @@ FAIActionBase::FAIActionBase(FAITree* InAiTree)
 {
 }
 
+bool FAIActionBase::TryStartAction()
+{
+	if (AiTree != nullptr)
+	{
+		return AiTree->TryToActivateAction(this);
+	}
+
+	return false;
+}
+
 void FAIActionBase::Initialize()
 {
 }

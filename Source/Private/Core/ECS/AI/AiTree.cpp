@@ -53,9 +53,7 @@ void FAITree::Tick()
 	{
 		if (CurrentAction->ShouldFinishAction())
 		{
-			CurrentAction->End();
-
-			CurrentAction = nullptr;
+			FinishAction();
 		}
 		else
 		{
@@ -84,6 +82,11 @@ void FAITree::ChooseActionCustom()
 }
 
 void FAITree::OnActionChosen(FAIActionBase* AiAction)
+{
+	StartAction(AiAction);
+}
+
+void FAITree::StartAction(FAIActionBase* AiAction)
 {
 	CurrentAction = AiAction;
 	CurrentAction->Start();
@@ -158,4 +161,11 @@ void FAITree::ChooseActionInternal()
 			LOG_WARN("Default case!");
 		}
 	}
+}
+
+void FAITree::FinishAction()
+{
+	CurrentAction->End();
+
+	CurrentAction = nullptr;
 }

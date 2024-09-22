@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "AIActionBase.h"
 #include "CoreMinimal.h"
 
 enum class EChooseActionMethod
@@ -40,6 +41,23 @@ public:
 	/** Delete AI Action. */
 	void RemoveAction(const FAIActionBase* AiAction);
 
+	template<typename TActionClass>
+	TActionClass* GetActionByClass()
+	{
+		TActionClass* CastedAction = nullptr;
+
+		for (std::shared_ptr<FAIActionBase>& AIAction : AiActionsArray)
+		{
+			CastedAction = dynamic_cast<TActionClass*>(AIAction.get());
+			if (CastedAction != nullptr)
+			{
+				break;
+			}
+		}
+
+		return CastedAction;
+	}
+
 	void TickInternal();
 
 	virtual void Tick();
@@ -50,14 +68,34 @@ public:
 
 	void SetIsTreeEnabled(const bool bInEnable);
 
+	bool TryToActivateAction(FAIActionBase* InAction)
+	{
+		bool bIsActionActivated = false;
+
+		if (CurrentAction != nullptr && CurrentAction->ShouldFinishAction())
+		{
+			FinishAction();
+		}
+
+		if (InAction != nullptr && CurrentAction == nullptr)
+		{
+			OnActionChosen(InAction);
+		}
+
+		return bIsActionActivated;
+	}
+
 protected:
 	/** If you want to have custom behaviour of choosing action set ChooseActionMethod and override this method */
 	virtual void ChooseActionCustom();
 
 	virtual void OnActionChosen(FAIActionBase* AiAction);
 
+	void StartAction(FAIActionBase* AiAction);
+
 private:
 	void ChooseActionInternal();
+	void FinishAction();
 		
 	/** Current method of choosing action to play, see ChooseActionInternal */
 	EChooseActionMethod ChooseActionMethod;

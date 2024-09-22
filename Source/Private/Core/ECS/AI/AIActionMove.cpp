@@ -51,3 +51,11 @@ void FAIActionMove::EndAction()
 		CurrentMoveComponent = nullptr;
 	}
 }
+
+void FAIActionMove::SetTargetLocation(const FVector2D<int>& NewLocation) const
+{
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->SetTargetMoveLocation(NewLocation);
+	}
+}
