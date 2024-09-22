@@ -57,6 +57,8 @@ public:
 	void SetLinearSpeedPerSecond(const float NewSpeed);
 	void SetAngularSpeedPerSecond(const float NewSpeed);
 
+	FDelegate<void> OnStoppedMovement;
+
 protected:
 	/** Moves internal vector. Does not move owner on it's own */
 	FVector2D<float> GetVectorForMoveInDirection(const EMovementDirection MovementDirection) const;

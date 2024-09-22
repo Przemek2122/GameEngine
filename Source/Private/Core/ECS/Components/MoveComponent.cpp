@@ -126,6 +126,8 @@ void UMoveComponent::AbortMovement()
 	TargetLocation = FVector2D<int>();
 
 	bHasTargetMoveToLocation = false;
+
+	OnStoppedMovement.Execute();
 }
 
 void UMoveComponent::SetShouldRotateInstant(const bool bInShouldRotateInstant)
@@ -253,6 +255,9 @@ void UMoveComponent::UpdateLocationToTarget(const float DeltaTime)
 		if (DistanceBetweenPoints < FMath::RoundToInt(DistanceToMoveInThisTick))
 		{
 			NewLocation = TargetLocation;
+
+			// We are close enough. Stop.
+			AbortMovement();
 		}
 		else
 		{
