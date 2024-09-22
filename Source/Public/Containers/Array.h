@@ -8,6 +8,8 @@
 
 #include <vector>
 
+#include "Misc/Math.h"
+
 /**
  * Dynamic array template for any type.
  */
@@ -215,6 +217,19 @@ public:
 	SDL_FORCE_INLINE constexpr TType& At(TTypeAuto Index)
 	{
 		return Vector.at(Index);
+	}
+
+	SDL_FORCE_INLINE TType GetRandomValue() const
+	{
+		const TSizeType RandomIndex = FMath::RandRange(0, Size() - 1);
+
+		// Could be invalid if array is empty
+		if (IsValidIndex(RandomIndex))
+		{
+			return Vector[RandomIndex];
+		}
+
+		return DefaultType;
 	}
 
 	bool Contains(const TType& Value) const
