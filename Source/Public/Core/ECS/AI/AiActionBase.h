@@ -29,13 +29,16 @@ public:
 	void End();
 
 	/** used by AiTree to check if action should be finished */
-	virtual bool ShouldFinishAction() const;
+	virtual bool ShouldFinishAction() const { return false; }
 
 	/** Used by AiTree to decide if this action is available. */
-	virtual bool IsActionReady() const;
+	virtual bool IsActionReady() const { return true; }
 
-	/** Used by AiTree to found action with the highest priority if EChooseActionMethod::ByPriority is used. Bigger means higher priority. */
-	virtual int32_t GetActionPriority() const;
+	/** Used by AiTree to decide if this action should start automatically. */
+	virtual bool HasAutomaticStart() const { return true; }
+
+	/** You can override if you want more complicated logic for determinig if action is running but, it would be nice for performance to do not touch */
+	virtual bool IsActionRunning() const { return bIsActionRunning; }
 
 	/** @return owner AI tree */
 	FAITree* GetTree() const;
@@ -49,5 +52,7 @@ protected:
 
 private:
 	FAITree* AiTree;
+
+	bool bIsActionRunning;
 
 };

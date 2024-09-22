@@ -19,6 +19,7 @@ public:
 
 	/** Begin FAIActionBase */
 	void Initialize() override;
+	bool HasAutomaticStart() const override { return false; }
 	bool ShouldFinishAction() const override;
 	bool IsActionReady() const override;
 
@@ -27,6 +28,8 @@ public:
 	/** End FAIActionBase */
 
 	void SetTargetLocation(const FVector2D<int>& NewLocation) const;
+
+	void OnStoppedMovement();
 
 protected:
 	UMoveComponent* CurrentMoveComponent;

@@ -33,12 +33,17 @@ bool FAIActionMove::ShouldFinishAction() const
 
 bool FAIActionMove::IsActionReady() const
 {
-	return false;
+	return true;
 }
 
 void FAIActionMove::StartAction()
 {
 	Super::StartAction();
+
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->OnStoppedMovement.BindObject(this, &FAIActionMove::OnStoppedMovement);
+	}
 }
 
 void FAIActionMove::EndAction()
@@ -58,4 +63,14 @@ void FAIActionMove::SetTargetLocation(const FVector2D<int>& NewLocation) const
 	{
 		CurrentMoveComponent->SetTargetMoveLocation(NewLocation);
 	}
+}
+
+void FAIActionMove::OnStoppedMovement()
+{
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->OnStoppedMovement.UnBindObject(this, &FAIActionMove::OnStoppedMovement);
+	}
+
+	EndAction();
 }

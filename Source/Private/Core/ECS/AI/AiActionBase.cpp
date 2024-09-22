@@ -5,6 +5,7 @@
 
 FAIActionBase::FAIActionBase(FAITree* InAiTree)
 	: AiTree(InAiTree)
+	, bIsActionRunning(false)
 {
 }
 
@@ -12,7 +13,7 @@ bool FAIActionBase::TryStartAction()
 {
 	if (AiTree != nullptr)
 	{
-		return AiTree->TryToActivateAction(this);
+		return AiTree->ActivateAction(this);
 	}
 
 	return false;
@@ -29,26 +30,15 @@ void FAIActionBase::Tick()
 void FAIActionBase::Start()
 {
 	StartAction();
+
+	bIsActionRunning = true;
 }
 
 void FAIActionBase::End()
 {
 	EndAction();
-}
 
-bool FAIActionBase::ShouldFinishAction() const
-{
-	return false;
-}
-
-bool FAIActionBase::IsActionReady() const
-{
-	return true;
-}
-
-int32_t FAIActionBase::GetActionPriority() const
-{
-	return 0;
+	bIsActionRunning = false;
 }
 
 FAITree* FAIActionBase::GetTree() const
