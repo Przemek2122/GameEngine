@@ -178,12 +178,32 @@ public:
 		return (L.X >= R.X) && (L.Y >= R.Y);;
 	}
 
+	/** Calculate distance from this vector to 'OtherVector' */
 	TType DistanceTo(const FVector2D& OtherVector) const
 	{
 		const float DiffXSquared = static_cast<float>(FMath::Power(OtherVector.X - X));
 		const float DiffYSquared = static_cast<float>(FMath::Power(OtherVector.Y - Y));
 
 		return static_cast<TType>(FMath::Sqrt(DiffXSquared + DiffYSquared));
+	}
+
+	/**
+	 * Function that calculates point which is returned,
+	 * which is at a distance 'InDistance' from point 'To' in the direction from point 'From' to point 'To'
+	 */
+	static FVector2D<TType> FindEscapingPoint(const FVector2D<TType>& From, const FVector2D<TType>& To, const float InDistance)
+	{
+		FVector2D<TType> OutVector;
+
+		const double DistanceFromTo = From.DistanceTo(To);
+
+		const double UnitVecX = (To.X - From.X) / DistanceFromTo;
+		const double UnitVecY = (To.Y - From.Y) / DistanceFromTo;
+
+		OutVector.X = To.X + InDistance * UnitVecX;
+		OutVector.Y = To.Y + InDistance * UnitVecY;
+
+		return OutVector;
 	}
 
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }
