@@ -67,6 +67,8 @@ public:
 	/** Will stop action, use force to stop for sure */
 	bool StopAction(FAIActionBase* InAction, const bool bForceStopAction = false);
 
+	bool IsAnyActionRunning() const;
+
 protected:
 	/** Choosing action method, override to change default behaviour */
 	virtual void ChooseAction();
@@ -78,12 +80,13 @@ protected:
 	void EndAction(FAIActionBase* InAction);
 	void EndAllActiveActions();
 
+protected:
+	/** FAIActionBase array, see CreateAction and RemoveAction */
+	CArray<std::shared_ptr<FAIActionBase>> AllAIActionsArray;
+
 private:
 	/** Owner entity */
 	EEntity* OwnerEntity;
-
-	/** FAIActionBase array, see CreateAction and RemoveAction */
-	CArray<std::shared_ptr<FAIActionBase>> AllAIActionsArray;
 
 	/** If true Tick will choose action when previous finished. */
 	bool bIsTreeEnabled;

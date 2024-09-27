@@ -24,7 +24,7 @@ void EEntity::BeginPlay()
 
 	RegisterInputInternal();
 
-	SetupAiActions();
+	SetupAIActions();
 
 	bWasBeginPlayCalled = true;
 	bShouldCallBeginPlayOnNewComponents = true;
@@ -141,7 +141,7 @@ void EEntity::UnRegisterInputInternal()
 	UnRegisterInput(InputHandler);
 }
 
-void EEntity::SetupAiActions()
+void EEntity::SetupAIActions()
 {
 }
 

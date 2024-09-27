@@ -57,7 +57,7 @@ protected:
 	void RegisterInputInternal();
 	void UnRegisterInputInternal();
 
-	virtual void SetupAiActions();
+	virtual void SetupAIActions();
 
 	template<typename TAiTreeClass>
 	TAiTreeClass* CreateAiTree()

@@ -98,6 +98,23 @@ bool FAITree::StopAction(FAIActionBase* InAction, const bool bForceStopAction)
 	return bWasStoppingActionSuccess;
 }
 
+bool FAITree::IsAnyActionRunning() const
+{
+	bool bIsAnyActionRunning = false;
+
+	for (const std::shared_ptr<FAIActionBase>& ActionPtr : AllAIActionsArray)
+	{
+		if (ActionPtr->IsActionRunning())
+		{
+			bIsAnyActionRunning = true;
+
+			break;
+		}
+	}
+
+	return bIsAnyActionRunning;
+}
+
 void FAITree::ChooseAction()
 {
 	for (std::shared_ptr<FAIActionBase>& ActionPtr : AllAIActionsArray)
