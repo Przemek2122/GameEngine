@@ -89,6 +89,36 @@ UParentComponent* EEntity::GetParentComponent() const
 	return dynamic_cast<UParentComponent*>(DefaultRootComponent);
 }
 
+FVector2D<int32> EEntity::GetLocation() const
+{
+	FVector2D<int32> RetLocation;
+
+	UParentComponent* ParentComponent = GetParentComponent();
+	if (ParentComponent != nullptr)
+	{
+		RetLocation = ParentComponent->GetLocation();
+	}
+
+	return RetLocation;
+}
+
+int32 EEntity::GetRotation() const
+{
+	int32 RetRotation;
+
+	UParentComponent* ParentComponent = GetParentComponent();
+	if (ParentComponent != nullptr)
+	{
+		RetRotation = ParentComponent->GetRotation();
+	}
+	else
+	{
+		RetRotation = 0;
+	}
+
+	return RetRotation;
+}
+
 void EEntity::RegisterInput(FEventHandler* InputHandler)
 {
 }

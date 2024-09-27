@@ -42,6 +42,12 @@ public:
 	virtual UBaseComponent* GetRootComponent() const;
 	virtual UParentComponent* GetParentComponent() const;
 
+	/** @Returns value of parent component (if present) */
+	FVector2D<int32> GetLocation() const;
+
+	/** @Returns value of parent component (if present) */
+	int32 GetRotation() const;
+
 	FEntityManager* GetEntityManagerOwner() const;
 	FWindow* GetWindow() const;
 	FWindowAdvanced* GetWindowAdvanced() const;
