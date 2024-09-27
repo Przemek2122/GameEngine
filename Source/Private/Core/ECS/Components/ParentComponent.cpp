@@ -75,17 +75,17 @@ FVector2D<float> UParentComponent::GetRightVector() const
 	return RightVector;
 }
 
-FVector2D<int> UParentComponent::GetLocationCenter() const
+FVector2D<int32> UParentComponent::GetLocationCenter() const
 {
 	return (GetLocation() + (Size / 2));
 }
 
-void UParentComponent::SetSize(const FVector2D<int> NewSize)
+void UParentComponent::SetSize(const FVector2D<int32> NewSize)
 {
 	Size = NewSize;
 }
 
-FVector2D<int> UParentComponent::GetSize() const
+FVector2D<int32> UParentComponent::GetSize() const
 {
 	return Size;
 }

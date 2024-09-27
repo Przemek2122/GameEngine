@@ -27,7 +27,8 @@ public:
 	void EndAction() override;
 	/** End FAIActionBase */
 
-	void SetTargetLocation(const FVector2D<int>& NewLocation) const;
+	/** Default implementation, will walk into given point */
+	virtual void SetTargetLocation(const FVector2D<int32>& InLocation);
 
 	void OnStoppedMovement();
 

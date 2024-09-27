@@ -46,7 +46,7 @@ FAITree* FAIActionBase::GetTree() const
 	return AiTree;
 }
 
-EEntity* FAIActionBase::GetEntity() const
+EEntity* FAIActionBase::GetOwnerEntity() const
 {
 	return AiTree->GetOwnerEntity();
 }

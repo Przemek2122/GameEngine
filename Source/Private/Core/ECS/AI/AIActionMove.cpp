@@ -50,18 +50,19 @@ void FAIActionMove::EndAction()
 {
 	Super::EndAction();
 
-	if (CurrentMoveComponent != nullptr && CurrentMoveComponent->IsMoving())
+	// Disable if moving due to action running
+	if (CurrentMoveComponent != nullptr && (IsActionRunning() && CurrentMoveComponent->IsMoving()))
 	{
 		CurrentMoveComponent->AbortMovement();
 		CurrentMoveComponent = nullptr;
 	}
 }
 
-void FAIActionMove::SetTargetLocation(const FVector2D<int>& NewLocation) const
+void FAIActionMove::SetTargetLocation(const FVector2D<int32>& InLocation)
 {
 	if (CurrentMoveComponent != nullptr)
 	{
-		CurrentMoveComponent->SetTargetMoveLocation(NewLocation);
+		CurrentMoveComponent->SetTargetMoveLocation(InLocation);
 	}
 }
 

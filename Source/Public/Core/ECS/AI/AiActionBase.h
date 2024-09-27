@@ -44,7 +44,7 @@ public:
 	FAITree* GetTree() const;
 
 	/** @return Entity owner for this action */
-	EEntity* GetEntity() const;
+	EEntity* GetOwnerEntity() const;
 
 protected:
 	virtual void StartAction();
