@@ -8,11 +8,11 @@
 
 UMoveComponent::UMoveComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
-	, bHasTargetMoveToLocation(false)
+	, bIsMoving(false)
 	, bShouldRotateInstant(false)
 	, StopDistance(0.f)
 	, LinearSpeedPerSecond(40.f)
-	, AngularSpeedPerSecond(90.f)
+	, AngularSpeedPerSecond(180.f)
 	, bHasCustomStopDistance(false)
 	, CurrentMap(nullptr)
 	, CurrentMovementMethod(EMovementMethod::Default)
@@ -46,30 +46,33 @@ void UMoveComponent::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	switch (CurrentMovementMethod)
+	if (IsMoving())
 	{
-		case EMovementMethod::Default:
+		switch (CurrentMovementMethod)
 		{
-			if (bHasTargetMoveToLocation && RootTransformComponent != nullptr)
+			case EMovementMethod::Default:
 			{
-				CurrentLocation = RootTransformComponent->GetLocation();
-				CalculatedTargetLocation = TargetLocation;
+				if (RootTransformComponent != nullptr)
+				{
+					CurrentLocation = RootTransformComponent->GetLocation();
+					CalculatedTargetLocation = TargetLocation;
 
-				UpdateRotationToTarget(DeltaTime);
+					UpdateRotationToTarget(DeltaTime);
 
-				UpdateLocationToTarget(DeltaTime);
+					UpdateLocationToTarget(DeltaTime);
+				}
+
+				break;
 			}
-
-			break;		
-		}
-		case EMovementMethod::Linear:
-		{
-			if (RootTransformComponent != nullptr)
+			case EMovementMethod::Linear:
 			{
-				UpdateLocationLinear(DeltaTime);
-			}
+				if (RootTransformComponent != nullptr)
+				{
+					UpdateLocationLinear(DeltaTime);
+				}
 
-			break;
+				break;
+			}
 		}
 	}
 }
@@ -108,7 +111,7 @@ void UMoveComponent::SetTargetMoveLocation(const FVector2D<int> NewTargetLocatio
 
 		TargetLocation = NewTargetLocation;
 
-		bHasTargetMoveToLocation = true;
+		bIsMoving = true;
 
 		if (!bHasCustomStopDistance)
 		{
@@ -125,7 +128,7 @@ void UMoveComponent::AbortMovement()
 {
 	TargetLocation = FVector2D<int>();
 
-	bHasTargetMoveToLocation = false;
+	bIsMoving = false;
 
 	OnStoppedMovement.Execute();
 }
@@ -137,11 +140,13 @@ void UMoveComponent::SetShouldRotateInstant(const bool bInShouldRotateInstant)
 
 bool UMoveComponent::IsMoving() const
 {
-	return bHasTargetMoveToLocation;
+	return bIsMoving;
 }
 
 void UMoveComponent::SetMovementMethod(const EMovementMethod NewMovementMethod)
 {
+	OnMovementMethodChanged(CurrentMovementMethod, NewMovementMethod);
+
 	CurrentMovementMethod = NewMovementMethod;
 }
 
@@ -317,4 +322,13 @@ bool UMoveComponent::IsInMapBounds(const FVector2D<int>& Location) const
 
 void UMoveComponent::OnRequestedLocationOutOfBounds()
 {
+	AbortMovement();
+}
+
+void UMoveComponent::OnMovementMethodChanged(const EMovementMethod InPrevious, const EMovementMethod InCurrent)
+{
+	if (InCurrent == EMovementMethod::Linear)
+	{
+		bIsMoving = true;
+	}
 }

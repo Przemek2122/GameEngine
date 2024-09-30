@@ -38,6 +38,7 @@ public:
 
 	/** How far owner has to be to stop when approaching TargetLocation */
 	void SetStoppingDistance(const float InStopDistance);
+	float GetStoppingDistance() const { return StopDistance; }
 
 	/** Reset stop distance to default auto calculated value */
 	void ResetStoppingDistance();
@@ -50,7 +51,7 @@ public:
 
 	void SetShouldRotateInstant(const bool bInShouldRotateInstant);
 
-	bool IsMoving() const;
+	virtual bool IsMoving() const;
 
 	virtual void SetMovementMethod(EMovementMethod NewMovementMethod);
 
@@ -73,12 +74,14 @@ protected:
 	/** Called when unit moves out of map bounds */
 	virtual void OnRequestedLocationOutOfBounds();
 
+	virtual void OnMovementMethodChanged(const EMovementMethod InPrevious, const EMovementMethod InCurrent);
+
 protected:
 	/** Location desired by unit. This is the place where we want to move to. */
 	FVector2D<int> TargetLocation;
 
 	/** If true, component owner is moving */
-	bool bHasTargetMoveToLocation;
+	bool bIsMoving;
 
 	/** if true we will not make smooth rotation but instant rotation */
 	bool bShouldRotateInstant;
