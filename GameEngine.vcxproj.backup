@@ -53,6 +53,7 @@
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionBase.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AITree.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\SingleActionAITree.h" />
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Collision\BaseCollision.h" />
     <ClInclude Include="Source\Public\Core\ECS\Collision\CircleCollision.h" />
@@ -302,6 +303,7 @@
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionBase.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AITree.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\AI\SingleActionAITree.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Collision\BaseCollision.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Collision\CircleCollision.cpp" />

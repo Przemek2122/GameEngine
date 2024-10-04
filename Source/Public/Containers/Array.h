@@ -219,9 +219,25 @@ public:
 		return Vector.at(Index);
 	}
 
+	TSizeType GetRandomIndex() const
+	{
+		TSizeType OutIndex;
+
+		if (Size() == 0)
+		{
+			OutIndex = 0;
+		}
+		else
+		{
+			OutIndex = FMath::RandRange(0, Size() - 1);
+		}
+
+		return OutIndex;
+	}
+
 	SDL_FORCE_INLINE TType GetRandomValue() const
 	{
-		const TSizeType RandomIndex = FMath::RandRange(0, Size() - 1);
+		const TSizeType RandomIndex = GetRandomIndex();
 
 		// Could be invalid if array is empty
 		if (IsValidIndex(RandomIndex))

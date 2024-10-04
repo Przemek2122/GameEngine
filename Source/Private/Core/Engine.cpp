@@ -60,11 +60,11 @@ FEngine::~FEngine()
 void FEngine::EngineInit(int Argc, char* Argv[])
 {
 #if defined(__DATE__) && defined(__TIME__)
-	LOG_INFO("GEngine init start compiled: " << __DATE__ << " " <<__TIME__);
+	LOG_INFO("GEngine init start compiled: " << __DATE__ << " " << __TIME__);
 #else
 	LOG_INFO("GEngine init start.");
 #endif
-	
+
 	// Read command line flags.
 	while (Argc--)
 	{
@@ -77,7 +77,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 		else
 		{
 			LaunchParameters.Push(Argv[Argc]);
-			
+
 			LOG_INFO("Found param [" << Argc << "] = " << Argv[Argc]);
 		}
 	}
@@ -109,14 +109,21 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 		exit(-4);
 	}
 
-	// Initialize SDL - Load support for the OGG and MOD sample/music formats
-	constexpr auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC;
+	// Initialize SDL - Load support for everything supported
+	constexpr auto MixFlags = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_FLAC | MIX_INIT_MID | MIX_INIT_OPUS;
 	const int MixInitialized = Mix_Init(MixFlags);
 	if (!MixInitialized)
 	{
 		LOG_ERROR("Mix_Init: " << Mix_GetError());
 
 		exit(-8);
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+
+		exit(-16);
 	}
 
 	/**
