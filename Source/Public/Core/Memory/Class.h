@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+class EUnitBase;
+
 /** Do not use directly - Use FClassStorage instead */
 template<typename TType, typename... TArgs>
 class TClass
@@ -155,4 +157,10 @@ protected:
 	TClassTypeWithArgs* StoredClass;
 	bool bIsMoved;
 
+};
+
+/** Storage class for storing subclasses of EEntity (Includes FEntityManager* by default) */
+template<typename TBaseClass, typename... TArgs>
+class FEntityClassStorage : public FClassStorage<TBaseClass, FEntityManager*, TArgs...>
+{
 };
