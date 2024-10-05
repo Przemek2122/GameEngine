@@ -31,21 +31,6 @@ bool FAIActionMove::ShouldFinishAction() const
 	return (CurrentMoveComponent != nullptr && !CurrentMoveComponent->IsMoving());
 }
 
-bool FAIActionMove::IsActionReady() const
-{
-	return true;
-}
-
-void FAIActionMove::StartAction()
-{
-	Super::StartAction();
-
-	if (CurrentMoveComponent != nullptr)
-	{
-		CurrentMoveComponent->OnStoppedMovement.BindObject(this, &FAIActionMove::OnStoppedMovement);
-	}
-}
-
 void FAIActionMove::EndAction()
 {
 	Super::EndAction();
@@ -55,6 +40,16 @@ void FAIActionMove::EndAction()
 	{
 		CurrentMoveComponent->AbortMovement();
 		CurrentMoveComponent = nullptr;
+	}
+}
+
+void FAIActionMove::StartAction()
+{
+	Super::StartAction();
+
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->OnStoppedMovement.BindObject(this, &FAIActionMove::OnStoppedMovement);
 	}
 }
 

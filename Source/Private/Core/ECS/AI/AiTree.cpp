@@ -42,6 +42,11 @@ void FAITree::TickInternal()
 {
 	if (bIsTreeEnabled)
 	{
+		for (std::shared_ptr<FAIActionBase>& AIActionPtr : AllAIActionsArray)
+		{
+			AIActionPtr->Tick();
+		}
+
 		ChooseAction();
 
 		Tick();
@@ -124,10 +129,6 @@ void FAITree::ChooseAction()
 			if (ActionPtr->ShouldFinishAction())
 			{
 				EndAction(ActionPtr.get());
-			}
-			else
-			{
-				ActionPtr->Tick();
 			}
 		}
 		else if (ActionPtr->HasAutomaticStart() && ActionPtr->IsActionReady())

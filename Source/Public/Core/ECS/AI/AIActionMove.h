@@ -10,6 +10,8 @@ class FAITree;
 
 /**
  * AI actions base class
+ * It is not set as not to run automatically, you should use TryStartAction
+ * If you wish to start automatically, change HasAutomaticStart to return true.
  */
 class FAIActionMove : public FAIActionBase
 {
@@ -21,7 +23,7 @@ public:
 	void Initialize() override;
 	bool HasAutomaticStart() const override { return false; }
 	bool ShouldFinishAction() const override;
-	bool IsActionReady() const override;
+	bool IsActionReady() const override { return true; }
 
 	void StartAction() override;
 	void EndAction() override;
