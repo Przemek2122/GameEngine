@@ -66,6 +66,9 @@ inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 /** Macro allowing calls to parent class. @note Constructor Super call in init list is not allowed! */
 #define Super __super
 
+/** Macro to check if CurrentClass inherits from BaseClass at compile time. FailMessage will be shown in log in case of missing class */
+#define ASSERT_IS_BASE_OF(BaseClass, CurrentClass, FailMessage) static_assert(std::is_base_of_v<BaseClass, CurrentClass>, FailMessage);
+
 #define THREAD_WAIT_MS(TimeInMS)			std::this_thread::sleep_for(std::chrono::milliseconds(TimeInMS))
 #define THREAD_WAIT_NS(TimeInNS)			std::this_thread::sleep_for(std::chrono::nanoseconds(TimeInNS))
 /** Wait for 0.00001 second (or 0.01 ms) */

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
 #include "AI/AITree.h"
 #include "ECS/BaseComponent.h"
 
@@ -61,15 +62,17 @@ public:
 	template<typename TAIMemorySetClass>
 	std::shared_ptr<TAIMemorySetClass> GetAIMemorySetByClass()
 	{
+		std::shared_ptr<TAIMemorySetClass> RetAIMemorySetPtr = nullptr;
+
 		for (std::shared_ptr<FAIMemorySet>& AIMemorySetPtr : AIMemorySetArray)
 		{
 			if (dynamic_cast<TAIMemorySetClass*>(AIMemorySetPtr.get()) != nullptr)
 			{
-				return std::dynamic_pointer_cast<TAIMemorySetClass>(AIMemorySetPtr);
+				RetAIMemorySetPtr = std::dynamic_pointer_cast<TAIMemorySetClass>(AIMemorySetPtr);
 			}
 		}
 
-		return std::make_shared<TAIMemorySetClass>(nullptr);
+		return RetAIMemorySetPtr;
 	}
 
 protected:
@@ -82,10 +85,12 @@ protected:
 
 	virtual void SetupAIActions();
 
-	template<typename TAiTreeClass>
-	TAiTreeClass* CreateAiTree()
+	template<typename TAITreeClass>
+	TAITreeClass* CreateAiTree()
 	{
-		std::shared_ptr<TAiTreeClass> AiTreePtr = std::make_shared<TAiTreeClass>(this);
+		ASSERT_IS_BASE_OF(FAITree, TAITreeClass, "Class mismatch, CreateAiTree requries class to inherit from FAITree.");
+
+		std::shared_ptr<TAITreeClass> AiTreePtr = std::make_shared<TAITreeClass>(this);
 
 		AiTreeArray.Push(AiTreePtr);
 
@@ -94,11 +99,14 @@ protected:
 
 	/** Create new AIMemorySet */
 	template<class TAIMemorySetClass>
-	TAIMemorySetClass* CreateAIMemorySetByClass()
+	void CreateAIMemorySet()
 	{
-		TAIMemorySetClass* NewAIMemorySet = std::make_shared<TAIMemorySetClass>();
+		ASSERT_IS_BASE_OF(FAIMemorySet, TAIMemorySetClass, "Class mismatch, CreateAIMemorySet requries class to inherit from FAIMemorySet.");
 
-		return NewAIMemorySet;
+		// Create set without returning it as we want to keep it as shared_ptr (GetAIMemorySetByClass can be used to get it.)
+		std::shared_ptr<TAIMemorySetClass> NewAIMemorySet = std::make_shared<TAIMemorySetClass>();
+
+		AIMemorySetArray.Push(NewAIMemorySet);
 	}
 
 	/** Begin IComponentManagerInterface */

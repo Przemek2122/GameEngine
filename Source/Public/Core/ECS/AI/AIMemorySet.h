@@ -12,7 +12,7 @@ class FAIMemorySet
 {
 protected:
 	/** Virtual method for casting */
-	virtual void InternalVirtualMethod();
+	virtual void InternalVirtualMethod() { }
 
 public:
 	FAIMemorySet() = default;
