@@ -4,6 +4,7 @@
 
 #include "AIActionBase.h"
 #include "CoreMinimal.h"
+#include "ECS/Entity.h"
 
 class FAIMemorySet;
 class FAIActionBase;
@@ -36,6 +37,7 @@ public:
 	/** Delete AI Action. */
 	void RemoveAction(const FAIActionBase* AiAction);
 
+	/** Get AI Action by class (Iterate all action to find correct one) */
 	template<class TActionClass>
 	TActionClass* GetActionByClass()
 	{
@@ -70,33 +72,18 @@ public:
 
 	bool IsAnyActionRunning() const;
 
-	const CArray<std::shared_ptr<FAIMemorySet>>& GetAIMemorySetArray() const { return AIMemorySetArray; }
-
 	/** Create new AIMemorySet */
-	template<class TAIMemorySetClass>
-	TAIMemorySetClass* CreateAIMemorySetByClass()
+	template<typename TAIMemorySetClass>
+	std::shared_ptr<TAIMemorySetClass> GetAIMemorySetByClass()
 	{
-		TAIMemorySetClass* NewAIMemorySet = std::make_shared<TAIMemorySetClass>();
+		std::shared_ptr<TAIMemorySetClass> AIMemorySet = nullptr;
 
-		return NewAIMemorySet;
-	}
-
-	/** Get AIMemorySet by class, it will iterate all existing MemorySets to find correct one */
-	template<class TAIMemorySetClass>
-	TAIMemorySetClass* GetAIMemorySetByClass()
-	{
-		TAIMemorySetClass* AIMemorySetCasted = nullptr;
-
-		for (std::shared_ptr<FAIMemorySet>& AIMemorySetPtr : AIMemorySetArray)
+		if (OwnerEntity != nullptr)
 		{
-			AIMemorySetCasted = dynamic_cast<TAIMemorySetClass*>(AIMemorySetPtr.get());
-			if (AIMemorySetCasted != nullptr)
-			{
-				break;
-			}
+			//AIMemorySet = OwnerEntity->GetAIMemorySetByClass<TAIMemorySetClass>();
 		}
 
-		return AIMemorySetCasted;
+		return AIMemorySet;
 	}
 
 protected:
@@ -115,9 +102,6 @@ protected:
 	CArray<std::shared_ptr<FAIActionBase>> AllAIActionsArray;
 
 private:
-	/** Array of AI memory sets. */
-	CArray<std::shared_ptr<FAIMemorySet>> AIMemorySetArray;
-
 	/** Owner entity */
 	EEntity* OwnerEntity;
 

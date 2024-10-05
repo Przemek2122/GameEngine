@@ -10,8 +10,12 @@
  */
 class FAIMemorySet
 {
-public:
-	FAIMemorySet();
+protected:
+	/** Virtual method for casting */
+	virtual void InternalVirtualMethod();
 
+public:
+	FAIMemorySet() = default;
+	virtual ~FAIMemorySet() = default;
 
 };

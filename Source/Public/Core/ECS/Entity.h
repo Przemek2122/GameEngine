@@ -55,6 +55,23 @@ public:
 	FGameModeBase* GetGameMode() const;
 	FMap* GetCurrentMap() const;
 
+	const CArray<std::shared_ptr<FAIMemorySet>>& GetAIMemorySetArray() const { return AIMemorySetArray; }
+
+	/** Get AIMemorySet by class, it will iterate all existing MemorySets to find correct one */
+	template<typename TAIMemorySetClass>
+	std::shared_ptr<TAIMemorySetClass> GetAIMemorySetByClass()
+	{
+		for (std::shared_ptr<FAIMemorySet>& AIMemorySetPtr : AIMemorySetArray)
+		{
+			if (dynamic_cast<TAIMemorySetClass*>(AIMemorySetPtr.get()) != nullptr)
+			{
+				return std::dynamic_pointer_cast<TAIMemorySetClass>(AIMemorySetPtr);
+			}
+		}
+
+		return std::make_shared<TAIMemorySetClass>(nullptr);
+	}
+
 protected:
 	/** Register input to FEventHandler. Remember to unregister input in UnRegisterInput! */
 	virtual void RegisterInput(FEventHandler* InputHandler);
@@ -75,11 +92,23 @@ protected:
 		return AiTreePtr.get();
 	}
 
+	/** Create new AIMemorySet */
+	template<class TAIMemorySetClass>
+	TAIMemorySetClass* CreateAIMemorySetByClass()
+	{
+		TAIMemorySetClass* NewAIMemorySet = std::make_shared<TAIMemorySetClass>();
+
+		return NewAIMemorySet;
+	}
+
 	/** Begin IComponentManagerInterface */
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	/** End IComponentManagerInterface */
 
 private:
+	/** Array of AI memory sets. */
+	CArray<std::shared_ptr<FAIMemorySet>> AIMemorySetArray;
+
 	/** Entity manager */
 	FEntityManager* EntityManagerOwner;
 
