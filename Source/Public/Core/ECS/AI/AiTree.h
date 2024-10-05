@@ -5,6 +5,7 @@
 #include "AIActionBase.h"
 #include "CoreMinimal.h"
 
+class FAIMemorySet;
 class FAIActionBase;
 
 /**
@@ -35,7 +36,7 @@ public:
 	/** Delete AI Action. */
 	void RemoveAction(const FAIActionBase* AiAction);
 
-	template<typename TActionClass>
+	template<class TActionClass>
 	TActionClass* GetActionByClass()
 	{
 		TActionClass* CastedAction = nullptr;
@@ -69,6 +70,35 @@ public:
 
 	bool IsAnyActionRunning() const;
 
+	const CArray<std::shared_ptr<FAIMemorySet>>& GetAIMemorySetArray() const { return AIMemorySetArray; }
+
+	/** Create new AIMemorySet */
+	template<class TAIMemorySetClass>
+	TAIMemorySetClass* CreateAIMemorySetByClass()
+	{
+		TAIMemorySetClass* NewAIMemorySet = std::make_shared<TAIMemorySetClass>();
+
+		return NewAIMemorySet;
+	}
+
+	/** Get AIMemorySet by class, it will iterate all existing MemorySets to find correct one */
+	template<class TAIMemorySetClass>
+	TAIMemorySetClass* GetAIMemorySetByClass()
+	{
+		TAIMemorySetClass* AIMemorySetCasted = nullptr;
+
+		for (std::shared_ptr<FAIMemorySet>& AIMemorySetPtr : AIMemorySetArray)
+		{
+			AIMemorySetCasted = dynamic_cast<TAIMemorySetClass*>(AIMemorySetPtr.get());
+			if (AIMemorySetCasted != nullptr)
+			{
+				break;
+			}
+		}
+
+		return AIMemorySetCasted;
+	}
+
 protected:
 	/** Choosing action method, override to change default behaviour */
 	virtual void ChooseAction();
@@ -85,6 +115,9 @@ protected:
 	CArray<std::shared_ptr<FAIActionBase>> AllAIActionsArray;
 
 private:
+	/** Array of AI memory sets. */
+	CArray<std::shared_ptr<FAIMemorySet>> AIMemorySetArray;
+
 	/** Owner entity */
 	EEntity* OwnerEntity;
 

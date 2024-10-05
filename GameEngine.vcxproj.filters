@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <ItemGroup>
     <Filter Include="Private">
       <UniqueIdentifier>{hfko3rwr-at331-79pdi-96zt2-swgnr8fhapm9}</UniqueIdentifier>
     </Filter>
@@ -247,41 +246,8 @@
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{tea7dni8-wf3mh-zcs14-tapir-3aym6f6jmgwd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ThirdParty\CppFlow">
-      <UniqueIdentifier>{kx53px5k-kop5w-2wkuc-ze449-jyzgn01b1l4g}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\CppFlow\ops_generator">
-      <UniqueIdentifier>{5ucblf07-nwf0d-595lp-rndnm-4xu5o6pnj9yr}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ThirdParty\SDL">
-      <UniqueIdentifier>{5hdcjslu-7k4yh-ktpr4-obn40-yt1blzb1ekkz}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tensorflow">
-      <UniqueIdentifier>{aylc766o-wtskn-90ufl-km752-95m8g4ckl39k}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tensorflow\c">
-      <UniqueIdentifier>{un6p0blj-fy1nt-j3bkb-tksg6-l7jz8ih0batx}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tensorflow\c\eager">
-      <UniqueIdentifier>{t5yyeyja-zcccp-pcb1h-j5mz3-o9tz4icd8ufn}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tensorflow\core">
-      <UniqueIdentifier>{w27ds4ke-k6y2x-islbs-ednu3-0wn5dlif2pxy}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tensorflow\core\platform">
-      <UniqueIdentifier>{g1lg2w6c-cjbmk-w45st-uckik-r193ie7h6k80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tsl">
-      <UniqueIdentifier>{inff9oj6-xdofa-ylzfw-5d1c5-czre5bcsdw2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tsl\c">
-      <UniqueIdentifier>{upzg8iy5-zd5uz-pwapm-shgw0-hnizme02g983}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ThirdParty\tsl\platform">
-      <UniqueIdentifier>{kbp7nkns-9xi11-24lws-m060z-3abl8yuf8km3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Config">
-      <UniqueIdentifier>{c316f991-41c5-4537-85ee-da1d42cc9063}</UniqueIdentifier>
+      <UniqueIdentifier>{kx53px5k-kop5w-2wkuc-ze449-jyzgn01b1l4g}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +317,9 @@
     <ClInclude Include="Source\Public\Containers\UnorderedMap.h">
       <Filter>Public\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Core\CoreEngine.h">
+      <Filter>Public\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Core\CoreMinimal.h">
       <Filter>Public\Core</Filter>
     </ClInclude>
@@ -358,6 +327,9 @@
       <Filter>Public\Core\ECS\AI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h">
+      <Filter>Public\Core\ECS\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Core\ECS\AI\AIMemorySet.h">
       <Filter>Public\Core\ECS\AI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\AI\AITree.h">
@@ -1073,6 +1045,9 @@
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp">
       <Filter>Private\Core\ECS\AI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Core\ECS\AI\AIMemorySet.cpp">
+      <Filter>Private\Core\ECS\AI</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\AI\AITree.cpp">
       <Filter>Private\Core\ECS\AI</Filter>
     </ClCompile>
@@ -1426,19 +1401,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyAssets.bat" />
-    <None Include="Scripts\BuildActions\PostBuild\CopyDLLs.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesEngine.bat" />
-    <None Include="Scripts\BuildActions\PreBuild\GenerateFilesProject.bat" />
-    <None Include="Assets\Config\CollisionSettings.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="Assets\Config\EngineInput.ini">
-      <Filter>Config</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Scripts\BuildActions\README.txt" />
-  </ItemGroup>
-</Project>
+    <None Include="cpp.hint" /> 
+  </ItemGroup> 
+</Project> 

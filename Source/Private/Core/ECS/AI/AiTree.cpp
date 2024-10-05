@@ -115,6 +115,11 @@ bool FAITree::IsAnyActionRunning() const
 	return bIsAnyActionRunning;
 }
 
+const CArray<std::shared_ptr<FAIMemorySet>>& FAITree::GetAIMemorySetArray() const
+{
+	return AIMemorySetArray;
+}
+
 void FAITree::ChooseAction()
 {
 	for (std::shared_ptr<FAIActionBase>& ActionPtr : AllAIActionsArray)
