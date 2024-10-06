@@ -140,11 +140,21 @@ void EEntity::SetRotation(const int32 Rotation)
 void EEntity::SetRelativeLocation(const FVector2D<int32> NewLocation)
 {
 	AttachmentRelativeLocation = NewLocation;
+
+	if (EntityAttachmentRootComponent != nullptr)
+	{
+		OnAttachedComponentLocationChanged(EntityAttachmentRootComponent->GetLocation());
+	}
 }
 
 void EEntity::SetRelativeRotation(const int32 NewRotation)
 {
 	AttachmentRelativeRotation = NewRotation;
+
+	if (EntityAttachmentRootComponent != nullptr)
+	{
+		OnAttachedComponentRotationChanged(EntityAttachmentRootComponent->GetRotation());
+	}
 }
 
 FVector2D<int32> EEntity::GetLocation() const
@@ -269,7 +279,9 @@ void EEntity::OnAttachedComponentLocationChanged(const FTransformLocation& NewLo
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		SetLocation(NewLocation + AttachmentRelativeLocation);
+		FVector2D<int> Rot = AttachmentRelativeLocation.Rotate(EntityAttachmentRootComponent->GetRotation());
+
+		SetLocation(NewLocation + Rot);
 	}
 }
 
@@ -277,6 +289,10 @@ void EEntity::OnAttachedComponentRotationChanged(const FTransformRotation NewRot
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
+		FVector2D<int> Rot = AttachmentRelativeLocation.Rotate(EntityAttachmentRootComponent->GetRotation());
+
+		SetLocation(EntityAttachmentRootComponent->GetLocation() + Rot);
+
 		SetRotation(NewRotation + AttachmentRelativeRotation);
 	}
 }
