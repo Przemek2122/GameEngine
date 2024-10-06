@@ -33,6 +33,9 @@ public:
 
 	void OnCollisionBegin(UCollisionComponent* OtherCollision);
 	void OnCollisionEnd(UCollisionComponent* OtherCollision);
+
+	FDelegate<void, UCollisionComponent*> OnCollisionEnter;
+	FDelegate<void, UCollisionComponent*> OnCollisionExit;
 	
 protected:
 	/** @returns collision subsystem. Might be expensive. Try avoid use */

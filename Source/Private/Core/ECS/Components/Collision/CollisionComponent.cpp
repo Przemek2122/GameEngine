@@ -78,12 +78,12 @@ const CArray<FCollisionBase*>& UCollisionComponent::GetCollisionObjectsArray() c
 
 void UCollisionComponent::OnCollisionBegin(UCollisionComponent* OtherCollision)
 {
-	LOG_INFO("Collision Start");
+	OnCollisionEnter.Execute(OtherCollision);
 }
 
 void UCollisionComponent::OnCollisionEnd(UCollisionComponent* OtherCollision)
 {
-	LOG_INFO("Collision End");
+	OnCollisionExit.Execute(OtherCollision);
 }
 
 FCollisionManager* UCollisionComponent::GetCollisionManager() const
