@@ -275,7 +275,7 @@ void EEntity::OnDeAttachedFromEntity()
 		EntityAttachmentRootComponent->OnRotationChangedDelegate.UnBindObject(this, &EEntity::OnAttachedComponentRotationChanged);
 	}
 }
-void EEntity::OnAttachedComponentLocationChanged(const FTransformLocation& NewLocation)
+void EEntity::OnAttachedComponentLocationChanged(const FTransform2DLocation& NewLocation)
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
@@ -285,7 +285,7 @@ void EEntity::OnAttachedComponentLocationChanged(const FTransformLocation& NewLo
 	}
 }
 
-void EEntity::OnAttachedComponentRotationChanged(const FTransformRotation NewRotation)
+void EEntity::OnAttachedComponentRotationChanged(const FTransform2DRotation NewRotation)
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{

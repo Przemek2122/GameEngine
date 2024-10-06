@@ -52,6 +52,7 @@ void USquareCollisionComponent::OnLocationChanged()
 		// Update location
 		FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
 		SquareDataForEdit.SetLocationTopLeftCorner(GetAbsoluteLocation());
+		SquareDataForEdit.SetSize(GetTransform().Size)
 	}
 }
 

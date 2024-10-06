@@ -29,7 +29,7 @@ void FTransform2DInterface::SetTransform(const FTransform2D& NewTransform2D)
 	}
 }
 
-void FTransform2DInterface::SetLocation(const FTransformLocation& NewLocation)
+void FTransform2DInterface::SetLocation(const FTransform2DLocation& NewLocation)
 {
 	if (RelativeTransform2D.Location != NewLocation)
 	{
@@ -39,13 +39,23 @@ void FTransform2DInterface::SetLocation(const FTransformLocation& NewLocation)
 	}
 }
 
-void FTransform2DInterface::SetRotation(const FTransformRotation NewRotation)
+void FTransform2DInterface::SetRotation(const FTransform2DRotation NewRotation)
 {
 	if (RelativeTransform2D.Rotation != NewRotation)
 	{
 		RelativeTransform2D.Rotation = NewRotation;
 
 		OnRotationChanged();
+	}
+}
+
+void FTransform2DInterface::SetSize(const FTransform2DSize& NewSize)
+{
+	if (RelativeTransform2D.Size != NewSize)
+	{
+		RelativeTransform2D.Size = NewSize;
+
+		OnSizeChanged();
 	}
 }
 
@@ -59,14 +69,14 @@ void FTransform2DInterface::RemoveUpdatedComponent(FTransform2DInterface* InTran
 	ChildrenInterfaces.Remove(InTransform2DInterface);
 }
 
-void FTransform2DInterface::OnParentLocationChanged(const FTransformLocation& NewLocation)
+void FTransform2DInterface::OnParentLocationChanged(const FTransform2DLocation& NewLocation)
 {
 	ParentTransform2D.Location = NewLocation;
 
 	OnLocationChanged();
 }
 
-void FTransform2DInterface::OnParentRotationChanged(const FTransformRotation NewRotation)
+void FTransform2DInterface::OnParentRotationChanged(const FTransform2DRotation NewRotation)
 {
 	ParentTransform2D.Rotation = NewRotation;
 
@@ -95,4 +105,9 @@ void FTransform2DInterface::OnRotationChanged()
 	{
 		ChildrenInterface->OnParentRotationChanged(AbsoluteTransform2D.Rotation);
 	}
+}
+
+void FTransform2DInterface::OnSizeChanged()
+{
+	OnSizeChangedDelegate.Execute(RelativeTransform2D.Size);
 }

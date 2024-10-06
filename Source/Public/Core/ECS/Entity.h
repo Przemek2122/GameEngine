@@ -133,8 +133,8 @@ protected:
 	virtual void OnAttachedToEntity();
 	virtual void OnDeAttachedFromEntity();
 
-	virtual void OnAttachedComponentLocationChanged(const FTransformLocation& NewLocation);
-	virtual void OnAttachedComponentRotationChanged(const FTransformRotation NewRotation);
+	virtual void OnAttachedComponentLocationChanged(const FTransform2DLocation& NewLocation);
+	virtual void OnAttachedComponentRotationChanged(const FTransform2DRotation NewRotation);
 
 private:
 	/** Array of AI memory sets. */
