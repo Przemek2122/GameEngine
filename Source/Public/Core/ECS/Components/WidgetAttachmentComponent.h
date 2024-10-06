@@ -10,10 +10,6 @@ class UWidgetAttachmentComponent : public UComponent
 public:
 	explicit UWidgetAttachmentComponent(IComponentManagerInterface* InComponentManagerInterface);
 
-	/** Begin UBaseComponent */
-	void Tick(const float DeltaTime) override;
-	/** End UBaseComponent */
-
 	/** Set managed widget for this component */
 	void SetWidget(FWidget* NewWidget);
 
@@ -21,6 +17,9 @@ public:
 	FWidget* GetWidget() const { return Widget; }
 
 	bool IsWidgetVisible() const;
+
+	void OnLocationChanged() override;
+	void OnSizeChanged() override;
 
 protected:
 	/** Managed widget for this component */

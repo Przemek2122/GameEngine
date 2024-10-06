@@ -7,13 +7,6 @@ UWidgetAttachmentComponent::UWidgetAttachmentComponent(IComponentManagerInterfac
 {
 }
 
-void UWidgetAttachmentComponent::Tick(const float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	Widget->SetWidgetLocation(GetAbsoluteLocation());
-}
-
 void UWidgetAttachmentComponent::SetWidget(FWidget* NewWidget)
 {
 	if (NewWidget != nullptr)
@@ -28,4 +21,24 @@ void UWidgetAttachmentComponent::SetWidget(FWidget* NewWidget)
 bool UWidgetAttachmentComponent::IsWidgetVisible() const
 {
 	return (Widget != nullptr && Widget->IsVisible());
+}
+
+void UWidgetAttachmentComponent::OnLocationChanged()
+{
+	Super::OnLocationChanged();
+
+	if (Widget != nullptr)
+	{
+		Widget->SetWidgetLocation(GetAbsoluteLocation());
+	}
+}
+
+void UWidgetAttachmentComponent::OnSizeChanged()
+{
+	Super::OnSizeChanged();
+
+	if (Widget != nullptr)
+	{
+		Widget->SetWidgetSize(GetSize());
+	}
 }

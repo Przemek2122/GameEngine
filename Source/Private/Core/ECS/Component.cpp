@@ -46,19 +46,6 @@ void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseCompo
 	}
 }
 
-FVector2D<int> UComponent::GetSize() const
-{
-	FVector2D<int> FinalSize;
-
-	UParentComponent* RootComponent = GetRootComponentOfEntity();
-	if (RootComponent != nullptr)
-	{
-		FinalSize = RootComponent->GetSize();
-	}
-
-	return FinalSize;
-}
-
 FVector2D<int> UComponent::GetLocationCenter() const
 {
 	return FMath::GetLocationCenter(GetAbsoluteLocation(), GetSize());

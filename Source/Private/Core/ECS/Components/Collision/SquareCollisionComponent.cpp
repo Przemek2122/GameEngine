@@ -10,6 +10,7 @@ USquareCollisionComponent::USquareCollisionComponent(IComponentManagerInterface*
 	: UCollisionComponent(InComponentManagerInterface)
 	, SquareCollision(nullptr)
 {
+	SquareCollision = new FSquareCollision(this, FTransform2DLocation::Zero(), FTransform2DSize::Zero());
 }
 
 USquareCollisionComponent::~USquareCollisionComponent()
@@ -21,7 +22,12 @@ void USquareCollisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SquareCollision = new FSquareCollision(this, GetAbsoluteLocation(), GetSize());
+	if (SquareCollision != nullptr)
+	{
+		FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
+		SquareDataForEdit.SetLocationTopLeftCorner(GetAbsoluteLocation());
+		SquareDataForEdit.SetSize(GetSize());
+	}
 
 	AddCollision(SquareCollision);
 }
@@ -52,7 +58,6 @@ void USquareCollisionComponent::OnLocationChanged()
 		// Update location
 		FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
 		SquareDataForEdit.SetLocationTopLeftCorner(GetAbsoluteLocation());
-		SquareDataForEdit.SetSize(GetTransform().Size)
 	}
 }
 
@@ -61,4 +66,15 @@ void USquareCollisionComponent::OnRotationChanged()
 	Super::OnRotationChanged();
 
 	// @TODO Rotation of square collision
+}
+
+void USquareCollisionComponent::OnSizeChanged()
+{
+	Super::OnSizeChanged();
+
+	if (SquareCollision != nullptr)
+	{
+		FRectangleWithDiagonal& SquareDataForEdit = SquareCollision->GetSquareDataForEdit();
+		SquareDataForEdit.SetSize(GetSize());
+	}
 }

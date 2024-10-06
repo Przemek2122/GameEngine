@@ -65,7 +65,7 @@ void URenderComponent::Render()
 		{
 			case ERenderCenterType::RotateAround:
 			{
-				LocationCenter = SizeCached / 2;
+				LocationCenter = GetSize() / 2;
 
 				break;
 			}
@@ -78,7 +78,13 @@ void URenderComponent::Render()
 			}
 		}
 
-		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(TextureAsset, RenderLocation, SizeCached, GetAbsoluteRotation(), LocationCenter);
+		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(
+			TextureAsset, 
+			RenderLocation,
+			GetSize(), 
+			GetAbsoluteRotation(),
+			LocationCenter
+		);
 	}
 }
 
@@ -136,7 +142,7 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 
 void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 {
-	SizeCached = InSize;
+	SetSize(InSize);
 }
 
 void URenderComponent::SetRenderLocationType(const ERenderType InRenderType)

@@ -20,9 +20,6 @@ public:
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent) override;
 
-	/** @returns size of root component */
-	FVector2D<int> GetSize() const;
-
 	FVector2D<int> GetLocationCenter() const;
 
 };

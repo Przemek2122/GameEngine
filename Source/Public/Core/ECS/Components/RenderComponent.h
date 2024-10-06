@@ -52,9 +52,6 @@ protected:
 	/** Image to render */
 	FTextureAsset* TextureAsset;
 
-	FVector2D<int> LocationRenderOffset;
-	FVector2D<int> SizeCached;
-
 	ERenderCenterType CurrentRenderCenterType;
 	ERenderType CurrentRenderType;
 

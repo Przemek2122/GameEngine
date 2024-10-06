@@ -27,10 +27,4 @@ public:
 	/** Final location - returns location in center of object */
 	FVector2D<int32> GetLocationCenter() const;
 
-	void SetSize(const FVector2D<int32> NewSize);
-	FVector2D<int32> GetSize() const;
-
-protected:
-	FVector2D<int32> Size;
-
 };

@@ -23,6 +23,7 @@ public:
 
 	void OnLocationChanged() override;
 	void OnRotationChanged() override;
+	void OnSizeChanged() override;
 
 protected:
 	FSquareCollision* SquareCollision;

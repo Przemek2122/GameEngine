@@ -7,7 +7,6 @@
 
 UParentComponent::UParentComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UBaseComponent(InComponentManagerInterface)
-	, Size(32, 32)
 {
 }
 
@@ -77,15 +76,5 @@ FVector2D<float> UParentComponent::GetRightVector() const
 
 FVector2D<int32> UParentComponent::GetLocationCenter() const
 {
-	return (GetAbsoluteLocation() + (Size / 2));
-}
-
-void UParentComponent::SetSize(const FVector2D<int32> NewSize)
-{
-	Size = NewSize;
-}
-
-FVector2D<int32> UParentComponent::GetSize() const
-{
-	return Size;
+	return (GetAbsoluteLocation() + (GetSize() / 2));
 }

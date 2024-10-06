@@ -3,12 +3,19 @@
 #include "CoreEngine.h"
 #include "Interfaces/TransformInterface2D.h"
 
+const static FTransform2DSize SizeDefault = { 16, 16 };
+
 FTransform2D::FTransform2D()
-	: Rotation(0)
+	: Location(0)
+	, Rotation(0)
+	, Size(SizeDefault)
 {
 }
 
 FTransform2DInterface::FTransform2DInterface()
+	: AbsoluteTransform2D()
+	, ParentTransform2D()
+	, RelativeTransform2D()
 {
 }
 
