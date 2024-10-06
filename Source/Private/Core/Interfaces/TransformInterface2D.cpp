@@ -8,6 +8,10 @@ FTransform2D::FTransform2D()
 {
 }
 
+FTransform2DInterface::FTransform2DInterface()
+{
+}
+
 void FTransform2DInterface::SetTransform(const FTransform2D& NewTransform2D)
 {
 	if (RelativeTransform2D.Location != NewTransform2D.Location)

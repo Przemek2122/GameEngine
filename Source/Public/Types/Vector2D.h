@@ -187,6 +187,29 @@ public:
 		return static_cast<TType>(FMath::Sqrt(DiffXSquared + DiffYSquared));
 	}
 
+	/** Return copy of rotated vector */
+	FVector2D<TType> Rotate(const int32 AngleInDegrees)
+	{
+		const double AngleInRadians = FMath::DegreesToRadians(AngleInDegrees);
+
+		return RotateRadians(AngleInRadians);
+	}
+
+	/**
+	 * Return copy of rotated vector
+	 * without conversion of Degrees to radians
+	 */
+	FVector2D<TType> RotateRadians(const double AngleInRadians)
+	{
+		FVector2D<TType> RetVector;
+
+		RetVector.X = X * FMath::Cos(AngleInRadians) - Y * FMath::Sin(AngleInRadians);
+		RetVector.Y = X * FMath::Sin(AngleInRadians) + Y * FMath::Cos(AngleInRadians);
+
+		return RetVector;
+	}
+
+
 	/**
 	 * Function that calculates point which is returned,
 	 * which is at a distance 'InDistance' from point 'To' in the direction from point 'From' to point 'To'

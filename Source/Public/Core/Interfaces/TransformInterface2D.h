@@ -8,6 +8,15 @@
 typedef FVector2D<int32> FTransformLocation;
 typedef int32 FTransformRotation;
 
+enum class ETransformAttachType
+{
+	/** Default transform method, just attach to parent to follow parent movement. */
+	DefaultAttached,
+
+	/** Will be more advanced than DefaultAttached because it will also rotate around parent */
+	AttachWithRotateAroundParent
+};
+
 /** Structure with location and rotation in 2D */
 struct FTransform2D
 {
@@ -26,7 +35,7 @@ struct FTransform2D
 class FTransform2DInterface
 {
 public:
-	FTransform2DInterface() = default;
+	FTransform2DInterface();
 	virtual ~FTransform2DInterface() = default;
 
 	const FTransform2D& GetAbsoluteTransform() const { return AbsoluteTransform2D; }

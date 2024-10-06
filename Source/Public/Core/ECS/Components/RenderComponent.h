@@ -5,10 +5,16 @@
 #include "ParentComponent.h"
 #include "ECS/Component.h"
 
-enum class ERenderType
+enum class ERenderType : uint8
 {
 	Center,
-	LeftTopCorner,
+	AbsoluteLocation,
+};
+
+enum class ERenderCenterType : uint8
+{
+	RotateAround,
+	AtPivotPoint
 };
 
 struct FAssetCollectionItem;
@@ -39,7 +45,8 @@ public:
 	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
 	void SetImageSize(const FVector2D<int>& InSize);
 
-	void SetRenderLocationType(const ERenderType RenderType);
+	void SetRenderLocationType(const ERenderType InRenderType);
+	void SetRenderCenterType(const ERenderCenterType InRenderCenterType);
 
 protected:
 	/** Image to render */
@@ -48,6 +55,7 @@ protected:
 	FVector2D<int> LocationRenderOffset;
 	FVector2D<int> SizeCached;
 
+	ERenderCenterType CurrentRenderCenterType;
 	ERenderType CurrentRenderType;
 
 };

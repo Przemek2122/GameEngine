@@ -49,9 +49,9 @@ int FMath::RandRange(const int Min, const int Max)
 	return Min + Result;
 }
 
-float FMath::RadiansToDegrees(float Value)
+double FMath::RadiansToDegrees(double Value)
 {
-	return static_cast<float>(Value * 180 / M_PI);
+	return static_cast<double>(Value * 180 / M_PI);
 }
 
 double FMath::RadiansToDegreesDouble(double Value)
@@ -59,9 +59,9 @@ double FMath::RadiansToDegreesDouble(double Value)
 	return Value * 180 / M_PI;
 }
 
-float FMath::DegreesToRadians(float Value)
+double FMath::DegreesToRadians(double Value)
 {
-	return static_cast<float>(2 * M_PI * (Value / 360));
+	return static_cast<double>(2 * M_PI * (Value / 360));
 }
 
 double FMath::DegreesToRadiansDouble(double Value)
@@ -76,8 +76,8 @@ double FMath::Get2DAngleOfPointRadians(const FVector2D<> A, const FVector2D<> B)
 
 void FMath::RotatePointAroundPoint(const FVector2D<int>& Pivot, const float& Angle, FVector2D<int>& Point)
 {
-	const float Sinus = sin(Angle);
-	const float Cosinus = cos(Angle);
+	const float Sinus = FMath::Sin(Angle);
+	const float Cosinus = FMath::Cos(Angle);
 
 	// translate point back to origin:
 	Point.X -= Pivot.X;

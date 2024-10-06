@@ -10,6 +10,7 @@
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, TextureAsset(nullptr)
+	, CurrentRenderCenterType(ERenderCenterType::RotateAround)
 	, CurrentRenderType(ERenderType::Center)
 {
 }
@@ -50,18 +51,34 @@ void URenderComponent::Render()
 				break;
 			}
 
-			case ERenderType::LeftTopCorner:
+			case ERenderType::AbsoluteLocation:
 			{
 				RenderLocation = GetAbsoluteLocation();
 
 				break;
 			}
-
-			default:
-				LOG_WARN("CurrentRenderType has changed and has undefined type.");
 		}
 
-		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(TextureAsset, RenderLocation, SizeCached, GetAbsoluteRotation(), SizeCached / 2);
+		FVector2D<int> LocationCenter;
+
+		switch (CurrentRenderCenterType)
+		{
+			case ERenderCenterType::RotateAround:
+			{
+				LocationCenter = SizeCached / 2;
+
+				break;
+			}
+
+			case ERenderCenterType::AtPivotPoint:
+			{
+				// Do nothing we want to rotate at zero
+
+				break;
+			}
+		}
+
+		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(TextureAsset, RenderLocation, SizeCached, GetAbsoluteRotation(), LocationCenter);
 	}
 }
 
@@ -122,7 +139,12 @@ void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 	SizeCached = InSize;
 }
 
-void URenderComponent::SetRenderLocationType(const ERenderType RenderType)
+void URenderComponent::SetRenderLocationType(const ERenderType InRenderType)
 {
-	CurrentRenderType = RenderType;
+	CurrentRenderType = InRenderType;
+}
+
+void URenderComponent::SetRenderCenterType(const ERenderCenterType InRenderCenterType)
+{
+	CurrentRenderCenterType = InRenderCenterType;
 }

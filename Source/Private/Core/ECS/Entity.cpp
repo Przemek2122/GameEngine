@@ -13,6 +13,8 @@ EEntity::EEntity(FEntityManager* InEntityManager)
 	, DefaultRootComponent(nullptr)
 	, bWasBeginPlayCalled(false)
 	, EntityAttachment(nullptr)
+	, EntityAttachmentRootComponent(nullptr)
+	, AttachmentRelativeRotation(0)
 {
 }
 
@@ -263,12 +265,11 @@ void EEntity::OnDeAttachedFromEntity()
 		EntityAttachmentRootComponent->OnRotationChangedDelegate.UnBindObject(this, &EEntity::OnAttachedComponentRotationChanged);
 	}
 }
-
 void EEntity::OnAttachedComponentLocationChanged(const FTransformLocation& NewLocation)
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		SetLocation(EntityAttachmentRootComponent->GetAbsoluteLocation() + AttachmentRelativeLocation);
+		SetLocation(NewLocation + AttachmentRelativeLocation);
 	}
 }
 

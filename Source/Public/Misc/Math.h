@@ -23,6 +23,16 @@ public:
 	
 	static FVector2D<int> GetRectCenter(const SDL_Rect Rect);
 
+	static double Cos(const double AngleRadians)
+	{
+		return std::cos(AngleRadians);
+	}
+
+	static double Sin(const double AngleRadians)
+	{
+		return std::sin(AngleRadians);
+	}
+
 	static int FloorToInt(const float Value);
 	static int FloorToInt(const double Value);
 
@@ -36,10 +46,10 @@ public:
 	static float RandRange(const float Min, const float Max);
 	static int RandRange(const int Min, const int Max);
 
-	static float RadiansToDegrees(float Value);
+	static double RadiansToDegrees(double Value);
 	static double RadiansToDegreesDouble(double Value);
 
-	static float DegreesToRadians(float Value);
+	static double DegreesToRadians(double Value);
 	static double DegreesToRadiansDouble(double Value);
 
 	/* Returns radians */
