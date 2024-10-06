@@ -277,6 +277,6 @@ void EEntity::OnAttachedComponentRotationChanged(const FTransformRotation NewRot
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		SetRotation(EntityAttachmentRootComponent->GetAbsoluteRotation() + AttachmentRelativeRotation);
+		SetRotation(NewRotation + AttachmentRelativeRotation);
 	}
 }

@@ -21,6 +21,10 @@ struct FLogMessage
 
 namespace FUtil
 {
+	static constexpr double FullMilliSecond = 1e3;
+	static constexpr double FullMicroSecond = 1e6;
+	static constexpr double FullNanoSecond = 1e9;
+
 	/* Use this function as one of first functions.
 	 * Creates thread for logs
 	 * @param enableLogging specify if it should log to file or not
@@ -38,31 +42,24 @@ namespace FUtil
 	size_t GetMiliSeconds();
 	/* @returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
 	size_t GetSeconds();
-	
+
 	/* Convert nanoseconds to seconds */
-	template <class TTypeOut = double>
-	TTypeOut NanoSecondToSecond(const size_t InNanosecond)
-	{
-		static constexpr double FullNanoSecond = 1e9;
-		
-		return (static_cast<TTypeOut>(InNanosecond) / static_cast<TTypeOut>(FullNanoSecond));
-	}
+	double NanoSecondToSecond(const size_t InNanosecond);
+
 	/* Convert MicroSeconds to seconds */
-	template <typename TTypeOut = double>
-	TTypeOut MicroSecondToSecond(const size_t InNanosecond)
-	{
-		static constexpr double FullMicroSecond = 1e6;
-		
-		return (static_cast<TTypeOut>(InNanosecond) / static_cast<TTypeOut>(FullMicroSecond));
-	}
-	/* Convert MiliSeconds to seconds */
-	template <typename TTypeOut = double>
-	TTypeOut MiliSecondToSecond(const size_t InNanosecond)
-	{
-		static constexpr double FullMiliSecond = 1e3;
-		
-		return (static_cast<TTypeOut>(InNanosecond) / static_cast<TTypeOut>(FullMiliSecond));
-	}
+	double MicroSecondToSecond(const size_t InNanosecond);
+
+	/* Convert MilliSeconds to seconds */
+	double MilliSecondToSecond(const size_t InNanosecond);
+
+	/* Convert seconds to nanoseconds */
+	size_t SecondToNanoSecond(const double InSecond);
+
+	/* Convert seconds to MicroSeconds */
+	size_t SecondToMicroSecond(const double InSecond);
+
+	/* Convert seconds to MilliSeconds */
+	size_t SecondToMilliSecond(const double InSecond);
 
 	/** @returns time_t with current time. */
 	INLINE_DEBUGABLE time_t GetTime();
@@ -86,18 +83,28 @@ namespace FUtil
 	/** @returns year */
 	INLINE_DEBUGABLE int GetYear(struct tm InTime = GetTimeInfo());
 
-	/* Starts delay.
+	/*
+	 * Starts delay.
 	 * @param startMs should be long long int &.
-	 * This functions sets time in ms. */
+	 * This functions sets time in ms.
+	 */
 	void StartDelay(size_t& StartMs);
 
-	/* Checks and returns true if it's delayed enough.
+	/*
+	 * Checks and returns true if it's delayed enough.
 	 * @param startMs is long long int& set in startDelay().
-	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.*/
-	bool IsDelayed(size_t& StartMs, size_t DelayMs);
+	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.
+	 */
+	bool IsDelayed(const size_t& StartMs, size_t DelayMs);
+
+	/**
+	 * @return Percent of delay (Value between 0-1 (clamped))
+	 */
+	float GetDelayPercent(const size_t& StartMs, size_t DelayMs);
 
 	/** @returns rawtime */
-	INLINE_DEBUGABLE time_t GetRawtime();
+	INLINE_DEBUGABLE time_t GetRawTime();
+
 	/** @returns time info */
 	INLINE_DEBUGABLE struct tm GetTimeInfo();
 

@@ -117,7 +117,37 @@ namespace FUtil
 
 	size_t GetSeconds()
 	{
-		return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();;
+		return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	}
+
+	double NanoSecondToSecond(const size_t InNanosecond)
+	{
+		return (static_cast<double>(InNanosecond) / static_cast<double>(FullNanoSecond));
+	}
+
+	double MicroSecondToSecond(const size_t InNanosecond)
+	{
+		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMicroSecond));
+	}
+
+	double MilliSecondToSecond(const size_t InNanosecond)
+	{
+		return (static_cast<double>(InNanosecond) / static_cast<double>(FullMilliSecond));
+	}
+
+	size_t SecondToNanoSecond(const double InSecond)
+	{
+		return static_cast<size_t>(InSecond * static_cast<double>(FullNanoSecond));
+	}
+
+	size_t SecondToMicroSecond(const double InSecond)
+	{
+		return static_cast<size_t>(InSecond * static_cast<double>(FullMicroSecond));
+	}
+
+	size_t SecondToMilliSecond(const double InSecond)
+	{
+		return static_cast<size_t>(InSecond * static_cast<double>(FullMilliSecond));
 	}
 
 	time_t GetTime()
@@ -171,12 +201,22 @@ namespace FUtil
 		StartMs = GetMiliSeconds();
 	}
 
-	bool IsDelayed(size_t& StartMs, size_t DelayMs)
+	bool IsDelayed(const size_t& StartMs, const size_t DelayMs)
 	{
 		return static_cast<size_t>(GetMiliSeconds()) >= StartMs + DelayMs;
 	}
 
-	time_t GetRawtime()
+	float GetDelayPercent(const size_t& StartMs, const size_t DelayMs)
+	{
+		const size_t CurrentTime = GetMiliSeconds();
+
+		// Double in case we wait for eternity, probably could be float
+		const float PercentOfDelayPassed = static_cast<float>(static_cast<double>(CurrentTime - StartMs) / static_cast<double>(DelayMs));
+
+		return FMath::Clamp(PercentOfDelayPassed, 0.f, 1.f);
+	}
+
+	time_t GetRawTime()
 	{
 		time_t rawtime;
 		time(&rawtime);
