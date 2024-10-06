@@ -195,7 +195,6 @@ namespace FUtil
 		return 0;
 	}
 
-	/* Starts delay you need variable long long int and pass it as reference */
 	void StartDelay(size_t& StartMs)
 	{
 		StartMs = GetMiliSeconds();

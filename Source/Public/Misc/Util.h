@@ -43,22 +43,22 @@ namespace FUtil
 	/* @returns current second since epoch(1 January 1970) - signed integer type of at least 35 bits */
 	size_t GetSeconds();
 
-	/* Convert nanoseconds to seconds */
+	/* Convert nanoseconds to seconds (1e9) */
 	double NanoSecondToSecond(const size_t InNanosecond);
 
-	/* Convert MicroSeconds to seconds */
+	/* Convert MicroSeconds to seconds (1e6) */
 	double MicroSecondToSecond(const size_t InNanosecond);
 
-	/* Convert MilliSeconds to seconds */
+	/* Convert MilliSeconds to seconds (1e3) */
 	double MilliSecondToSecond(const size_t InNanosecond);
 
-	/* Convert seconds to nanoseconds */
+	/* Convert seconds to nanoseconds (1e9) */
 	size_t SecondToNanoSecond(const double InSecond);
 
-	/* Convert seconds to MicroSeconds */
+	/* Convert seconds to MicroSeconds (1e6) */
 	size_t SecondToMicroSecond(const double InSecond);
 
-	/* Convert seconds to MilliSeconds */
+	/* Convert seconds to MilliSeconds (1e3) */
 	size_t SecondToMilliSecond(const double InSecond);
 
 	/** @returns time_t with current time. */
@@ -83,17 +83,12 @@ namespace FUtil
 	/** @returns year */
 	INLINE_DEBUGABLE int GetYear(struct tm InTime = GetTimeInfo());
 
-	/*
-	 * Starts delay.
-	 * @param startMs should be long long int &.
-	 * This functions sets time in ms.
-	 */
+	/* Starts delay. Uses millisecond (1e3) */
 	void StartDelay(size_t& StartMs);
 
 	/*
 	 * Checks and returns true if it's delayed enough.
-	 * @param startMs is long long int& set in startDelay().
-	 * @param delayMs is time(in ms) which needs to pass untill this function will return true.
+	 * Delay is raw milliseconds to pass. Do not add StartMs.
 	 */
 	bool IsDelayed(const size_t& StartMs, size_t DelayMs);
 
