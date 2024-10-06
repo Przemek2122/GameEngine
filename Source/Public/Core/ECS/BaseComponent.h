@@ -8,7 +8,7 @@ class EEntity;
 
 /**
  * Base component class.
- * Children should have one of transform interfaces included. Unless transform is not needed.
+ * This is base of components without any transform
  */
 class UBaseComponent : public IComponentManagerInterface
 {

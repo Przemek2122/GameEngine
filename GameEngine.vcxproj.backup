@@ -52,6 +52,7 @@
     <ClInclude Include="Source\Public\Core\CoreMinimal.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionBase.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AIActionMove.h" />
+    <ClInclude Include="Source\Public\Core\ECS\AI\AIMemorySet.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\AITree.h" />
     <ClInclude Include="Source\Public\Core\ECS\AI\SingleActionAITree.h" />
     <ClInclude Include="Source\Public\Core\ECS\BaseComponent.h" />
@@ -304,6 +305,7 @@
     <ClCompile Include="Source\Private\Core\CoreMinimal.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionBase.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AIActionMove.cpp" />
+    <ClCompile Include="Source\Private\Core\ECS\AI\AIMemorySet.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\AITree.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\AI\SingleActionAITree.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\BaseComponent.cpp" />

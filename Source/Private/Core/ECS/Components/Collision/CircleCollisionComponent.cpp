@@ -42,9 +42,9 @@ void UCircleCollisionComponent::Render()
 #endif
 }
 
-void UCircleCollisionComponent::OnTransformLocationChanged()
+void UCircleCollisionComponent::OnLocationChanged()
 {
-	Super::OnTransformLocationChanged();
+	Super::OnLocationChanged();
 
 	if (CircleCollision != nullptr)
 	{
@@ -62,5 +62,5 @@ int UCircleCollisionComponent::GetCircleRadius() const
 
 FVector2D<int> UCircleCollisionComponent::GetLocationForCollision() const
 {
-	return GetLocation();
+	return GetAbsoluteLocation();
 }

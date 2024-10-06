@@ -57,9 +57,9 @@ void UCollisionComponent::RemoveCollision(FCollisionBase* CollisionObject)
 	}
 }
 
-void UCollisionComponent::OnTransformLocationChanged()
+void UCollisionComponent::OnLocationChanged()
 {
-	Super::OnTransformLocationChanged();
+	Super::OnLocationChanged();
 
 	if (CollisionManagerCached != nullptr)
 	{
@@ -105,7 +105,7 @@ FCollisionManager* UCollisionComponent::GetCollisionManager() const
 
 FVector2D<int> UCollisionComponent::GetLocationForCollision() const
 {
-	return GetLocation();
+	return GetAbsoluteLocation();
 }
 
 #if _DEBUG

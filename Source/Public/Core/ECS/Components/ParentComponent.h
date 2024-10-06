@@ -9,7 +9,7 @@
  * Component for handling transform of the entity
  * Every component which should have transform should inherit from this class
  */
-class UParentComponent : public UBaseComponent, public ITransformParentInterface2D<int32>
+class UParentComponent : public UBaseComponent, public FTransform2DInterface
 {
 public:
 	UParentComponent(IComponentManagerInterface* InComponentManagerInterface);

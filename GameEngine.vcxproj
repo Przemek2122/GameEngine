@@ -71,7 +71,6 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\ParentComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\PhysicsComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h" />
-    <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\TeamComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Components\WidgetAttachmentComponent.h" />
     <ClInclude Include="Source\Public\Core\ECS\Entities\AudioPlayer.h" />
@@ -324,7 +323,6 @@
     <ClCompile Include="Source\Private\Core\ECS\Components\ParentComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp" />
-    <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\TeamComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Components\WidgetAttachmentComponent.cpp" />
     <ClCompile Include="Source\Private\Core\ECS\Entities\AudioPlayer.cpp" />

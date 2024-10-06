@@ -21,7 +21,7 @@ public:
 	void BeginPlay() override;
 	void Render() override;
 
-	void OnTransformLocationChanged() override;
+	void OnLocationChanged() override;
 
 protected:
 	virtual int GetCircleRadius() const;

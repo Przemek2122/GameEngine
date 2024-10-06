@@ -27,7 +27,7 @@ public:
 	void RemoveCollision(FCollisionBase* CollisionObject);
 
 	/** Notify manager about changed collision */
-	void OnTransformLocationChanged() override;
+	void OnLocationChanged() override;
 
 	const CArray<FCollisionBase*>& GetCollisionObjectsArray() const;
 

@@ -35,7 +35,7 @@ void UMoveComponent::BeginPlay()
 		RootTransformComponent = dynamic_cast<UParentComponent*>(EntityOwner->GetRootComponent());
 		if (RootTransformComponent != nullptr)
 		{
-			PreciseLocation = RootTransformComponent->GetLocation();
+			PreciseLocation = RootTransformComponent->GetAbsoluteLocation();
 		}
 
 		CurrentMap = EntityOwner->GetCurrentMap();
@@ -54,7 +54,7 @@ void UMoveComponent::Tick(const float DeltaTime)
 			{
 				if (RootTransformComponent != nullptr)
 				{
-					CurrentLocation = RootTransformComponent->GetLocation();
+					CurrentLocation = RootTransformComponent->GetAbsoluteLocation();
 					CalculatedTargetLocation = TargetLocation;
 
 					UpdateRotationToTarget(DeltaTime);
@@ -106,8 +106,8 @@ void UMoveComponent::SetTargetMoveLocation(const FVector2D<int> NewTargetLocatio
 	FMap* CurrentMap = GetEntity()->GetCurrentMap();
 	if (CurrentMap->IsInBounds(NewTargetLocation))
 	{
-		PreciseLocation = RootTransformComponent->GetLocation();
-		PreciseRotation = static_cast<float>(RootTransformComponent->GetRotation());
+		PreciseLocation = RootTransformComponent->GetAbsoluteLocation();
+		PreciseRotation = static_cast<float>(RootTransformComponent->GetAbsoluteRotation());
 
 		TargetLocation = NewTargetLocation;
 
@@ -256,7 +256,7 @@ void UMoveComponent::UpdateLocationToTarget(const float DeltaTime)
 
 		FVector2D<> NewLocation;
 
-		const int DistanceBetweenPoints = RootTransformComponent->GetLocation().DistanceTo(TargetLocation);
+		const int DistanceBetweenPoints = RootTransformComponent->GetAbsoluteLocation().DistanceTo(TargetLocation);
 		if (DistanceBetweenPoints < FMath::RoundToInt(DistanceToMoveInThisTick))
 		{
 			NewLocation = TargetLocation;

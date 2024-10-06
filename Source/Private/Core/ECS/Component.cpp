@@ -22,16 +22,16 @@ void UComponent::OnComponentCreated(const std::string& ComponentName, UBaseCompo
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);
 
-	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(NewComponent);
-	if (TransformComponent != nullptr)
+	FTransform2DInterface* Transform2DInterface = dynamic_cast<FTransform2DInterface*>(NewComponent);
+	if (Transform2DInterface != nullptr)
 	{
-		AddUpdatedComponent(TransformComponent);
+		AddUpdatedComponent(Transform2DInterface);
 
 		// Update location of new component
-		TransformComponent->SetParentLocation(GetLocation());
+		Transform2DInterface->OnParentLocationChanged(GetAbsoluteLocation());
 
 		// Update rotation of new component
-		TransformComponent->SetParentRotation(GetRotation());
+		Transform2DInterface->OnParentRotationChanged(GetAbsoluteRotation());
 	}
 }
 
@@ -39,10 +39,10 @@ void UComponent::OnComponentDestroy(const std::string& ComponentName, UBaseCompo
 {
 	Super::OnComponentDestroy(ComponentName, OldComponent);
 
-	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(OldComponent);
-	if (TransformComponent != nullptr)
+	FTransform2DInterface* Transform2DInterface = dynamic_cast<FTransform2DInterface*>(OldComponent);
+	if (Transform2DInterface != nullptr)
 	{
-		RemoveUpdatedComponent(TransformComponent);
+		RemoveUpdatedComponent(Transform2DInterface);
 	}
 }
 
@@ -61,5 +61,5 @@ FVector2D<int> UComponent::GetSize() const
 
 FVector2D<int> UComponent::GetLocationCenter() const
 {
-	return FMath::GetLocationCenter(GetLocation(), GetSize());
+	return FMath::GetLocationCenter(GetAbsoluteLocation(), GetSize());
 }

@@ -386,9 +386,6 @@
     <ClInclude Include="Source\Public\Core\ECS\Components\RenderComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Core\ECS\Components\TargetingComponent.h">
-      <Filter>Public\Core\ECS\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Public\Core\ECS\Components\TeamComponent.h">
       <Filter>Public\Core\ECS\Components</Filter>
     </ClInclude>
@@ -1100,9 +1097,6 @@
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\RenderComponent.cpp">
-      <Filter>Private\Core\ECS\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Private\Core\ECS\Components\TargetingComponent.cpp">
       <Filter>Private\Core\ECS\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\Core\ECS\Components\TeamComponent.cpp">

@@ -11,7 +11,7 @@ void UWidgetAttachmentComponent::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Widget->SetWidgetLocation(GetLocation());
+	Widget->SetWidgetLocation(GetAbsoluteLocation());
 }
 
 void UWidgetAttachmentComponent::SetWidget(FWidget* NewWidget)
@@ -20,7 +20,7 @@ void UWidgetAttachmentComponent::SetWidget(FWidget* NewWidget)
 	{
 		Widget = NewWidget;
 
-		NewWidget->SetWidgetLocation(GetLocation());
+		NewWidget->SetWidgetLocation(GetAbsoluteLocation());
 		NewWidget->SetWidgetSize(GetSize());
 	}
 }

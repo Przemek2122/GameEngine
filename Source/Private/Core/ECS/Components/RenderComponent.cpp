@@ -52,7 +52,7 @@ void URenderComponent::Render()
 
 			case ERenderType::LeftTopCorner:
 			{
-				RenderLocation = GetLocation();
+				RenderLocation = GetAbsoluteLocation();
 
 				break;
 			}
@@ -61,7 +61,7 @@ void URenderComponent::Render()
 				LOG_WARN("CurrentRenderType has changed and has undefined type.");
 		}
 
-		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(TextureAsset, RenderLocation, SizeCached, GetRotation(), SizeCached / 2);
+		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(TextureAsset, RenderLocation, SizeCached, GetAbsoluteRotation(), SizeCached / 2);
 	}
 }
 

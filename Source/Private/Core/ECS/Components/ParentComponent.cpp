@@ -25,16 +25,16 @@ void UParentComponent::OnComponentCreated(const std::string& ComponentName, UBas
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);
 
-	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(NewComponent);
+	FTransform2DInterface* TransformComponent = dynamic_cast<FTransform2DInterface*>(NewComponent);
 	if (TransformComponent != nullptr)
 	{
 		AddUpdatedComponent(TransformComponent);
 
 		// Update location of new component
-		TransformComponent->SetParentLocation(GetLocation());
+		TransformComponent->OnParentLocationChanged(GetAbsoluteLocation());
 
 		// Update rotation of new component
-		TransformComponent->SetParentRotation(GetRotation());
+		TransformComponent->OnParentRotationChanged(GetAbsoluteRotation());
 	}
 }
 
@@ -42,7 +42,7 @@ void UParentComponent::OnComponentDestroy(const std::string& ComponentName, UBas
 {
 	Super::OnComponentDestroy(ComponentName, OldComponent);
 
-	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(OldComponent);
+	FTransform2DInterface* TransformComponent = dynamic_cast<FTransform2DInterface*>(OldComponent);
 	if (TransformComponent != nullptr)
 	{
 		RemoveUpdatedComponent(TransformComponent);
@@ -56,7 +56,7 @@ FVector2D<float> UParentComponent::GetForwardVector() const
 
 	FVector2D<int> CurrentForwardVector = ForwardVector * VectorRotation;
 
-	const int CurrentRotation = GetRotation();
+	const int CurrentRotation = GetAbsoluteRotation();
 	const float CurrentRotationRadian = FMath::DegreesToRadians(static_cast<float>(CurrentRotation));
 
 	FMath::RotatePointAroundPoint({ 0, 0 }, CurrentRotationRadian, CurrentForwardVector);
@@ -70,14 +70,14 @@ FVector2D<float> UParentComponent::GetRightVector() const
 
 	FVector2D<int> CurrentRightVector = RightVector;
 
-	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<float>(GetRotation()), CurrentRightVector);
+	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<float>(GetAbsoluteRotation()), CurrentRightVector);
 
 	return RightVector;
 }
 
 FVector2D<int32> UParentComponent::GetLocationCenter() const
 {
-	return (GetLocation() + (Size / 2));
+	return (GetAbsoluteLocation() + (Size / 2));
 }
 
 void UParentComponent::SetSize(const FVector2D<int32> NewSize)

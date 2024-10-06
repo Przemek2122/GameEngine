@@ -67,7 +67,7 @@ void EEntity::ReceiveRender()
 	{
 		FRenderer* Renderer = GetWindow()->GetRenderer();
 
-		FVector2D<int> DebugRectLocation = RootComponent->GetLocation() - FVector2D<int>(2, 2);
+		FVector2D<int> DebugRectLocation = RootComponent->GetAbsoluteLocation() - FVector2D<int>(2, 2);
 		FVector2D<int> DebugRectSize = { 4, 4 };
 
 		Renderer->DrawRectangle(DebugRectLocation, DebugRectSize, FColorRGBA::ColorOrange());
@@ -102,8 +102,8 @@ void EEntity::AttachToEntity(EEntity* InEntityToAttachTo)
 
 		OnAttachedToEntity();
 
-		OnAttachedComponentLocationChanged();
-		OnAttachedComponentRotationChanged();
+		OnAttachedComponentLocationChanged(EntityAttachmentRootComponent->GetAbsoluteLocation());
+		OnAttachedComponentRotationChanged(EntityAttachmentRootComponent->GetAbsoluteRotation());
 	}
 }
 
@@ -152,7 +152,7 @@ FVector2D<int32> EEntity::GetLocation() const
 	UParentComponent* ParentComponent = GetRootComponent();
 	if (ParentComponent != nullptr)
 	{
-		RetLocation = ParentComponent->GetLocation();
+		RetLocation = ParentComponent->GetAbsoluteLocation();
 	}
 
 	return RetLocation;
@@ -165,7 +165,7 @@ int32 EEntity::GetRotation() const
 	UParentComponent* ParentComponent = GetRootComponent();
 	if (ParentComponent != nullptr)
 	{
-		RetRotation = ParentComponent->GetRotation();
+		RetRotation = ParentComponent->GetAbsoluteRotation();
 	}
 	else
 	{
@@ -250,8 +250,8 @@ void EEntity::OnAttachedToEntity()
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		EntityAttachmentRootComponent->OnLocationChanged.BindObject(this, &EEntity::OnAttachedComponentLocationChanged);
-		EntityAttachmentRootComponent->OnRotationChanged.BindObject(this, &EEntity::OnAttachedComponentRotationChanged);
+		EntityAttachmentRootComponent->OnLocationChangedDelegate.BindObject(this, &EEntity::OnAttachedComponentLocationChanged);
+		EntityAttachmentRootComponent->OnRotationChangedDelegate.BindObject(this, &EEntity::OnAttachedComponentRotationChanged);
 	}
 }
 
@@ -259,23 +259,23 @@ void EEntity::OnDeAttachedFromEntity()
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		EntityAttachmentRootComponent->OnLocationChanged.UnBindObject(this, &EEntity::OnAttachedComponentLocationChanged);
-		EntityAttachmentRootComponent->OnRotationChanged.UnBindObject(this, &EEntity::OnAttachedComponentRotationChanged);
+		EntityAttachmentRootComponent->OnLocationChangedDelegate.UnBindObject(this, &EEntity::OnAttachedComponentLocationChanged);
+		EntityAttachmentRootComponent->OnRotationChangedDelegate.UnBindObject(this, &EEntity::OnAttachedComponentRotationChanged);
 	}
 }
 
-void EEntity::OnAttachedComponentLocationChanged()
+void EEntity::OnAttachedComponentLocationChanged(const FTransformLocation& NewLocation)
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		SetLocation(EntityAttachmentRootComponent->GetLocation() + AttachmentRelativeLocation);
+		SetLocation(EntityAttachmentRootComponent->GetAbsoluteLocation() + AttachmentRelativeLocation);
 	}
 }
 
-void EEntity::OnAttachedComponentRotationChanged()
+void EEntity::OnAttachedComponentRotationChanged(const FTransformRotation NewRotation)
 {
 	if (EntityAttachmentRootComponent != nullptr)
 	{
-		SetRotation(EntityAttachmentRootComponent->GetRotation() + AttachmentRelativeRotation);
+		SetRotation(EntityAttachmentRootComponent->GetAbsoluteRotation() + AttachmentRelativeRotation);
 	}
 }

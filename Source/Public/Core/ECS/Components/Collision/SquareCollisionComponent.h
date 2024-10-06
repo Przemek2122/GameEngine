@@ -21,8 +21,8 @@ public:
 	void BeginPlay() override;
 	void Render() override;
 
-	void OnTransformLocationChanged() override;
-	void OnTransformRotationChanged() override;
+	void OnLocationChanged() override;
+	void OnRotationChanged() override;
 
 protected:
 	FSquareCollision* SquareCollision;
