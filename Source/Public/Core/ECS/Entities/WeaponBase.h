@@ -23,8 +23,8 @@ public:
 	/** Sets bool which disables or enables attacks */
 	void SetCanAttack(const bool bInCanAttack);
 
-	void SetDelayBetweenAttacks(const float NewDelay);
-	float GetDelayBetweenAttacks() const { return CooldownAttackTime; }
+	void SetAttackCooldown(const float NewDelay);
+	float GetAttackCooldown() const { return CooldownAttackTime; }
 
 protected:
 	virtual void PerformAttack();

@@ -38,7 +38,7 @@ void EWeaponBase::SetCanAttack(const bool bInCanAttack)
 	OnCanAttackChanged();
 }
 
-void EWeaponBase::SetDelayBetweenAttacks(const float NewDelay)
+void EWeaponBase::SetAttackCooldown(const float NewDelay)
 {
 	CooldownAttackTime = NewDelay;
 }
