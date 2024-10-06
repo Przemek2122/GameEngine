@@ -45,6 +45,7 @@ public:
 	void ResetAttachment();
 	/** Attach to other entity */
 	void AttachToEntity(EEntity* InEntityToAttachTo);
+	EEntity* GetEntityAttachment() const { return EntityAttachment; }
 		
 	virtual void SetRootComponent(UParentComponent* NewComponent);
 	virtual UParentComponent* GetRootComponent() const;
