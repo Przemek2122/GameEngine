@@ -5,25 +5,18 @@
 #include "CoreMinimal.h"
 
 /** Make as def to be able to change in single place in case of need */
-typedef FVector2D<int32> FTransformLocation;
-typedef int32 FTransformRotation;
-
-enum class ETransformAttachType
-{
-	/** Default transform method, just attach to parent to follow parent movement. */
-	DefaultAttached,
-
-	/** Will be more advanced than DefaultAttached because it will also rotate around parent */
-	AttachWithRotateAroundParent
-};
+typedef FVector2D<int32> FTransform2DLocation;
+typedef int32 FTransform2DRotation;
+typedef FVector2D<int32> FTransform2DSize;
 
 /** Structure with location and rotation in 2D */
 struct FTransform2D
 {
 	FTransform2D();
 
-	FTransformLocation Location;
-	FTransformRotation Rotation;
+	FTransform2DLocation	Location;
+	FTransform2DRotation	Rotation;
+	FTransform2DSize		Size;
 };
 
 /**
@@ -39,33 +32,39 @@ public:
 	virtual ~FTransform2DInterface() = default;
 
 	const FTransform2D& GetAbsoluteTransform() const { return AbsoluteTransform2D; }
-	const FTransformLocation& GetAbsoluteLocation() const { return AbsoluteTransform2D.Location; }
-	FTransformRotation GetAbsoluteRotation() const { return AbsoluteTransform2D.Rotation; }
+	const FTransform2DLocation& GetAbsoluteLocation() const { return AbsoluteTransform2D.Location; }
+	FTransform2DRotation GetAbsoluteRotation() const { return AbsoluteTransform2D.Rotation; }
 
 	const FTransform2D& GetTransform() const { return RelativeTransform2D; }
-	const FTransformLocation& GetLocation() const { return RelativeTransform2D.Location; }
-	FTransformRotation GetRotation() const { return RelativeTransform2D.Rotation; }
+	const FTransform2DLocation& GetLocation() const { return RelativeTransform2D.Location; }
+	FTransform2DRotation GetRotation() const { return RelativeTransform2D.Rotation; }
+	virtual FTransform2DSize GetSize() const { return RelativeTransform2D.Size; }
 
 	void SetTransform(const FTransform2D& NewTransform2D);
-	void SetLocation(const FTransformLocation& NewLocation);
-	void SetRotation(const FTransformRotation NewRotation);
+	void SetLocation(const FTransform2DLocation& NewLocation);
+	void SetRotation(const FTransform2DRotation NewRotation);
+	void SetSize(const FTransform2DSize& NewSize);
 
 	CArray<FTransform2DInterface*>& GetChildrenInterfaces() { return ChildrenInterfaces; }
 
 	void AddUpdatedComponent(FTransform2DInterface* InTransform2DInterface);
 	void RemoveUpdatedComponent(FTransform2DInterface* InTransform2DInterface);
 
-	void OnParentLocationChanged(const FTransformLocation& NewLocation);
-	void OnParentRotationChanged(const FTransformRotation NewRotation);
+	void OnParentLocationChanged(const FTransform2DLocation& NewLocation);
+	void OnParentRotationChanged(const FTransform2DRotation NewRotation);
 
 	virtual void OnLocationChanged();
 	virtual void OnRotationChanged();
+	virtual void OnSizeChanged();
 
 	/** Called when location changed */
-	FDelegate<void, const FTransformLocation&> OnLocationChangedDelegate;
+	FDelegate<void, const FTransform2DLocation&> OnLocationChangedDelegate;
 
 	/** Called when rotation is changed */
-	FDelegate<void, FTransformRotation> OnRotationChangedDelegate;
+	FDelegate<void, FTransform2DRotation> OnRotationChangedDelegate;
+
+	/** Called when size is changed */
+	FDelegate<void, FTransform2DSize> OnSizeChangedDelegate;
 
 private:
 	/** Child array of interfaces */
