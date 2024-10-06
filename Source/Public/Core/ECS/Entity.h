@@ -39,8 +39,11 @@ public:
 	/** Called every frame from engine code. */
 	void ReceiveRender();
 
+	/** Tells us if we are attached to other entity */
 	bool IsAttached() const;
-
+	/** Removes attachment */
+	void ResetAttachment();
+	/** Attach to other entity */
 	void AttachToEntity(EEntity* InEntityToAttachTo);
 		
 	virtual void SetRootComponent(UParentComponent* NewComponent);
@@ -48,6 +51,12 @@ public:
 
 	void SetLocation(const FVector2D<int32> NewLocation);
 	void SetRotation(int32 Rotation);
+
+	void SetRelativeLocation(const FVector2D<int32> NewLocation);
+	void SetRelativeRotation(const int32 NewRotation);
+
+	const FVector2D<int32>& GetRelativeLocation() const { return AttachmentRelativeLocation; }
+	int32 GetRelativeRotation() const { return AttachmentRelativeRotation; }
 
 	/** @Returns value of parent component (if present) */
 	FVector2D<int32> GetLocation() const;
@@ -121,6 +130,12 @@ protected:
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	/** End IComponentManagerInterface */
 
+	virtual void OnAttachedToEntity();
+	virtual void OnDeAttachedFromEntity();
+
+	virtual void OnAttachedComponentLocationChanged();
+	virtual void OnAttachedComponentRotationChanged();
+
 private:
 	/** Array of AI memory sets. */
 	CArray<std::shared_ptr<FAIMemorySet>> AIMemorySetArray;
@@ -140,7 +155,13 @@ private:
 	/** Entity which this entity is attached to */
 	EEntity* EntityAttachment;
 
+	/** EntityAttachment's root component cache */
+	UParentComponent* EntityAttachmentRootComponent;
+
 	/** Used to define relative location to attached actor */
 	FVector2D<int32> AttachmentRelativeLocation;
+
+	/** Used to define relative rotation to attached actor */
+	int32 AttachmentRelativeRotation;
 
 };

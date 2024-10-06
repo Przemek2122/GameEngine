@@ -46,14 +46,6 @@ void EEntity::Tick(float DeltaTime)
 
 void EEntity::ReceiveTick(const float DeltaTime)
 {
-	if (IsAttached() && DefaultRootComponent != nullptr)
-	{
-		// @TODO Change into delegate called when changed location
-		//DefaultRootComponent->OnTransformLocationChanged()
-
-		SetLocation(EntityAttachment->GetLocation() + AttachmentRelativeLocation);
-	}
-
 	Tick(DeltaTime);
 
 	TickComponents(DeltaTime);
@@ -88,9 +80,31 @@ bool EEntity::IsAttached() const
 	return (EntityAttachment != nullptr);
 }
 
+void EEntity::ResetAttachment()
+{
+	if (EntityAttachment != nullptr)
+	{
+		OnDeAttachedFromEntity();
+
+		EntityAttachment = nullptr;
+		EntityAttachmentRootComponent = nullptr;
+	}
+}
+
 void EEntity::AttachToEntity(EEntity* InEntityToAttachTo)
 {
-	EntityAttachment = InEntityToAttachTo;
+	if (InEntityToAttachTo != nullptr)
+	{
+		ResetAttachment();
+
+		EntityAttachment = InEntityToAttachTo;
+		EntityAttachmentRootComponent = InEntityToAttachTo->GetRootComponent();
+
+		OnAttachedToEntity();
+
+		OnAttachedComponentLocationChanged();
+		OnAttachedComponentRotationChanged();
+	}
 }
 
 void EEntity::SetRootComponent(UParentComponent* NewComponent)
@@ -119,6 +133,16 @@ void EEntity::SetRotation(const int32 Rotation)
 	{
 		ParentComponent->SetRotation(Rotation);
 	}
+}
+
+void EEntity::SetRelativeLocation(const FVector2D<int32> NewLocation)
+{
+	AttachmentRelativeLocation = NewLocation;
+}
+
+void EEntity::SetRelativeRotation(const int32 NewRotation)
+{
+	AttachmentRelativeRotation = NewRotation;
 }
 
 FVector2D<int32> EEntity::GetLocation() const
@@ -219,5 +243,39 @@ void EEntity::OnComponentCreated(const std::string& ComponentName, UBaseComponen
 		{
 			DefaultRootComponent = ParentComponent;
 		}
+	}
+}
+
+void EEntity::OnAttachedToEntity()
+{
+	if (EntityAttachmentRootComponent != nullptr)
+	{
+		EntityAttachmentRootComponent->OnLocationChanged.BindObject(this, &EEntity::OnAttachedComponentLocationChanged);
+		EntityAttachmentRootComponent->OnRotationChanged.BindObject(this, &EEntity::OnAttachedComponentRotationChanged);
+	}
+}
+
+void EEntity::OnDeAttachedFromEntity()
+{
+	if (EntityAttachmentRootComponent != nullptr)
+	{
+		EntityAttachmentRootComponent->OnLocationChanged.UnBindObject(this, &EEntity::OnAttachedComponentLocationChanged);
+		EntityAttachmentRootComponent->OnRotationChanged.UnBindObject(this, &EEntity::OnAttachedComponentRotationChanged);
+	}
+}
+
+void EEntity::OnAttachedComponentLocationChanged()
+{
+	if (EntityAttachmentRootComponent != nullptr)
+	{
+		SetLocation(EntityAttachmentRootComponent->GetLocation() + AttachmentRelativeLocation);
+	}
+}
+
+void EEntity::OnAttachedComponentRotationChanged()
+{
+	if (EntityAttachmentRootComponent != nullptr)
+	{
+		SetRotation(EntityAttachmentRootComponent->GetRotation() + AttachmentRelativeRotation);
 	}
 }
