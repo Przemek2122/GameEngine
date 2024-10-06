@@ -12,6 +12,7 @@ EEntity::EEntity(FEntityManager* InEntityManager)
 	, EntityManagerOwner(InEntityManager)
 	, DefaultRootComponent(nullptr)
 	, bWasBeginPlayCalled(false)
+	, EntityAttachment(nullptr)
 {
 }
 
@@ -45,6 +46,14 @@ void EEntity::Tick(float DeltaTime)
 
 void EEntity::ReceiveTick(const float DeltaTime)
 {
+	if (IsAttached() && DefaultRootComponent != nullptr)
+	{
+		// @TODO Change into delegate called when changed location
+		//DefaultRootComponent->OnTransformLocationChanged()
+
+		SetLocation(EntityAttachment->GetLocation() + AttachmentRelativeLocation);
+	}
+
 	Tick(DeltaTime);
 
 	TickComponents(DeltaTime);
@@ -74,26 +83,49 @@ void EEntity::ReceiveRender()
 #endif
 }
 
-void EEntity::SetRootComponent(UBaseComponent* NewComponent)
+bool EEntity::IsAttached() const
+{
+	return (EntityAttachment != nullptr);
+}
+
+void EEntity::AttachToEntity(EEntity* InEntityToAttachTo)
+{
+	EntityAttachment = InEntityToAttachTo;
+}
+
+void EEntity::SetRootComponent(UParentComponent* NewComponent)
 {
 	DefaultRootComponent = NewComponent;
 }
 
-UBaseComponent* EEntity::GetRootComponent() const
+UParentComponent* EEntity::GetRootComponent() const
 {
 	return DefaultRootComponent;
 }
 
-UParentComponent* EEntity::GetParentComponent() const
+void EEntity::SetLocation(const FVector2D<int32> NewLocation)
 {
-	return dynamic_cast<UParentComponent*>(DefaultRootComponent);
+	UParentComponent* ParentComponent = GetRootComponent();
+	if (ParentComponent != nullptr)
+	{
+		ParentComponent->SetLocation(NewLocation);
+	}
+}
+
+void EEntity::SetRotation(const int32 Rotation)
+{
+	UParentComponent* ParentComponent = GetRootComponent();
+	if (ParentComponent != nullptr)
+	{
+		ParentComponent->SetRotation(Rotation);
+	}
 }
 
 FVector2D<int32> EEntity::GetLocation() const
 {
 	FVector2D<int32> RetLocation;
 
-	UParentComponent* ParentComponent = GetParentComponent();
+	UParentComponent* ParentComponent = GetRootComponent();
 	if (ParentComponent != nullptr)
 	{
 		RetLocation = ParentComponent->GetLocation();
@@ -106,7 +138,7 @@ int32 EEntity::GetRotation() const
 {
 	int32 RetRotation;
 
-	UParentComponent* ParentComponent = GetParentComponent();
+	UParentComponent* ParentComponent = GetRootComponent();
 	if (ParentComponent != nullptr)
 	{
 		RetRotation = ParentComponent->GetRotation();
@@ -185,7 +217,7 @@ void EEntity::OnComponentCreated(const std::string& ComponentName, UBaseComponen
 		// But only with specific base
 		if (UParentComponent* ParentComponent = dynamic_cast<UParentComponent*>(NewComponent))
 		{
-			DefaultRootComponent = NewComponent;
+			DefaultRootComponent = ParentComponent;
 		}
 	}
 }

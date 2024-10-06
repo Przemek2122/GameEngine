@@ -50,10 +50,10 @@ FVector2D<int> UComponent::GetSize() const
 {
 	FVector2D<int> FinalSize;
 
-	UBaseComponent* RootComponent = GetRootComponentOfEntity();
-	if (UParentComponent* ParentRootComponent = dynamic_cast<UParentComponent*>(RootComponent))
+	UParentComponent* RootComponent = GetRootComponentOfEntity();
+	if (RootComponent != nullptr)
 	{
-		FinalSize = ParentRootComponent->GetSize();
+		FinalSize = RootComponent->GetSize();
 	}
 
 	return FinalSize;

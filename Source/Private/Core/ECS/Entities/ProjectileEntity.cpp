@@ -20,7 +20,7 @@ void EProjectileEntity::SetProjectileMovementParams(const EProjectileMovementPar
 	MovementComponent->SetLinearSpeedPerSecond(ProjectileMovementParams.LinearSpeedPerSecond);
 
 	// Set rotation
-	GetParentComponent()->SetRotation(ProjectileMovementParams.Angle);
+	GetRootComponent()->SetRotation(ProjectileMovementParams.Angle);
 }
 
 URenderComponent* EProjectileEntity::GetRenderComponent() const

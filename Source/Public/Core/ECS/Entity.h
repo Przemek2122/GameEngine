@@ -39,9 +39,15 @@ public:
 	/** Called every frame from engine code. */
 	void ReceiveRender();
 
-	virtual void SetRootComponent(UBaseComponent* NewComponent);
-	virtual UBaseComponent* GetRootComponent() const;
-	virtual UParentComponent* GetParentComponent() const;
+	bool IsAttached() const;
+
+	void AttachToEntity(EEntity* InEntityToAttachTo);
+		
+	virtual void SetRootComponent(UParentComponent* NewComponent);
+	virtual UParentComponent* GetRootComponent() const;
+
+	void SetLocation(const FVector2D<int32> NewLocation);
+	void SetRotation(int32 Rotation);
 
 	/** @Returns value of parent component (if present) */
 	FVector2D<int32> GetLocation() const;
@@ -123,11 +129,18 @@ private:
 	FEntityManager* EntityManagerOwner;
 
 	/** Root component. First component added or set by user */
-	UBaseComponent* DefaultRootComponent;
+	UParentComponent* DefaultRootComponent;
 
 	/** Ai tree array */
 	CArray<std::shared_ptr<FAITree>> AiTreeArray;
 
+	/** Used to avoid double calling BeginPlay */
 	bool bWasBeginPlayCalled;
+
+	/** Entity which this entity is attached to */
+	EEntity* EntityAttachment;
+
+	/** Used to define relative location to attached actor */
+	FVector2D<int32> AttachmentRelativeLocation;
 
 };

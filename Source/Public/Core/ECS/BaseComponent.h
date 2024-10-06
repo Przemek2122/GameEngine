@@ -30,7 +30,7 @@ public:
 	/** Component is owned by entity and this function returns parent */
 	EEntity* GetEntity() const;
 
-	UBaseComponent* GetRootComponentOfEntity() const;
+	UParentComponent* GetRootComponentOfEntity() const;
 
 	template<typename TComponentClass>
 	TComponentClass* RequireComponent() const

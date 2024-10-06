@@ -20,14 +20,10 @@ void UArrowComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UBaseComponent* RootComponentOfEntity = GetRootComponentOfEntity();
+	UParentComponent* RootComponentOfEntity = GetRootComponentOfEntity();
 	if (RootComponentOfEntity != nullptr)
 	{
-		UParentComponent* TemporaryComponent = dynamic_cast<UParentComponent*>(RootComponentOfEntity);
-		if (TemporaryComponent != nullptr)
-		{
-			RootTransformComponent = TemporaryComponent;
-		}
+		RootTransformComponent = RootComponentOfEntity;
 	}
 
 	const FAssetCollectionItem& ArrowCollectionItem = FEngineAssetsCollection::ArrowTransparent1;
