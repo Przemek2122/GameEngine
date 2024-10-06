@@ -16,16 +16,19 @@ public:
 	virtual void Attack();
 
 	/** Defines if attack can be performed - Check for delay between attacks etc */
-	virtual bool CanAttack() const { return (bCanAttack && !bIsDelayed); }
+	virtual bool CanAttack() const { return (bCanAttack && !bIsWaitingForCooldown); }
 
 	virtual bool ShouldDelayAttacks() const { return true; }
 
 	/** Sets bool which disables or enables attacks */
 	void SetCanAttack(const bool bInCanAttack);
 
+	void SetDelayBetweenAttacks(const float NewDelay);
+	float GetDelayBetweenAttacks() const { return CooldownAttackTime; }
+
 protected:
 	virtual void PerformAttack();
-	void AttackDelayFinished(FOptionalTimerParams* OptionalTimerParams);
+	void AttackCooldownFinished(FOptionalTimerParams* OptionalTimerParams);
 
 	virtual void OnCanAttackChanged();
 	virtual void OnAttackPerformed();
@@ -33,9 +36,10 @@ protected:
 
 private:
 	bool bCanAttack;
-	bool bIsDelayed;
+	bool bIsWaitingForCooldown;
+	float CooldownAttackTime;
 
 	/** Timer for delayed attacks */
-	std::shared_ptr<FTimer> AttackDelayTimer;
+	std::shared_ptr<FTimer> AttackCooldownTimer;
 
 };

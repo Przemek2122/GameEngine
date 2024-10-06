@@ -4,7 +4,6 @@
 
 #include "AIActionBase.h"
 #include "CoreMinimal.h"
-#include "ECS/Entity.h"
 
 class FAIMemorySet;
 class FAIActionBase;
@@ -71,20 +70,6 @@ public:
 	bool StopAction(FAIActionBase* InAction, const bool bForceStopAction = false);
 
 	bool IsAnyActionRunning() const;
-
-	/** Create new AIMemorySet */
-	template<typename TAIMemorySetClass>
-	std::shared_ptr<TAIMemorySetClass> GetAIMemorySetByClass()
-	{
-		std::shared_ptr<TAIMemorySetClass> AIMemorySet = nullptr;
-
-		if (OwnerEntity != nullptr)
-		{
-			//AIMemorySet = OwnerEntity->GetAIMemorySetByClass<TAIMemorySetClass>();
-		}
-
-		return AIMemorySet;
-	}
 
 protected:
 	/** Choosing action method, override to change default behaviour */

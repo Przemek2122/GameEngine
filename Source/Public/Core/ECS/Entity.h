@@ -62,7 +62,9 @@ public:
 	template<typename TAIMemorySetClass>
 	std::shared_ptr<TAIMemorySetClass> GetAIMemorySetByClass()
 	{
-		std::shared_ptr<TAIMemorySetClass> RetAIMemorySetPtr = nullptr;
+		ASSERT_IS_BASE_OF(FAIMemorySet, TAIMemorySetClass, "Class mismatch, GetAIMemorySetByClass requries class to inherit from FAIMemorySet.");
+
+		std::shared_ptr<TAIMemorySetClass> RetAIMemorySetPtr;
 
 		for (std::shared_ptr<FAIMemorySet>& AIMemorySetPtr : AIMemorySetArray)
 		{

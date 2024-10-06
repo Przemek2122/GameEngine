@@ -6,7 +6,8 @@
 EWeaponBase::EWeaponBase(FEntityManager* InEntityManager)
 	: EEntity(InEntityManager)
 	, bCanAttack(true)
-	, bIsDelayed(false)
+	, bIsWaitingForCooldown(false)
+	, CooldownAttackTime(0.5)
 {
 }
 
@@ -19,11 +20,11 @@ void EWeaponBase::Attack()
 		if (ShouldDelayAttacks())
 		{
 			FDelegateSafe<void, FOptionalTimerParams*> OnAttackDelayFinished;
-			OnAttackDelayFinished.BindObject(this, &EWeaponBase::AttackDelayFinished);
+			OnAttackDelayFinished.BindObject(this, &EWeaponBase::AttackCooldownFinished);
 
-			AttackDelayTimer = FTimerManager::CreateTimerSync(OnAttackDelayFinished, 0.1f);
+			AttackCooldownTimer = FTimerManager::CreateTimerSync(OnAttackDelayFinished, CooldownAttackTime);
 
-			bIsDelayed = true;
+			bIsWaitingForCooldown = true;
 		}
 
 		OnAttackPerformed();
@@ -37,15 +38,20 @@ void EWeaponBase::SetCanAttack(const bool bInCanAttack)
 	OnCanAttackChanged();
 }
 
+void EWeaponBase::SetDelayBetweenAttacks(const float NewDelay)
+{
+	CooldownAttackTime = NewDelay;
+}
+
 void EWeaponBase::PerformAttack()
 {
 }
 
-void EWeaponBase::AttackDelayFinished(FOptionalTimerParams* OptionalTimerParams)
+void EWeaponBase::AttackCooldownFinished(FOptionalTimerParams* OptionalTimerParams)
 {
 	OnAttackDelayFinished();
 
-	bIsDelayed = false;
+	bIsWaitingForCooldown = false;
 }
 
 void EWeaponBase::OnCanAttackChanged()
