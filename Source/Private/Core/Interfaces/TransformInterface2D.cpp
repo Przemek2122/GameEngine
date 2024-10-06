@@ -16,6 +16,7 @@ FTransform2DInterface::FTransform2DInterface()
 	: AbsoluteTransform2D()
 	, ParentTransform2D()
 	, RelativeTransform2D()
+	, TransformFollowMethod(ETransformFollowMethod::Default)
 {
 }
 
@@ -66,6 +67,16 @@ void FTransform2DInterface::SetSize(const FTransform2DSize& NewSize)
 	}
 }
 
+ETransformFollowMethod FTransform2DInterface::GetTransformFollowMethod() const
+{
+	return TransformFollowMethod;
+}
+
+void FTransform2DInterface::SetTransformFollowMethod(const ETransformFollowMethod InTransformFollowMethod)
+{
+	TransformFollowMethod = InTransformFollowMethod;
+}
+
 void FTransform2DInterface::AddUpdatedComponent(FTransform2DInterface* InTransform2DInterface)
 {
 	ChildrenInterfaces.Push(InTransform2DInterface);
@@ -92,7 +103,18 @@ void FTransform2DInterface::OnParentRotationChanged(const FTransform2DRotation N
 
 void FTransform2DInterface::OnLocationChanged()
 {
-	AbsoluteTransform2D.Location = ParentTransform2D.Location + RelativeTransform2D.Location;
+	if (TransformFollowMethod == ETransformFollowMethod::RotateAroundParent)
+	{
+		RotateAroundParentLocation = RelativeTransform2D.Location.Rotate(AbsoluteTransform2D.Rotation);
+
+		AbsoluteTransform2D.Location = ParentTransform2D.Location + RotateAroundParentLocation;
+
+		LOG_INFO(RotateAroundParentLocation);
+	}
+	else
+	{
+		AbsoluteTransform2D.Location = ParentTransform2D.Location + RelativeTransform2D.Location;
+	}
 
 	OnLocationChangedDelegate.Execute(AbsoluteTransform2D.Location);
 
@@ -105,6 +127,11 @@ void FTransform2DInterface::OnLocationChanged()
 void FTransform2DInterface::OnRotationChanged()
 {
 	AbsoluteTransform2D.Rotation = ParentTransform2D.Rotation + RelativeTransform2D.Rotation;
+
+	if (TransformFollowMethod == ETransformFollowMethod::RotateAroundParent)
+	{
+		OnLocationChanged();
+	}
 
 	OnRotationChangedDelegate.Execute(AbsoluteTransform2D.Rotation);
 

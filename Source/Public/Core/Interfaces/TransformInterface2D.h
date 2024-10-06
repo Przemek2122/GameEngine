@@ -9,6 +9,12 @@ typedef FVector2D<int32> FTransform2DLocation;
 typedef int32 FTransform2DRotation;
 typedef FVector2D<int32> FTransform2DSize;
 
+enum class ETransformFollowMethod
+{
+	Default,
+	RotateAroundParent
+};
+
 /** Structure with location and rotation in 2D */
 struct FTransform2D
 {
@@ -45,6 +51,9 @@ public:
 	void SetRotation(const FTransform2DRotation NewRotation);
 	void SetSize(const FTransform2DSize& NewSize);
 
+	ETransformFollowMethod GetTransformFollowMethod() const;
+	void SetTransformFollowMethod(const ETransformFollowMethod InTransformFollowMethod);
+
 	CArray<FTransform2DInterface*>& GetChildrenInterfaces() { return ChildrenInterfaces; }
 
 	void AddUpdatedComponent(FTransform2DInterface* InTransform2DInterface);
@@ -78,5 +87,10 @@ private:
 
 	/** 2D Location and rotation relative to parent, or world (0, 0) for master interface */
 	FTransform2D RelativeTransform2D;
+
+	/** Special for ETransformFollowMethod::RotateAroundParent */
+	FTransform2DLocation RotateAroundParentLocation;
+
+	ETransformFollowMethod TransformFollowMethod;
 
 };

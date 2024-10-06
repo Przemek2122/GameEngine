@@ -59,13 +59,13 @@ void URenderComponent::Render()
 			}
 		}
 
-		FVector2D<int> LocationCenter;
+		FVector2D<int> PivotLocationCenter;
 
 		switch (CurrentRenderCenterType)
 		{
 			case ERenderCenterType::RotateAround:
 			{
-				LocationCenter = GetSize() / 2;
+				PivotLocationCenter = GetSize() / 2;
 
 				break;
 			}
@@ -83,7 +83,7 @@ void URenderComponent::Render()
 			RenderLocation,
 			GetSize(), 
 			GetAbsoluteRotation(),
-			LocationCenter
+			PivotLocationCenter
 		);
 	}
 }
