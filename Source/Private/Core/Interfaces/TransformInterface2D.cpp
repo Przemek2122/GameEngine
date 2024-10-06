@@ -108,8 +108,6 @@ void FTransform2DInterface::OnLocationChanged()
 		RotateAroundParentLocation = RelativeTransform2D.Location.Rotate(AbsoluteTransform2D.Rotation);
 
 		AbsoluteTransform2D.Location = ParentTransform2D.Location + RotateAroundParentLocation;
-
-		LOG_INFO(RotateAroundParentLocation);
 	}
 	else
 	{
