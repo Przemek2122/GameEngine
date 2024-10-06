@@ -11,7 +11,8 @@
 UArrowComponent::UArrowComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, bOnlyVisibleInDebug(false)
-	, RootTransformComponent(nullptr)
+	, ArrowColor(FColorRGBA::ColorRed())
+	, RootComponent(nullptr)
 	, ArrowTextureAsset(nullptr)
 {
 }
@@ -23,7 +24,7 @@ void UArrowComponent::BeginPlay()
 	UParentComponent* RootComponentOfEntity = GetRootComponentOfEntity();
 	if (RootComponentOfEntity != nullptr)
 	{
-		RootTransformComponent = RootComponentOfEntity;
+		RootComponent = RootComponentOfEntity;
 	}
 
 	const FAssetCollectionItem& ArrowCollectionItem = FEngineAssetsCollection::ArrowTransparent1;
@@ -83,6 +84,11 @@ bool UArrowComponent::IsOnlyVisibleInDebug() const
 	return bOnlyVisibleInDebug;
 }
 
+void UArrowComponent::SetArrowColor(const FColorRGBA& InColor)
+{
+	ArrowColor = InColor;
+}
+
 bool UArrowComponent::IsDebug() const
 {
 	bool bIsDebug = false;
@@ -102,7 +108,7 @@ void UArrowComponent::RenderArrow()
 
 		static const FVector2D<int> ArrowPivotPoint = { 0, 0 };
 
-		FRenderer::OverrideTextureColor(ArrowTextureAsset->GetTexture()->GetSDLTexture(), FColorRGBA::ColorRed());
+		FRenderer::OverrideTextureColor(ArrowTextureAsset->GetTexture()->GetSDLTexture(), ArrowColor);
 		Renderer->DrawTextureAdvanced(ArrowTextureAsset, GetLocationCenter(), ArrowRenderSize, GetAbsoluteRotation() + 180, ArrowPivotPoint, SDL_FLIP_VERTICAL);
 		FRenderer::OverrideTextureColorReset(ArrowTextureAsset->GetTexture()->GetSDLTexture());
 	}
@@ -110,7 +116,7 @@ void UArrowComponent::RenderArrow()
 
 void UArrowComponent::SetArrow(FTextureAsset* NewTextureAsset)
 {
-	if (RootTransformComponent != nullptr)
+	if (RootComponent != nullptr)
 	{
 		if (NewTextureAsset != nullptr)
 		{
@@ -124,7 +130,7 @@ void UArrowComponent::SetArrow(FTextureAsset* NewTextureAsset)
 
 			ArrowRenderSize = NewTextureAsset->GetSize() / 3;
 
-			SetLocation(RootTransformComponent->GetSize() / 2);
+			SetLocation(RootComponent->GetSize() / 2);
 		}
 	}
 	else

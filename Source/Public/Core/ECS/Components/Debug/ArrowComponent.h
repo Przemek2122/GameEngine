@@ -24,6 +24,8 @@ public:
 	void SetOnlyVisibleInDebug(const bool bInOnlyVisibleInDebug);
 	bool IsOnlyVisibleInDebug() const;
 
+	void SetArrowColor(const FColorRGBA& InColor);
+
 protected:
 	bool IsDebug() const;
 
@@ -34,7 +36,10 @@ protected:
 private:
 	bool bOnlyVisibleInDebug;
 
-	UParentComponent* RootTransformComponent;
+	FColorRGBA ArrowColor;
+
+	/** Root component */
+	UParentComponent* RootComponent;
 
 	FTextureAsset* ArrowTextureAsset;
 
