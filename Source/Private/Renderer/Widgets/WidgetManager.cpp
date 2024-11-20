@@ -22,6 +22,22 @@ void FWidgetManager::DeInit()
 	ClearChildren();
 }
 
+void FWidgetManager::ReceiveTick()
+{
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		if (ManagedWidget->NeedsWidgetRebuild())
+		{
+			FWidgetGeometry WidgetGeometry;
+			ManagedWidget->GenerateWidgetGeometry(WidgetGeometry);
+
+			ManagedWidget->RebuildWidget();
+		}
+	}
+
+	TickWidgets();
+}
+
 FVector2D<int> FWidgetManager::GetWidgetManagerOffset() const
 {
 	return 0;
@@ -35,6 +51,11 @@ FVector2D<int> FWidgetManager::GetWidgetManagerSize() const
 bool FWidgetManager::HasParent() const
 {
 	return false;
+}
+
+int32 FWidgetManager::GetParentsNumber() const
+{
+	return 0;
 }
 
 IWidgetManagementInterface* FWidgetManager::GetParent() const
@@ -52,5 +73,13 @@ void FWidgetManager::OnWindowChanged()
 	for (FWidget* Widget : ManagedWidgets)
 	{
 		Widget->OnWindowChanged();
+	}
+}
+
+void FWidgetManager::OnWindowSizeChanged()
+{
+	for (FWidget* Widget : ManagedWidgets)
+	{
+		Widget->RequestWidgetRebuild();
 	}
 }

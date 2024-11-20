@@ -20,8 +20,6 @@ void UHealthComponent::BeginPlay()
 {
 	UBaseComponent::BeginPlay();
 
-	SetHealthDefaults();
-
 	if (bUseHealthBarComponent)
 	{
 		HealthBarRenderComponent = CreateComponent<URenderComponent>("HealthBarRenderComponent");
@@ -35,25 +33,31 @@ void UHealthComponent::SetHealthDefaults()
 
 void UHealthComponent::TakeDamage(const float Damage)
 {
-	CurrentHealth -= FMath::Abs(Damage);
-
-	OnHealthLowered.Execute(Damage);
-
-	if (CurrentHealth <= 0.f)
+	if (IsAlive())
 	{
-		OnDie();
+		CurrentHealth -= FMath::Abs(Damage);
+
+		OnHealthLowered.Execute(Damage);
+
+		if (CurrentHealth <= 0.f)
+		{
+			Die();
+		}
 	}
 }
 
 void UHealthComponent::Heal(const float HealthToAdd)
 {
-	CurrentHealth += FMath::Abs(HealthToAdd);
-
-	OnHealthGained.Execute(HealthToAdd);
-
-	if (CurrentHealth > MaxHealth)
+	if (IsAlive())
 	{
-		CurrentHealth = MaxHealth;
+		CurrentHealth += FMath::Abs(HealthToAdd);
+
+		OnHealthGained.Execute(HealthToAdd);
+
+		if (CurrentHealth > MaxHealth)
+		{
+			CurrentHealth = MaxHealth;
+		}
 	}
 }
 
@@ -73,12 +77,17 @@ void UHealthComponent::ResetMaxHealthToDefault()
 	MaxHealth = StartingHealth;
 }
 
+bool UHealthComponent::IsAlive() const
+{
+	return !IsDead();
+}
+
 bool UHealthComponent::IsDead() const
 {
 	return bIsDead;
 }
 
-void UHealthComponent::OnDie()
+void UHealthComponent::Die()
 {
 	CurrentHealth = 0.f;
 

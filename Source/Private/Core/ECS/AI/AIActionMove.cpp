@@ -5,39 +5,68 @@
 
 #include "ECS/Components/MoveComponent.h"
 
-FAiActionMove::FAiActionMove(FAiTree* InAiTree)
-	: FAiActionBase(InAiTree)
+FAIActionMove::FAIActionMove(FAITree* InAiTree)
+	: FAIActionBase(InAiTree)
 	, CurrentMoveComponent(nullptr)
 {
 }
 
-bool FAiActionMove::ShouldFinishAction() const
+void FAIActionMove::Initialize()
 {
-	return (CurrentMoveComponent != nullptr && !CurrentMoveComponent->IsMoving());
-}
-
-void FAiActionMove::StartAction()
-{
-	Super::StartAction();
+	Super::Initialize();
 
 	// Get entity. Should always be valid.
 	EEntity* Entity = GetTree()->GetOwnerEntity();
 
 	// Move component does not have to be present.
 	CurrentMoveComponent = Entity->GetComponentByClass<UMoveComponent>();
-	if (CurrentMoveComponent != nullptr)
+	if (CurrentMoveComponent == nullptr)
 	{
-		
+		LOG_WARN("Missing MoveComponent in FAIActionMove, Entity class: " << Entity->GetCppClassNameWithoutClass());
 	}
 }
 
-void FAiActionMove::EndAction()
+bool FAIActionMove::ShouldFinishAction() const
+{
+	return (CurrentMoveComponent != nullptr && !CurrentMoveComponent->IsMoving());
+}
+
+void FAIActionMove::EndAction()
 {
 	Super::EndAction();
 
-	if (CurrentMoveComponent != nullptr && CurrentMoveComponent->IsMoving())
+	// Disable if moving due to action running
+	if (CurrentMoveComponent != nullptr && (IsActionRunning() && CurrentMoveComponent->IsMoving()))
 	{
 		CurrentMoveComponent->AbortMovement();
 		CurrentMoveComponent = nullptr;
 	}
+}
+
+void FAIActionMove::StartAction()
+{
+	Super::StartAction();
+
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->OnStoppedMovement.BindObject(this, &FAIActionMove::OnStoppedMovement);
+	}
+}
+
+void FAIActionMove::SetTargetLocation(const FVector2D<int32>& InLocation)
+{
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->SetTargetMoveLocation(InLocation);
+	}
+}
+
+void FAIActionMove::OnStoppedMovement()
+{
+	if (CurrentMoveComponent != nullptr)
+	{
+		CurrentMoveComponent->OnStoppedMovement.UnBindObject(this, &FAIActionMove::OnStoppedMovement);
+	}
+
+	EndAction();
 }

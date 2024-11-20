@@ -8,7 +8,7 @@ class EEntity;
 
 /**
  * Base component class.
- * Children should have one of transform interfaces included. Unless transform is not needed.s
+ * This is base of components without any transform
  */
 class UBaseComponent : public IComponentManagerInterface
 {
@@ -30,7 +30,7 @@ public:
 	/** Component is owned by entity and this function returns parent */
 	EEntity* GetEntity() const;
 
-	UBaseComponent* GetRootComponentOfEntity() const;
+	UParentComponent* GetRootComponentOfEntity() const;
 
 	template<typename TComponentClass>
 	TComponentClass* RequireComponent() const

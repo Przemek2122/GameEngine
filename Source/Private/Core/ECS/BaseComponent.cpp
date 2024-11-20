@@ -59,14 +59,14 @@ EEntity* UBaseComponent::GetEntity() const
 	return Owner;
 }
 
-UBaseComponent* UBaseComponent::GetRootComponentOfEntity() const
+UParentComponent* UBaseComponent::GetRootComponentOfEntity() const
 {
-	UBaseComponent* RetComponent = nullptr;
+	UParentComponent* RetComponent = nullptr;
 
 	EEntity* Entity = GetEntity();
 	if (Entity != nullptr)
 	{
-		UBaseComponent* RootComponent = Entity->GetRootComponent();
+		UParentComponent* RootComponent = Entity->GetRootComponent();
 		if (RootComponent != nullptr)
 		{
 			RetComponent = RootComponent;

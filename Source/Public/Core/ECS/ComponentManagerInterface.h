@@ -1,6 +1,8 @@
 // Created by Przemys³aw Wiewióra 2020
 
 #pragma once
+#include "BaseComponent.h"
+#include "BaseComponent.h"
 
 class UBaseComponent;
 
@@ -18,7 +20,10 @@ public:
 
 		ComponentsMap.Emplace(ComponentName, NewComponent);
 
-		NewComponent.get()->BeginPlay();
+		if (bShouldCallBeginPlayOnNewComponents)
+		{
+			NewComponent.get()->BeginPlay();
+		}
 
 		OnComponentCreated(ComponentName, NewComponent.get());
 
@@ -66,6 +71,17 @@ public:
 			}
 		}
 
+		// Search subcomponents if not present on top
+		for (std::pair<const std::string, std::shared_ptr<UBaseComponent>>& ComponentPair : ComponentsMap)
+		{
+			TComponentClass* Component = ComponentPair.second.get()->GetComponentByClass<TComponentClass>();
+
+			if (Component != nullptr)
+			{
+				return Component;
+			}
+		}
+
 		return nullptr;
 	}
 
@@ -103,5 +119,7 @@ protected:
 
 	/** Window owner */
 	FWindow* OwnerWindow;
+
+	bool bShouldCallBeginPlayOnNewComponents;
 
 };

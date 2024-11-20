@@ -10,7 +10,7 @@
 static const char* DefaultText = "Default text"; 
 static const char* DefaultFont = "OpenSans";
 
-FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, DesiredText(DefaultText)
 	, RenderedText(DefaultText)
@@ -22,13 +22,16 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	, SDLRect(new SDL_Rect)
 	, TextTexture(nullptr)
 	, LastTextTextureSize({ 0, 0 })
-	, TextRenderMode(ETextRenderMode::Blended)
-	, bAutoScaleWidget(true)
+	, CurrentTextRenderMode(ETextRenderMode::None)
+	, DesiredTextRenderMode(ETextRenderMode::Blended)
+	, bAutoCutTextToFitInsideOfParent(false)
 {
 #if _DEBUG
 	// Unable to find font asset.
 	ENSURE_VALID(FontAsset != nullptr);
 #endif
+
+	SetWidgetMargin(FWidgetMargin(10, 10, 8, 8 ));
 }
 
 FTextWidget::~FTextWidget()
@@ -38,37 +41,11 @@ FTextWidget::~FTextWidget()
 	delete SDLRect;
 }
 
-void FTextWidget::Init()
-{
-	FWidget::Init();
-
-	UpdateSDLRectSize();
-
-	if (FontAsset != nullptr)
-	{
-		SetText(DefaultText);
-	}
-
-	AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
-}
-
 void FTextWidget::Render()
 {
 	SDL_RenderCopy(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
-}
 
-void FTextWidget::SetWidgetLocation(const FVector2D<int> InWidgetLocation, EWidgetOrientation WidgetOrientation, const bool bSetNoneAnchor)
-{
-	Super::SetWidgetLocation(InWidgetLocation, WidgetOrientation, bSetNoneAnchor);
-
-	UpdateSDLRectSize();
-}
-
-void FTextWidget::SetWidgetSize(const FVector2D<int> InWidgetSize)
-{
-	FWidget::SetWidgetSize(InWidgetSize);
-
-	// @TODO Can not use OnTextChanged due to infinite call loop
+	Super::Render();
 }
 
 void FTextWidget::OnClippingMethodChanged(const EClipping NewClipping)
@@ -79,11 +56,37 @@ void FTextWidget::OnClippingMethodChanged(const EClipping NewClipping)
 	OnTextChanged();
 }
 
-void FTextWidget::RefreshWidget(const bool bRefreshChildren)
+void FTextWidget::UpdateWidgetLocation()
 {
-	Super::RefreshWidget(bRefreshChildren);
+	Super::UpdateWidgetLocation();
 
-	//OnTextChanged();
+	const FVector2D<int>& LocationCache = GetWidgetLocation(EWidgetOrientation::Absolute);
+
+	SDLRect->x = LocationCache.X;
+	SDLRect->y = LocationCache.Y;
+}
+
+void FTextWidget::UpdateWidgetSize(const bool bWasSentFromRebuild)
+{
+	Super::UpdateWidgetSize(bWasSentFromRebuild);
+
+	const FVector2D<int>& SizeCache = GetWidgetSize();
+
+	SDLRect->w = SizeCache.X;
+	SDLRect->h = SizeCache.Y;
+}
+
+void FTextWidget::UpdateAnchor(const bool bIsFromRebuild)
+{
+	Super::UpdateAnchor(bIsFromRebuild);
+
+	const FVector2D<int>& LocationCache = GetWidgetLocation(EWidgetOrientation::Absolute);
+	const FVector2D<int>& SizeCache = GetWidgetSize();
+
+	SDLRect->x = LocationCache.X;
+	SDLRect->y = LocationCache.Y;
+	SDLRect->w = SizeCache.X;
+	SDLRect->h = SizeCache.Y;
 }
 
 void FTextWidget::SetText(const std::string& InText)
@@ -101,6 +104,22 @@ std::string FTextWidget::GetDesiredText() const
 std::string FTextWidget::GetRenderedText() const
 {
 	return RenderedText;
+}
+
+void FTextWidget::RebuildWidget()
+{
+	Super::RebuildWidget();
+
+	if (FontAsset != nullptr)
+	{
+		// Update text
+		RedrawText();
+	}
+}
+
+void FTextWidget::OnTextChanged()
+{
+	RequestWidgetRebuild();
 }
 
 void FTextWidget::AutoAdjustSize(const bool bLimitToParentSize)
@@ -162,39 +181,37 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 	return ErrorState;
 }
 
-void FTextWidget::UpdateSDLRectSize() const
+void FTextWidget::SetTextRenderMode(const ETextRenderMode NewTextRenderMode)
 {
-	const FVector2D<int>& LocationCache = GetWidgetLocation(EWidgetOrientation::Absolute);
-	const FVector2D<int>& SizeCache = GetWidgetSize();
+	DesiredTextRenderMode = NewTextRenderMode;
 
-	SDLRect->x = LocationCache.X;
-	SDLRect->y = LocationCache.Y;
-	SDLRect->w = SizeCache.X;
-	SDLRect->h = SizeCache.Y;
+	// @TODO We could run single rebuild instead of rebuilding whole hierarchy as this change should not change size
+	RequestWidgetRebuild();
+}
+
+ETextRenderMode FTextWidget::GetTextRenderMode() const
+{
+	return DesiredTextRenderMode;
 }
 
 void FTextWidget::RedrawText()
 {
-	if (ENSURE_VALID(FontAsset != nullptr) && ENSURE_VALID(!DesiredText.empty()))
+	const bool bIsInputDataCorrect = (FontAsset != nullptr && !DesiredText.empty());
+	const bool bIsAnyDataChanged = (DesiredText != RenderedText || CurrentTextRenderMode != DesiredTextRenderMode);
+	if (bIsInputDataCorrect && bIsAnyDataChanged)
 	{
 		RenderedText = DesiredText;
 
-		if (bAutoScaleWidget)
+		if (bAutoCutTextToFitInsideOfParent)
 		{
 			AutoAdjustSize(GetClippingMethod() == EClipping::Cut);
-
-			// @HACK
-			if (RenderedText.empty())
-			{
-				RenderedText = DesiredText;
-			}
 		}
 
 		SDL_Surface* SdlSurface = nullptr;
 		TTF_Font* Font = FontAsset->GetFont(TextSize)->GetFont();
 		if (Font != nullptr)
 		{
-			switch (TextRenderMode)
+			switch (DesiredTextRenderMode)
 			{
 				case ETextRenderMode::Solid:
 				{
@@ -214,7 +231,10 @@ void FTextWidget::RedrawText()
 
 					break;
 				}
+				default: ;
 			}
+
+			CurrentTextRenderMode = DesiredTextRenderMode;
 		}
 		else
 		{
@@ -255,27 +275,22 @@ void FTextWidget::RedrawText()
 			SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
 
 			AutoAdjustSize();
-
-			UpdateSDLRectSize();
 		}
 		else
 		{
 			LOG_ERROR("SdlSurface is NULL");
 		}
 	}
-}
+	else
+	{
+		if (FontAsset == nullptr)
+		{
+			LOG_ERROR("FontAsset for Text widget is null");
+		}
 
-void FTextWidget::SetTextRenderMode(const ETextRenderMode NewTextRenderMode)
-{
-	TextRenderMode = NewTextRenderMode;
-}
-
-ETextRenderMode FTextWidget::GetTextRenderMode() const
-{
-	return TextRenderMode;
-}
-
-void FTextWidget::OnTextChanged()
-{
-	RedrawText();
+		if (DesiredText.empty())
+		{
+			LOG_ERROR("Desired text is empty, if you intend to hide widget, use SetVisibility.");
+		}
+	}
 }

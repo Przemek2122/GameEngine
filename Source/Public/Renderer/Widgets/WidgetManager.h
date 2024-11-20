@@ -16,16 +16,20 @@ protected:
 	FWidgetManager(FWindow* InOwnerWindow);
 	virtual ~FWidgetManager() override;
 
-	void DeInit();
+	virtual void DeInit();
+	virtual void ReceiveTick();
 
 	/** Begin IWidgetManagementInterface */
-	_NODISCARD virtual FVector2D<int> GetWidgetManagerOffset() const override;
-	_NODISCARD virtual FVector2D<int> GetWidgetManagerSize() const override;
-	_NODISCARD virtual bool HasParent() const override;
-	_NODISCARD virtual IWidgetManagementInterface* GetParent() const override;
-	_NODISCARD virtual FWindow* GetOwnerWindow() const override;
-	virtual void OnWindowChanged() override;
+	_NODISCARD FVector2D<int> GetWidgetManagerOffset() const override;
+	_NODISCARD FVector2D<int> GetWidgetManagerSize() const override;
+	_NODISCARD bool HasParent() const override;
+	_NODISCARD int32 GetParentsNumber() const override;
+	_NODISCARD IWidgetManagementInterface* GetParent() const override;
+	_NODISCARD FWindow* GetOwnerWindow() const override;
+	void OnWindowChanged() override;
 	/** End IWidgetManagementInterface */
+
+	void OnWindowSizeChanged();
 
 private:
 	/** Window where widgets are rendered */

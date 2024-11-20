@@ -3,24 +3,36 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AiActionBase.h"
+#include "AIActionBase.h"
 
 class UMoveComponent;
-class FAiTree;
+class FAITree;
 
 /**
  * AI actions base class
+ * It is not set as not to run automatically, you should use TryStartAction
+ * If you wish to start automatically, change HasAutomaticStart to return true.
  */
-class FAiActionMove : public FAiActionBase
+class FAIActionMove : public FAIActionBase
 {
 public:
-	FAiActionMove(FAiTree* InAiTree);
-	virtual ~FAiActionMove() override = default;
+	FAIActionMove(FAITree* InAiTree);
+	virtual ~FAIActionMove() override = default;
 
+	/** Begin FAIActionBase */
+	void Initialize() override;
+	bool HasAutomaticStart() const override { return false; }
 	bool ShouldFinishAction() const override;
+	bool IsActionReady() const override { return true; }
 
 	void StartAction() override;
 	void EndAction() override;
+	/** End FAIActionBase */
+
+	/** Default implementation, will walk into given point */
+	virtual void SetTargetLocation(const FVector2D<int32>& InLocation);
+
+	void OnStoppedMovement();
 
 protected:
 	UMoveComponent* CurrentMoveComponent;

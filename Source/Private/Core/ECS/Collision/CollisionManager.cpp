@@ -3,9 +3,11 @@
 #include "CoreEngine.h"
 #include "ECS/Collision/CollisionManager.h"
 
+#include "Assets/IniReader/IniManager.h"
+#include "Assets/IniReader/IniObject.h"
 #include "ECS/Collision/CircleCollision.h"
 #include "ECS/Collision/SquareCollision.h"
-#include "ECS/Components/CollisionComponent.h"
+#include "ECS/Components/Collision/CollisionComponent.h"
 #include "Renderer/Map/Map.h"
 #include "Threads/ThreadsManager.h"
 
@@ -18,11 +20,6 @@ FCollisionManager::FCollisionManager()
 
 FCollisionManager::~FCollisionManager()
 {
-	if (FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface()))
-	{
-		CurrentMap->GetMapLocationChangeDelegate().UnBindObject(this, &FCollisionManager::OnMapLocationChange);
-	}
-
 	for (FCollisionMeshRow* CollisionRow : CollisionRows)
 	{
 		for (FCollisionTile* CollisionTile : CollisionRow->CollisionTiles)
@@ -36,13 +33,29 @@ FCollisionManager::~FCollisionManager()
 
 void FCollisionManager::InitializeSubSystem()
 {
-	ISubSystemInstanceInterface::InitializeSubSystem();
+	Super::InitializeSubSystem();
 
-	if (FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface()))
+	const std::string CollisionSettingsIniName = "CollisionSettings";
+	FIniManager* IniManager = GEngine->GetAssetsManager()->GetIniManager();
+	EngineCollisionSettingsIniObject = IniManager->GetIniObject(CollisionSettingsIniName);
+	if (EngineCollisionSettingsIniObject && EngineCollisionSettingsIniObject->DoesIniExist())
 	{
-		CurrentMapOffset = CurrentMap->GetMapRenderOffset();
+		EngineCollisionSettingsIniObject->LoadIni();
 
-		CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &FCollisionManager::OnMapLocationChange);
+		const std::string CollisionTileSizeFieldName = "CollisionTileSize";
+		const FIniField IniField = EngineCollisionSettingsIniObject->FindFieldByName(CollisionTileSizeFieldName);
+		if (IniField.IsValid())
+		{
+			const int CollisionTileSizeValue = IniField.GetValueAsInt();
+
+			CollisionTileSize = FVector2D<int>(CollisionTileSizeValue, CollisionTileSizeValue);
+
+			LOG_INFO("Collision mesh size from ini: " << CollisionTileSizeValue << " x " << CollisionTileSizeValue << " each.");
+		}
+	}
+	else
+	{
+		LOG_WARN("Missing collision ini file.");
 	}
 
 	BuildCollision();
@@ -58,7 +71,7 @@ void FCollisionManager::TickSubSystem()
 		{
 			for (FCollisionBase* Collision : CollisionWaitingForAddArray)
 			{
-				PutCollisionIntoMesh(Collision);
+				PutCollisionIntoMesh(Collision, true);
 			}
 
 			CollisionWaitingForAddArray.Clear();
@@ -97,7 +110,7 @@ void FCollisionManager::RenderSubSystem()
 					{
 						FColorRGBA DrawColor = CollisionTile->CollisionObjects.IsEmpty() ? FColorRGBA::ColorLightGreen() : FColorRGBA::ColorOrange();
 
-						Renderer->DrawRectangleOutline(ConvertLocationToAbsolute(CollisionTile->TileLocation), CollisionTile->TileSize, DrawColor);
+						Renderer->DrawRectangleOutline(CollisionTile->TileLocation, CollisionTile->TileSize, DrawColor);
 					}
 				}
 			}
@@ -142,29 +155,6 @@ void FCollisionManager::OnCollisionObjectMoved(FCollisionBase* InCollisionObject
 	}
 }
 
-FVector2D<int> FCollisionManager::ConvertLocationToAbsolute(const FVector2D<int>& Relative) const
-{
-	FVector2D<int> OutLocation = Relative;
-
-	OutLocation += CurrentMapOffset;
-
-	return OutLocation;
-}
-
-FVector2D<int> FCollisionManager::ConvertLocationToRelative(const FVector2D<int>& Absolute) const
-{
-	FVector2D<int> OutLocation = Absolute;
-
-	OutLocation -= CurrentMapOffset;
-
-	return OutLocation;
-}
-
-void FCollisionManager::OnMapLocationChange(FVector2D<int> NewLocation)
-{
-	CurrentMapOffset = NewLocation;
-}
-
 void FCollisionManager::BuildCollision()
 {
 	FMap* CurrentMap = dynamic_cast<FMap*>(GetSubSystemParentInterface());
@@ -172,13 +162,13 @@ void FCollisionManager::BuildCollision()
 	{
 		MapSizeInPixelsCache = CurrentMap->GetMapSizeInPixels();
 
+		bIsCollisionReady = false;
+
 		FDelegateSafe<> AsyncWork;
 		AsyncWork.BindObject(this, &FCollisionManager::CreateCollisionTiles);
 
 		FDelegateSafe<> MainThreadCallback;
 		MainThreadCallback.BindObject(this, &FCollisionManager::OnCollisionCreated);
-
-		bIsCollisionReady = false;
 
 		GEngine->GetThreadsManager()->AddAsyncDelegate(AsyncWork, MainThreadCallback);
 	}
@@ -215,7 +205,7 @@ void FCollisionManager::CreateCollisionTiles()
 		TemporaryCollisionRows.Push(CollisionTilesRow);
 	}
 
-	CollisionRows = std::move(TemporaryCollisionRows);
+	CollisionRows = TemporaryCollisionRows;
 
 	LOG_INFO("Created " << TargetNumberOfTiles.X * TargetNumberOfTiles.Y << " tiles.");
 }
@@ -229,7 +219,7 @@ void FCollisionManager::OnCollisionCreated()
 	LOG_INFO("Collision map created.");
 }
 
-void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
+void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision, const bool bIsDelayed)
 {
 	InCollision->CurrentlyLocatedTiles = GetTilesFromCollision(InCollision);
 
@@ -238,25 +228,29 @@ void FCollisionManager::PutCollisionIntoMesh(FCollisionBase* InCollision)
 		Tile->CollisionObjects.Push(InCollision);
 	}
 
-	// After putting it inside we should find intersections with other colliders
-	for (FCollisionTile* Tile : InCollision->CurrentlyLocatedTiles)
+	// In case where we added collision before building collision mesh, skip this step
+	if (!bIsDelayed)
 	{
-		// Skip single colliders
-		if (Tile->CollisionObjects.Size() > 1)
+		// After putting it inside we should find intersections with other colliders
+		for (FCollisionTile* Tile : InCollision->CurrentlyLocatedTiles)
 		{
-			for (FCollisionBase* TileCollisionA : Tile->CollisionObjects)
+			// Skip single colliders
+			if (Tile->CollisionObjects.Size() > 1)
 			{
-				for (FCollisionBase* TileCollisionB : Tile->CollisionObjects)
+				for (FCollisionBase* TileCollisionA : Tile->CollisionObjects)
 				{
-					// Skip self
-					if (TileCollisionA != TileCollisionB)
+					for (FCollisionBase* TileCollisionB : Tile->CollisionObjects)
 					{
-						const bool bIsIntersecting = IsIntersecting(TileCollisionA, TileCollisionB);
-						if (bIsIntersecting)
+						// Skip self
+						if (TileCollisionA != TileCollisionB && TileCollisionA->CollisionComponent->IsCollisionEnabled() && TileCollisionB->CollisionComponent->IsCollisionEnabled())
 						{
-							LOG_INFO("Found intersection :)!");
+							const bool bIsIntersecting = IsIntersecting(TileCollisionA, TileCollisionB);
+							if (bIsIntersecting)
+							{
+								LOG_INFO("Found intersection :)!");
 
-							OnCollisionBegin(TileCollisionA, TileCollisionB);
+								OnCollisionBegin(TileCollisionA, TileCollisionB);
+							}
 						}
 					}
 				}
@@ -272,8 +266,8 @@ void FCollisionManager::RemoveCollisionFromMesh(FCollisionBase* InCollision)
 
 void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision)
 {
-	const CArray<FCollisionTile*> NewTiles = GetTilesFromCollision(InCollision);
 	const CArray<FCollisionTile*> PreviousTiles = InCollision->CurrentlyLocatedTiles;
+	const CArray<FCollisionTile*> NewTiles = GetTilesFromCollision(InCollision);
 	
 	InCollision->CurrentlyLocatedTiles = NewTiles;
 
@@ -282,7 +276,7 @@ void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision)
 	{
 		if (!NewTiles.Contains(PreviousTile))
 		{
-			PreviousTile->CollisionObjects.Remove(InCollision);
+			PreviousTile->CollisionObjects.RemoveAll(InCollision);
 		}
 	}
 
@@ -300,7 +294,7 @@ void FCollisionManager::UpdateCollisionOnMesh(FCollisionBase* InCollision)
 	{
 		for (FCollisionBase* CollisionObject : Tiles->CollisionObjects)
 		{
-			if (CollisionObject != InCollision)
+			if (CollisionObject != InCollision && CollisionObject->CollisionComponent->IsCollisionEnabled() && InCollision->CollisionComponent->IsCollisionEnabled())
 			{
 				const bool bWasIntersecting = CollisionObject->OtherCollidersCurrentlyColliding.Contains(InCollision);
 				const bool bIsCurrentlyIntersecting = IsIntersecting(InCollision, CollisionObject);
@@ -340,7 +334,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FCircle& CircleDataA = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleData();
 						const FCircle& CircleDataB = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleData();
 
-						bIsIntersecting = FCollisionGlobals::CirclesIntersect(this, CircleDataA, CircleDataB);
+						bIsIntersecting = FCollisionGlobals::CirclesIntersect(CircleDataA, CircleDataB);
 
 						break;
 					}
@@ -349,7 +343,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionA)->GetCircleData();
 						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
 
-						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(this, RectangleData, CircleData);
+						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
 
 						break;
 					}
@@ -372,7 +366,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FRectangleWithDiagonal& RectangleData = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
 						const FCircle& CircleData = dynamic_cast<FCircleCollision*>(CollisionB)->GetCircleData();
 
-						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(this, RectangleData, CircleData);
+						bIsIntersecting = FCollisionGlobals::CircleAndSquareIntersect(RectangleData, CircleData);
 
 						break;
 					}
@@ -381,7 +375,7 @@ bool FCollisionManager::IsIntersecting(FCollisionBase* CollisionA, FCollisionBas
 						const FRectangleWithDiagonal& RectangleDataA = dynamic_cast<FSquareCollision*>(CollisionA)->GetSquareData();
 						const FRectangleWithDiagonal& RectangleDataB = dynamic_cast<FSquareCollision*>(CollisionB)->GetSquareData();
 
-						bIsIntersecting = FCollisionGlobals::RectanglesIntersect(this, RectangleDataA, RectangleDataB);
+						bIsIntersecting = FCollisionGlobals::RectanglesIntersect(RectangleDataA, RectangleDataB);
 
 						break;
 					}
@@ -452,7 +446,7 @@ CArray<FCollisionTile*> FCollisionManager::GetTilesIntersectingRectangle(const F
 		LOG_WARN("Custom logic is required for Objects greater than single CollisionTile. #1");
 	}
 
-	const FVector2D<int> RelativeLocation = InLocation - CurrentMapOffset;
+	const FVector2D<int> RelativeLocation = InLocation;
 
 	// Find edge locations and add to @OutTiles
 	CArray<FVector2D<int>> RectangleEdgeLocations;
@@ -537,12 +531,12 @@ void FCollisionManager::OnCollisionEnd(FCollisionBase* InCollision)
 	InCollision->OtherCollidersCurrentlyColliding.Clear();
 }
 
-bool FCollisionGlobals::RectanglesIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)
+bool FCollisionGlobals::RectanglesIntersect(const FRectangleWithDiagonal& RectangleA, const FRectangleWithDiagonal& RectangleB)
 {
-	const FVector2D<int> RectAPositionBottomRight = CollisionManager->ConvertLocationToRelative(RectangleA.GetPositionBottomRight());
-	const FVector2D<int> RectAPositionTopLeft = CollisionManager->ConvertLocationToRelative(RectangleA.GetPositionTopLeft());
-	const FVector2D<int> RectBPositionBottomRight = CollisionManager->ConvertLocationToRelative(RectangleB.GetPositionBottomRight());
-	const FVector2D<int> RectBPositionTopLeft = CollisionManager->ConvertLocationToRelative(RectangleB.GetPositionTopLeft());
+	const FVector2D<int> RectAPositionBottomRight = RectangleA.GetPositionBottomRight();
+	const FVector2D<int> RectAPositionTopLeft = RectangleA.GetPositionTopLeft();
+	const FVector2D<int> RectBPositionBottomRight = RectangleB.GetPositionBottomRight();
+	const FVector2D<int> RectBPositionTopLeft = RectangleB.GetPositionTopLeft();
 
 	return !(	RectAPositionBottomRight.X <= RectBPositionTopLeft.X	||		// RectangleA is left of RectangleB 
 				RectBPositionBottomRight.X <= RectAPositionTopLeft.X	||		// RectangleB is left of RectangleA 
@@ -550,10 +544,10 @@ bool FCollisionGlobals::RectanglesIntersect(const FCollisionManager* CollisionMa
 				RectBPositionBottomRight.Y <= RectAPositionTopLeft.Y	);		// RectangleB is above RectangleA 
 }
 
-bool FCollisionGlobals::CirclesIntersect(const FCollisionManager* CollisionManager, const FCircle& CircleA, const FCircle& CircleB)
+bool FCollisionGlobals::CirclesIntersect(const FCircle& CircleA, const FCircle& CircleB)
 {
-	const FVector2D<int> CircleALocation = CollisionManager->ConvertLocationToRelative(CircleA.GetLocation());
-	const FVector2D<int> CircleBLocation = CollisionManager->ConvertLocationToRelative(CircleB.GetLocation());
+	const FVector2D<int> CircleALocation = CircleA.GetLocation();
+	const FVector2D<int> CircleBLocation = CircleB.GetLocation();
 
 	const int Distance = CircleALocation.DistanceTo(CircleBLocation);
 	const int SummaryRadius = CircleA.GetRadius() + CircleB.GetRadius();
@@ -561,12 +555,12 @@ bool FCollisionGlobals::CirclesIntersect(const FCollisionManager* CollisionManag
 	return (SummaryRadius > Distance);
 }
 
-bool FCollisionGlobals::CircleAndSquareIntersect(const FCollisionManager* CollisionManager, const FRectangleWithDiagonal& Rectangle, const FCircle& Circle)
+bool FCollisionGlobals::CircleAndSquareIntersect(const FRectangleWithDiagonal& Rectangle, const FCircle& Circle)
 {
-	const FVector2D<int> RectPositionBottomRight = CollisionManager->ConvertLocationToRelative(Rectangle.GetPositionBottomRight());
-	const FVector2D<int> RectPositionTopLeft = CollisionManager->ConvertLocationToRelative(Rectangle.GetPositionTopLeft());
+	const FVector2D<int> RectPositionBottomRight = Rectangle.GetPositionBottomRight();
+	const FVector2D<int> RectPositionTopLeft = Rectangle.GetPositionTopLeft();
 
-	const FVector2D<int> CircleLocation = CollisionManager->ConvertLocationToRelative(Circle.GetLocation());
+	const FVector2D<int> CircleLocation = Circle.GetLocation();
 
 	// Find the closest point to the circle within the rectangle 
 	const int ClosestX = std::max(RectPositionTopLeft.X, std::min(CircleLocation.X, RectPositionBottomRight.X));

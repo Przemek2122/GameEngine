@@ -5,7 +5,9 @@
 
 IWidgetManagementInterface::IWidgetManagementInterface()
 	: LastWidgetNumber(0)
+	, bIsWidgetRequestingRebuild(false)
 {
+	OnAnyChildChangedDelegate.BindObject(this, &IWidgetManagementInterface::OnAnyChildChanged);
 }
 
 IWidgetManagementInterface::~IWidgetManagementInterface()
@@ -54,14 +56,49 @@ void IWidgetManagementInterface::RenderWidgets()
 	for (ContainerInt i = 0; i < Size; i++)
 	{
 		FWidget* CurrentWidget = ManagedWidgets[i];
+		CurrentWidget->ReceiveRender();
+	}
+}
 
-		CurrentWidget->bWasRenderedThisFrame = CurrentWidget->ShouldBeRendered();
-
-		if (CurrentWidget->bWasRenderedThisFrame)
+void IWidgetManagementInterface::RequestWidgetRebuild()
+{
+	if (!bIsWidgetRequestingRebuild)
+	{
+		// Parent is required as otherwise we will not be able to ever rebuild
+		IWidgetManagementInterface* Parent = GetParent();
+		if (Parent != nullptr)
 		{
-			CurrentWidget->ReceiveRender();
+			bIsWidgetRequestingRebuild = true;
+
+			if (!Parent->NeedsWidgetRebuild())
+			{
+				Parent->RequestWidgetRebuild();
+			}
+
+			// Propagate to children
+			for (FWidget* ManagedWidget : ManagedWidgets)
+			{
+				if (!ManagedWidget->NeedsWidgetRebuild())
+				{
+					ManagedWidget->RequestWidgetRebuild();
+				}
+			}
 		}
 	}
+}
+
+void IWidgetManagementInterface::MarkAsWidgetRebuild()
+{
+	bIsWidgetRequestingRebuild = false;
+}
+
+void IWidgetManagementInterface::GenerateWidgetGeometry(FWidgetGeometry& InWidgetGeometry)
+{
+}
+
+void IWidgetManagementInterface::RebuildWidget()
+{
+	MarkAsWidgetRebuild();
 }
 
 bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
@@ -80,6 +117,10 @@ bool IWidgetManagementInterface::AddChild(FWidget* InWidget)
 			RegisterWidgetPostInit(InWidget);
 
 			return true;
+		}
+		else
+		{
+			LOG_WARN("Double called AddChild");
 		}
 	}
 
@@ -125,9 +166,9 @@ void IWidgetManagementInterface::ClearChildren()
 {
 	if (!ManagedWidgets.IsEmpty())
 	{
-		for (PotentiallyNegativeContainerInt i = ManagedWidgets.Size() - 1; i >= 0; i--)
+		for (ContainerInt i = ManagedWidgets.Size() - 1; i >= 0; i--)
 		{
-			ManagedWidgets[static_cast<ContainerInt>(i)]->DestroyWidget();
+			ManagedWidgets[i]->DestroyWidget();
 		}
 	}
 }
@@ -157,14 +198,38 @@ void IWidgetManagementInterface::OnChildWidgetCreated(FWidget* NewWidget)
 	NewWidget->Init();
 
 	AddChild(NewWidget);
+
+	OnAnyChildChangedDelegate.Execute();
+
+	if (HasParent())
+	{
+		IWidgetManagementInterface* Parent = GetParent();
+		Parent->OnAnyChildChangedDelegate.Execute();
+	}
 }
 
 void IWidgetManagementInterface::OnChildWidgetDestroyed(FWidget* NewWidget)
 {
+	OnAnyChildChangedDelegate.Execute();
+
+	if (HasParent())
+	{
+		IWidgetManagementInterface* Parent = GetParent();
+		Parent->OnAnyChildChangedDelegate.Execute();
+	}
 }
 
 void IWidgetManagementInterface::OnChildSizeChanged()
 {
+}
+
+void IWidgetManagementInterface::OnAnyChildChanged()
+{
+	if (HasParent())
+	{
+		IWidgetManagementInterface* Parent = GetParent();
+		Parent->OnAnyChildChangedDelegate.Execute();
+	}
 }
 
 void IWidgetManagementInterface::ChangeWidgetOrder(FWidget* InWidget)
@@ -209,6 +274,8 @@ void IWidgetManagementInterface::RegisterWidget(FWidget* Widget)
 		// This means re-register to same parent and it's not supported
 		ENSURE_VALID(false);
 	}
+
+	RequestWidgetRebuild();
 }
 
 void IWidgetManagementInterface::RegisterWidgetPostInit(FWidget* Widget)
@@ -223,6 +290,8 @@ void IWidgetManagementInterface::UnRegisterWidget(FWidget* Widget)
 	
 	ManagedWidgets.Remove(Widget);
 	ManagedWidgetsMap.Remove(Widget->GetName());
+
+	RequestWidgetRebuild();
 
 #if _DEBUG
 	const auto NotDeletedIndex = ManagedWidgets.FindIndexOf(Widget);

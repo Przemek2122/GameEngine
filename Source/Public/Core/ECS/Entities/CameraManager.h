@@ -21,8 +21,8 @@ public:
 	void RegisterInput();
 	void UnregisterInput();
 
-	void OnMouseMove(FVector2D<int> CurrentMouseLocation, EInputState);
-	void OnMouseRightClick(FVector2D<int> CurrentMouseLocation, EInputState InputState);
+	bool OnMouseMove(FVector2D<int> CurrentMouseLocation, EInputState);
+	bool OnMouseRightClick(FVector2D<int> CurrentMouseLocation, EInputState InputState);
 
 protected:
 	/** MapManager - Sending map location */

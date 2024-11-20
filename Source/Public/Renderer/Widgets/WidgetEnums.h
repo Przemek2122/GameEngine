@@ -1,15 +1,19 @@
-
-
 #pragma once
 
 /** Visibility and hit control enum */
 enum class EWidgetVisibility : Uint8
 {
 	None = 0,				// Should never happen
-	Visible,				// Visible and interactive
-	VisibleNotInteractive,	// Visible but not interactive
-	Hidden,					// Not visible but interactive
-	Collapsed,				// Not visible and non interactive
+	Visible,				// Visible
+	Hidden,					// Not visible
+};
+
+/** Visibility and hit control enum */
+enum class EWidgetInteraction : Uint8
+{
+	None = 0,				// Should never happen
+	Interactive,			// Interactive
+	NotInteractive,			// Not interactive
 };
 
 /** Alignment of child to parent widget */
@@ -48,3 +52,43 @@ enum class EWidgetSizeType : Uint8
 	Pixels = 0,				// Size in pixels
 	ParentPercentage,		// Size in screen percentage
 };
+
+inline const char* WidgetVisibilityToString(const EWidgetVisibility InWidgetVisibility)
+{
+	const char* OutValue = "Unknown visibility";
+
+	switch (InWidgetVisibility)
+	{
+	case EWidgetVisibility::None:
+		OutValue = "None";
+		break;
+	case EWidgetVisibility::Visible:
+		OutValue = "Visible";
+		break;
+	case EWidgetVisibility::Hidden:
+		OutValue = "Hidden";
+		break;
+	}
+
+	return OutValue;
+}
+
+inline const char* WidgetInteractionToString(const EWidgetInteraction WidgetInteraction)
+{
+	const char* OutValue = "Unknown interaction";
+
+	switch (WidgetInteraction)
+	{
+	case EWidgetInteraction::None:
+		OutValue = "None";
+		break;
+	case EWidgetInteraction::Interactive:
+		OutValue = "Interactive";
+		break;
+	case EWidgetInteraction::NotInteractive:
+		OutValue = "NotInteractive";
+		break;
+	}
+
+	return OutValue;
+}

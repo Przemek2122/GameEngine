@@ -13,32 +13,24 @@ enum class EHorizontalBoxAlignMethod
 class FHorizontalBoxWidget : public FWidget
 {
 public:
-	FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
-
-	/** Begin FWidget interface */
-	void Render() override;
-	void ReCalculate() override;
-	/** End FWidget interface */
+	FHorizontalBoxWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
 
 	/** Begin IWidgetManagementInterface interface */
-	void RegisterWidgetPostInit(FWidget* Widget) override;
-	void UnRegisterWidget(FWidget* Widget) override;
-	void OnChildSizeChanged() override;
+	void GenerateDesiredWidgetGeometry() override;
 	/** End IWidgetManagementInterface interface */
 
-	void AlignWidgets(const bool bForce = false);
-
-	void AlignFromTheLeft();
+	void AlignWidgets();
 
 	void SetScaleToContent(const bool bInScaleToContent);
-
 	bool ShouldScaleToContent() const { return bScaleToContent; }
 
 protected:
+	void RebuildWidget() override;
+
+	void AlignFromTheLeft();
+
 	EHorizontalBoxAlignMethod HorizontalBoxAlignMethod;
 
 	bool bScaleToContent;
-
-	int CurrentlyCalculatedNumberOfWidgets;
 	
 };

@@ -5,120 +5,10 @@
 
 #include "Assets/IniReader/IniManager.h"
 #include "Assets/IniReader/IniObject.h"
-
-static const std::string DefaultInputName = "Default";
-
-FMouseDelegates::FMouseDelegates(FEventHandler* EventHandler)
-{
-	const std::shared_ptr<FMouseInputDelegateWrapper> InputPtr = std::make_shared<FMouseInputDelegateWrapper>(EventHandler);
-
-	RawInputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
-	InputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
-}
-
-void FMouseDelegates::AddInput(FEventHandler* EventHandler, FIniObject* InIniObject, const std::string& RawInputName)
-{
-#if _DEBUG
-	if (EventHandler != nullptr)
-	{
-#endif
-
-		if (InIniObject != nullptr)
-		{
-			FIniField IniField = InIniObject->FindFieldByName(RawInputName);
-			if (IniField.IsValid())
-			{
-				const std::shared_ptr<FMouseInputDelegateWrapper> InputPtr = std::make_shared<FMouseInputDelegateWrapper>(EventHandler);
-
-				RawInputNameToDelegateMap.Emplace(RawInputName, InputPtr);
-				InputNameToDelegateMap.Emplace(IniField.GetValueAsString(), InputPtr);
-			}
-		}
-
-#if _DEBUG
-	}
-	else
-	{
-		LOG_ERROR("EventHandler can not be nullptr!");
-	}
-#endif
-}
-
-FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByNameRaw(const std::string& InputName)
-{
-	if (RawInputNameToDelegateMap.ContainsKey(InputName))
-	{
-		return RawInputNameToDelegateMap[InputName].get();
-	}
-	else
-	{
-		LOG_ERROR("FMouseDelegates::GetMouseDelegateByNameRaw returns default input mapping. Input not found: " << InputName);
-
-		return RawInputNameToDelegateMap["Default"].get();
-	}
-}
-
-FMouseInputDelegateWrapper* FMouseDelegates::GetMouseDelegateByName(const std::string& InputName)
-{
-	if (InputNameToDelegateMap.ContainsKey(InputName))
-	{
-		return InputNameToDelegateMap[InputName].get();
-	}
-	else
-	{
-		LOG_ERROR("FMouseDelegates::GetMouseDelegateByName returns default input mapping. Input not found: " << InputName);
-
-		return InputNameToDelegateMap["Default"].get();
-	}
-}
-
-FKeyBoardDelegates::FKeyBoardDelegates(FEventHandler* EventHandler)
-{
-	const std::shared_ptr<FInputDelegateWrapper> InputPtr = std::make_shared<FInputDelegateWrapper>(EventHandler);
-
-	RawInputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
-	InputNameToDelegateMap.Emplace(DefaultInputName, InputPtr);
-}
-
-void FKeyBoardDelegates::AddInput(FEventHandler* EventHandler, const std::string& RawInputName, const std::string& InputName)
-{
-#if _DEBUG
-	if (EventHandler != nullptr)
-	{
-#endif
-
-		const std::shared_ptr<FInputDelegateWrapper> InputPtr = std::make_shared<FInputDelegateWrapper>(EventHandler);
-
-		RawInputNameToDelegateMap.Emplace(RawInputName, InputPtr);
-		InputNameToDelegateMap.Emplace(InputName, InputPtr);
-
-#if _DEBUG
-	}
-	else
-	{
-		LOG_ERROR("EventHandler can not be nullptr!");
-	}
-#endif
-}
-
-FInputDelegateWrapper* FKeyBoardDelegates::GetMouseDelegateByName(const std::string& InputName)
-{
-	if (InputNameToDelegateMap.ContainsKey(InputName))
-	{
-		return InputNameToDelegateMap[InputName].get();
-	}
-	else
-	{
-		LOG_ERROR("FKeyBoardDelegates::GetMouseDelegateByName returns default input mapping. It will not work.");
-
-		return InputNameToDelegateMap["Default"].get();
-	}
-}
+#include "Input/WindowInputManager.h"
 
 FEventHandler::FEventHandler(const SDL_Event& InEvent)
-	: MouseDelegates(this)
-	, KeyBoardDelegates(this)
-	, Event(InEvent)
+	: Event(InEvent)
 	, bQuitInputDetected(false)
 {
 }
@@ -162,14 +52,12 @@ void FEventHandler::ResetAll()
 
 void FEventHandler::InitializeInputFromConfig()
 {
+	const std::string EngineInputSettingsIniName = "EngineInput";
 	FIniManager* IniManager = GEngine->GetAssetsManager()->GetIniManager();
-	EngineInputIniObject = IniManager->GetIniObject("EngineInput");
+	EngineInputIniObject = IniManager->GetIniObject(EngineInputSettingsIniName);
 	if (EngineInputIniObject->DoesIniExist())
 	{
 		EngineInputIniObject->LoadIni();
-
-		InitializeMouseDelegates();
-		InitializeKeyBoardDelegates();
 	}
 }
 
@@ -193,6 +81,11 @@ FVector2D<int> FEventHandler::GetMouseLocationLast() const
 	return MouseLocationLast;
 }
 
+std::shared_ptr<FIniObject> FEventHandler::GetEngineInputIniObject() const
+{
+	return EngineInputIniObject;
+}
+
 void FEventHandler::AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* MouseInputDelegateWrapper)
 {
 	MouseInputDelegateResetQueue.Push(MouseInputDelegateWrapper);
@@ -201,46 +94,6 @@ void FEventHandler::AddMouseInputDelegateToReset(FMouseInputDelegateWrapper* Mou
 void FEventHandler::AddKeyboardInputDelegateToReset(FInputDelegateWrapper* KeyboardInputDelegateWrapper)
 {
 	KeyboardInputDelegateResetQueue.Push(KeyboardInputDelegateWrapper);
-}
-
-void FEventHandler::InitializeMouseDelegates()
-{
-	MouseDelegates.AddInput(this, EngineInputIniObject.get(), "SDL_MOUSE_MOVE");
-	MouseDelegates.AddInput(this, EngineInputIniObject.get(), "SDL_MOUSE_BUTTON_LEFT");
-	MouseDelegates.AddInput(this, EngineInputIniObject.get(), "SDL_MOUSE_BUTTON_MIDDLE");
-	MouseDelegates.AddInput(this, EngineInputIniObject.get(), "SDL_MOUSE_BUTTON_RIGHT");
-}
-
-void FEventHandler::InitializeKeyBoardDelegates()
-{
-	KeyBoardDelegates.ButtonEscape = FAutoDeletePointer<FInputDelegateWrapper>(this);
-
-	KeyBoardDelegates.Button0 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button1 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button2 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button3 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button4 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button5 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button6 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button7 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button8 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.Button9 = FAutoDeletePointer<FInputDelegateWrapper>(this);
-
-	KeyBoardDelegates.ButtonA = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonB = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonC = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonD = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonE = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	// [...] @TODO Add other basic buttons
-	KeyBoardDelegates.ButtonW = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonS = FAutoDeletePointer<FInputDelegateWrapper>(this);
-
-	KeyBoardDelegates.ButtonArrowUP = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonArrowDOWN = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonArrowRIGHT = FAutoDeletePointer<FInputDelegateWrapper>(this);
-	KeyBoardDelegates.ButtonArrowLEFT = FAutoDeletePointer<FInputDelegateWrapper>(this);
-
-	KeyBoardDelegates.ButtonDELETE = FAutoDeletePointer<FInputDelegateWrapper>(this);
 }
 
 void FEventHandler::SwitchOnInput(const Uint32 EventType)
@@ -313,387 +166,422 @@ void FEventHandler::SwitchOnInput(const Uint32 EventType)
 
 void FEventHandler::InputKeyDown()
 {
-	switch (Event.key.keysym.sym)
+	// Sent input only to focused window
+	if (FWindow* CurrentWindow = GetCurrentlyFocusedWindow())
 	{
-		case SDLK_ESCAPE:
+		FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
+		FKeyBoardDelegates& KeyBoardDelegates = CurrentWindowInputManger->KeyBoardDelegates;
+
+		switch (Event.key.keysym.sym)
 		{
-			KeyBoardDelegates.ButtonEscape->Execute(EInputState::PRESS);
+			case SDLK_ESCAPE:
+			{
+				KeyBoardDelegates.ButtonEscape->Execute(EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_0:
-		{
-			KeyBoardDelegates.Button0->Execute(EInputState::PRESS);
+			case SDLK_0:
+			{
+				KeyBoardDelegates.Button0->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_1:
-		{
-			KeyBoardDelegates.Button1->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_1:
+			{
+				KeyBoardDelegates.Button1->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_2:
-		{
-			KeyBoardDelegates.Button2->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_2:
+			{
+				KeyBoardDelegates.Button2->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_3:
-		{
-			KeyBoardDelegates.Button3->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_3:
+			{
+				KeyBoardDelegates.Button3->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_4:
-		{
-			KeyBoardDelegates.Button4->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_4:
+			{
+				KeyBoardDelegates.Button4->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_5:
-		{
-			KeyBoardDelegates.Button5->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_5:
+			{
+				KeyBoardDelegates.Button5->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_6:
-		{
-			KeyBoardDelegates.Button6->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_6:
+			{
+				KeyBoardDelegates.Button6->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_7:
-		{
-			KeyBoardDelegates.Button7->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_7:
+			{
+				KeyBoardDelegates.Button7->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_8:
-		{
-			KeyBoardDelegates.Button8->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_8:
+			{
+				KeyBoardDelegates.Button8->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_9:
-		{
-			KeyBoardDelegates.Button9->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_9:
+			{
+				KeyBoardDelegates.Button9->Execute(EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_UP:
-		{
-			KeyBoardDelegates.ButtonArrowUP->Execute(EInputState::PRESS);
+			case SDLK_UP:
+			{
+				KeyBoardDelegates.ButtonArrowUP->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_DOWN:
-		{
-			KeyBoardDelegates.ButtonArrowDOWN->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_DOWN:
+			{
+				KeyBoardDelegates.ButtonArrowDOWN->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_RIGHT:
-		{
-			KeyBoardDelegates.ButtonArrowRIGHT->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_RIGHT:
+			{
+				KeyBoardDelegates.ButtonArrowRIGHT->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_LEFT:
-		{
-			KeyBoardDelegates.ButtonArrowLEFT->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_LEFT:
+			{
+				KeyBoardDelegates.ButtonArrowLEFT->Execute(EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_DELETE:
-		{
-			KeyBoardDelegates.ButtonDELETE->Execute(EInputState::PRESS);
+			case SDLK_DELETE:
+			{
+				KeyBoardDelegates.ButtonDELETE->Execute(EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_a:
-		{
-			KeyBoardDelegates.ButtonA->Execute(EInputState::PRESS);
+			case SDLK_a:
+			{
+				KeyBoardDelegates.ButtonA->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_b:
-		{
-			KeyBoardDelegates.ButtonB->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_b:
+			{
+				KeyBoardDelegates.ButtonB->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_c:
-		{
-			KeyBoardDelegates.ButtonC->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_c:
+			{
+				KeyBoardDelegates.ButtonC->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_d:
-		{
-			KeyBoardDelegates.ButtonD->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_d:
+			{
+				KeyBoardDelegates.ButtonD->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_e:
-		{
-			KeyBoardDelegates.ButtonE->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_e:
+			{
+				KeyBoardDelegates.ButtonE->Execute(EInputState::PRESS);
 
-			break;
-		}
-		// [...] @TODO Someday all add buttons
-		case SDLK_w:
-		{
-			KeyBoardDelegates.ButtonW->Execute(EInputState::PRESS);
+				break;
+			}
+			// [...] @TODO Someday all add buttons
+			case SDLK_w:
+			{
+				KeyBoardDelegates.ButtonW->Execute(EInputState::PRESS);
 
-			break;
-		}
-		case SDLK_s:
-		{
-			KeyBoardDelegates.ButtonS->Execute(EInputState::PRESS);
+				break;
+			}
+			case SDLK_s:
+			{
+				KeyBoardDelegates.ButtonS->Execute(EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		default:
-		{
-			LOG_DEBUG("Unknown keyboard input found.");
+			default:
+			{
+				LOG_DEBUG("Unknown keyboard input found.");
+			}
 		}
 	}
 }
 
 void FEventHandler::InputKeyUp()
 {
-	switch (Event.key.keysym.sym)
+	// Sent input only to focused window
+	if (FWindow* CurrentWindow = GetCurrentlyFocusedWindow())
 	{
-		case SDLK_ESCAPE:
+		FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
+		FKeyBoardDelegates& KeyBoardDelegates = CurrentWindowInputManger->KeyBoardDelegates;
+
+		switch (Event.key.keysym.sym)
 		{
-			KeyBoardDelegates.ButtonEscape->Execute(EInputState::RELEASE);
+			case SDLK_ESCAPE:
+			{
+				KeyBoardDelegates.ButtonEscape->Execute(EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_0:
-		{
-			KeyBoardDelegates.Button0->Execute(EInputState::RELEASE);
+			case SDLK_0:
+			{
+				KeyBoardDelegates.Button0->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_1:
-		{
-			KeyBoardDelegates.Button1->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_1:
+			{
+				KeyBoardDelegates.Button1->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_2:
-		{
-			KeyBoardDelegates.Button2->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_2:
+			{
+				KeyBoardDelegates.Button2->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_3:
-		{
-			KeyBoardDelegates.Button3->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_3:
+			{
+				KeyBoardDelegates.Button3->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_4:
-		{
-			KeyBoardDelegates.Button4->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_4:
+			{
+				KeyBoardDelegates.Button4->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_5:
-		{
-			KeyBoardDelegates.Button5->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_5:
+			{
+				KeyBoardDelegates.Button5->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_6:
-		{
-			KeyBoardDelegates.Button6->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_6:
+			{
+				KeyBoardDelegates.Button6->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_7:
-		{
-			KeyBoardDelegates.Button7->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_7:
+			{
+				KeyBoardDelegates.Button7->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_8:
-		{
-			KeyBoardDelegates.Button8->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_8:
+			{
+				KeyBoardDelegates.Button8->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_9:
-		{
-			KeyBoardDelegates.Button9->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_9:
+			{
+				KeyBoardDelegates.Button9->Execute(EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_UP:
-		{
-			KeyBoardDelegates.ButtonArrowUP->Execute(EInputState::RELEASE);
+			case SDLK_UP:
+			{
+				KeyBoardDelegates.ButtonArrowUP->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_DOWN:
-		{
-			KeyBoardDelegates.ButtonArrowDOWN->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_DOWN:
+			{
+				KeyBoardDelegates.ButtonArrowDOWN->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_RIGHT:
-		{
-			KeyBoardDelegates.ButtonArrowRIGHT->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_RIGHT:
+			{
+				KeyBoardDelegates.ButtonArrowRIGHT->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_LEFT:
-		{
-			KeyBoardDelegates.ButtonArrowLEFT->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_LEFT:
+			{
+				KeyBoardDelegates.ButtonArrowLEFT->Execute(EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_DELETE:
-		{
-			KeyBoardDelegates.ButtonDELETE->Execute(EInputState::RELEASE);
+			case SDLK_DELETE:
+			{
+				KeyBoardDelegates.ButtonDELETE->Execute(EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		case SDLK_a:
-		{
-			KeyBoardDelegates.ButtonA->Execute(EInputState::RELEASE);
+			case SDLK_a:
+			{
+				KeyBoardDelegates.ButtonA->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_b:
-		{
-			KeyBoardDelegates.ButtonB->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_b:
+			{
+				KeyBoardDelegates.ButtonB->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_c:
-		{
-			KeyBoardDelegates.ButtonC->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_c:
+			{
+				KeyBoardDelegates.ButtonC->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_d:
-		{
-			KeyBoardDelegates.ButtonD->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_d:
+			{
+				KeyBoardDelegates.ButtonD->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_e:
-		{
-			KeyBoardDelegates.ButtonE->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_e:
+			{
+				KeyBoardDelegates.ButtonE->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		// [...] @TODO Someday all add buttons
-		case SDLK_w:
-		{
-			KeyBoardDelegates.ButtonW->Execute(EInputState::RELEASE);
+				break;
+			}
+			// [...] @TODO Someday all add buttons
+			case SDLK_w:
+			{
+				KeyBoardDelegates.ButtonW->Execute(EInputState::RELEASE);
 
-			break;
-		}
-		case SDLK_s:
-		{
-			KeyBoardDelegates.ButtonS->Execute(EInputState::RELEASE);
+				break;
+			}
+			case SDLK_s:
+			{
+				KeyBoardDelegates.ButtonS->Execute(EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		default:
-		{
-			LOG_DEBUG("Unknown keyboard input found.");
+			default:
+			{
+				LOG_DEBUG("Unknown keyboard input found.");
+			}
 		}
 	}
 }
 
 void FEventHandler::MouseMotion()
 {
-	if (MouseLocationLast != MouseLocationCurrent)
+	// Sent input only to focused window
+	if (FWindow* CurrentWindow = GetCurrentlyFocusedWindow())
 	{
-		MouseLocationLast = MouseLocationCurrent;
+		if (MouseLocationLast != MouseLocationCurrent)
+		{
+			FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
+			FMouseDelegates& MouseDelegates = CurrentWindowInputManger->MouseDelegates;
 
-		MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_MOVE")->Execute(MouseLocationCurrent, EInputState::PRESS);
+			MouseLocationLast = MouseLocationCurrent;
+
+			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_MOVE")->Execute(MouseLocationCurrent, EInputState::PRESS);
+		}
+
+		MouseLocationCurrent.X = Event.motion.x;
+		MouseLocationCurrent.Y = Event.motion.y;
 	}
-
-	MouseLocationCurrent.X = Event.motion.x;
-	MouseLocationCurrent.Y = Event.motion.y;
 }
 
 void FEventHandler::InputMouseDown()
 {
-	switch (Event.button.button)
+	// Sent input only to focused window
+	if (FWindow* CurrentWindow = GetCurrentlyFocusedWindow())
 	{
-		case SDL_BUTTON_LEFT:
+		FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
+		FMouseDelegates& MouseDelegates = CurrentWindowInputManger->MouseDelegates;
+
+		switch (Event.button.button)
 		{
-			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_LEFT")->Execute(MouseLocationCurrent, EInputState::PRESS);
+			case SDL_BUTTON_LEFT:
+			{
+				MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_LEFT")->Execute(MouseLocationCurrent, EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		case SDL_BUTTON_MIDDLE:
-		{
-			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_MIDDLE")->Execute(MouseLocationCurrent, EInputState::PRESS);
+			case SDL_BUTTON_MIDDLE:
+			{
+				MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_MIDDLE")->Execute(MouseLocationCurrent, EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		case SDL_BUTTON_RIGHT:
-		{
-			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_RIGHT")->Execute(MouseLocationCurrent, EInputState::PRESS);
+			case SDL_BUTTON_RIGHT:
+			{
+				MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_RIGHT")->Execute(MouseLocationCurrent, EInputState::PRESS);
 
-			break;
-		}
+				break;
+			}
 
-		default:
-		{
-			LOG_DEBUG("Unknown mouse input found.");
+			default:
+			{
+				LOG_DEBUG("Unknown mouse input found.");
+			}
 		}
 	}
 }
 
 void FEventHandler::InputMouseUp()
 {
-	switch (Event.button.button)
+	// Sent input only to focused window
+	if (FWindow* CurrentWindow = GetCurrentlyFocusedWindow())
 	{
-		case SDL_BUTTON_LEFT:
+		FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
+		FMouseDelegates& MouseDelegates = CurrentWindowInputManger->MouseDelegates;
+
+		switch (Event.button.button)
 		{
-			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_LEFT")->Execute(MouseLocationCurrent, EInputState::RELEASE);
+			case SDL_BUTTON_LEFT:
+			{
+				MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_LEFT")->Execute(MouseLocationCurrent, EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		case SDL_BUTTON_MIDDLE:
-		{
-			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_MIDDLE")->Execute(MouseLocationCurrent, EInputState::RELEASE);
+			case SDL_BUTTON_MIDDLE:
+			{
+				MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_MIDDLE")->Execute(MouseLocationCurrent, EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		case SDL_BUTTON_RIGHT:
-		{
-			MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_RIGHT")->Execute(MouseLocationCurrent, EInputState::RELEASE);
+			case SDL_BUTTON_RIGHT:
+			{
+				MouseDelegates.GetMouseDelegateByNameRaw("SDL_MOUSE_BUTTON_RIGHT")->Execute(MouseLocationCurrent, EInputState::RELEASE);
 
-			break;
-		}
+				break;
+			}
 
-		default:
-		{
-			LOG_DEBUG("Unknown mouse input found.");
+			default:
+			{
+				LOG_DEBUG("Unknown mouse input found.");
+			}
 		}
 	}
 }
@@ -724,35 +612,30 @@ void FEventHandler::InputWindowEvent()
 
 		case SDL_WINDOWEVENT_MOVED:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " moved to: " << Event.window.data1 << " " << Event.window.data2);
 			GEngine->GetEngineRender()->OnWindowMoved(Event.window.windowID, Event.window.data1, Event.window.data2);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_RESIZED:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " resized to: " << Event.window.data1 << " " << Event.window.data2);
 			GEngine->GetEngineRender()->OnWindowResized(Event.window.windowID, Event.window.data1, Event.window.data2);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " size changed to: " << Event.window.data1 << " " << Event.window.data2);
 			GEngine->GetEngineRender()->OnWindowSizeChanged(Event.window.windowID, Event.window.data1, Event.window.data2);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_MINIMIZED:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " minimized.");
 			GEngine->GetEngineRender()->OnWindowMinimized(Event.window.windowID);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_MAXIMIZED:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " maximized.");
 			GEngine->GetEngineRender()->OnWindowMaximized(Event.window.windowID);
 			break;
 		}
@@ -765,26 +648,24 @@ void FEventHandler::InputWindowEvent()
 
 		case SDL_WINDOWEVENT_ENTER:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " mouse entered.");
+			GEngine->GetEngineRender()->SetWindowIsMouseInside(Event.window.windowID, true);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_LEAVE:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " mouse left.");
+			GEngine->GetEngineRender()->SetWindowIsMouseInside(Event.window.windowID, false);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 		{
-			LOG_DEBUG("Window %d gained keyboard focus << " << Event.window.windowID);
 			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
 			break;
 		}
 
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " lost keyboard focus");
 			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
 			break;
 		}
@@ -812,4 +693,9 @@ void FEventHandler::InputWindowEvent()
 			LOG_DEBUG("Window " << Event.window.windowID << " got unknown event" << Event.window.event);
 		}
 	}
+}
+
+FWindow* FEventHandler::GetCurrentlyFocusedWindow() const
+{
+	return GEngine->GetEngineRender()->GetFocusedWindow();
 }

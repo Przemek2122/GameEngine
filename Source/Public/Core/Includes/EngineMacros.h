@@ -6,13 +6,22 @@
 
 #include "CoreMinimal.h"
 
-#if _DEBUG
+#define DEBUG ((defined _DEBUG) && _DEBUG)
+#define WITH_WIDGET_DEBUGGER DEBUG
+
+#if DEBUG
 // Not inline in debug to be able to see callstack.
 #define INLINE_DEBUGABLE
 #else
 // Inline in release
 #define INLINE_DEBUGABLE inline
 #endif
+
+typedef Uint8 uint8;
+typedef Uint32 uint32;
+typedef Uint64 uint64;
+typedef int32_t int32;
+typedef int64_t int64;
 
 inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 {
@@ -28,7 +37,7 @@ inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 	}
 };
 
-#if _DEBUG
+#if DEBUG
 // Just a stop, can be continued
 #define ENSURE_VALID(Condition) Inline_ENSURE_VALID_Lambda(Condition)
 //#define ENSURE_VALID_MESSAGE(Condition, Message) Inline_ENSURE_VALID_MESSAGE_Lambda(Condition, Message)
@@ -56,6 +65,9 @@ inline bool Inline_ENSURE_VALID_Lambda(auto Condition)
 
 /** Macro allowing calls to parent class. @note Constructor Super call in init list is not allowed! */
 #define Super __super
+
+/** Macro to check if CurrentClass inherits from BaseClass at compile time. FailMessage will be shown in log in case of missing class */
+#define ASSERT_IS_BASE_OF(BaseClass, CurrentClass, FailMessage) static_assert(std::is_base_of_v<BaseClass, CurrentClass>, FailMessage);
 
 #define THREAD_WAIT_MS(TimeInMS)			std::this_thread::sleep_for(std::chrono::milliseconds(TimeInMS))
 #define THREAD_WAIT_NS(TimeInNS)			std::this_thread::sleep_for(std::chrono::nanoseconds(TimeInNS))

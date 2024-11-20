@@ -28,6 +28,8 @@ public:
 
 	UCollisionComponent* GetCollisionComponent() const { return CollisionComponent; }
 
+	const CArray<FCollisionTile*>& GetCurrentlyLocatedTiles() const { return CurrentlyLocatedTiles; }
+
 protected:
 	ECollisionType CollisionType;
 

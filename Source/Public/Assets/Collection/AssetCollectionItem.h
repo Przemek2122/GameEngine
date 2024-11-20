@@ -12,6 +12,10 @@ protected:
 	std::string AssetPath;
 
 public:
+	FAssetCollectionItem()
+	{
+	}
+
 	FAssetCollectionItem(std::string InAssetName, std::string InAssetPath);
 
 	const std::string& GetAssetName() const;

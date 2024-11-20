@@ -23,6 +23,16 @@ public:
 	
 	static FVector2D<int> GetRectCenter(const SDL_Rect Rect);
 
+	static double Cos(const double AngleRadians)
+	{
+		return std::cos(AngleRadians);
+	}
+
+	static double Sin(const double AngleRadians)
+	{
+		return std::sin(AngleRadians);
+	}
+
 	static int FloorToInt(const float Value);
 	static int FloorToInt(const double Value);
 
@@ -36,10 +46,10 @@ public:
 	static float RandRange(const float Min, const float Max);
 	static int RandRange(const int Min, const int Max);
 
-	static float RadiansToDegrees(float Value);
+	static double RadiansToDegrees(double Value);
 	static double RadiansToDegreesDouble(double Value);
 
-	static float DegreesToRadians(float Value);
+	static double DegreesToRadians(double Value);
 	static double DegreesToRadiansDouble(double Value);
 
 	/* Returns radians */
@@ -77,7 +87,7 @@ public:
 	}
 
 	template<typename TType>
-	static int Clamp(const TType Value, const TType Min,  const TType Max)
+	static TType Clamp(const TType Value, const TType Min,  const TType Max)
 	{
 		if (Value < Min)
 		{
@@ -152,6 +162,12 @@ public:
 	static bool IsNearlyEqual(TType A, TType B, float Tolerance = 0.0001f)
 	{
 		return (Abs(A - B) < Tolerance);
+	}
+
+	template<typename TType = float>
+	static TType MapRange(TType Value, const FVector2D<TType>& InRange, const FVector2D<TType>& OutRange)
+	{
+		return (Value - InRange.X) * (OutRange.Y - OutRange.X) / (InRange.Y - InRange.X) + OutRange.X;
 	}
 
 };

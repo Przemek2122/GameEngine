@@ -19,7 +19,7 @@ void FSingleRunTest::StartTest()
 
 	const size_t Nanosecond_End = FUtil::GetNanoSeconds();
 	const size_t Nanosecond_TestDuration = Nanosecond_End - Nanosecond_Start;
-	const std::string ActualTimeString = std::to_string(FUtil::NanoSecondToSecond<float>(Nanosecond_TestDuration));
+	const std::string ActualTimeString = std::to_string(FUtil::NanoSecondToSecond(Nanosecond_TestDuration));
 
 	LOG_DEBUG(GetTestName() << " - Test duration(nanoseconds) : " + ActualTimeString + "s.");
 

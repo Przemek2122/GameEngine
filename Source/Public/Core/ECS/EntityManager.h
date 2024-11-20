@@ -16,16 +16,22 @@ protected:
 	virtual ~FEntityManager();
 
 public:
-	template<typename TEntityClass, typename... TInParams>
-	TEntityClass* CreateEntity(TInParams... InParams)
+	template <typename TEntityClass>
+	void RegisterNewEntity(TEntityClass* NewEntity)
 	{
-		TEntityClass* NewEntity = new TEntityClass(this, InParams ...);
-
 		Entities.Push(NewEntity);
 
 		NewEntity->BeginPlay();
 
 		OnEntityCreated(NewEntity);
+	}
+
+	template<typename TEntityClass, typename... TInParams>
+	TEntityClass* CreateEntity(TInParams... InParams)
+	{
+		TEntityClass* NewEntity = new TEntityClass(this, InParams ...);
+
+		RegisterNewEntity<TEntityClass>(NewEntity);
 
 		return NewEntity;
 	}
@@ -38,7 +44,7 @@ public:
 		UParentComponent* TransformComponent = dynamic_cast<UParentComponent*>(NewEntity->GetRootComponent());
 		if (TransformComponent != nullptr)
 		{
-			TransformComponent->SetLocationUser(Location);
+			TransformComponent->SetLocation(Location);
 		}
 
 		return NewEntity;

@@ -19,6 +19,12 @@ class FRenderer;
 class FWindow;
 
 class FWidget;
+class FTextWidget;
+class FImageWidget;
+class FBorderWidget;
+class FHorizontalBoxWidget;
+class FVerticalBoxWidget;
+
 class FWidgetManager;
 class IWidgetManagementInterface;
 class IWidgetInteraction;

@@ -31,7 +31,7 @@ void FTimersLongRunTest::StartTimer1()
 	TimerDelegate.BindLambda([&](FOptionalTimerParams*)
 	{
 		LOG_INFO("Timer (sync thread) finished.");
-		LOG_INFO("Time elapsed since timer start: " << TemporaryTimer1->GetTimeElapsedSinceStart());
+		LOG_INFO("Time elapsed since timer start: " << TemporaryTimer1->GetTimeMSElapsedSinceStart());
 
 		CheckIfAllTimersFinishedAndFinishTest();
 	});
@@ -44,7 +44,7 @@ void FTimersLongRunTest::StartTimer2()
 	TemporaryTimer2 = FTimerManager::CreateTimerAsync([&](FOptionalTimerParams*)
 	{
 		LOG_INFO("Timer (sync thread) finished.");
-		LOG_INFO("Time elapsed since timer start: " << TemporaryTimer2->GetTimeElapsedSinceStart());
+		LOG_INFO("Time elapsed since timer start: " << TemporaryTimer2->GetTimeMSElapsedSinceStart());
 
 		CurrentNumberOfTimer2Runs++;
 

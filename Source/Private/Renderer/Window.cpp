@@ -2,8 +2,13 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Window.h"
+
+#include "Input/WindowInputManager.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Map/MapManager.h"
+#if WITH_WIDGET_DEBUGGER
+#include "Renderer/Widgets/WidgetDebugger.h"
+#endif
 #include "Renderer/Widgets/WidgetInputManager.h"
 
 FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, const Uint32 InWindowFlags)
@@ -15,7 +20,12 @@ FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, co
 	, WindowFlags(InWindowFlags)
 	, bIsWindowFocused(false)
 	, bIsWindowVisible(true)
+	, bIsWindowMouseInside(true)
 	, WidgetManager(nullptr)
+#if WITH_WIDGET_DEBUGGER
+	, WidgetDebugger(nullptr)
+#endif
+	, WindowInputManager(nullptr)
 	, WidgetInputManager(nullptr)
 	, MapManager(nullptr)
 {
@@ -37,6 +47,9 @@ FWindow::~FWindow()
 {
 	delete Renderer;	
 	delete WidgetManager;
+#if WITH_WIDGET_DEBUGGER
+	delete WidgetDebugger;
+#endif
 	delete WidgetInputManager;
 	delete MapManager;
 
@@ -56,6 +69,7 @@ void FWindow::Init()
 {
 	Renderer = CreateRenderer();
 	WidgetManager = CreateWidgetManager();
+	WindowInputManager = CreateWindowInputManager();
 	WidgetInputManager = CreateWidgetInputManager();
 	MapManager = CreateMapManager();
 }
@@ -80,9 +94,21 @@ FWidgetManager* FWindow::CreateWidgetManager()
 	return new FWidgetManager(this);
 }
 
+#if WITH_WIDGET_DEBUGGER
+FWidgetDebugger* FWindow::CreateWidgetDebugger()
+{
+	return new FWidgetDebugger(this);
+}
+#endif
+
+FWindowInputManager* FWindow::CreateWindowInputManager()
+{
+	return new FWindowInputManager(this);
+}
+
 FWidgetInputManager* FWindow::CreateWidgetInputManager()
 {
-	return new FWidgetInputManager();
+	return new FWidgetInputManager(this);
 }
 
 FMapManager* FWindow::CreateMapManager()
@@ -99,7 +125,7 @@ void FWindow::Tick()
 {
 	const float DeltaTime = GEngine->GetDeltaTime();
 
-	WidgetManager->TickWidgets();
+	WidgetManager->ReceiveTick();
 	MapManager->TickMap(DeltaTime);
 }
 
@@ -114,6 +140,14 @@ void FWindow::Render()
 
 	Renderer->PostRender();
 }
+
+#if DEBUG
+void FWindow::StartWidgetDebugger()
+{
+	WidgetDebugger = CreateWidgetDebugger();
+	WidgetDebugger->StartDebugger();
+}
+#endif
 
 void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 {
@@ -130,6 +164,8 @@ void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 	{
 		Widget->OnWindowChanged();
 	}
+
+	WidgetManager->RequestWidgetRebuild();
 }
 
 void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)
@@ -141,6 +177,11 @@ void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)
 
 	Location.X = X;
 	Location.Y = Y;
+}
+
+std::string FWindow::GetWindowTitle() const
+{
+	return WindowTitle;
 }
 
 FRenderer* FWindow::GetRenderer() const
@@ -178,7 +219,7 @@ void FWindow::OnWindowMadeVisible()
 	bIsWindowVisible = true;
 }
 
-void FWindow::OnWindowMadeInVisible()
+void FWindow::OnWindowMadeInvisible()
 {
 	bIsWindowVisible = false;
 }
@@ -200,6 +241,11 @@ void FWindow::SetWindowFocus(const bool bInNewFocus)
 	SDL_SetWindowInputFocus(Window);
 }
 
+void FWindow::SetWindowIsMouseInside(const bool bInIsWindowMouseInside)
+{
+	bIsWindowMouseInside = bInIsWindowMouseInside;
+}
+
 FMapManager* FWindow::GetMapManager() const
 {
 	return MapManager;
@@ -208,6 +254,11 @@ FMapManager* FWindow::GetMapManager() const
 FWidgetManager* FWindow::GetWidgetManager() const
 {
 	return WidgetManager;
+}
+
+FWindowInputManager* FWindow::GetWindowInputManager() const
+{
+	return WindowInputManager;
 }
 
 FWidgetInputManager* FWindow::GetWidgetInputManager() const

@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Widget.h"
 
+#include "Renderer/Widgets/WidgetInputManager.h"
+
 FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::string InWidgetName, const int InWidgetOrder)
 	: IWidgetPositionInterface(InWidgetManagementInterface)
 	, bWasRenderedThisFrame(false)
@@ -10,8 +12,13 @@ FWidget::FWidget(IWidgetManagementInterface* InWidgetManagementInterface, std::s
 	, WidgetName(std::move(InWidgetName))
 	, WidgetOrder(InWidgetOrder)
 	, WidgetVisibility(EWidgetVisibility::Visible)
+	, WidgetInteraction(EWidgetInteraction::NotInteractive)
 	, WidgetManagementInterface(InWidgetManagementInterface)
 	, bIsPendingDelete(false)
+	, WidgetInputManager(nullptr)
+#if WITH_WIDGET_DEBUGGER
+	, bIsWidgetBeingDebugged(false)
+#endif
 {
 #if _DEBUG
 	// Critical to be valid.
@@ -39,22 +46,49 @@ void FWidget::ReceiveTick()
 
 void FWidget::ReceiveRender()
 {
-	Render();
-	
-	RenderWidgets();
+	bWasRenderedThisFrame = ShouldBeRendered();
+	if (bWasRenderedThisFrame)
+	{
+		Render();
+
+		RenderWidgets();
+	}
+
+#if WITH_WIDGET_DEBUGGER
+	if (bIsWidgetBeingDebugged)
+	{
+		FRenderer* Renderer = GetRenderer();
+		Renderer->DrawRectangleOutline(GetWidgetLocation(), GetWidgetSize(), FColorRGBA::ColorRed(), false);
+	}
+#endif
 }
 
 void FWidget::Init()
 {
 	WidgetManagementInterface->RegisterWidget(this);
 
-	SetAnchor(DefaultAnchorInterface);
-
-	RefreshWidget();
+	SetAnchor(DefaultAnchor);
 
 	RegisterWidgetPostInit(this);
 
 	bWasInitCalled = true;
+
+	FEventHandler* EventHandler = GEngine->GetEventHandler();
+	SetupInput(EventHandler);
+}
+
+void FWidget::PreDeInit()
+{
+	FEventHandler* EventHandler = GEngine->GetEventHandler();
+	ClearInput(EventHandler);
+
+	// Unregister widget
+	if (WidgetManagementInterface != nullptr)
+	{
+		WidgetManagementInterface->UnRegisterWidget(this);
+
+		WidgetManagementInterface = nullptr;
+	}
 }
 
 void FWidget::DeInit()
@@ -69,23 +103,92 @@ void FWidget::Render()
 {
 }
 
-void FWidget::ReCalculate()
+void FWidget::SetupInput(FEventHandler* EventHandler)
 {
-	RefreshWidget(false);
+}
 
-	for (FWidget* Widget : ManagedWidgets)
+void FWidget::ClearInput(FEventHandler* EventHandler)
+{
+}
+
+void FWidget::OnWidgetOrderChanged()
+{
+	WidgetManagementInterface->ChangeWidgetOrder(this);
+}
+
+void FWidget::OnWidgetVisibilityChanged()
+{
+	if (WidgetVisibility == EWidgetVisibility::Hidden)
 	{
-		Widget->OnWindowChanged();
+		OnVisibilityChangedToHidden();
 	}
 }
 
-void FWidget::PreDeInit()
+void FWidget::OnChildSizeChanged()
 {
-	if (WidgetManagementInterface != nullptr)
-	{
-		WidgetManagementInterface->UnRegisterWidget(this);
+	Super::OnChildSizeChanged();
 
-		WidgetManagementInterface = nullptr;
+	UpdateSizeToFitChildren();
+}
+
+void FWidget::OnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
+{
+}
+
+bool FWidget::OnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	// By default, we do not capture input on widgets, you can change returned value to true to block input for other input receivers
+	return (ShouldConsumeInput() && IsLocationInsideWidget(InMousePosition));
+}
+
+bool FWidget::OnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	// By default, we do not capture input on widgets, you can change returned value to true to block input for other input receivers
+	return (ShouldConsumeInput() && IsLocationInsideWidget(InMousePosition));
+}
+
+void FWidget::UpdateSizeToFitChildren()
+{
+	// @TODO Refactor due to widget changes
+	if (bShouldChangeSizeToFitChildren)
+	{
+		FVector2D<int> DesiredSize;
+
+		for (const FWidget* ChildWidget : ManagedWidgets)
+		{
+			if (ChildWidget->IsVisible())
+			{
+				const FVector2D<int> ChildSize = ChildWidget->GetWidgetSize();
+
+				if (ChildSize.X > DesiredSize.X)
+				{
+					DesiredSize.X = ChildSize.X;
+				}
+
+				DesiredSize.Y += ChildSize.Y;
+			}
+		}
+
+		const FVector2D<int> CurrentWidgetSize = GetWidgetSize();
+
+		if (DesiredSize.X > CurrentWidgetSize.X && DesiredSize.Y > CurrentWidgetSize.Y)
+		{
+			SetWidgetSize(DesiredSize);
+		}
+		else if (DesiredSize.X > CurrentWidgetSize.X)
+		{
+			DesiredSize.Y = CurrentWidgetSize.Y;
+
+			SetWidgetSize(DesiredSize);
+		}
+		else if (DesiredSize.Y > CurrentWidgetSize.Y)
+		{
+			DesiredSize.X = CurrentWidgetSize.X;
+
+			SetWidgetSize(DesiredSize);
+		}
+
+		UpdateAnchor();
 	}
 }
 
@@ -93,13 +196,13 @@ void FWidget::DestroyWidget()
 {
 	if (!bIsPendingDelete)
 	{
+		RequestWidgetRebuild();
+
 		bIsPendingDelete = true;
 
-		ClearChildren();
-
-		SetWidgetVisibility(EWidgetVisibility::Collapsed);
-
 		PreDeInit();
+
+		ClearChildren();
 
 		GEngine->GetFunctionsToCallOnStartOfNextTick().BindObject(this, &FWidget::FinalizeDestroyWidget);
 	}
@@ -127,8 +230,6 @@ void FWidget::DestroyWidgetImmediate()
 
 		ClearChildren();
 
-		SetWidgetVisibility(EWidgetVisibility::Collapsed);
-
 		PreDeInit();
 
 		DeInit();
@@ -137,19 +238,33 @@ void FWidget::DestroyWidgetImmediate()
 	}
 }
 
-void FWidget::RefreshWidget(const bool bRefreshChildren)
+void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
 {
-	RefreshWidgetSize();
-	RefreshWidgetLocation();
-	RefreshAnchor();
-
-	if (bRefreshChildren)
+	if (WidgetVisibility != InWidgetVisibility)
 	{
-		for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
-		{
-			ManagedWidgets[i]->RefreshWidget();
-		}
+		WidgetVisibility = InWidgetVisibility;
+
+		OnWidgetVisibilityChanged();
+
+		RequestWidgetRebuild();
 	}
+}
+
+void FWidget::SetWidgetInteraction(const EWidgetInteraction InWidgetInteraction)
+{
+	WidgetInteraction = InWidgetInteraction;
+}
+
+void FWidget::SetWidgetOrder(const int InWidgetOrder)
+{
+	WidgetOrder = InWidgetOrder;
+
+	OnWidgetOrderChanged();
+}
+
+void FWidget::SetShouldChangeSizeOnChildChange(const bool bInShouldChangeSizeOnChildChange)
+{
+	bShouldChangeSizeToFitChildren = bInShouldChangeSizeOnChildChange;
 }
 
 FVector2D<int> FWidget::GetWidgetManagerOffset() const
@@ -164,6 +279,7 @@ FVector2D<int> FWidget::GetWidgetManagerSize() const
 
 bool FWidget::HasParent() const
 {
+	// Widgets unlike FWidgetManager always have parent
 	return true;
 }
 
@@ -174,12 +290,36 @@ FWindow* FWidget::GetOwnerWindow() const
 
 void FWidget::OnWindowChanged()
 {
-	ReCalculate();
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->OnWindowChanged();
+		ManagedWidget->RequestWidgetRebuild();
+	}
+}
+
+bool FWidget::IsVisible() const
+{
+	return (GetWidgetVisibility() == EWidgetVisibility::Visible);
+}
+
+bool FWidget::IsInteractive() const
+{
+	return bWasRenderedThisFrame && (GetWidgetInteraction() == EWidgetInteraction::Interactive);
+}
+
+bool FWidget::ShouldConsumeInput() const
+{
+	return (IsInteractive());
 }
 
 bool FWidget::ShouldBeRendered() const
 {
-	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
+	return (WidgetVisibility == EWidgetVisibility::Visible);
+}
+
+std::string FWidget::GetName() const
+{
+	return WidgetName;
 }
 
 FWindow* FWidget::GetWindow() const
@@ -197,52 +337,42 @@ FEventHandler* FWidget::GetEventHandler()
 	return GEngine->GetEventHandler();
 }
 
-void FWidget::SetWidgetVisibility(const EWidgetVisibility InWidgetVisibility)
-{
-	WidgetVisibility = InWidgetVisibility;
-
-	for (FWidget* ManagedWidget : ManagedWidgets)
-	{
-		ManagedWidget->SetWidgetVisibility(InWidgetVisibility);
-	}
-
-	ReCalculate();
-}
-
 EWidgetVisibility FWidget::GetWidgetVisibility() const
 {
 	return WidgetVisibility;
 }
 
-bool FWidget::IsVisible() const
+std::string FWidget::GetWidgetVisibilityAsString() const
 {
-	return (WidgetVisibility == EWidgetVisibility::Visible || WidgetVisibility == EWidgetVisibility::VisibleNotInteractive);
+	return WidgetVisibilityToString(WidgetVisibility);
 }
 
-void FWidget::OnWidgetVisibilityChanged()
+EWidgetInteraction FWidget::GetWidgetInteraction() const
 {
+	return WidgetInteraction;
 }
 
-std::string FWidget::GetName() const
+std::string FWidget::GetWidgetInteractionAsString() const
 {
-	return WidgetName;
+	return WidgetInteractionToString(WidgetInteraction);
 }
 
-int FWidget::GetWidgetOrder() const
+int32 FWidget::GetWidgetOrder() const
 {
 	return WidgetOrder;
 }
 
-void FWidget::SetWidgetOrder(const int InWidgetOrder)
+int32 FWidget::GetParentsNumber() const
 {
-	WidgetOrder = InWidgetOrder;
-	
-	OnWidgetOrderChanged();
-}
+	int32 OutParentNumber = 0;
 
-void FWidget::OnWidgetOrderChanged()
-{
-	WidgetManagementInterface->ChangeWidgetOrder(this);
+	IWidgetManagementInterface* CurrentParent = GetParent();
+	for (; OutParentNumber < WIDGET_MAX_DEPTH && CurrentParent != nullptr; OutParentNumber++)
+	{
+		CurrentParent = CurrentParent->GetParent();
+	}
+
+	return OutParentNumber;
 }
 
 IWidgetManagementInterface* FWidget::GetParent() const
@@ -268,7 +398,76 @@ IWidgetManagementInterface* FWidget::GetParentRoot() const
 	return nullptr;
 }
 
-bool FWidget::IsInteractive() const
+void FWidget::ReceiveOnMouseMove(FVector2D<int> InMousePosition, EInputState InputState)
 {
-	return (GetWidgetVisibility() == EWidgetVisibility::Visible || GetWidgetVisibility() == EWidgetVisibility::Hidden);
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		FWidget* ManagedWidget = ManagedWidgets[i];
+
+		ManagedWidget->ReceiveOnMouseMove(InMousePosition, InputState);
+	}
+
+	OnMouseMove(InMousePosition, InputState);
 }
+
+bool FWidget::ReceiveOnMouseLeftClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	bool bIsInputConsumed = false;
+
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		FWidget* ManagedWidget = ManagedWidgets[i];
+
+		if (ManagedWidget->ReceiveOnMouseLeftClick(InMousePosition, InputState))
+		{
+			bIsInputConsumed = true;
+		}
+	}
+
+	if (!bIsInputConsumed)
+	{
+		bIsInputConsumed = OnMouseLeftClick(InMousePosition, InputState);
+	}
+
+	return bIsInputConsumed;
+}
+
+bool FWidget::ReceiveOnMouseRightClick(FVector2D<int> InMousePosition, EInputState InputState)
+{
+	bool bIsInputConsumed = false;
+
+	for (ContainerInt i = 0; i < ManagedWidgets.Size(); i++)
+	{
+		FWidget* ManagedWidget = ManagedWidgets[i];
+
+		if (ManagedWidget->ReceiveOnMouseRightClick(InMousePosition, InputState))
+		{
+			bIsInputConsumed = true;
+		}
+	}
+
+	if (!bIsInputConsumed)
+	{
+		bIsInputConsumed = OnMouseRightClick(InMousePosition, InputState);
+	}
+
+	return bIsInputConsumed;
+}
+
+#if WITH_WIDGET_DEBUGGER
+void FWidget::SetIsWidgetBeingDebugged(const bool bNewValue)
+{
+	bIsWidgetBeingDebugged = bNewValue;
+}
+
+void FWidget::OnVisibilityChangedToHidden()
+{
+	bWasRenderedThisFrame = false;
+
+	for (FWidget* ManagedWidget : ManagedWidgets)
+	{
+		ManagedWidget->OnVisibilityChangedToHidden();
+	}
+
+}
+#endif

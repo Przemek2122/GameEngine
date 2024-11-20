@@ -1,7 +1,7 @@
 #include "CoreEngine.h"
 #include "Renderer/Widgets/UIMenus/PauseUIMenu.h"
 
-#include "Input/EventHandler.h"
+#include "Input/WindowInputManager.h"
 #include "Renderer/WindowAdvanced.h"
 #include "Renderer/Widgets/Samples/ButtonWidget.h"
 #include "Renderer/Widgets/Samples/TextWidget.h"
@@ -16,10 +16,12 @@ FPauseUIMenu::FPauseUIMenu(FWindow* InGameWindow)
 
 void FPauseUIMenu::Initialize()
 {
+	static const std::string PauseVerticalBoxName = "VerticalBox_PauseUI";
+
 	OnBindDelegateRequested();
 
 	// Create VerticalBoxWidget
-	VerticalBoxWidget = GetOwnerWindow()->CreateWidget<FVerticalBoxWidget>();
+	VerticalBoxWidget = GetOwnerWindow()->CreateWidget<FVerticalBoxWidget>(PauseVerticalBoxName);
 	VerticalBoxWidget->SetAnchor(EAnchor::Center);
 
 	// Create content
@@ -36,7 +38,7 @@ void FPauseUIMenu::DeInitialize()
 	VerticalBoxWidget->DestroyWidget();
 }
 
-void FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
+bool FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
 {
 	if (InputState == EInputState::RELEASE)
 	{
@@ -49,6 +51,8 @@ void FPauseUIMenu::OnExitButtonPressed(EInputState InputState)
 			EnablePauseMenu();
 		}
 	}
+
+	return true;
 }
 
 void FPauseUIMenu::OnExitToMenuRequested()
@@ -105,7 +109,7 @@ void FPauseUIMenu::Show()
 
 void FPauseUIMenu::Hide()
 {
-	VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Collapsed);
+	VerticalBoxWidget->SetWidgetVisibility(EWidgetVisibility::Hidden);
 
 	OnMenuHidden();
 }
@@ -120,22 +124,29 @@ void FPauseUIMenu::OnMenuHidden()
 
 void FPauseUIMenu::CreateMenuInVerticalBox(FVerticalBoxWidget* InVerticalBoxWidget)
 {
-	FButtonWidget* BackButton = VerticalBoxWidget->CreateWidget<FButtonWidget>();
-	FTextWidget* TextWidget = BackButton->CreateWidget<FTextWidget>();
-	TextWidget->SetText("Back to menu");
-	BackButton->OnClickRelease.BindObject(this, &FPauseUIMenu::OnExitToMenuRequested);
+	static const std::string PauseButtonName = "Button_PauseUI";
+	static const std::string PauseTextName = "Text_PauseUI";
+	static const std::string BackToMenuText = "Back to menu";
+
+	FButtonWidget* BackButton = VerticalBoxWidget->CreateWidget<FButtonWidget>(PauseButtonName);
+	BackButton->UseDefaultSize();
+	BackButton->OnLeftClickRelease.BindObject(this, &FPauseUIMenu::OnExitToMenuRequested);
+	FTextWidget* TextWidget = BackButton->CreateWidget<FTextWidget>(PauseTextName);
+	TextWidget->SetText(BackToMenuText);
 }
 
 void FPauseUIMenu::OnBindDelegateRequested()
 {
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
+	FWindowInputManager* WindowInputManager = GetOwnerWindow()->GetWindowInputManager();
 
+	FInputDelegateWrapper* EscapeDelegate = WindowInputManager->KeyBoardDelegates.ButtonEscape.Get();
 	EscapeDelegate->Delegate.BindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }
 
 void FPauseUIMenu::OnUnbindDelegateRequested()
 {
-	FInputDelegateWrapper* EscapeDelegate = GEngine->GetEventHandler()->KeyBoardDelegates.ButtonEscape.Get();
+	FWindowInputManager* WindowInputManager = GetOwnerWindow()->GetWindowInputManager();
 
+	FInputDelegateWrapper* EscapeDelegate = WindowInputManager->KeyBoardDelegates.ButtonEscape.Get();
 	EscapeDelegate->Delegate.UnBindObject(this, &FPauseUIMenu::OnExitButtonPressed);
 }

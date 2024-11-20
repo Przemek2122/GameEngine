@@ -4,16 +4,20 @@
 
 #include "CoreMinimal.h"
 
-class FAiTree;
+class FAITree;
 
 /**
  * AI actions base class
  */
-class FAiActionBase
+class FAIActionBase
 {
 public:
-	FAiActionBase(FAiTree* InAiTree);
-	virtual ~FAiActionBase() = default;
+	FAIActionBase(FAITree* InAiTree);
+	virtual ~FAIActionBase() = default;
+
+	bool TryStartAction();
+
+	virtual void Initialize();
 
 	/** Ticks only when action is active */
 	virtual void Tick();
@@ -25,25 +29,30 @@ public:
 	void End();
 
 	/** used by AiTree to check if action should be finished */
-	virtual bool ShouldFinishAction() const;
+	virtual bool ShouldFinishAction() const { return false; }
 
 	/** Used by AiTree to decide if this action is available. */
-	virtual bool IsActionReady() const;
+	virtual bool IsActionReady() const { return true; }
 
-	/** Used by AiTree to found action with the highest priority if EChooseActionMethod::ByPriority is used. Bigger means higher priority. */
-	virtual int32_t GetActionPriority() const;
+	/** Used by AiTree to decide if this action should start automatically. */
+	virtual bool HasAutomaticStart() const { return true; }
+
+	/** You can override if you want more complicated logic for determinig if action is running but, it would be nice for performance to do not touch */
+	virtual bool IsActionRunning() const { return bIsActionRunning; }
 
 	/** @return owner AI tree */
-	FAiTree* GetTree() const;
+	FAITree* GetTree() const;
 
 	/** @return Entity owner for this action */
-	EEntity* GetEntity() const;
+	EEntity* GetOwnerEntity() const;
 
 protected:
 	virtual void StartAction();
 	virtual void EndAction();
 
 private:
-	FAiTree* AiTree;
+	FAITree* AiTree;
+
+	bool bIsActionRunning;
 
 };

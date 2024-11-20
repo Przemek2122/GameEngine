@@ -11,7 +11,6 @@ FMap::FMap(FMapAsset* InMapAsset, FMapManager* InMapManager)
 	: MapAsset(InMapAsset)
 	, MapManager(InMapManager)
 	, CameraManagerEntity(nullptr)
-	, MapLocationChangeDelegate()
 	, bIsActive(false)
 	, EntityManager(nullptr)
 {
@@ -24,6 +23,8 @@ void FMap::Initialize()
 	ReadAsset();
 
 	CameraManagerEntity = EntityManager->CreateEntity<ECameraManager>();
+
+	UpdateMapOffsetOnRenderer();
 }
 
 void FMap::DeInitialize()
@@ -192,13 +193,20 @@ FEntityManager* FMap::CreateEntityManager()
 	return new FEntityManager(MapManager->GetOwnerWindow());
 }
 
+void FMap::UpdateMapOffsetOnRenderer() const
+{
+	FWindow* Window = MapManager->GetOwnerWindow();
+	FRenderer* WindowRenderer = Window->GetRenderer();
+
+	WindowRenderer->SetRenderOffset(MapRenderOffset);
+}
+
 bool FMap::IsInBounds(const FVector2D<int>& Location) const
 {
-	const FVector2D<int> LocationMinusOffset = Location - MapRenderOffset;
 	const FVector2D<int> MapSize = GetMapSizeInPixels();
 
-	return (	(LocationMinusOffset.X >= 0 && LocationMinusOffset.X < MapSize.X)	&& 
-				(LocationMinusOffset.Y >= 0 && LocationMinusOffset.Y < MapSize.Y)	);
+	return (	(Location.X >= 0 && Location.X < MapSize.X)	&&
+				(Location.Y >= 0 && Location.Y < MapSize.Y)	);
 }
 
 void FMap::AddMapRenderOffset(const FVector2D<int>& LocationChange)
@@ -233,6 +241,8 @@ void FMap::AddMapRenderOffset(const FVector2D<int>& LocationChange)
 
 	// Trigger delegate for changed location
 	MapLocationChangeDelegate.Execute(MapRenderOffset);
+
+	UpdateMapOffsetOnRenderer();
 }
 
 FVector2D<int> FMap::GetMapRenderOffset() const

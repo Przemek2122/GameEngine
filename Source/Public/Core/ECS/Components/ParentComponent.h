@@ -9,7 +9,7 @@
  * Component for handling transform of the entity
  * Every component which should have transform should inherit from this class
  */
-class UParentComponent : public UBaseComponent, public ITransformParentInterface2D<int>
+class UParentComponent : public UBaseComponent, public FTransform2DInterface
 {
 public:
 	UParentComponent(IComponentManagerInterface* InComponentManagerInterface);
@@ -17,8 +17,6 @@ public:
 
 	/** Begin UBaseComponent */
 	void BeginPlay() override;
-	void EndPlay() override;
-
 	void OnComponentCreated(const std::string& ComponentName, UBaseComponent* NewComponent) override;
 	void OnComponentDestroy(const std::string& ComponentName, UBaseComponent* OldComponent) override;
 	/** End UBaseComponent */
@@ -27,15 +25,6 @@ public:
 	FVector2D<float> GetRightVector() const;
 
 	/** Final location - returns location in center of object */
-	FVector2D<int> GetLocationCenter() const;
-
-	void SetSize(const FVector2D<int> NewSize);
-	FVector2D<int> GetSize() const;
-
-	/** Called from map using delegate each time map location (camera position) is changed */
-	void OnMapLocationChanged(FVector2D<int> NewLocation);
-
-protected:
-	FVector2D<int> Size;
+	FVector2D<int32> GetLocationCenter() const;
 
 };

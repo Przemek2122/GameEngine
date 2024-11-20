@@ -4,7 +4,7 @@
 #include "Mutex/MutexScopeLock.h"
 
 FThreadsManager::FThreadsManager()
-	: StartingNumberOfThreads(4)
+	: StartingNumberOfThreads(1)
 	, DefaultThreadName("DefaultThread_")
 {
 }
@@ -209,7 +209,7 @@ bool FThreadsManager::HasAnyJobLeft() const
 
 bool FThreadsManager::InternalRemoveWorkerThread(const FThread* InThread)
 {
-	bool bWasRemoved ;
+	bool bWasRemoved;
 
 	if (!WorkerThreadsArrayMutex.TryLock())
 	{

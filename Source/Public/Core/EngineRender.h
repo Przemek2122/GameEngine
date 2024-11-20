@@ -4,6 +4,13 @@
 
 #include "CoreMinimal.h"
 
+struct FWindowCreationData
+{
+	FWindowCreationData(const bool bInIsThisWindowDebugger);
+
+	bool bIsThisWindowDebugger;
+};
+
 /** Call for managing rendering (windows). */
 class FEngineRender
 {
@@ -38,7 +45,7 @@ protected:
 public:
 	/** Create window from template class */
 	template<class TWindow, typename... TInParams>
-	TWindow* CreateWindow(TInParams... InParams)
+	TWindow* CreateWindow(FWindowCreationData WindowCreationData, TInParams... InParams)
 	{
 		TWindow* NewWindow = new TWindow(InParams...);
 
@@ -69,6 +76,7 @@ public:
 	void OnWindowMaximized(Uint32 WindowId);
 
 	void SetWindowFocus(Uint32 WindowId, const bool bIsFocused);
+	void SetWindowIsMouseInside(Uint32 WindowId, const bool bIsInside);
 			
 protected:
 	virtual void OnWindowMadeVisible(FWindow* Window);

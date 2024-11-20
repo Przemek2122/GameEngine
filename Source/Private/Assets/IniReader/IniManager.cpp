@@ -20,7 +20,7 @@ std::shared_ptr<FIniObject> FIniManager::GetIniObject(const std::string& IniName
 
 	if (IniNameToObjectMap.ContainsKey(IniName))
 	{
-		IniObject = IniNameToObjectMap.FindValueByKey(IniName);
+		IniObject = IniNameToObjectMap[IniName];
 	}
 	else
 	{
@@ -52,13 +52,13 @@ std::shared_ptr<FIniObject> FIniManager::CreateIniObject(const std::string& IniN
 {
 	std::string IniFullPath = ConvertIniNameToRelativeFullPath(IniName) + IniSuffix;
 
-	std::shared_ptr<FIniObject> SharedPtr = std::make_shared<FIniObject>(this, IniFullPath, IniName);
+	std::shared_ptr<FIniObject> IniObjectSharedPtr = std::make_shared<FIniObject>(this, IniFullPath, IniName);
 
-	SharedPtr->Initialize();
+	IniObjectSharedPtr->Initialize();
 
-	IniNameToObjectMap.Emplace(IniName, SharedPtr);
+	IniNameToObjectMap.Emplace(IniName, IniObjectSharedPtr);
 
-	return SharedPtr;
+	return IniObjectSharedPtr;
 }
 
 std::string FIniManager::ConvertIniNameToRelativeFullPath(const std::string& IniName) const

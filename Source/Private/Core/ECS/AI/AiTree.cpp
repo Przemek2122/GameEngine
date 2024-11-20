@@ -1,23 +1,26 @@
 // Created by Przemys³aw Wiewióra 2024
 
 #include "CoreEngine.h"
-#include "ECS/AI/AiTree.h"
+#include "ECS/AI/AITree.h"
 
-#include "ECS/AI/AiActionBase.h"
+#include "ECS/AI/AIActionBase.h"
 
-FAiTree::FAiTree(EEntity* InOwnerEntity)
-	: ChooseActionMethod(EChooseActionMethod::Random)
-	, OwnerEntity(InOwnerEntity)
-	, CurrentAction(nullptr)
+FAITree::FAITree(EEntity* InOwnerEntity)
+	: OwnerEntity(InOwnerEntity)
 	, bIsTreeEnabled(true)
 {
 }
 
-void FAiTree::RemoveAction(const FAiActionBase* AiAction)
+FAITree::~FAITree()
+{
+	EndAllActiveActions();
+}
+
+void FAITree::RemoveAction(const FAIActionBase* AiAction)
 {
 	ContainerInt Index;
 
-	const bool bIsIndexFound = AiActionsArray.FindByLambda([&](const std::shared_ptr<FAiActionBase>& Item)
+	const bool bIsIndexFound = AllAIActionsArray.FindByLambda([&](const std::shared_ptr<FAIActionBase>& Item)
 	{
 		bool bIsItemEqual = false;
 
@@ -31,131 +34,139 @@ void FAiTree::RemoveAction(const FAiActionBase* AiAction)
 
 	if (bIsIndexFound)
 	{
-		AiActionsArray.RemoveAt(Index);
+		AllAIActionsArray.RemoveAt(Index);
 	}
 }
 
-void FAiTree::TickInternal()
+void FAITree::TickInternal()
 {
 	if (bIsTreeEnabled)
 	{
+		for (std::shared_ptr<FAIActionBase>& AIActionPtr : AllAIActionsArray)
+		{
+			AIActionPtr->Tick();
+		}
+
+		ChooseAction();
+
 		Tick();
 	}
 }
 
-void FAiTree::Tick()
+void FAITree::Tick()
 {
-	if (CurrentAction == nullptr)
-	{
-		ChooseActionInternal();
-	}
-	else
-	{
-		if (CurrentAction->ShouldFinishAction())
-		{
-			CurrentAction->End();
-
-			CurrentAction = nullptr;
-		}
-		else
-		{
-			CurrentAction->Tick();
-		}
-	}
 }
 
-EEntity* FAiTree::GetOwnerEntity() const
+EEntity* FAITree::GetOwnerEntity() const
 {
 	return OwnerEntity;
 }
 
-void FAiTree::SetChooseActionMethod(const EChooseActionMethod InChooseActionMethod)
-{
-	ChooseActionMethod = InChooseActionMethod;
-}
-
-void FAiTree::SetIsTreeEnabled(const bool bInEnable)
+void FAITree::SetIsTreeEnabled(const bool bInEnable)
 {
 	bIsTreeEnabled = bInEnable;
-}
 
-void FAiTree::ChooseActionCustom()
-{
-}
-
-void FAiTree::OnActionChosen(FAiActionBase* AiAction)
-{
-	CurrentAction = AiAction;
-	CurrentAction->Start();
-}
-
-void FAiTree::ChooseActionInternal()
-{
-	switch (ChooseActionMethod)
+	if (!bInEnable)
 	{
-		case EChooseActionMethod::Random:
+		EndAllActiveActions();
+	}
+}
+
+bool FAITree::ActivateAction(FAIActionBase* InAction)
+{
+	bool bIsActionActivated = false;
+
+	if (InAction != nullptr && !InAction->IsActionRunning() && InAction->IsActionReady())
+	{
+		StartAction(InAction);
+
+		bIsActionActivated = true;
+	}
+
+	return bIsActionActivated;
+}
+
+bool FAITree::StopAction(FAIActionBase* InAction, const bool bForceStopAction)
+{
+	bool bWasStoppingActionSuccess = false;
+
+	if (InAction != nullptr && InAction->IsActionRunning())
+	{
+		bWasStoppingActionSuccess = true;
+
+		if (bForceStopAction || InAction->ShouldFinishAction())
 		{
-			FAiActionBase* ChosenAction = nullptr;
-			CArray<std::shared_ptr<FAiActionBase>> AllActionsCopy = AiActionsArray;
+			InAction->End();
+		}
+	}
 
-			while(ChosenAction == nullptr && AllActionsCopy.Size() > 0)
-			{
-				int32_t RandomIndex = FMath::RandRange(0, AllActionsCopy.Size() - 1);
-				const std::shared_ptr<FAiActionBase>& AiAction = AllActionsCopy[RandomIndex];
+	return bWasStoppingActionSuccess;
+}
 
-				if (AiAction->IsActionReady())
-				{
-					ChosenAction = AiAction.get();
-				}
-				else
-				{
-					AllActionsCopy.RemoveAt(RandomIndex);
-				}
-			}
+bool FAITree::IsAnyActionRunning() const
+{
+	bool bIsAnyActionRunning = false;
 
-			if (ChosenAction != nullptr)
-			{
-				OnActionChosen(ChosenAction);
-			}
+	for (const std::shared_ptr<FAIActionBase>& ActionPtr : AllAIActionsArray)
+	{
+		if (ActionPtr->IsActionRunning())
+		{
+			bIsAnyActionRunning = true;
 
 			break;
 		}
-		case EChooseActionMethod::ByPriority:
-		{
-			int32_t HighestPriority = -1;
-			FAiActionBase* HighestPriorityAction = nullptr;
+	}
 
-			for (std::shared_ptr<FAiActionBase>& AiAction : AiActionsArray)
+	return bIsAnyActionRunning;
+}
+
+void FAITree::ChooseAction()
+{
+	for (std::shared_ptr<FAIActionBase>& ActionPtr : AllAIActionsArray)
+	{
+		if (ActionPtr->IsActionRunning())
+		{
+			if (ActionPtr->ShouldFinishAction())
 			{
-				if (AiAction->IsActionReady())
-				{
-					int32_t CurrentPriority = AiAction->GetActionPriority();
-
-					if (CurrentPriority > HighestPriority)
-					{
-						HighestPriority = CurrentPriority;
-
-						HighestPriorityAction = AiAction.get();
-					}
-				}
+				EndAction(ActionPtr.get());
 			}
-
-			if (HighestPriorityAction != nullptr)
-			{
-				OnActionChosen(HighestPriorityAction);
-			}
-
-			break;
 		}
-		case EChooseActionMethod::Custom:
+		else if (ActionPtr->HasAutomaticStart() && ActionPtr->IsActionReady())
 		{
-			ChooseActionCustom();
-
-			break;
+			StartAction(ActionPtr.get());
 		}
-		default:
+	}
+}
+
+void FAITree::OnActionActivated(FAIActionBase* InAction)
+{
+}
+
+void FAITree::OnActionDeactivated(FAIActionBase* InAction)
+{
+}
+
+void FAITree::StartAction(FAIActionBase* InAction)
+{
+	InAction->Start();
+
+	OnActionActivated(InAction);
+}
+
+void FAITree::EndAction(FAIActionBase* InAction)
+{
+	InAction->End();
+
+	OnActionDeactivated(InAction);
+}
+
+void FAITree::EndAllActiveActions()
+{
+	for (const std::shared_ptr<FAIActionBase>& AIActionBase : AllAIActionsArray)
+	{
+		if (AIActionBase->IsActionRunning())
 		{
-			LOG_WARN("Default case!");
+			StopAction(AIActionBase.get(), true);
 		}
 	}
 }

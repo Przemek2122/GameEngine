@@ -5,6 +5,20 @@
 #include "ParentComponent.h"
 #include "ECS/Component.h"
 
+enum class ERenderType : uint8
+{
+	Center,
+	AbsoluteLocation,
+};
+
+enum class ERenderCenterType : uint8
+{
+	RotateAround,
+	AtPivotPoint
+};
+
+struct FAssetCollectionItem;
+
 /**
  * Component for handling transform of the entity
  */
@@ -19,6 +33,9 @@ public:
 	void Render() override;
 	/** End UBaseComponent */
 
+	/** Set image from AssetCollectionItem. */
+	void SetImage(const FAssetCollectionItem& AssetCollectionItem);
+
 	/** Set image from given name. It will try to find asset. If it was not created it will try to use OptionalPath to load it. */
 	void SetImage(const std::string& InImageName, const std::string& OptionalPath = "");
 
@@ -28,11 +45,14 @@ public:
 	/** Set size. @Note SetImage sets always size of image, so call it after SetImage */
 	void SetImageSize(const FVector2D<int>& InSize);
 
+	void SetRenderLocationType(const ERenderType InRenderType);
+	void SetRenderCenterType(const ERenderCenterType InRenderCenterType);
+
 protected:
 	/** Image to render */
 	FTextureAsset* TextureAsset;
 
-	FVector2D<int> LocationRenderOffset;
-	FVector2D<int> SizeCached;
+	ERenderCenterType CurrentRenderCenterType;
+	ERenderType CurrentRenderType;
 
 };

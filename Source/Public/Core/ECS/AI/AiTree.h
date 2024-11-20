@@ -2,16 +2,11 @@
 
 #pragma once
 
+#include "AIActionBase.h"
 #include "CoreMinimal.h"
 
-enum class EChooseActionMethod
-{
-	Random,
-	ByPriority,
-	Custom
-};
-
-class FAiActionBase;
+class FAIMemorySet;
+class FAIActionBase;
 
 /**
  * AI Trees are used for decision making on which action should AI Choose
@@ -19,10 +14,11 @@ class FAiActionBase;
  * One tree for movement. One action for direct approach. One for approach from left etc...
  * Another example would be AI with multiple weapons.
  */
-class FAiTree
+class FAITree
 {
 public:
-	FAiTree(EEntity* InOwnerEntity);
+	FAITree(EEntity* InOwnerEntity);
+	virtual ~FAITree();
 
 	/** Create AI Action. */
 	template<typename TActionClass>
@@ -30,44 +26,69 @@ public:
 	{
 		std::shared_ptr<TActionClass> ActionPtr = std::make_shared<TActionClass>(this);
 
-		AiActionsArray.Push(ActionPtr);
+		ActionPtr->Initialize();
+
+		AllAIActionsArray.Push(ActionPtr);
 
 		return ActionPtr.get();
 	}
 
 	/** Delete AI Action. */
-	void RemoveAction(const FAiActionBase* AiAction);
+	void RemoveAction(const FAIActionBase* AiAction);
+
+	/** Get AI Action by class (Iterate all action to find correct one) */
+	template<class TActionClass>
+	TActionClass* GetActionByClass()
+	{
+		TActionClass* CastedAction = nullptr;
+
+		for (std::shared_ptr<FAIActionBase>& AIAction : AllAIActionsArray)
+		{
+			CastedAction = dynamic_cast<TActionClass*>(AIAction.get());
+			if (CastedAction != nullptr)
+			{
+				break;
+			}
+		}
+
+		return CastedAction;
+	}
 
 	void TickInternal();
 
+	/** Start, stop actions and tick them. */
 	virtual void Tick();
 
 	EEntity* GetOwnerEntity() const;
 
-	void SetChooseActionMethod(const EChooseActionMethod InChooseActionMethod);
-
 	void SetIsTreeEnabled(const bool bInEnable);
 
-protected:
-	/** If you want to have custom behaviour of choosing action set ChooseActionMethod and override this method */
-	virtual void ChooseActionCustom();
+	/** Will activate action if not running and ready */
+	bool ActivateAction(FAIActionBase* InAction);
 
-	virtual void OnActionChosen(FAiActionBase* AiAction);
+	/** Will stop action, use force to stop for sure */
+	bool StopAction(FAIActionBase* InAction, const bool bForceStopAction = false);
+
+	bool IsAnyActionRunning() const;
+
+protected:
+	/** Choosing action method, override to change default behaviour */
+	virtual void ChooseAction();
+
+	virtual void OnActionActivated(FAIActionBase* InAction);
+	virtual void OnActionDeactivated(FAIActionBase* InAction);
+
+	void StartAction(FAIActionBase* InAction);
+	void EndAction(FAIActionBase* InAction);
+	void EndAllActiveActions();
+
+protected:
+	/** FAIActionBase array, see CreateAction and RemoveAction */
+	CArray<std::shared_ptr<FAIActionBase>> AllAIActionsArray;
 
 private:
-	void ChooseActionInternal();
-		
-	/** Current method of choosing action to play, see ChooseActionInternal */
-	EChooseActionMethod ChooseActionMethod;
-
 	/** Owner entity */
 	EEntity* OwnerEntity;
-
-	/** FAiActionBase array, see CreateAction and RemoveAction */
-	CArray<std::shared_ptr<FAiActionBase>> AiActionsArray;
-
-	/** Current AiAction running */
-	FAiActionBase* CurrentAction;
 
 	/** If true Tick will choose action when previous finished. */
 	bool bIsTreeEnabled;

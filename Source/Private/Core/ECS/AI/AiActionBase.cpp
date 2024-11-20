@@ -1,56 +1,60 @@
 // Created by Przemys³aw Wiewióra 2024
 
 #include "CoreEngine.h"
-#include "Core/ECS/AI/AiActionBase.h"
+#include "Core/ECS/AI/AIActionBase.h"
 
-FAiActionBase::FAiActionBase(FAiTree* InAiTree)
+FAIActionBase::FAIActionBase(FAITree* InAiTree)
 	: AiTree(InAiTree)
+	, bIsActionRunning(false)
 {
 }
 
-void FAiActionBase::Tick()
+bool FAIActionBase::TryStartAction()
 {
-}
+	if (AiTree != nullptr)
+	{
+		return AiTree->ActivateAction(this);
+	}
 
-void FAiActionBase::Start()
-{
-	StartAction();
-}
-
-void FAiActionBase::End()
-{
-	EndAction();
-}
-
-bool FAiActionBase::ShouldFinishAction() const
-{
 	return false;
 }
 
-bool FAiActionBase::IsActionReady() const
+void FAIActionBase::Initialize()
 {
-	return true;
 }
 
-int32_t FAiActionBase::GetActionPriority() const
+void FAIActionBase::Tick()
 {
-	return 0;
 }
 
-FAiTree* FAiActionBase::GetTree() const
+void FAIActionBase::Start()
+{
+	StartAction();
+
+	bIsActionRunning = true;
+}
+
+void FAIActionBase::End()
+{
+	EndAction();
+
+	bIsActionRunning = false;
+}
+
+FAITree* FAIActionBase::GetTree() const
 {
 	return AiTree;
 }
 
-EEntity* FAiActionBase::GetEntity() const
+EEntity* FAIActionBase::GetOwnerEntity() const
 {
 	return AiTree->GetOwnerEntity();
 }
 
-void FAiActionBase::StartAction()
+void FAIActionBase::StartAction()
 {
 }
 
-void FAiActionBase::EndAction()
+void FAIActionBase::EndAction()
 {
 }

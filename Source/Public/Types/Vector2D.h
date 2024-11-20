@@ -77,6 +77,13 @@ public:
 		return FVector2D(-X, -Y);
 	}
 
+	static FVector2D Zero()
+	{
+		static FVector2D ZeroVector(0, 0);
+
+		return ZeroVector;
+	}
+
 	// Basic calculations
 	
 	friend FVector2D operator+(const FVector2D<TType>& A, const FVector2D<TType>& B) 
@@ -148,35 +155,78 @@ public:
 	
 	friend bool operator==(const FVector2D& L, const FVector2D& R)
 	{
-		return std::tie(L.X, L.Y) == std::tie(R.X, R.Y);
+		return (L.X == R.X) && (L.Y == R.Y);
 	}
 	friend bool operator!=(const FVector2D& L, const FVector2D& R)
 	{
-		return !(L == R);
+		return (L.X != R.X) || (L.Y != R.Y);
 	}
-	friend bool operator< (const FVector2D& L, const FVector2D& R)
+	friend bool operator<(const FVector2D& L, const FVector2D& R)
 	{
-		return std::tie(L.X, L.Y) < std::tie(R.X, R.Y);
-	}
-	friend bool operator>=(const FVector2D& L, const FVector2D& R)
-	{
-		return !(L < R);
-	}
-	friend bool operator> (const FVector2D& L, const FVector2D& R)
-	{
-		return   R < L;
+		return (L.X < R.X) || (L.Y < R.Y);
 	}
 	friend bool operator<=(const FVector2D& L, const FVector2D& R)
 	{
-		return !(R < L);
+		return (L.X <= R.X) && (L.Y <= R.Y);
+	}
+	friend bool operator>(const FVector2D& L, const FVector2D& R)
+	{
+		return (L.X > R.X) || (L.Y > R.Y);;
+	}
+	friend bool operator>=(const FVector2D& L, const FVector2D& R)
+	{
+		return (L.X >= R.X) && (L.Y >= R.Y);;
 	}
 
+	/** Calculate distance from this vector to 'OtherVector' */
 	TType DistanceTo(const FVector2D& OtherVector) const
 	{
 		const float DiffXSquared = static_cast<float>(FMath::Power(OtherVector.X - X));
 		const float DiffYSquared = static_cast<float>(FMath::Power(OtherVector.Y - Y));
 
 		return static_cast<TType>(FMath::Sqrt(DiffXSquared + DiffYSquared));
+	}
+
+	/** Return copy of rotated vector */
+	FVector2D<TType> Rotate(const int32 AngleInDegrees)
+	{
+		const double AngleInRadians = FMath::DegreesToRadians(AngleInDegrees);
+
+		return RotateRadians(AngleInRadians);
+	}
+
+	/**
+	 * Return copy of rotated vector
+	 * without conversion of Degrees to radians
+	 */
+	FVector2D<TType> RotateRadians(const double AngleInRadians)
+	{
+		FVector2D<TType> RetVector;
+
+		RetVector.X = X * FMath::Cos(AngleInRadians) - Y * FMath::Sin(AngleInRadians);
+		RetVector.Y = X * FMath::Sin(AngleInRadians) + Y * FMath::Cos(AngleInRadians);
+
+		return RetVector;
+	}
+
+
+	/**
+	 * Function that calculates point which is returned,
+	 * which is at a distance 'InDistance' from point 'To' in the direction from point 'From' to point 'To'
+	 */
+	static FVector2D<TType> FindEscapingPoint(const FVector2D<TType>& From, const FVector2D<TType>& To, const float InDistance)
+	{
+		FVector2D<TType> OutVector;
+
+		const double DistanceFromTo = From.DistanceTo(To);
+
+		const double UnitVecX = (To.X - From.X) / DistanceFromTo;
+		const double UnitVecY = (To.Y - From.Y) / DistanceFromTo;
+
+		OutVector.X = To.X + InDistance * UnitVecX;
+		OutVector.Y = To.Y + InDistance * UnitVecY;
+
+		return OutVector;
 	}
 
 	//FVector2D operator*(const TType& S, const FVector2D<TType>& V) { return FVector2D<TType>(V) *= S; }

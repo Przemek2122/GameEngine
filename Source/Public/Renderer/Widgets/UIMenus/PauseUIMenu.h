@@ -19,7 +19,7 @@ public:
 	FPauseUIMenu(FWindow* InGameWindow);
 
 	/** Default is escape but can be anything - Use OnBindDelegateRequested and OnUnbindDelegateRequested to change. */
-	void OnExitButtonPressed(EInputState InputState);
+	bool OnExitButtonPressed(EInputState InputState);
 
 	void OnExitToMenuRequested();
 

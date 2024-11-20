@@ -18,7 +18,7 @@ FSpark::FSpark(const FVector2D<int>& InLocation, const float InSpeed, const int 
 {
 }
 
-FMouseSparkWidget::FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder)
+FMouseSparkWidget::FMouseSparkWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int32 InWidgetOrder)
 	: FWidget(InWidgetManagementInterface, InWidgetName, InWidgetOrder)
 	, MinMaxSpeedRange(0.04f, 0.3f)
 	, MinMaxAngleRange(0, 359)
@@ -87,6 +87,6 @@ void FMouseSparkWidget::Render()
 	
 	if (const FRenderer* Renderer = GetRenderer())
 	{
-		Renderer->DrawPointsAt(Points, FColorRGBA(0, 153, 154));
+		Renderer->DrawPointsAt(Points, FColorRGBA(0, 153, 154), false);
 	}
 }

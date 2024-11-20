@@ -6,11 +6,16 @@
 #include "ECS/SubSystems/SubSystemManagerInterface.h"
 #include "Widgets/WidgetManager.h"
 
+class FWindowInputManager;
 class FMapManager;
 class FEntityManager;
 class FWidgetInputManager;
 class FWidgetManager;
 class FWidget;
+
+#if WITH_WIDGET_DEBUGGER
+class FWidgetDebugger;
+#endif
 
 #define WINDOW_DEFAULT_FLAGS (SDL_WINDOW_RESIZABLE)
 
@@ -36,6 +41,10 @@ protected:
 	void ReceiveTick();
 
 	_NODISCARD virtual FWidgetManager* CreateWidgetManager();
+#if WITH_WIDGET_DEBUGGER
+	_NODISCARD virtual FWidgetDebugger* CreateWidgetDebugger();
+#endif
+	_NODISCARD virtual FWindowInputManager* CreateWindowInputManager();
 	_NODISCARD virtual FWidgetInputManager* CreateWidgetInputManager();
 	_NODISCARD virtual FMapManager* CreateMapManager();
 	_NODISCARD virtual FRenderer* CreateRenderer();
@@ -46,11 +55,18 @@ public:
 	/** Render this window using renderer. */
 	virtual void Render();
 
+#if WITH_WIDGET_DEBUGGER
+	/** Call to enable debugger for widgets */
+	virtual void StartWidgetDebugger();
+#endif
+
 	/** Call to change window size. */
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true);
 
 	/** Call to change window location. */
 	void SetWindowLocation(const int X, const int Y, const bool bUpdateSDL);
+
+	std::string GetWindowTitle() const;
 
 	_NODISCARD FRenderer* GetRenderer() const;
 
@@ -62,17 +78,18 @@ public:
 	_NODISCARD FVector2D<int> GetWindowLocation() const;
 
 	virtual void OnWindowMadeVisible();
-	virtual void OnWindowMadeInVisible();
+	virtual void OnWindowMadeInvisible();
 
 	virtual void OnWindowSizeChanged(Sint32 X, Sint32 Y);
 	virtual void OnWindowLocationChanged(Sint32 X, Sint32 Y);
 
-	_NODISCARD SDL_Window* GetSdlWindow() const { return Window; }
-
-	_NODISCARD Uint32 GetWindowId() const { return WindowId; }
-
-	_NODISCARD bool IsWindowFocused() const { return bIsWindowFocused; }
 	void SetWindowFocus(const bool bInNewFocus);
+	void SetWindowIsMouseInside(const bool bInIsWindowMouseInside);
+
+	_NODISCARD SDL_Window* GetSdlWindow() const { return Window; }
+	_NODISCARD Uint32 GetWindowId() const { return WindowId; }
+	_NODISCARD bool IsWindowFocused() const { return bIsWindowFocused && bIsWindowMouseInside; }
+	_NODISCARD bool IsWindowMouseInside() const { return bIsWindowMouseInside; }
 
 	_NODISCARD FMapManager* GetMapManager() const;
 
@@ -84,12 +101,18 @@ public:
 	}
 
 	_NODISCARD FWidgetManager* GetWidgetManager() const;
+	_NODISCARD FWindowInputManager* GetWindowInputManager() const;
 	_NODISCARD FWidgetInputManager* GetWidgetInputManager() const;
 
 	template<class TWidgetTemplate>
 	_NODISCARD TWidgetTemplate* CreateWidget() const
 	{
 		return GetWidgetManager()->CreateWidget<TWidgetTemplate>();
+	}
+	template<class TWidgetTemplate>
+	_NODISCARD TWidgetTemplate* CreateWidget(const std::string& WidgetName) const
+	{
+		return GetWidgetManager()->CreateWidget<TWidgetTemplate>(WidgetName);
 	}
 	bool DestroyWidget(FWidget* Widget) const
 	{
@@ -108,8 +131,13 @@ protected:
 
 	bool bIsWindowFocused;
 	bool bIsWindowVisible;
+	bool bIsWindowMouseInside;
 
 	FWidgetManager* WidgetManager;
+#if WITH_WIDGET_DEBUGGER
+	FWidgetDebugger* WidgetDebugger;
+#endif
+	FWindowInputManager* WindowInputManager;
 	FWidgetInputManager* WidgetInputManager;
 
 	FMapManager* MapManager;

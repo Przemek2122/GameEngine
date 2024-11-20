@@ -7,57 +7,16 @@
 
 UParentComponent::UParentComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UBaseComponent(InComponentManagerInterface)
-	, Size(32, 32)
 {
 }
 
 void UParentComponent::BeginPlay()
 {
-	UBaseComponent::BeginPlay();
+	Super::BeginPlay();
 
-	const FWindow* Window = GetOwnerWindow();
-	if (Window != nullptr)
+	for (auto ComponentPair : ComponentsMap)
 	{
-		const FMapManager* MapManger = Window->GetMapManager();
-		if (MapManger != nullptr)
-		{
-			FMap* CurrentMap = MapManger->GetCurrentMap();
-			if (CurrentMap != nullptr)
-			{
-				CurrentMap->GetMapLocationChangeDelegate().BindObject(this, &UParentComponent::OnMapLocationChanged);
-			}
-			else
-			{
-				LOG_ERROR("UParentComponent::BeginPlay: CurrentMap is nullptr");
-			}
-		}
-		else
-		{
-			LOG_ERROR("UParentComponent::BeginPlay: MapManager is nullptr");
-		}
-	}
-	else
-	{
-		LOG_ERROR("UParentComponent::BeginPlay: Window is nullptr");
-	}
-}
-
-void UParentComponent::EndPlay()
-{
-	UBaseComponent::EndPlay();
-
-	const FWindow* Window = GetOwnerWindow();
-	if (Window != nullptr)
-	{
-		const FMapManager* MapManger = Window->GetMapManager();
-		if (MapManger != nullptr)
-		{
-			FMap* CurrentMap = MapManger->GetCurrentMap();
-			if (CurrentMap != nullptr)
-			{
-				CurrentMap->GetMapLocationChangeDelegate().UnBindObject(this, &UParentComponent::OnMapLocationChanged);
-			}
-		}
+		ComponentPair.second->BeginPlay();
 	}
 }
 
@@ -65,14 +24,16 @@ void UParentComponent::OnComponentCreated(const std::string& ComponentName, UBas
 {
 	Super::OnComponentCreated(ComponentName, NewComponent);
 
-	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(NewComponent);
+	FTransform2DInterface* TransformComponent = dynamic_cast<FTransform2DInterface*>(NewComponent);
 	if (TransformComponent != nullptr)
 	{
 		AddUpdatedComponent(TransformComponent);
 
 		// Update location of new component
-		TransformComponent->SetLocationFromParent(GetLocation());
-		TransformComponent->SetParentRotation(GetRotation());
+		TransformComponent->OnParentLocationChanged(GetAbsoluteLocation());
+
+		// Update rotation of new component
+		TransformComponent->OnParentRotationChanged(GetAbsoluteRotation());
 	}
 }
 
@@ -80,7 +41,7 @@ void UParentComponent::OnComponentDestroy(const std::string& ComponentName, UBas
 {
 	Super::OnComponentDestroy(ComponentName, OldComponent);
 
-	ITransformChildInterface2D<int>* TransformComponent = dynamic_cast<ITransformChildInterface2D<int>*>(OldComponent);
+	FTransform2DInterface* TransformComponent = dynamic_cast<FTransform2DInterface*>(OldComponent);
 	if (TransformComponent != nullptr)
 	{
 		RemoveUpdatedComponent(TransformComponent);
@@ -94,7 +55,7 @@ FVector2D<float> UParentComponent::GetForwardVector() const
 
 	FVector2D<int> CurrentForwardVector = ForwardVector * VectorRotation;
 
-	const int CurrentRotation = GetRotation();
+	const int CurrentRotation = GetAbsoluteRotation();
 	const float CurrentRotationRadian = FMath::DegreesToRadians(static_cast<float>(CurrentRotation));
 
 	FMath::RotatePointAroundPoint({ 0, 0 }, CurrentRotationRadian, CurrentForwardVector);
@@ -108,27 +69,12 @@ FVector2D<float> UParentComponent::GetRightVector() const
 
 	FVector2D<int> CurrentRightVector = RightVector;
 
-	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<float>(GetRotation()), CurrentRightVector);
+	FMath::RotatePointAroundPoint({ 0, 0 }, static_cast<float>(GetAbsoluteRotation()), CurrentRightVector);
 
 	return RightVector;
 }
 
-FVector2D<int> UParentComponent::GetLocationCenter() const
+FVector2D<int32> UParentComponent::GetLocationCenter() const
 {
-	return (GetLocation() + (Size / 2));
-}
-
-void UParentComponent::SetSize(const FVector2D<int> NewSize)
-{
-	Size = NewSize;
-}
-
-FVector2D<int> UParentComponent::GetSize() const
-{
-	return Size;
-}
-
-void UParentComponent::OnMapLocationChanged(const FVector2D<int> NewLocation)
-{
-	SetLocationMap(NewLocation);
+	return (GetAbsoluteLocation() + (GetSize() / 2));
 }

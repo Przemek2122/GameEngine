@@ -26,6 +26,7 @@ public:
 	void SetMaxHealthOverride(const float NewMaxHealth);
 	void ResetMaxHealthToDefault();
 
+	bool IsAlive() const;
 	bool IsDead() const;
 
 	/** Called when receiving damage - each time with damage taken */
@@ -41,7 +42,7 @@ protected:
 	virtual void SetHealthDefaults();
 
 	/** Called when killed (Health is 0 or below) */
-	virtual void OnDie();
+	virtual void Die();
 
 protected:
 	/** Health which was set before start */

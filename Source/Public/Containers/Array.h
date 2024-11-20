@@ -8,6 +8,8 @@
 
 #include <vector>
 
+#include "Misc/Math.h"
+
 /**
  * Dynamic array template for any type.
  */
@@ -123,7 +125,7 @@ public:
 	}
 	
 	template<typename TTypeAuto>
-	SDL_FORCE_INLINE void InsertAt(int Index, TTypeAuto Value)
+	SDL_FORCE_INLINE void InsertAt(TSizeType Index, TTypeAuto Value)
 	{
 		Vector.insert(Vector.begin() + Index, Value); 
 	}
@@ -158,20 +160,18 @@ public:
 	template<typename TTypeAuto>
 	SDL_FORCE_INLINE bool RemoveAll(TTypeAuto Value)
 	{
-		std::vector<int>::iterator Iterator = Vector.begin();
-
 		TSizeType RemovedElements = 0;
 
-		while (Iterator != Vector.end())
+		for (TSizeType i = 0; i < Size(); )
 		{
-			if (*Iterator == Value)
+			if (Vector[i] == Value)
 			{
-				Iterator = Vector.erase(Iterator);
-				++RemovedElements;
+				RemoveAt(i);
 			}
-			else 
+			else
 			{
-				++Iterator;
+				// Increment only if not removed
+				++i;
 			}
 		}
 
@@ -217,6 +217,35 @@ public:
 	SDL_FORCE_INLINE constexpr TType& At(TTypeAuto Index)
 	{
 		return Vector.at(Index);
+	}
+
+	TSizeType GetRandomIndex() const
+	{
+		TSizeType OutIndex;
+
+		if (Size() == 0)
+		{
+			OutIndex = 0;
+		}
+		else
+		{
+			OutIndex = FMath::RandRange(0, Size() - 1);
+		}
+
+		return OutIndex;
+	}
+
+	SDL_FORCE_INLINE TType GetRandomValue() const
+	{
+		const TSizeType RandomIndex = GetRandomIndex();
+
+		// Could be invalid if array is empty
+		if (IsValidIndex(RandomIndex))
+		{
+			return Vector[RandomIndex];
+		}
+
+		return DefaultType;
 	}
 
 	bool Contains(const TType& Value) const

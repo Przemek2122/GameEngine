@@ -5,25 +5,42 @@
 #include "CoreMinimal.h"
 #include "InteractionBaseWidget.h"
 
+enum class EHorizontalAlignMethod : Uint8
+{
+	AlignToFit,
+	AlignOnlyIfNotFitting
+};
+
+/**
+ * Button widget
+ * Contains background with customizable colors and clicking ability
+ */
 class FButtonWidget : public FInteractionBaseWidget
 {
 public:
 	FButtonWidget(IWidgetManagementInterface* InWidgetManagementInterface, const std::string& InWidgetName, const int InWidgetOrder = WIDGET_DEFINES_DEFAULT_ORDER);
-	virtual ~FButtonWidget() override = default;
 
 	/** Begin FWidget */
-	void Init() override;
 	void Render() override;
 	/** End FWidget */
 
+	/** IWidgetPositionInterface FWidget */
+	void RebuildWidget() override;
+	/** End IWidgetPositionInterface */
+	
 	/** Begin FInteractionBaseWidget */
-	void NativeHover() override;
-	void NativePress() override;
-	void NativeRelease() override;
-	void NativeReleaseOutsideWidget() override;
+	void NativeHoverInsideTick() override;
+	void NativeHoverOutsideTick() override;
+	void NativePressLeft() override;
+	void NativeReleaseLeft() override;
+	void NativePressRight() override;
+	void NativeReleaseRight() override;
 	void NativeMouseEnterWidget() override;
 	void NativeMouseExitWidget() override;
 	/** End FInteractionBaseWidget */
+
+	void UseDefaultSize();
+	void SetScaleHorizontally(const bool bInScaleHorizontally);
 
 	FColorRGBA GetButtonRenderColor() const { return ButtonRenderColor; }
 	FColorRGBA GetButtonNormalColor() const { return ButtonNormalColor; }
@@ -35,14 +52,15 @@ public:
 	void SetButtonHoverColor(const FColorRGBA& Color);
 	void SetButtonClickColor(const FColorRGBA& Color);
 
-	FDelegate<> OnHover;
-	FDelegate<> OnClickPress;
-	FDelegate<> OnClickRelease;
-
 protected:
 	FColorRGBA ButtonRenderColor;
 	FColorRGBA ButtonNormalColor;
 	FColorRGBA ButtonHoverColor;
 	FColorRGBA ButtonClickColor;
+
+	/** Should scale horizontally to fit children? */
+	bool bScaleHorizontally;
+
+	EHorizontalAlignMethod HorizontalAlignMethod;
 	
 };

@@ -5,10 +5,13 @@
 
 #include "Assets/AssetsManagerHelpers.h"
 #include "Assets/Assets/TextureAsset.h"
+#include "Assets/Collection/AssetCollectionItem.h"
 
 URenderComponent::URenderComponent(IComponentManagerInterface* InComponentManagerInterface)
 	: UComponent(InComponentManagerInterface)
 	, TextureAsset(nullptr)
+	, CurrentRenderCenterType(ERenderCenterType::RotateAround)
+	, CurrentRenderType(ERenderType::Center)
 {
 }
 
@@ -37,25 +40,81 @@ void URenderComponent::Render()
 
 	if (TextureAsset != nullptr)
 	{
-		GetOwnerWindow()->GetRenderer()->DrawTexture(TextureAsset, GetLocation(), SizeCached);
+		FVector2D<int> RenderLocation;
+ 
+		switch (CurrentRenderType)
+		{
+			case ERenderType::Center:
+			{
+				RenderLocation = GetLocationCenter();
+
+				break;
+			}
+
+			case ERenderType::AbsoluteLocation:
+			{
+				RenderLocation = GetAbsoluteLocation();
+
+				break;
+			}
+		}
+
+		FVector2D<int> PivotLocationCenter;
+
+		switch (CurrentRenderCenterType)
+		{
+			case ERenderCenterType::RotateAround:
+			{
+				PivotLocationCenter = GetSize() / 2;
+
+				break;
+			}
+
+			case ERenderCenterType::AtPivotPoint:
+			{
+				// Do nothing we want to rotate at zero
+
+				break;
+			}
+		}
+
+		GetOwnerWindow()->GetRenderer()->DrawTextureAdvanced(
+			TextureAsset, 
+			RenderLocation,
+			GetSize(), 
+			GetAbsoluteRotation(),
+			PivotLocationCenter
+		);
 	}
+}
+
+void URenderComponent::SetImage(const FAssetCollectionItem& AssetCollectionItem)
+{
+	SetImage(AssetCollectionItem.GetAssetName(), AssetCollectionItem.GetAssetPath());
 }
 
 void URenderComponent::SetImage(const std::string& InImageName, const std::string& OptionalPath)
 {
-	FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
-	if (AssetsManager != nullptr)
+	if (!InImageName.empty())
 	{
-		FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
+		FAssetsManager* AssetsManager = GEngine->GetAssetsManager();
+		if (AssetsManager != nullptr)
+		{
+			FTextureAsset* TemporaryTexture = FAssetsManagerHelpers::GetOrCreateAsset<FTextureAsset>(AssetsManager, GetOwnerWindow(), InImageName, OptionalPath, EAssetType::AT_TEXTURE);
 
-		if (TemporaryTexture != nullptr)
-		{
-			SetImage(TemporaryTexture);
+			if (TemporaryTexture != nullptr)
+			{
+				SetImage(TemporaryTexture);
+			}
+			else
+			{
+				LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in URenderComponent::SetImage");
+			}
 		}
-		else
-		{
-			LOG_ERROR("Asset: '" << InImageName << "' not found. If you would like to load it instead use OptionalPath parameter in URenderComponent::SetImage");
-		}
+	}
+	else
+	{
+		LOG_ERROR("Got empty @InImageName. We will not set an image");
 	}
 }
 
@@ -83,5 +142,15 @@ void URenderComponent::SetImage(FTextureAsset* InAsset)
 
 void URenderComponent::SetImageSize(const FVector2D<int>& InSize)
 {
-	SizeCached = InSize;
+	SetSize(InSize);
+}
+
+void URenderComponent::SetRenderLocationType(const ERenderType InRenderType)
+{
+	CurrentRenderType = InRenderType;
+}
+
+void URenderComponent::SetRenderCenterType(const ERenderCenterType InRenderCenterType)
+{
+	CurrentRenderCenterType = InRenderCenterType;
 }

@@ -3,7 +3,7 @@
 #include "CoreEngine.h"
 #include "Timer/Timer.h"
 
-static constexpr int TimeConversionMultiplier = 1000;
+static constexpr int32 TimeConversionMultiplier = 1000;
 
 FTimerCollector::FTimerCollector()
 	: bAreTimersPaused(false)
@@ -178,7 +178,7 @@ Uint32 FTimer::GetTimeLeftRaw() const
 	return TimeLeftRaw;
 }
 
-Uint32 FTimer::GetTimeElapsedSinceStart() const
+Uint32 FTimer::GetTimeMSElapsedSinceStart() const
 {
 	return static_cast<Uint32>(SDL_GetTicks64() - TimeStartOfTimer);
 }
@@ -191,6 +191,14 @@ SDL_TimerID FTimer::GetTimerId() const
 FOptionalTimerParams* FTimer::GetOptionalTimerParams() const
 {
 	return OptionalTimerParams.get();
+}
+
+float FTimer::GetTimerPercent() const
+{
+	const Uint32 TimeElapsedSinceStart = GetTimeMSElapsedSinceStart();
+	const float TimeDiff = static_cast<float>(TimeElapsedSinceStart) / static_cast<float>(InitialTimerTime);
+
+	return FMath::Clamp(TimeDiff, 0.f, 1.f);
 }
 
 void FTimer::InitializeTimer()

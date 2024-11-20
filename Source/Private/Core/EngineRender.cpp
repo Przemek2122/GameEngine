@@ -3,6 +3,11 @@
 #include "CoreEngine.h"
 #include "EngineRender.h"
 
+FWindowCreationData::FWindowCreationData(const bool bInIsThisWindowDebugger)
+	: bIsThisWindowDebugger(bInIsThisWindowDebugger)
+{
+}
+
 FEngineRender::FEngineRender()
 	: bIsRenderTickFinished(true)
 {
@@ -190,6 +195,15 @@ void FEngineRender::SetWindowFocus(const Uint32 WindowId, const bool bIsFocused)
 	}
 }
 
+void FEngineRender::SetWindowIsMouseInside(Uint32 WindowId, const bool bIsInside)
+{
+	FWindow* Window = GetWindowById(WindowId);
+	if (Window != nullptr)
+	{
+		Window->SetWindowIsMouseInside(bIsInside);
+	}
+}
+
 void FEngineRender::OnWindowMadeVisible(FWindow* Window)
 {
 	Window->OnWindowMadeVisible();
@@ -197,7 +211,7 @@ void FEngineRender::OnWindowMadeVisible(FWindow* Window)
 
 void FEngineRender::OnWindowMadeInVisible(FWindow* Window)
 {
-	Window->OnWindowMadeInVisible();
+	Window->OnWindowMadeInvisible();
 }
 
 void FEngineRender::OnWindowSizeChanged(FWindow* Window, const Sint32 X, const Sint32 Y)
