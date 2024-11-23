@@ -130,13 +130,6 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 		ForceExit(-16);
 	}
 
-	/**
-	 * @TODO HACK
-	 * https://stackoverflow.com/questions/40312553/sdl2-crashes-on-window-resize
-	 * Workarround for crash. Should be changed in feature but it does not matter for now.
-	 */
-	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-
 	EngineRender = CreateEngineRenderer();
 	EventHandler = CreateEventHandler();
 	AssetsManager = CreateAssetsManager();
