@@ -5,6 +5,7 @@
 #include "Engine/Logic/GameModeManager.h"
 #include "Engine/Logic/BaseController.h"
 #include "Renderer/Map/MapManager.h"
+#include "Threads/ThreadsManager.h"
 
 FGameModeBase::FGameModeBase(FGameModeManager* InGameModeManager)
 	: bIsInProgress(false)
@@ -22,6 +23,11 @@ void FGameModeBase::Initialize()
 
 void FGameModeBase::DeInitialize()
 {
+	// Make sure we do not have any async job in queue
+	GEngine->GetThreadsManager()->ResetAllJobs();
+
+	// Also reset Engine queue
+	GEngine->GetFunctionsToCallOnStartOfNextTick().UnBindAll();
 }
 
 void FGameModeBase::Begin()

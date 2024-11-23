@@ -3,8 +3,6 @@
 #include "CoreEngine.h"
 #include "Test/Samples/TestPerformance.h"
 
-#include "SDL/SDL_egl.h"
-
 #if ENGINE_TESTS_ALLOW_ANY
 
 FTestPerformance::FTestPerformance()

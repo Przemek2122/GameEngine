@@ -10,7 +10,7 @@ public:
 	FTexture(const std::string& InTexturePath, SDL_Renderer* Renderer);
 	~FTexture();
 
-	void Draw(SDL_Renderer* Renderer, SDL_Rect SourceRect, SDL_Rect DestinationRect) const;
+	void Draw(SDL_Renderer* Renderer, SDL_FRect SourceRect, SDL_FRect DestinationRect) const;
 
 	SDL_Texture* GetSDLTexture() const;
 

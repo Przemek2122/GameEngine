@@ -89,8 +89,8 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	}
 
 	// Initialize SDL
-	const auto SdlInitialized = SDL_Init(SDL_INIT_EVERYTHING);
-	if (SdlInitialized == 0)
+	const bool SdlInitialized = SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+	if (SdlInitialized)
 	{
 		LOG_INFO("SDL Subsystems Initialised!");
 	}
@@ -98,15 +98,15 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	{
 		LOG_ERROR("SDL_INIT_EVERYTHING error: " << SDL_GetError());
 
-		exit(-2);
+		ForceExit(-2);
 	}
 
 	// Initialize SDL TTF 
-	if (TTF_Init() != 0)
+	if (!TTF_Init())
 	{
-		LOG_ERROR("TTF_Init: " << TTF_GetError());
+		LOG_ERROR("TTF_Init: " << SDL_GetError());
 
-		exit(-4);
+		ForceExit(-4);
 	}
 
 	// Initialize SDL - Load support for everything supported
@@ -114,16 +114,20 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	const int MixInitialized = Mix_Init(MixFlags);
 	if (!MixInitialized)
 	{
-		LOG_ERROR("Mix_Init: " << Mix_GetError());
+		LOG_ERROR("Mix_Init: " << SDL_GetError());
 
-		exit(-8);
+		ForceExit(-8);
 	}
 
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	SDL_AudioSpec AudioSpec;
+	AudioSpec.freq = 44100;
+	AudioSpec.format = MIX_DEFAULT_FORMAT;
+	AudioSpec.channels = 2;
+	if (Mix_OpenAudio(0, &AudioSpec) == false)
 	{
-		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", SDL_GetError());
 
-		exit(-16);
+		ForceExit(-16);
 	}
 
 	/**
@@ -253,6 +257,20 @@ void FEngine::RequestExit()
 	bContinueMainLoop = false;
 }
 
+void FEngine::ForceExit(const int32 OptionalError)
+{
+	Clean();
+
+	LOG_WARN("Waiting for log to be printed.");
+
+	while (!FUtil::MessagesQueue.IsEmpty())
+	{
+		THREAD_WAIT_SHORT_TIME;
+	}
+
+	exit(OptionalError);
+}
+
 void FEngine::PreExit()
 {
 }
@@ -375,7 +393,7 @@ void FEngine::UpdateFrameTime()
 
 	int TargetFrameRate;
 	SDL_DisplayMode DisplayMode;
-	if (GetDisplaySettings(0, 0, DisplayMode))
+	if (GetPrimaryDisplaySettings(DisplayMode))
 	{
 		// Take refresh rate from display
 		TargetFrameRate = DisplayMode.refresh_rate;
@@ -490,18 +508,50 @@ FEngineRender* FEngine::GetEngineRender() const
 	return EngineRender;
 }
 
-bool FEngine::GetDisplaySettings(const int DisplayIndex, const int ModeIndex, SDL_DisplayMode& DisplayMode)
+bool FEngine::GetDisplaySettings(const int DisplayIndex, SDL_DisplayMode& InDisplayMode)
 {
 	bool bIsSuccessful = false;
 
-	int NumberOfDisplays = SDL_GetNumVideoDisplays();
+	int* NumberOfDisplays = nullptr;
+	SDL_DisplayID* DisplayIDArray = SDL_GetDisplays(NumberOfDisplays);
 
-	if (NumberOfDisplays > DisplayIndex)
+	if (NumberOfDisplays != nullptr && *NumberOfDisplays > DisplayIndex)
 	{
-		if (SDL_GetDisplayMode(DisplayIndex, ModeIndex, &DisplayMode) == 0)
+		SDL_DisplayID DisplayId = DisplayIDArray[DisplayIndex];
+		const SDL_DisplayMode* DisplayMode = SDL_GetCurrentDisplayMode(DisplayId);
+		if (DisplayMode != nullptr)
 		{
+			InDisplayMode = *DisplayMode;
+
 			bIsSuccessful = true;
 		}
+	}
+	else
+	{
+		LOG_WARN("Error getting display settings: '" << SDL_GetError() << "'.");
+	}
+
+	return bIsSuccessful;
+}
+
+bool FEngine::GetPrimaryDisplaySettings(SDL_DisplayMode& InDisplayMode)
+{
+	bool bIsSuccessful = false;
+
+	SDL_DisplayID DisplayID = SDL_GetPrimaryDisplay();
+	if (DisplayID != 0)
+	{
+		const SDL_DisplayMode* DisplayMode = SDL_GetCurrentDisplayMode(DisplayID);
+		if (DisplayMode != nullptr)
+		{
+			InDisplayMode = *DisplayMode;
+
+			bIsSuccessful = true;
+		}
+	}
+	else
+	{
+		LOG_WARN("Error getting display settings: '" << SDL_GetError() << "'.");
 	}
 
 	return bIsSuccessful;

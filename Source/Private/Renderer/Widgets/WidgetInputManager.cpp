@@ -81,7 +81,7 @@ void FWidgetInputManager::AddWidgetDependingOnOrder(FWidget* InputWidget)
 	}
 
 #if WIDGET_INPUT_DEBUG_ORDER_ENABLED
-	LOG_DEBUG("--- AddWidgetDependingOnOrder: " << OwnerWindow->GetWindowTitle() << " ---");
+	LOG_DEBUG("--- AddWidgetDependingOnOrder: " << OwnerWindow->GetWindowName() << " ---");
 
 	for (FWidget* CurrentWidget : WidgetsArray)
 	{

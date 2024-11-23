@@ -98,10 +98,12 @@ void FEventHandler::AddKeyboardInputDelegateToReset(FInputDelegateWrapper* Keybo
 
 void FEventHandler::SwitchOnInput(const Uint32 EventType)
 {
+	InputWindowEvent();
+
 	switch (EventType)
 	{
 		/** User requested quit */
-		case SDL_QUIT:
+		case SDL_EVENT_QUIT:
 		{
 			bQuitInputDetected = true;
 
@@ -110,23 +112,15 @@ void FEventHandler::SwitchOnInput(const Uint32 EventType)
 			break;
 		}
 
-		/** Window events */
-		case SDL_WINDOWEVENT:
-		{
-			InputWindowEvent();
-
-			break;
-		}
-
 		/** Keyboard */
-		case SDL_KEYDOWN:
+		case SDL_EVENT_KEY_DOWN:
 		{
 			InputKeyDown();
 
 			break;
 		}
 
-		case SDL_KEYUP:
+		case SDL_EVENT_KEY_UP:
 		{
 			InputKeyUp();
 
@@ -134,7 +128,7 @@ void FEventHandler::SwitchOnInput(const Uint32 EventType)
 		}
 
 		/** Mouse movement X & Y */
-		case SDL_MOUSEMOTION:
+		case SDL_EVENT_MOUSE_MOTION:
 		{
 			MouseMotion();
 
@@ -142,7 +136,7 @@ void FEventHandler::SwitchOnInput(const Uint32 EventType)
 		}
 
 		/** Mouse buttons down */
-		case SDL_MOUSEBUTTONDOWN:
+		case SDL_EVENT_MOUSE_BUTTON_DOWN:
 		{
 			InputMouseDown();
 
@@ -150,7 +144,7 @@ void FEventHandler::SwitchOnInput(const Uint32 EventType)
 		}
 
 		/** Mouse buttons release */
-		case SDL_MOUSEBUTTONUP:
+		case SDL_EVENT_MOUSE_BUTTON_UP:
 		{
 			InputMouseUp();
 
@@ -172,7 +166,7 @@ void FEventHandler::InputKeyDown()
 		FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
 		FKeyBoardDelegates& KeyBoardDelegates = CurrentWindowInputManger->KeyBoardDelegates;
 
-		switch (Event.key.keysym.sym)
+		switch (Event.key.key)
 		{
 			case SDLK_ESCAPE:
 			{
@@ -274,44 +268,44 @@ void FEventHandler::InputKeyDown()
 				break;
 			}
 
-			case SDLK_a:
+			case SDLK_A:
 			{
 				KeyBoardDelegates.ButtonA->Execute(EInputState::PRESS);
 
 				break;
 			}
-			case SDLK_b:
+			case SDLK_B:
 			{
 				KeyBoardDelegates.ButtonB->Execute(EInputState::PRESS);
 
 				break;
 			}
-			case SDLK_c:
+			case SDLK_C:
 			{
 				KeyBoardDelegates.ButtonC->Execute(EInputState::PRESS);
 
 				break;
 			}
-			case SDLK_d:
+			case SDLK_D:
 			{
 				KeyBoardDelegates.ButtonD->Execute(EInputState::PRESS);
 
 				break;
 			}
-			case SDLK_e:
+			case SDLK_E:
 			{
 				KeyBoardDelegates.ButtonE->Execute(EInputState::PRESS);
 
 				break;
 			}
 			// [...] @TODO Someday all add buttons
-			case SDLK_w:
+			case SDLK_W:
 			{
 				KeyBoardDelegates.ButtonW->Execute(EInputState::PRESS);
 
 				break;
 			}
-			case SDLK_s:
+			case SDLK_S:
 			{
 				KeyBoardDelegates.ButtonS->Execute(EInputState::PRESS);
 
@@ -334,7 +328,7 @@ void FEventHandler::InputKeyUp()
 		FWindowInputManager* CurrentWindowInputManger = CurrentWindow->GetWindowInputManager();
 		FKeyBoardDelegates& KeyBoardDelegates = CurrentWindowInputManger->KeyBoardDelegates;
 
-		switch (Event.key.keysym.sym)
+		switch (Event.key.key)
 		{
 			case SDLK_ESCAPE:
 			{
@@ -436,44 +430,44 @@ void FEventHandler::InputKeyUp()
 				break;
 			}
 
-			case SDLK_a:
+			case SDLK_A:
 			{
 				KeyBoardDelegates.ButtonA->Execute(EInputState::RELEASE);
 
 				break;
 			}
-			case SDLK_b:
+			case SDLK_B:
 			{
 				KeyBoardDelegates.ButtonB->Execute(EInputState::RELEASE);
 
 				break;
 			}
-			case SDLK_c:
+			case SDLK_C:
 			{
 				KeyBoardDelegates.ButtonC->Execute(EInputState::RELEASE);
 
 				break;
 			}
-			case SDLK_d:
+			case SDLK_D:
 			{
 				KeyBoardDelegates.ButtonD->Execute(EInputState::RELEASE);
 
 				break;
 			}
-			case SDLK_e:
+			case SDLK_E:
 			{
 				KeyBoardDelegates.ButtonE->Execute(EInputState::RELEASE);
 
 				break;
 			}
 			// [...] @TODO Someday all add buttons
-			case SDLK_w:
+			case SDLK_W:
 			{
 				KeyBoardDelegates.ButtonW->Execute(EInputState::RELEASE);
 
 				break;
 			}
-			case SDLK_s:
+			case SDLK_S:
 			{
 				KeyBoardDelegates.ButtonS->Execute(EInputState::RELEASE);
 
@@ -588,109 +582,97 @@ void FEventHandler::InputMouseUp()
 
 void FEventHandler::InputWindowEvent()
 {
-	switch (Event.window.event)
+	switch (Event.window.type)
 	{
-		case SDL_WINDOWEVENT_SHOWN:
+		case SDL_EVENT_WINDOW_SHOWN:
 		{
 			LOG_DEBUG("Window " << Event.window.windowID << " shown");
 			break;
 		}
 
-		case SDL_WINDOWEVENT_HIDDEN:
+		case SDL_EVENT_WINDOW_HIDDEN:
 		{
 			LOG_DEBUG("Window " << Event.window.windowID << " hidden");
 			GEngine->GetEngineRender()->OnWindowHidden(Event.window.windowID);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_EXPOSED:
+		case SDL_EVENT_WINDOW_EXPOSED:
 		{
 			LOG_DEBUG("Window " << Event.window.windowID << " exposed");
 			GEngine->GetEngineRender()->OnWindowExposed(Event.window.windowID);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_MOVED:
+		case SDL_EVENT_WINDOW_MOVED:
 		{
 			GEngine->GetEngineRender()->OnWindowMoved(Event.window.windowID, Event.window.data1, Event.window.data2);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_RESIZED:
+		case SDL_EVENT_WINDOW_RESIZED:
 		{
 			GEngine->GetEngineRender()->OnWindowResized(Event.window.windowID, Event.window.data1, Event.window.data2);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_SIZE_CHANGED:
+		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
 		{
 			GEngine->GetEngineRender()->OnWindowSizeChanged(Event.window.windowID, Event.window.data1, Event.window.data2);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_MINIMIZED:
+		case SDL_EVENT_WINDOW_MINIMIZED:
 		{
 			GEngine->GetEngineRender()->OnWindowMinimized(Event.window.windowID);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_MAXIMIZED:
+		case SDL_EVENT_WINDOW_MAXIMIZED:
 		{
 			GEngine->GetEngineRender()->OnWindowMaximized(Event.window.windowID);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_RESTORED:
+		case SDL_EVENT_WINDOW_RESTORED:
 		{
 			LOG_DEBUG("Window " << Event.window.windowID << " restored.");
 			break;
 		}
 
-		case SDL_WINDOWEVENT_ENTER:
+		case SDL_EVENT_WINDOW_MOUSE_ENTER:
 		{
 			GEngine->GetEngineRender()->SetWindowIsMouseInside(Event.window.windowID, true);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_LEAVE:
+		case SDL_EVENT_WINDOW_MOUSE_LEAVE:
 		{
 			GEngine->GetEngineRender()->SetWindowIsMouseInside(Event.window.windowID, false);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_FOCUS_GAINED:
+		case SDL_EVENT_WINDOW_FOCUS_GAINED:
 		{
 			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, true);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_FOCUS_LOST:
+		case SDL_EVENT_WINDOW_FOCUS_LOST:
 		{
 			GEngine->GetEngineRender()->SetWindowFocus(Event.window.windowID, false);
 			break;
 		}
 
-		case SDL_WINDOWEVENT_CLOSE:
+		case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
 		{
 			LOG_DEBUG("Window " << Event.window.windowID << " closed");
 			break;
 		}
 
-		case SDL_WINDOWEVENT_TAKE_FOCUS:
-		{
-			LOG_DEBUG("Window " << Event.window.windowID << " is offered a focus");
-			break;
-		}
-
-		case SDL_WINDOWEVENT_HIT_TEST:
-		{
-			LOG_DEBUG("Window " << Event.window.windowID << " has a special hit test ");
-			break;
-		}
-
 		default:
 		{
-			LOG_DEBUG("Window " << Event.window.windowID << " got unknown event" << Event.window.event);
+			LOG_DEBUG("Window " << Event.window.windowID << " got unknown event" << Event.window.type);
 		}
 	}
 }

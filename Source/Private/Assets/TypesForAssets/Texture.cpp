@@ -2,7 +2,7 @@
 
 #include "CoreEngine.h"
 #include "Assets/TypesForAssets/Texture.h"
-#include "SDL/SDL_image.h"
+#include "SDL3/SDL_image.h"
 
 FTexture::FTexture(const std::string& InTexturePath, SDL_Renderer* Renderer)
 {
@@ -15,7 +15,7 @@ FTexture::FTexture(const std::string& InTexturePath, SDL_Renderer* Renderer)
 		// To memory
 		SDLTexture = SDL_CreateTextureFromSurface(Renderer, TemporarySurface);
 
-		SDL_FreeSurface(TemporarySurface);
+		SDL_DestroySurface(TemporarySurface);
 	}
 	else
 	{
@@ -35,9 +35,9 @@ FTexture::~FTexture()
 	}
 }
 
-void FTexture::Draw(SDL_Renderer* Renderer, const SDL_Rect SourceRect, const SDL_Rect DestinationRect) const
+void FTexture::Draw(SDL_Renderer* Renderer, const SDL_FRect SourceRect, const SDL_FRect DestinationRect) const
 {
-	SDL_RenderCopy(Renderer, SDLTexture, &SourceRect, &DestinationRect);
+	SDL_RenderTexture(Renderer, SDLTexture, &SourceRect, &DestinationRect);
 }
 
 SDL_Texture* FTexture::GetSDLTexture() const

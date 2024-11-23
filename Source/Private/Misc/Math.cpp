@@ -3,6 +3,8 @@
 #include "CoreEngine.h"
 #include "Misc/Math.h"
 
+#define PI (3.14159265358979323846)
+
 FVector2D<int> FMath::GetRectCenter(const SDL_Rect Rect)
 {
 	return {
@@ -51,22 +53,22 @@ int FMath::RandRange(const int Min, const int Max)
 
 double FMath::RadiansToDegrees(double Value)
 {
-	return static_cast<double>(Value * 180 / M_PI);
+	return static_cast<double>(Value * 180 / PI);
 }
 
 double FMath::RadiansToDegreesDouble(double Value)
 {
-	return Value * 180 / M_PI;
+	return Value * 180 / PI;
 }
 
 double FMath::DegreesToRadians(double Value)
 {
-	return static_cast<double>(2 * M_PI * (Value / 360));
+	return static_cast<double>(2 * PI * (Value / 360));
 }
 
 double FMath::DegreesToRadiansDouble(double Value)
 {
-	return (2 * M_PI * (Value / 360));
+	return (2 * PI * (Value / 360));
 }
 
 double FMath::Get2DAngleOfPointRadians(const FVector2D<> A, const FVector2D<> B)

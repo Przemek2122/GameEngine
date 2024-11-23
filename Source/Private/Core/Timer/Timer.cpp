@@ -95,7 +95,7 @@ FTimer::~FTimer()
 	PauseTimer();
 }
 
-Uint32 FTimer::OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams)
+Uint32 FTimer::OnTimerFinished(void* InOptionalTimerParams, SDL_TimerID InTimerID, Uint32 InInterval)
 {
 	FOptionalTimerParams* OptionalTimerParams = static_cast<FOptionalTimerParams*>(InOptionalTimerParams);
 
@@ -133,7 +133,7 @@ void FTimer::StartTimer(const bool bRestartTimer)
 			TimeLeftRaw = InitialTimerTime;
 		}
 
-		TimeStartOfTimer = SDL_GetTicks64();
+		TimeStartOfTimer = SDL_GetTicks();
 
 		TimerIDRaw = SDL_AddTimer(TimeLeftRaw, OnTimerFinished, OptionalTimerParams.get());
 	}
@@ -149,7 +149,7 @@ void FTimer::PauseTimer()
 
 		if (bWasRemoved)
 		{
-			TimeLeftRaw = static_cast<Uint32>(SDL_GetTicks64() - TimeStartOfTimer);
+			TimeLeftRaw = static_cast<Uint32>(SDL_GetTicks() - TimeStartOfTimer);
 		}
 		else
 		{
@@ -180,7 +180,7 @@ Uint32 FTimer::GetTimeLeftRaw() const
 
 Uint32 FTimer::GetTimeMSElapsedSinceStart() const
 {
-	return static_cast<Uint32>(SDL_GetTicks64() - TimeStartOfTimer);
+	return static_cast<Uint32>(SDL_GetTicks() - TimeStartOfTimer);
 }
 
 SDL_TimerID FTimer::GetTimerId() const
@@ -207,7 +207,7 @@ void FTimer::InitializeTimer()
 	{
 		OptionalTimerParams->Timer = this;
 
-		TimeStartOfTimer = SDL_GetTicks64();
+		TimeStartOfTimer = SDL_GetTicks();
 
 		StartTimer();
 	}

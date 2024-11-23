@@ -2,8 +2,8 @@
 
 #include "CoreEngine.h"
 #include "Renderer/Widgets/Samples/TextWidget.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL_ttf.h"
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_ttf.h"
 #include "Assets/TypesForAssets/Font.h"
 #include "Assets/Assets/FontAsset.h"
 
@@ -19,7 +19,7 @@ FTextWidget::FTextWidget(IWidgetManagementInterface* InWidgetManagementInterface
 	, FontAsset(AssetsManager->GetAsset<FFontAsset>(DefaultFont))
 	, TextRenderColor(255)
 	, TextBackgroundRenderColor({ 255, 0, 0})
-	, SDLRect(new SDL_Rect)
+	, SDLRect(new SDL_FRect)
 	, TextTexture(nullptr)
 	, LastTextTextureSize({ 0, 0 })
 	, CurrentTextRenderMode(ETextRenderMode::None)
@@ -43,7 +43,7 @@ FTextWidget::~FTextWidget()
 
 void FTextWidget::Render()
 {
-	SDL_RenderCopy(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
+	SDL_RenderTexture(GetRenderer()->GetSDLRenderer(), TextTexture, nullptr, SDLRect);
 
 	Super::Render();
 }
@@ -161,7 +161,7 @@ void FTextWidget::AutoAdjustTextSize(const FVector2D<int>& InMaxSize)
 
 int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) const
 {
-	int ErrorState = -1;
+	bool bIsRendering = false;
 
 	static TTF_Font* Font;
 	if (Font == nullptr)
@@ -170,15 +170,15 @@ int FTextWidget::CalculateDefaultSizeForRenderText(FVector2D<int>& InOutSize) co
 	}
 	if (Font != nullptr)
 	{
-		ErrorState = TTF_SizeUTF8(Font, RenderedText.c_str(), &InOutSize.X, &InOutSize.Y);
+		bIsRendering = TTF_GetStringSize(Font, RenderedText.c_str(), 0, &InOutSize.X, &InOutSize.Y);
 	}
 	
-	if (ErrorState)
+	if (!bIsRendering)
 	{
-		LOG_ERROR("Text could not be rendered. TTF: '" << TTF_GetError() << "' SDL: '" << SDL_GetError() << "'");
+		LOG_ERROR("Text could not be rendered. TTF: '" << SDL_GetError() << "' SDL: '" << SDL_GetError() << "'");
 	}
 
-	return ErrorState;
+	return bIsRendering;
 }
 
 void FTextWidget::SetTextRenderMode(const ETextRenderMode NewTextRenderMode)
@@ -215,19 +215,19 @@ void FTextWidget::RedrawText()
 			{
 				case ETextRenderMode::Solid:
 				{
-					SdlSurface = TTF_RenderText_Solid(Font, RenderedText.c_str(), TextRenderColor);
+					SdlSurface = TTF_RenderText_Solid(Font, RenderedText.c_str(), 0, TextRenderColor);
 
 					break;
 				}
 				case ETextRenderMode::Blended:
 				{
-					SdlSurface = TTF_RenderText_Blended(Font, RenderedText.c_str(), TextRenderColor);
+					SdlSurface = TTF_RenderText_Blended(Font, RenderedText.c_str(), 0, TextRenderColor);
 
 					break;
 				}
 				case ETextRenderMode::Shaded:
 				{
-					SdlSurface = TTF_RenderText_Shaded(Font, RenderedText.c_str(), TextRenderColor, TextBackgroundRenderColor);
+					SdlSurface = TTF_RenderText_Shaded(Font, RenderedText.c_str(), 0, TextRenderColor, TextBackgroundRenderColor);
 
 					break;
 				}
@@ -245,7 +245,7 @@ void FTextWidget::RedrawText()
 		{
 			SDL_LockSurface(SdlSurface); // Lock surface for safe pixel access
 
-			FVector2D<int> WidgetSize = GetWidgetSize();
+			FVector2D<float> WidgetSize = GetWidgetSize();
 
 			// If we have texture and X or Y size has changed and we need texture of different size
 			if (TextTexture == nullptr || (WidgetSize.X != LastTextTextureSize.X || WidgetSize.Y != LastTextTextureSize.Y))
@@ -261,18 +261,18 @@ void FTextWidget::RedrawText()
 			else
 			{
 				// If size not changed update old texture
-				int bWasUpdateTextureSuccess = SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
+				const bool bWasUpdateTextureSuccess = SDL_UpdateTexture(TextTexture, nullptr, SdlSurface->pixels, SdlSurface->pitch);
 
-				if (bWasUpdateTextureSuccess != 0)
+				if (!bWasUpdateTextureSuccess)
 				{
 					LOG_ERROR("SDL_UpdateTexture error: " << SDL_GetError());
 				}
 			}
 
 			SDL_UnlockSurface(SdlSurface);
-			SDL_FreeSurface(SdlSurface);
+			SDL_DestroySurface(SdlSurface);
 
-			SDL_QueryTexture(TextTexture, nullptr, nullptr, &WidgetSize.X, &WidgetSize.Y);
+			SDL_GetTextureSize(TextTexture, &WidgetSize.X, &WidgetSize.Y);
 
 			AutoAdjustSize();
 		}

@@ -21,7 +21,7 @@ public:
 	/** End FAssetBase */
 
 	/** Returns size of texture. */
-	FVector2D<int> GetSize() const;
+	FVector2D<float> GetSize() const;
 
 	/** Get texture */
 	FTexture* GetTexture() const;

@@ -9,9 +9,9 @@ class FTextureAsset;
 struct FColorPoint
 {
 	FColorPoint();
-	FColorPoint(const FVector2D<int> InLocation, const FColorRGBA& InColor);
+	FColorPoint(const FVector2D<float> InLocation, const FColorRGBA& InColor);
 
-	FVector2D<int> Location;
+	FVector2D<float> Location;
 	FColorRGBA Color;
 };
 
@@ -60,15 +60,15 @@ public:
 
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true) const;
 
-	void DrawTexture(const FTextureAsset* Texture,	FVector2D<int> Location, const FVector2D<int> Size, const bool bIsLocationRelative = true) const;
+	void DrawTexture(const FTextureAsset* Texture,	FVector2D<float> Location, const FVector2D<float> Size, const bool bIsLocationRelative = true) const;
 
-	void DrawTexture(SDL_Texture* Texture,			FVector2D<int> Location, const FVector2D<int> Size, const bool bIsLocationRelative = true) const;
+	void DrawTexture(SDL_Texture* Texture,			FVector2D<float> Location, const FVector2D<float> Size, const bool bIsLocationRelative = true) const;
 
-	void DrawTextureAdvanced(const FTextureAsset* Texture,	FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, 
-		const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_FLIP_NONE, const bool bIsLocationRelative = true) const;
+	void DrawTextureAdvanced(const FTextureAsset* Texture,	FVector2D<float> Location, const FVector2D<float> Size, const double Rotation,
+		const FVector2D<float> CenterOfRotation = FVector2D<float>(), SDL_FlipMode Flip = SDL_FLIP_NONE, const bool bIsLocationRelative = true) const;
 
-	void DrawTextureAdvanced(SDL_Texture* Texture,			FVector2D<int> Location, const FVector2D<int> Size, const int Rotation, 
-		const FVector2D<int> CenterOfRotation = FVector2D<int>(), SDL_RendererFlip Flip = SDL_FLIP_NONE, const bool bIsLocationRelative = true) const;
+	void DrawTextureAdvanced(SDL_Texture* Texture,			FVector2D<float> Location, const FVector2D<float> Size, const double Rotation,
+		const FVector2D<float> CenterOfRotation = FVector2D<float>(), SDL_FlipMode Flip = SDL_FLIP_NONE, const bool bIsLocationRelative = true) const;
 
 	static void OverrideTextureColor(SDL_Texture* Texture, const FColorRGBA& Color);
 	static void OverrideTextureColorReset(SDL_Texture* Texture);
@@ -80,23 +80,23 @@ public:
 	void DrawPointAtAbsolute(const FColorPoint& ColorPoint) const;
 
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<FVector2D<int>>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative = true) const;
+	void DrawPointsAt(const CArray<FVector2D<float>>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative = true) const;
 
 	/** Draw multiple points with same colors. */
-	void DrawPointsAt(const CArray<SDL_Point>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative = true) const;
+	void DrawPointsAt(const CArray<SDL_FPoint>& Points, const FColorRGBA& AllPointsColor, const bool bIsLocationRelative = true) const;
 
 	/** Draw single rectangle */
-	void DrawRectangle(FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative = true) const;
+	void DrawRectangle(FVector2D<float> RectLocation, const FVector2D<float> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative = true) const;
 
 	/** Draw single rectangle but without interior */
-	void DrawRectangleOutline(FVector2D<int> RectLocation, const FVector2D<int> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative = true) const;
+	void DrawRectangleOutline(FVector2D<float> RectLocation, const FVector2D<float> RectSize, const FColorRGBA& InColor, const bool bIsLocationRelative = true) const;
 	
 	void DrawCircle(FVector2D<int> Location, const int Radius, const bool bIsLocationRelative = true) const;
 
 	void DrawLine(FVector2D<int> From, FVector2D<int> To, const bool bIsLocationRelative = true) const;
 
 	/** Adds RenderOffset to rendered objects */
-	FVector2D<int> ConvertLocationToScreenSpace(const FVector2D<int>& InLocation) const;
+	FVector2D<float> ConvertLocationToScreenSpace(const FVector2D<float>& InLocation) const;
 
 	/** Updates offset of rendering object. Usually called by map when moved. */
 	void SetRenderOffset(const FVector2D<int>& NewRenderOffset);

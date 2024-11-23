@@ -62,7 +62,7 @@ public:
 	virtual ~FTimer();
 
 	/** Called when timer finishes */
-	static Uint32 OnTimerFinished(Uint32 InInterval, void* InOptionalTimerParams);
+	static Uint32 OnTimerFinished(void* InOptionalTimerParams, SDL_TimerID InTimerID, Uint32 InInterval);
 
 	void OnSynchronousTimerFinished();
 

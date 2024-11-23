@@ -146,7 +146,8 @@ void FEngineRender::OnWindowMoved(const Uint32 WindowId, const Sint32 X, const S
 	FWindow* Window = GetWindowById(WindowId);
 	if (Window != nullptr)
 	{
-		Window->SetWindowLocation(X, Y, false);
+		// @TODO it was removed in SDL3?
+		//Window->SetWindowLocation(X, Y, false);
 	}
 }
 

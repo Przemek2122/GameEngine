@@ -23,7 +23,7 @@ void FWidgetDebugger::StartDebugger()
 		FWindowCreationData WindowCreationData(true);
 
 		static const std::string ColonDebugger = " : Widget Debugger";
-		const std::string WindowName = Window->GetWindowTitle() + ColonDebugger;
+		const std::string WindowName = Window->GetWindowName() + ColonDebugger;
 
 		static const FVector2D<int> WindowLocation = Window->GetWindowLocation() + FVector2D<int>(Window->GetWindowSize().X, 0);
 		static const FVector2D<int> WindowDefaultSize = FVector2D<int>(400, 600);

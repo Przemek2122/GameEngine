@@ -50,6 +50,9 @@ public:
 		return ThreadData;
 	}
 
+	/** Kill all pending tasks, will be called when gamemode changes for example */
+	virtual void ResetAllJobs();
+
 protected:
 	/** Creates thread for use, use StopThread to disable and automatically delete thread */
 	FThreadWorkerData* CreateThreadWorker(const std::string& NewThreadName);

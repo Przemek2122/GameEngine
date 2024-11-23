@@ -35,7 +35,7 @@ FThreadsManager::~FThreadsManager()
 void FThreadsManager::Initialize()
 {
 	// Calculate number of cores
-	int NumberOfCores = SDL_GetCPUCount();
+	int NumberOfCores = SDL_GetNumLogicalCPUCores();
 
 	// Ensure we always have at least one thread.
 	if (NumberOfCores <= 0)
@@ -110,6 +110,18 @@ void FThreadsManager::AddAsyncWork(const FAsyncWorkStructure& AsyncRunWithCallba
 	AsyncJobQueue.PushBack(AsyncRunWithCallback);
 }
 
+void FThreadsManager::ResetAllJobs()
+{
+	while (AsyncJobQueueMutex.IsLocked())
+	{
+		THREAD_WAIT_SHORT_TIME;
+	}
+
+	FMutexScopeLock MutexScopeLock(AsyncJobQueueMutex);
+
+	AsyncJobQueue.Clear();
+}
+
 FThreadWorkerData* FThreadsManager::CreateThreadWorker(const std::string& NewThreadName)
 {
 	return CreateThread<FThreadWorker, FThreadWorkerData>(NewThreadName);
@@ -167,7 +179,7 @@ int FThreadsManager::GetNumberOfWorkerThreads() const
 
 int FThreadsManager::GetNumberOfCores()
 {
-	return SDL_GetCPUCount();
+	return SDL_GetNumLogicalCPUCores();
 }
 
 FAsyncWorkStructure FThreadsManager::GetFirstAvailableJob()

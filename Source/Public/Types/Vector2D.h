@@ -264,7 +264,7 @@ public:
 		Point.x = static_cast<int>(X);
 		Point.y = static_cast<int>(Y);
 
-		return Point;
+		return std::move(Point);
 	}
 
 	// @TODO Fix warning
@@ -274,6 +274,26 @@ public:
 		SDL_Point Point;
 		Point.x = static_cast<int>(X);
 		Point.y = static_cast<int>(Y);
+
+		return &Point;
+	}
+
+	operator SDL_FPoint() const
+	{
+		SDL_FPoint Point;
+		Point.x = static_cast<float>(X);
+		Point.y = static_cast<float>(Y);
+
+		return std::move(Point);
+	}
+
+	// @TODO Fix warning
+	// C4172
+	operator SDL_FPoint*() const
+	{
+		SDL_FPoint Point;
+		Point.x = static_cast<float>(X);
+		Point.y = static_cast<float>(Y);
 
 		return &Point;
 	}

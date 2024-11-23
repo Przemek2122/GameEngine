@@ -76,7 +76,7 @@ protected:
 	FColorRGBA TextRenderColor;
 	FColorRGBA TextBackgroundRenderColor;
 
-	SDL_Rect* SDLRect;
+	SDL_FRect* SDLRect;
 	SDL_Texture* TextTexture;
 
 	FVector2D<int> LastTextTextureSize;

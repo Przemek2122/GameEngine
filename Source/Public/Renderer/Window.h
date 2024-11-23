@@ -32,7 +32,7 @@ protected:
 	 * Creates SDL Window.
 	 * Take a look here for available flags (or at SDL_vide.h): https://wiki.libsdl.org/SDL_WindowFlags
 	 */
-	FWindow(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, Uint32 InWindowFlags = WINDOW_DEFAULT_FLAGS);
+	FWindow(const std::string& InName, FVector2D<int32> InLocation, const FVector2D<int> InSize, Uint32 InWindowFlags = WINDOW_DEFAULT_FLAGS);
 	~FWindow() override;
 
 	virtual void Init();
@@ -63,10 +63,7 @@ public:
 	/** Call to change window size. */
 	void SetWindowSize(const int X, const int Y, const bool bUpdateSDL = true);
 
-	/** Call to change window location. */
-	void SetWindowLocation(const int X, const int Y, const bool bUpdateSDL);
-
-	std::string GetWindowTitle() const;
+	std::string GetWindowName() const;
 
 	_NODISCARD FRenderer* GetRenderer() const;
 
@@ -81,7 +78,6 @@ public:
 	virtual void OnWindowMadeInvisible();
 
 	virtual void OnWindowSizeChanged(Sint32 X, Sint32 Y);
-	virtual void OnWindowLocationChanged(Sint32 X, Sint32 Y);
 
 	void SetWindowFocus(const bool bInNewFocus);
 	void SetWindowIsMouseInside(const bool bInIsWindowMouseInside);
@@ -123,8 +119,7 @@ protected:
 	SDL_Window* Window;
 	FRenderer* Renderer;
 
-	std::string WindowTitle;
-	FVector2D<int> Location;
+	std::string WindowName;
 	FVector2D<int> Size;
 	Uint32 WindowFlags;
 	Uint32 WindowId;

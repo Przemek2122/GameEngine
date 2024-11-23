@@ -50,10 +50,9 @@ void FFont::InitializeFont()
 	if (FFileSystem::File::Exists(FontAsset->GetAssetPath()))
 	{
 		Font = TTF_OpenFont(FontAsset->GetAssetPath().c_str(), FontSize);
-
 		if (Font == nullptr)
 		{
-			LOG_ERROR("TTF_OpenFont: %s\n" << TTF_GetError());
+			LOG_ERROR("TTF_OpenFont: %s\n" << SDL_GetError());
 		}
 	}
 	else

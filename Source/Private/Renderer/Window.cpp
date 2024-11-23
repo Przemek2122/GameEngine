@@ -11,11 +11,10 @@
 #endif
 #include "Renderer/Widgets/WidgetInputManager.h"
 
-FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, const FVector2D<int> InSize, const Uint32 InWindowFlags)
-	: Window(SDL_CreateWindow(InTitle.c_str(), InLocation.X, InLocation.Y, InSize.X, InSize.Y, InWindowFlags))
+FWindow::FWindow(const std::string& InName, FVector2D<int32> InLocation, const FVector2D<int> InSize, const Uint32 InWindowFlags)
+	: Window(SDL_CreateWindow(InName.c_str(), InSize.X, InSize.Y, InWindowFlags))
 	, Renderer(nullptr)
-	, WindowTitle(InTitle)
-	, Location(InLocation)
+	, WindowName(InName)
 	, Size(InSize)
 	, WindowFlags(InWindowFlags)
 	, bIsWindowFocused(false)
@@ -31,15 +30,15 @@ FWindow::FWindow(const std::string& InTitle, const FVector2D<int> InLocation, co
 {
 	if (Window != nullptr)
 	{
-		LOG_INFO("Window created. (" << WindowTitle << ")");
+		LOG_INFO("Window created. (" << WindowName << ")");
 
 		WindowId = SDL_GetWindowID(Window);
 	}
 	else
 	{
-		LOG_ERROR("Can not create window: " << STRING(SDL_GetError()) << " ! (" << WindowTitle << ")");
+		LOG_ERROR("Can not create window: " << STRING(SDL_GetError()) << " ! (" << WindowName << ")");
 
-		exit(-16);
+		GEngine->ForceExit(-16);
 	}
 }
 
@@ -57,11 +56,11 @@ FWindow::~FWindow()
 	{
 		SDL_DestroyWindow(Window);
 
-		LOG_INFO("Window destroyed. (" << WindowTitle << ")");
+		LOG_INFO("Window destroyed. (" << WindowName << ")");
 	}
 	else
 	{
-		LOG_WARN("Window not destroyed (pointer invalid)! ("<< WindowTitle << ")");
+		LOG_WARN("Window not destroyed (pointer invalid)! ("<< WindowName << ")");
 	}
 }
 
@@ -168,20 +167,9 @@ void FWindow::SetWindowSize(const int X, const int Y, const bool bUpdateSDL)
 	WidgetManager->RequestWidgetRebuild();
 }
 
-void FWindow::SetWindowLocation(const int X, const int Y, const bool bUpdateSDL)
+std::string FWindow::GetWindowName() const
 {
-	if (bUpdateSDL)
-	{
-		SDL_SetWindowPosition(Window, X, Y);
-	}
-
-	Location.X = X;
-	Location.Y = Y;
-}
-
-std::string FWindow::GetWindowTitle() const
-{
-	return WindowTitle;
+	return WindowName;
 }
 
 FRenderer* FWindow::GetRenderer() const
@@ -229,16 +217,11 @@ void FWindow::OnWindowSizeChanged(const Sint32 X, const Sint32 Y)
 	SetWindowSize(X, Y, false);
 }
 
-void FWindow::OnWindowLocationChanged(const Sint32 X, const Sint32 Y)
-{
-	SetWindowLocation(X, Y, false);
-}
-
 void FWindow::SetWindowFocus(const bool bInNewFocus)
 {
 	bIsWindowFocused = bInNewFocus;
 
-	SDL_SetWindowInputFocus(Window);
+	// @TODO Could be forced to focus but unsure if that's needed
 }
 
 void FWindow::SetWindowIsMouseInside(const bool bInIsWindowMouseInside)

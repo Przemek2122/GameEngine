@@ -24,11 +24,11 @@ EAssetType FTextureAsset::GetAssetType() const
 	return EAssetType::AT_TEXTURE;
 }
 
-FVector2D<int> FTextureAsset::GetSize() const
+FVector2D<float> FTextureAsset::GetSize() const
 {
-	FVector2D<int> Size;
-
-	SDL_QueryTexture(Texture->GetSDLTexture(), nullptr, nullptr, &Size.X, &Size.Y);
+	FVector2D<float> Size;
+	
+	SDL_GetTextureSize(Texture->GetSDLTexture(), &Size.X, &Size.Y);
 
 	return Size;
 }

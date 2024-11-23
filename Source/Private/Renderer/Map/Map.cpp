@@ -96,7 +96,7 @@ void FMap::Render()
 
 		SDL_Renderer* WindowRenderer = MapManager->GetOwnerWindow()->GetRenderer()->GetSDLRenderer();
 
-		SDL_Rect Source, Destination;
+		SDL_FRect Source, Destination;
 		Source.x = 0;
 		Source.y = 0;
 		Source.h = MapData.AssetsTileSize.Y;

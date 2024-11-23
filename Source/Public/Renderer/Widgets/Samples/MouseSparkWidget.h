@@ -30,7 +30,7 @@ public:
 
 protected:
 	CDeque<FSpark> Sparks;
-	CArray<SDL_Point> Points;
+	CArray<SDL_FPoint> Points;
 	
 	FVector2D<float> MinMaxSpeedRange;
 	FVector2D<int> MinMaxAngleRange;

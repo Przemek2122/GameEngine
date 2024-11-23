@@ -52,6 +52,9 @@ public:
 	/** Call to stop main loop. (Exit engine) */
 	virtual void RequestExit();
 
+	/** Call to force stopping app */
+	virtual void ForceExit(const int32 OptionalError = -1);
+
 	/** Called when main loops stop but before destructor. */
 	virtual void PreExit();
 
@@ -135,7 +138,8 @@ protected:
 	_NODISCARD virtual class FTestManager* CreateTestManager() const;
 #endif
 
-	static bool GetDisplaySettings(int DisplayIndex, int ModeIndex, SDL_DisplayMode& DisplayMode);
+	static bool GetDisplaySettings(int DisplayIndex, SDL_DisplayMode& InDisplayMode);
+	static bool GetPrimaryDisplaySettings(SDL_DisplayMode& InDisplayMode);
 
 protected:
 	bool bFrameRateLimited;
