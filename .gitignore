@@ -21,4 +21,4 @@ Win32/
 ARM/
 
 #Ignore ThirdParty changes
-ThirdParty/
+/ThirdParty
