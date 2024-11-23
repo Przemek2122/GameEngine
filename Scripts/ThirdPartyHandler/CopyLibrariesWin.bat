@@ -31,6 +31,13 @@ XCOPY /Y /E /V /-I ThirdParty\SDL\VisualC\%Platform%\%Configuration%\SDL3.dll %T
 XCOPY /Y /E /V /-I ThirdParty\SDL\VisualC\%Platform%\%Configuration%\SDL3.lib %TargetLocation%\%Platform%\%Configuration%\SDL3.lib
 XCOPY /Y /E /V /-I ThirdParty\SDL\VisualC\%Platform%\%Configuration%\SDL3.pdb %TargetLocation%\%Platform%\%Configuration%\SDL3.pdb
 
+REM libuv
+XCOPY /Y /E /V /-I ThirdParty\libuv\build\%Configuration%\libuv.lib %TargetLocation%\%Platform%\%Configuration%\libuv.lib
+XCOPY /Y /E /V /-I ThirdParty\libuv\build\%Configuration%\libuv.pdb %TargetLocation%\%Platform%\%Configuration%\libuv.pdb
+XCOPY /Y /E /V /-I ThirdParty\libuv\build\%Configuration%\uv.dll %TargetLocation%\%Platform%\%Configuration%\uv.dll
+XCOPY /Y /E /V /-I ThirdParty\libuv\build\%Configuration%\uv.lib %TargetLocation%\%Platform%\%Configuration%\uv.lib
+XCOPY /Y /E /V /-I ThirdParty\libuv\build\%Configuration%\uv.pdb %TargetLocation%\%Platform%\%Configuration%\uv.pdb
+
 echo "Copy of libraries finishd."
 
 PAUSE
