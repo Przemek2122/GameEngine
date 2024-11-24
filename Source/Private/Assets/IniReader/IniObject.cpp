@@ -28,16 +28,7 @@ int FIniField::GetValueAsInt() const
 
 bool FIniField::GetValueAsBool() const
 {
-	static std::string BoolTrueStringValue = "true";
-
-	bool bIsTrue = false;
-
-	if (FStringHelpers::CompareStringCaseInsensitive(Value, BoolTrueStringValue))
-	{
-		bIsTrue = true;
-	}
-
-	return bIsTrue;
+	return FStringHelpers::ToBoolValue(Value);
 }
 
 bool FIniField::IsValid() const

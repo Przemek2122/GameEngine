@@ -50,6 +50,9 @@ public:
 		return ThreadData;
 	}
 
+	/** Sets flag to stop a thread, will not be immediate stop. */
+	void TryStopThread(FThreadData* ThreadData);
+
 	/** Kill all pending tasks, will be called when gamemode changes for example */
 	virtual void ResetAllJobs();
 

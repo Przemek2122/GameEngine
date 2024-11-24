@@ -11,9 +11,15 @@
 #include "Test/Samples/TestClassType.h"
 #endif
 
+#if ENGINE_NETWORK_LIB_ENABLED
+#include "Network/NetworkManager.h"
+#endif
+
 #include "Assets/Assets/FontAsset.h"
 #include "Engine/EngineRenderingManager.h"
 #include "Engine/EngineTickingManager.h"
+#include "Includes/EngineLaunchParameterCollection.h"
+#include "Misc/StringHelpers.h"
 #include "Test/Samples/TestPerformance.h"
 #include "Test/Samples/TestTimers.h"
 #include "Threads/RenderThread.h"
@@ -76,10 +82,14 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 		}
 		else
 		{
-			LaunchParameters.Push(Argv[Argc]);
-
-			LOG_INFO("Found param [" << Argc << "] = " << Argv[Argc]);
+			LaunchParameters.Push(CreateEngineLaunchParameter(Argv[Argc]));
 		}
+	}
+
+	// Print parameters
+	for (FEngineLaunchParameter& LaunchParameter : LaunchParameters)
+	{
+		LOG_DEBUG("Param name: " << LaunchParameter.Name << ", value: " << LaunchParameter.Value);
 	}
 
 	// We always need correct directory.
@@ -98,7 +108,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	{
 		LOG_ERROR("SDL_INIT_EVERYTHING error: " << SDL_GetError());
 
-		ForceExit(-2);
+		ForceExit(EEngineErrorCode::SDL_InitFail);
 	}
 
 	// Initialize SDL TTF 
@@ -106,7 +116,7 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	{
 		LOG_ERROR("TTF_Init: " << SDL_GetError());
 
-		ForceExit(-4);
+		ForceExit(EEngineErrorCode::TTF_InitFail);
 	}
 
 	// Initialize SDL - Load support for everything supported
@@ -116,18 +126,18 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	{
 		LOG_ERROR("Mix_Init: " << SDL_GetError());
 
-		ForceExit(-8);
+		ForceExit(EEngineErrorCode::Mix_InitFail);
 	}
 
 	SDL_AudioSpec AudioSpec;
 	AudioSpec.freq = 44100;
 	AudioSpec.format = MIX_DEFAULT_FORMAT;
 	AudioSpec.channels = 2;
-	if (Mix_OpenAudio(0, &AudioSpec) == false)
+	if (!Mix_OpenAudio(0, &AudioSpec))
 	{
 		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", SDL_GetError());
 
-		ForceExit(-16);
+		ForceExit(EEngineErrorCode::Mixer_OpenAudioFailed);
 	}
 
 	EngineRender = CreateEngineRenderer();
@@ -144,6 +154,11 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	// Add render thread
 	RenderThreadData = ThreadsManager->CreateThread<FRenderThread, FThreadData>("RenderThreadData");
 	RenderThread = dynamic_cast<FRenderThread*>(RenderThreadData->GetThread());
+
+#if ENGINE_NETWORK_LIB_ENABLED
+	NetworkManager = new FNetworkManager(this, true);
+	NetworkManager->Initialize();
+#endif
 
 #if ENGINE_TESTS_ALLOW_ANY
 	TestManager = CreateTestManager();
@@ -250,7 +265,7 @@ void FEngine::RequestExit()
 	bContinueMainLoop = false;
 }
 
-void FEngine::ForceExit(const int32 OptionalError)
+void FEngine::ForceExit(const EEngineErrorCode OptionalErrorCode)
 {
 	Clean();
 
@@ -261,7 +276,7 @@ void FEngine::ForceExit(const int32 OptionalError)
 		THREAD_WAIT_SHORT_TIME;
 	}
 
-	exit(OptionalError);
+	exit(static_cast<int>(OptionalErrorCode));
 }
 
 void FEngine::PreExit()
@@ -285,6 +300,11 @@ void FEngine::Clean()
 	delete EngineTickingManager;
 	delete EngineRenderingManager;
 	delete ThreadsManager;
+
+#if ENGINE_NETWORK_LIB_ENABLED
+	NetworkManager->DeInitialize();
+	delete NetworkManager;
+#endif
 
 #if ENGINE_TESTS_ALLOW_ANY
 	delete TestManager;
@@ -485,6 +505,13 @@ FThreadsManager* FEngine::GetThreadsManager() const
 	return ThreadsManager;
 }
 
+#if ENGINE_NETWORK_LIB_ENABLED
+FNetworkManager* FEngine::GetNetworkManager() const
+{
+	return NetworkManager;
+}
+#endif
+
 #if ENGINE_TESTS_ALLOW_ANY
 FTestManager* FEngine::CreateTestManager() const
 {
@@ -548,4 +575,55 @@ bool FEngine::GetPrimaryDisplaySettings(SDL_DisplayMode& InDisplayMode)
 	}
 
 	return bIsSuccessful;
+}
+
+FEngineLaunchParameter FEngine::CreateEngineLaunchParameter(const std::string& InParameter) const
+{
+	FEngineLaunchParameter EngineLaunchParameter;
+
+	bool bMinusFound = false;
+	bool bEqualSignFound = false;
+
+	for (int32 i = 0; i < 1024 && InParameter.length() > i; i++)
+	{
+		if (bEqualSignFound)
+		{
+			EngineLaunchParameter.Value += InParameter[i];
+		}
+		else if (bMinusFound)
+		{
+			if (InParameter[i] == '=')
+			{
+				bEqualSignFound = true;
+			}
+			else
+			{
+				EngineLaunchParameter.Name += InParameter[i];
+			}
+		}
+		else if (InParameter[i] == '-')
+		{
+			bMinusFound = true;
+		}
+	}
+
+	return EngineLaunchParameter;
+}
+
+FEngineLaunchParameter FEngine::GetLaunchParameter(const std::string& InName) const
+{
+	FEngineLaunchParameter EngineLaunchParameter;
+
+	// @TODO Would be way better using a map instead of an array
+	for (const FEngineLaunchParameter& LaunchParameter : LaunchParameters)
+	{
+		if (LaunchParameter.Name == InName)
+		{
+			EngineLaunchParameter = LaunchParameter;
+
+			break;
+		}
+	}
+
+	return EngineLaunchParameter;
 }

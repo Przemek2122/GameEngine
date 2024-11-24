@@ -10,6 +10,8 @@ public:
 	static bool CompareStringCaseInsensitive(const std::string& A, const std::string& B);
 	static bool CompareCharsCaseInsensitive(char A, char B);
 
+	static bool ToBoolValue(const std::string& String);
+
 	static std::string ReplaceCharInString(const std::string& BaseString, const char ReplaceFrom, const char ReplaceTo);
 
 };

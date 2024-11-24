@@ -2,7 +2,10 @@
 
 #pragma once
 
-#define INDEX_NONE								-1
+#define INDEX_NONE								(-1)
+
+/** Defines if network library is enabled */
+#define ENGINE_NETWORK_LIB_ENABLED				1
 
 /** Defines default order for widget display */
 #define WIDGET_DEFINES_DEFAULT_ORDER			0

@@ -38,7 +38,7 @@ FWindow::FWindow(const std::string& InName, FVector2D<int32> InLocation, const F
 	{
 		LOG_ERROR("Can not create window: " << STRING(SDL_GetError()) << " ! (" << WindowName << ")");
 
-		GEngine->ForceExit(-16);
+		GEngine->ForceExit(EEngineErrorCode::CanNotCreateWindow);
 	}
 }
 

@@ -95,6 +95,8 @@
     <ClInclude Include="Source\Public\Core\Engine.h" />
     <ClInclude Include="Source\Public\Core\EngineMain.h" />
     <ClInclude Include="Source\Public\Core\EngineRender.h" />
+    <ClInclude Include="Source\Public\Core\Includes\EngineErrorCodes.h" />
+    <ClInclude Include="Source\Public\Core\Includes\EngineLaunchParameters.h" />
     <ClInclude Include="Source\Public\Core\Includes\EngineMacros.h" />
     <ClInclude Include="Source\Public\Core\Includes\ForwardEngineBase.h" />
     <ClInclude Include="Source\Public\Core\Includes\ForwardThirdParty.h" />
@@ -135,6 +137,13 @@
     <ClInclude Include="Source\Public\Misc\Math.h" />
     <ClInclude Include="Source\Public\Misc\StringHelpers.h" />
     <ClInclude Include="Source\Public\Misc\Util.h" />
+    <ClInclude Include="Source\Public\Network\NetworkClassBase.h" />
+    <ClInclude Include="Source\Public\Network\NetworkClientBase.h" />
+    <ClInclude Include="Source\Public\Network\NetworkManager.h" />
+    <ClInclude Include="Source\Public\Network\NetworkServerBase.h" />
+    <ClInclude Include="Source\Public\Network\NetworkThread.h" />
+    <ClInclude Include="Source\Public\Network\TCP\NetworkTCPClient.h" />
+    <ClInclude Include="Source\Public\Network\TCP\NetworkTCPServer.h" />
     <ClInclude Include="Source\Public\Renderer\Map\Map.h" />
     <ClInclude Include="Source\Public\Renderer\Map\MapEditor.h" />
     <ClInclude Include="Source\Public\Renderer\Map\MapManager.h" />
@@ -390,6 +399,13 @@
     <ClCompile Include="Source\Private\Misc\Math.cpp" />
     <ClCompile Include="Source\Private\Misc\StringHelpers.cpp" />
     <ClCompile Include="Source\Private\Misc\Util.cpp" />
+    <ClCompile Include="Source\Private\Network\NetworkClassBase.cpp" />
+    <ClCompile Include="Source\Private\Network\NetworkClientBase.cpp" />
+    <ClCompile Include="Source\Private\Network\NetworkManager.cpp" />
+    <ClCompile Include="Source\Private\Network\NetworkServerBase.cpp" />
+    <ClCompile Include="Source\Private\Network\NetworkThread.cpp" />
+    <ClCompile Include="Source\Private\Network\TCP\NetworkTCPClient.cpp" />
+    <ClCompile Include="Source\Private\Network\TCP\NetworkTCPServer.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\Map.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\MapEditor.cpp" />
     <ClCompile Include="Source\Private\Renderer\Map\MapManager.cpp" />
@@ -595,7 +611,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)Libs\x86\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -637,7 +653,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -682,7 +698,7 @@
     <Lib>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalLibraryDirectories>$(ProjectDir)Libs\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
@@ -724,7 +740,7 @@
     </Lib>
     <Lib>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
@@ -766,7 +782,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -808,7 +824,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;SDL3_mixer.lib;uv.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>

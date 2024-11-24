@@ -13,6 +13,20 @@ bool FStringHelpers::CompareCharsCaseInsensitive(const char A, const char B)
     return ( std::tolower(static_cast<unsigned char>(A)) == std::tolower(static_cast<unsigned char>(B)) );
 }
 
+bool FStringHelpers::ToBoolValue(const std::string& String)
+{
+    static std::string BoolTrueStringValue = "true";
+
+    bool bIsTrue = false;
+
+    if (CompareStringCaseInsensitive(String, BoolTrueStringValue))
+    {
+        bIsTrue = true;
+    }
+
+    return bIsTrue;
+}
+
 std::string FStringHelpers::ReplaceCharInString(const std::string& BaseString, const char ReplaceFrom, const char ReplaceTo)
 {
     std::string OutputString;

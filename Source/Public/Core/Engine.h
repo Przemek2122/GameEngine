@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Threads/RenderThread.h"
+#include "Includes/EngineErrorCodes.h"
+#include "Includes/EngineLaunchParameterCollection.h"
 
+enum class EEngineErrorCode;
+class FNetworkManager;
 class FEngineRenderingManager;
 class FEngineTickingManager;
 class ITickInterface;
@@ -53,7 +56,7 @@ public:
 	virtual void RequestExit();
 
 	/** Call to force stopping app */
-	virtual void ForceExit(const int32 OptionalError = -1);
+	virtual void ForceExit(const EEngineErrorCode OptionalErrorCode = EEngineErrorCode::ForceExit);
 
 	/** Called when main loops stop but before destructor. */
 	virtual void PreExit();
@@ -123,6 +126,9 @@ public:
 	_NODISCARD FEngineTickingManager* GetEngineTickingManager() const;
 	_NODISCARD FEngineRenderingManager* GetEngineRenderingManager() const;
 	_NODISCARD FThreadsManager* GetThreadsManager() const;
+#if ENGINE_NETWORK_LIB_ENABLED
+	_NODISCARD FNetworkManager* GetNetworkManager() const;
+#endif
 
 protected:
 	void UpdateFrameRateCounter();
@@ -140,6 +146,9 @@ protected:
 
 	static bool GetDisplaySettings(int DisplayIndex, SDL_DisplayMode& InDisplayMode);
 	static bool GetPrimaryDisplaySettings(SDL_DisplayMode& InDisplayMode);
+
+	FEngineLaunchParameter CreateEngineLaunchParameter(const std::string& InParameter) const;
+	FEngineLaunchParameter GetLaunchParameter(const std::string& InName) const;
 
 protected:
 	bool bFrameRateLimited;
@@ -167,7 +176,7 @@ protected:
 	std::string LaunchRelativePath;
 
 	// Parameters
-	CArray<std::string> LaunchParameters;
+	CArray<FEngineLaunchParameter> LaunchParameters;
 
 	/** Class for managing windows,  */
 	FEngineRender* EngineRender;
@@ -185,6 +194,10 @@ protected:
 
 	FDelegate<> FunctionsToCallOnStartOfNextTick;
 	FDelegate<void, float> TickingObjectsDelegate;
+
+#if ENGINE_NETWORK_LIB_ENABLED
+	FNetworkManager* NetworkManager;
+#endif
 
 #if ENGINE_TESTS_ALLOW_ANY
 	class FTestManager* TestManager;

@@ -53,7 +53,7 @@ public:
 	}
 
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType& Key)
+	SDL_FORCE_INLINE TValue& operator[](TAutoType Key)
 	{
 		if (!Map.contains(Key))
 		{
@@ -66,7 +66,7 @@ public:
 		return Map[Key];
 	}
 	template<typename TAutoType>
-	SDL_FORCE_INLINE TValue& operator[](TAutoType& Key) const
+	SDL_FORCE_INLINE TValue& operator[](TAutoType Key) const
 	{
 		if (!Map.contains(Key))
 		{
