@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#if ENGINE_TESTS_ALLOW_ANY
 #include "Test/TestBase.h"
 
 /**
@@ -22,3 +24,4 @@ public:
 	virtual void InitializeTest() = 0;
 
 };
+#endif

@@ -1,6 +1,8 @@
 // Created by Przemys³aw Wiewióra 2024
 
 #include "CoreEngine.h"
+
+#if ENGINE_TESTS_ALLOW_ANY
 #include "Test/TestLongRun.h"
 
 FLongRunTest::FLongRunTest()
@@ -28,3 +30,4 @@ void FLongRunTest::EndTask()
 
 	DestroyTest();
 }
+#endif

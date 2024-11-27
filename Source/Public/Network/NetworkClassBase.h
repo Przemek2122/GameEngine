@@ -11,6 +11,7 @@ class FNetworkThread;
 
 void alloc_buffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf);
 
+/** Structure added to libuv server to be able to identify instance */
 struct FCustomNetworkInstanceData
 {
 	FCustomNetworkInstanceData(const std::string& InServerThreadName)
@@ -20,6 +21,14 @@ struct FCustomNetworkInstanceData
 
 	/** Unique thread name */
 	std::string ServerThreadName;
+};
+
+struct FNetworkPackageData
+{
+	FNetworkPackageData();
+
+	std::string Data;
+
 };
 
 class FNetworkClassBase

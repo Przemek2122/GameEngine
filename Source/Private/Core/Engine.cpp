@@ -45,12 +45,12 @@ FEngine::FEngine()
 	, EngineRenderingManager(nullptr)
 	, ThreadsManager(nullptr)
 	, RenderThreadData(nullptr)
+#if ENGINE_TESTS_ALLOW_ANY
 	, TestManager(nullptr)
+#endif
 	, bContinueMainLoop(true)
 	, TicksThisSecond(0)
-#if ENGINE_TESTS_ALLOW_ANY
 	, Second(0)
-#endif
 {
 	FUtil::LogInit();
 }
@@ -156,7 +156,15 @@ void FEngine::EngineInit(int Argc, char* Argv[])
 	RenderThread = dynamic_cast<FRenderThread*>(RenderThreadData->GetThread());
 
 #if ENGINE_NETWORK_LIB_ENABLED
-	NetworkManager = new FNetworkManager(this, true);
+	const FEngineLaunchParameter& IsEngineLaunchParameter = GetLaunchParameter(FEngineLaunchParameterCollection::IsServer);
+
+	bool bIsServer = true;
+	if (IsEngineLaunchParameter.IsValid())
+	{
+		bIsServer = IsEngineLaunchParameter.AsBool();
+	}
+
+	NetworkManager = new FNetworkManager(this, bIsServer);
 	NetworkManager->Initialize();
 #endif
 

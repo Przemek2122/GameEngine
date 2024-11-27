@@ -11,7 +11,7 @@ void OnNewClientConnectCallback(uv_stream_t* InUVServer, int InStatus)
 {
 	if (InStatus < 0)
 	{
-		LOG_ERROR("New connection error %s" << uv_strerror(InStatus));
+		LOG_ERROR("New connection error: " << uv_strerror(InStatus));
 	}
 	else
 	{
@@ -50,7 +50,11 @@ void FNetworkTCPServer::Initialize()
 		const int ListenResult = uv_listen(UVServer, DefaultConnectionData.GetNetworkDefaultBackLog(), OnNewClientConnectCallback);
 		if (ListenResult)
 		{
-			LOG_ERROR("Listen error %s\n" << uv_strerror(ListenResult));
+			LOG_ERROR("Listen error: " << uv_strerror(ListenResult));
+		}
+		else
+		{
+			LOG_INFO("Listening (TCP Server) at: " << DefaultConnectionData.GetNetworkAddressIP() << '@' << DefaultConnectionData.GetNetworkPort());
 		}
 	}
 }

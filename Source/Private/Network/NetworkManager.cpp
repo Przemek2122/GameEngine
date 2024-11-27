@@ -126,7 +126,7 @@ void FNetworkManager::LoadConfig()
 			{
 				// @TODO What should be backlog max?
 				// Change if needed, 65535 is random number.
-				DefaultNetworkConnectionData.SetNetworkPort(BackLogField.GetValueAsInt());
+				DefaultNetworkConnectionData.SetNetworkDefaultBackLog(BackLogField.GetValueAsInt());
 			}
 		}
 	}

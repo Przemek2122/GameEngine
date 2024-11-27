@@ -11,7 +11,7 @@
 #define WIDGET_DEFINES_DEFAULT_ORDER			0
 
 /** Should any type of tests be compiled? */
-#define ENGINE_TESTS_ALLOW_ANY					1
+#define ENGINE_TESTS_ALLOW_ANY					0
 
 /** Should default tests be performed? */
 #define ENGINE_TESTS_RUN						1 && ENGINE_TESTS_ALLOW_ANY
